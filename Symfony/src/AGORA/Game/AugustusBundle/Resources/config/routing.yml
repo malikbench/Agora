@@ -1,0 +1,3 @@
+augustus_homepage:
+    path:     /
+    defaults: { _controller: AugustusBundle:Default:index }

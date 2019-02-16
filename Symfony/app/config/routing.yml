@@ -1,5 +1,5 @@
 augustus:
-    resource: "@AugustusBundle/Resources/config/routing.php"
+    resource: "@AugustusBundle/Resources/config/routing.yml"
     prefix:   /
 
 agora_game_game:
