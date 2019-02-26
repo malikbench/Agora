@@ -2,53 +2,38 @@
 
 namespace AGORA\Game\SQPBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
- * SQPLeaderBoard
- *
- * @ORM\Table(name="s_q_p_leader_board")
- * @ORM\Entity(repositoryClass="AGORA\Game\SQPBundle\Repository\SQPLeaderBoardRepository")
+ * SQPLeaderboard
  */
-class SQPLeaderBoard
+class SQPLeaderboard
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
     /**
      * @var int
+     *
      * @ORM\OneToOne(targetEntity="AGORA\UserBundle\Entity\User", cascade={"persist"})
      * @ORM\JoinColumn(name="id_user", referencedColumnName="id")
-     * @ORM\Column(name="idPlayer", type="integer", unique=true)
      */
-    private $idPlayer;
+    private $iDPlayer;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="ELO", type="integer")
      */
     private $eLO;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="nbVic", type="integer")
      */
-    private $nbVic;
+    private $nBVic;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="nbDef", type="integer")
      */
-    private $nbDef;
+    private $nBDef;
 
 
     /**
@@ -62,27 +47,27 @@ class SQPLeaderBoard
     }
 
     /**
-     * Set idPlayer.
+     * Set iDPlayer.
      *
-     * @param int $idPlayer
+     * @param int $iDPlayer
      *
-     * @return SQPLeaderBoard
+     * @return SQPLeaderboard
      */
-    public function setIdPlayer($idPlayer)
+    public function setIDPlayer($iDPlayer)
     {
-        $this->idPlayer = $idPlayer;
+        $this->iDPlayer = $iDPlayer;
 
         return $this;
     }
 
     /**
-     * Get idPlayer.
+     * Get iDPlayer.
      *
      * @return int
      */
-    public function getIdPlayer()
+    public function getIDPlayer()
     {
-        return $this->idPlayer;
+        return $this->iDPlayer;
     }
 
     /**
@@ -90,7 +75,7 @@ class SQPLeaderBoard
      *
      * @param int $eLO
      *
-     * @return SQPLeaderBoard
+     * @return SQPLeaderboard
      */
     public function setELO($eLO)
     {
@@ -110,50 +95,50 @@ class SQPLeaderBoard
     }
 
     /**
-     * Set nbVic.
+     * Set nBVic.
      *
-     * @param int $nbVic
+     * @param int $nBVic
      *
-     * @return SQPLeaderBoard
+     * @return SQPLeaderboard
      */
-    public function setNbVic($nbVic)
+    public function setNBVic($nBVic)
     {
-        $this->nbVic = $nbVic;
+        $this->nBVic = $nBVic;
 
         return $this;
     }
 
     /**
-     * Get nbVic.
+     * Get nBVic.
      *
      * @return int
      */
-    public function getNbVic()
+    public function getNBVic()
     {
-        return $this->nbVic;
+        return $this->nBVic;
     }
 
     /**
-     * Set nbDef.
+     * Set nBDef.
      *
-     * @param int $nbDef
+     * @param int $nBDef
      *
-     * @return SQPLeaderBoard
+     * @return SQPLeaderboard
      */
-    public function setNbDef($nbDef)
+    public function setNBDef($nBDef)
     {
-        $this->nbDef = $nbDef;
+        $this->nBDef = $nBDef;
 
         return $this;
     }
 
     /**
-     * Get nbDef.
+     * Get nBDef.
      *
      * @return int
      */
-    public function getNbDef()
+    public function getNBDef()
     {
-        return $this->nbDef;
+        return $this->nBDef;
     }
 }
