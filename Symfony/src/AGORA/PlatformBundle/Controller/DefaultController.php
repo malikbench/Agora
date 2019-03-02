@@ -97,6 +97,26 @@ class DefaultController extends Controller
     	
 	}
 
+    public function gameListCreateAction($game = null) {
+        $em = $this->getDoctrine()->getManager();
+        $gameInfoRepository = $em->getRepository('AGORAPlatformBundle:GameInfo');
+
+        if (isset($game) && $game != "*") {
+            $gameInfo = $gameInfoRepository->find($game);
+
+            if ($gameInfo == null) {
+                throw $this->createNotFoundException('La page demandée n\'existe pas ! ');
+            }
+            return $this->render('AGORAPlatformBundle:Accueil:gameDetails.html.twig',array(
+                "gameInfo" => $gameInfo));
+        } else {
+            $allGameInfo = $gameInfoRepository->findAll();
+            return $this->render('AGORAPlatformBundle:Game:gameListCreate.html.twig',array(
+                "gameList" => $allGameInfo));
+        }
+
+    }
+
     public function profileAction() {
         $user = $this->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {

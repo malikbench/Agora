@@ -32,6 +32,11 @@
         <li><a class="left" href="{{ path('agora_platform_contact') }}">Contact</a></li>
         <li><a class="left" href="{{ path('agora_platform_leaderboard') }}">Classement</a></li>
         <li><a class="left" href="{{ path('agora_platform_project') }}">Le projet</a></li>
+
+        {#TODO-- Mettre l'onglet crée une partie dans la condition 'si enregistré#}
+        {#Crée une partie#}
+        <li><a class="left" href="{{ path('agora_platform_gamelist_create') }}">Crée une partie</a></li>
+
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             {#Déplacement des onglets dans la condition 'si enregistré'#}
             <li><a class="left" href="{{ path('agora_platform_joingame') }}">Rejoindre une partie</a></li>
