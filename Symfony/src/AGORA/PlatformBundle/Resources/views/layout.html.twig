@@ -80,11 +80,13 @@
     <ul>
         <li><a class="left" href="{{ path('agora_platform_homepage') }}">Accueil</a></li>
         <li><a class="left" href="{{ path('agora_platform_gamelist') }}">Liste des Jeux</a></li>
-        <li><a class="left" href="{{ path('agora_platform_joingame') }}">Rejoindre une partie</a></li>
+
         <li><a class="left" href="{{ path('agora_platform_leaderboard') }}">Classement</a></li>
         <li><a class="left" href="{{ path('agora_platform_contact') }}">Contact</a></li>
 
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            {#Déplacement des onglets dans la condition 'si enregistré'#}
+            <li><a class="left" href="{{ path('agora_platform_joingame') }}">Rejoindre une partie</a></li>
             <li><a class="left" href="{{ path('agora_platform_playerParties', {'userId': app.user.id }) }} ">Mes Parties</a></li>
             {% if is_granted('ROLE_MODO') %}
             <li><a class="left" href="{{ path('agora_platform_moderation') }}">Modération</a></li>
