@@ -30,7 +30,8 @@ agora_platform_leaderboard:
 agora_platform_game_create:
     path: /game/create/{gameId}
     defaults: { _controller: AGORAPlatformBundle:Default:createGame, gameId: "" }
-    
+
+
 agora_platform_joingame:
     path: /joingame
     defaults: { _controller: AGORAPlatformBundle:Default:joinGame, gameId: "" }

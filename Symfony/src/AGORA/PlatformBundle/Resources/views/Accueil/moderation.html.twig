@@ -3,13 +3,22 @@
 {% block title %}{{ parent() }} - Accueil{% endblock %}
 
 {% block header %}
-    <h1>Rejoindre une partie</h1>
+    <nav>
+        <ul>
+            {% if is_granted('ROLE_MODO') %}
+                <li class="right btn-green"><a href="{{ path('agora_platform_homepage') }}">Mode Joueur</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <h1>Espace Modérateur</h1>
+
 {% endblock %}
 
 {% block content %}
 	<script src="{{ asset('bundles/agoragamesqp/script/vendor/modernizr-3.5.0.min.js') }}"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
 <script>
     //Fonction exécutée lors d'un click sur rejoindre la partie avec un mot de passe
     function promptMDP(path) {
@@ -32,6 +41,7 @@
     }
 
 </script>
+
     <h2>Ave Cesar</h2>
     <table id="joinGameTableAVC" class="display">
         <thead>
