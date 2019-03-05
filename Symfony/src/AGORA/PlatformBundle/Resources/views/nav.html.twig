@@ -28,7 +28,6 @@
         <li><a class="left" href="{{ path('agora_platform_gamelist') }}">Liste des Jeux</a></li>
         <li><a class="left" href="{{ path('agora_platform_contact') }}">Contact</a></li>
         <li><a class="left" href="{{ path('agora_platform_leaderboard') }}">Classement</a></li>
-        <li><a class="left" href="{{ path('agora_platform_project') }}">Le projet</a></li>
 
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             {#Déplacement des onglets dans la condition 'si enregistré'#}
@@ -39,14 +38,16 @@
             {% if is_granted('ROLE_MODO') %}
                 {#Crée une partie#}
                 <li><a class="left" href="{{ path('agora_platform_gamelist_create') }}">Créer une partie</a></li>
-                <li class="right btn-green"><a href="{{ path('agora_platform_moderation') }}">Espace Modérateur</a></li>
+                <li><a class="left" href="{{ path('agora_platform_moderation') }}">Gestion des parties</a></li>
 
             {% endif %}
-            <li class="right btn-green"><a href="/logout">Déconnexion</a></li>
+
             {% if is_granted('ROLE_ADMIN') %}
-                <li class="right btn-green"><a href="/admin">Administration</a></li>
+                <li><a class="left" href="/admin">Gestion des utilisateurs</a></li>
             {% endif %}
-            <li class="right span-like"><a href="/profile">Mon Profil - {{ app.user.username }}</a></li>
+            <li><a class="left" href="/logout">Déconnexion</a></li>
+            {#On cache "mon Profil-statut"#}
+            {#<li class="right span-like"><a href="/profile">Mon Profil - {{ app.user.username }}</a></li>#}
         {% else %}
             <li class="right btn-green"><a href="/register">Inscription</a></li>
             <li class="right btn-green"><a href="/login">Connexion</a></li>
