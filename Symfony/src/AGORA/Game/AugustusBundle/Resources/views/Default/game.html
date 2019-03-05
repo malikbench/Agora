@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Augustus - {{ gameName }}</title>
+        <!-- <link rel="stylesheet" type="text/css" href="{{ asset('bundles/agoragameaugustus/css/style.css') }}"> -->
+        <link rel="stylesheet" type="text/css" href="../../css/game.css">
+        <link rel="stylesheet" type="text/css" href="../../css/tchat.css">
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script> var playerUsername = "";</script>
+    </head>
+
+    <body>
+        <div id="gameContent" class="flexContainer">
+            <div id="playersInfo" class="flexContainer flexColumn">
+                <div id="allPlayersInfo" class="flexContainer flexColumn">
+                    <div>
+                        <p>
+                            Joueur 1<br>
+                            Légions : x/x<br>
+                            Objectifs sous contrôle : x
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            Joueur 2<br>
+                            Légions : x/x<br>
+                            Objectifs sous contrôle : x
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            Joueur 3<br>
+                            Légions : x/x<br>
+                            Objectifs sous contrôle : x
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            Joueur 4<br>
+                            Légions : x/x<br>
+                            Objectifs sous contrôle : x
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            Joueur 5<br>
+                            Légions : x/x<br>
+                            Objectifs sous contrôle : x
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            Joueur 6<br>
+                            Légions : x/x<br>
+                            Objectifs sous contrôle : x
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex1"></div>
+
+                <div id="yourInfo">
+                    <p>
+                        Moi<br>
+                        Légions :<br>
+                        x/x<br>
+                        Score :<br>
+                        x
+                        <br>
+                        Resssources :<br>
+                        Blé : x<br>
+                        Or : x<br>
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex1"></div>
+
+            <div id="boardAndHand" class="flexContainer flexColumn">
+                <div id="playerBar" class="flexContainer flexRow">
+                    <div>
+                        <p>
+                            Un<br>
+                            Légions :<br>
+                            x/x
+                        </p>
+                    </div>
+
+                    <div class="flex1"></div>
+
+                    <img src="../../img/Cards/1.jpg" alt="Card1" height="170">
+                    <img src="../../img/Cards/1.jpg" alt="Card1" height="170">
+                    <img src="../../img/Cards/1.jpg" alt="Card1" height="170">
+                    <img src="../../img/Cards/1.jpg" alt="Card1" height="170">
+                    <img src="../../img/Cards/1.jpg" alt="Card1" height="170">
+
+                    <div class="flex1"></div>
+
+                    <div class="flexContainer flexColumn">
+                        <button>Land</button>
+                        <button>Loot</button>
+                    </div>
+                </div>
+
+                <div class="flex1"></div>
+
+                <div id="boardBar" class="flexContainer flexRow">
+                    <div id="lootBars" class="flexContainer flexColumn">
+                        <div id="topLoot" class="flexContainer flexRow">
+                            <img src="../../img/Loot/Loot2Cards.jpg" alt="" height="100">
+                            <img src="../../img/Loot/Loot3Cards.jpg" alt="" height="100">
+                            <img src="../../img/Loot/Loot4Cards.jpg" alt="" height="100">
+                            <img src="../../img/Loot/Loot5Cards.jpg" alt="" height="100">
+                            <img src="../../img/Loot/Loot6Cards.jpg" alt="" height="100">
+                            <img src="../../img/Loot/LootGold.jpg" alt="" height="100">
+                        </div>
+                        <div id="botLoot" class="flexContainer flexRow">
+                            <img src="../../img/Loot/LootSenator.jpg" alt="" height="100">
+                            <img src="../../img/Loot/LootGreen.jpg" alt="" height="100">
+                            <img src="../../img/Loot/LootMulti.jpg" alt="" height="100">
+                            <img src="../../img/Loot/LootRose.jpg" alt="" height="100">
+                            <img src="../../img/Loot/LootOrange.jpg" alt="" height="100">
+                            <img src="../../img/Loot/LootWheat.jpg" alt="" height="100">
+                        </div>
+                    </div>
+
+                    <div class="flex1"></div>
+
+                    <div id="objLine" class="flexContainer flexRow">
+                        <div class="flexContainer flexColumn">
+                            <div>
+                                <img src="../../img/Cards/3.jpg" alt="Une carte" height="100">
+                                <img src="../../img/Cards/3.jpg" alt="Une carte" height="100">
+                            </div>
+                            <div>
+                                <img src="../../img/Cards/3.jpg" alt="Une carte" height="100">
+                                <img src="../../img/Cards/3.jpg" alt="Une carte" height="100">
+                            </div>
+                        </div>
+                        <div class="flexContainer flexColumn">
+                            <div class="flex1"></div>
+                            <img src="../../img/Cards/3.jpg" alt="Une carte" height="100">
+                            <div class="flex1"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex1"></div>
+
+                <div id="myBar" class="flexContainer flexRow">
+                    <img src="../../img/Cards/2.jpg" alt="Card2" height="200">
+                    <img src="../../img/Cards/2.jpg" alt="Card2" height="200">
+                    <img src="../../img/Cards/2.jpg" alt="Card2" height="200">
+                    <img src="../../img/Cards/2.jpg" alt="Card2" height="200">
+                    <img src="../../img/Cards/2.jpg" alt="Card2" height="200">
+
+                    <div class="flex1"></div>
+
+                    <div class="flexContainer flexColumn">
+                        <button>Land</button>
+                        <button>Loot</button>
+                    </div>
+                </div>
+
+                <div id="buttons" class="flexContainer flexRow">
+                    <div class="flex1"></div>
+                    <button>Valider</button>
+                    <button>Annuler</button>
+                    <div class="flex1"></div>
+                </div>
+            </div>
+
+            <div class="flex1"></div>
+
+            <div id="tokenInfo" class="flexContainer flexColumn">
+                <img src="../../img/Token/TokenCount.jpg" alt="TokenHelp" width="150">
+                <div class="flexContainer flexRow">
+                    <p>Jeton du tour : </p>
+                    <img src="../../img/Token/TokenDoubleGlaive.jpg" alt="un jeton" height="55">
+                </div>
+            </div>
+        </div>
+
+        <!-- THERE WAS LINE 151 to 388 FROM AVE CESAR GAME TWIG -->
+
+        <!-- TCHAT DIV + SCRIPT -->
+        <div class="tchat">
+            <div class="titleTchat">
+                <img id="flecheTchat" src="{{ asset('bundles/agoragameavecesar/image/fleche_historique_bas.png') }}">
+                <i>Chat du lobby</i>
+            </div>
+            <div id="discussion"></div>
+            <textarea id="UserMessage" placeholder="Entrez votre message ici"></textarea>
+        </div>
+        <button id="buttAcc" onclick="window.location.href = '{{ app.request.getSchemeAndHttpHost() }}'">Accueil</button>
+        <script>//Script gérant le tchat
+        document.getElementById('UserMessage').addEventListener('keypress', function (event) {
+            var key = event.hasOwnProperty('which') ? event.which : event.keyCode;
+            if (key === 13) { // 13 est la touche entrée
+                var div = document.createElement("div");
+                var message = document.getElementById('UserMessage').value;
+                /*
+                var clientInformation = {
+                    gameId: {{ game.id }},
+                    playerId: {{ player.id }},
+                    action : {
+                        type: "message",
+                        username: playerUsername,
+                        message: message
+                        },
+                    gameCode : "aug"
+                };
+                */
+                div.textContent = "Moi : " + message;
+                document.getElementById('UserMessage').value = "";
+                div.className = "messageMy";
+                document.getElementById("discussion").appendChild(div);
+                conn.send(JSON.stringify(clientInformation));
+            }
+        });
+        var flecheTchat = document.getElementById("flecheTchat");
+        flecheTchat.addEventListener("click", tchatOnClick);
+        </script>
+    </body>
+</html>

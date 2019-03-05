@@ -1,0 +1,37 @@
+html {
+    height: 100%;
+    width: 100%;
+    background-color: bisque;
+}
+
+
+/* FLEXBOX */
+.flexContainer {
+    display: flex;
+}
+
+.flexRow {
+    flex-direction: row;
+}
+
+.flexColumn {
+    flex-direction: column;
+}
+
+.flex1 {
+    flex: 1;
+}
+
+
+/* Specific Infos */
+#allPlayersInfo, #playerBar {
+background-color: white;
+}
+
+#objLine {
+    background-color: deepskyblue;
+}
+
+#myBar, #yourInfo {
+    background-color: lightgray;
+}
