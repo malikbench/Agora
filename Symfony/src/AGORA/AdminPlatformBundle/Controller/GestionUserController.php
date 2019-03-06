@@ -42,9 +42,10 @@ class GestionUserController extends Controller
             $user = $userRepository->find($request->get('id'));
             $em->remove($user);
             $em->flush();
-            return $this->render('AGORAAdminPlatformBundle:GestionUser:createUser.html.twig');
+            return new Response("Succes");
+
         }
-        return $this->render('AGORAAdminPlatformBundle:GestionUser:createUser.html.twig');
+        return new Response("Echec");
     }
 
     public function promoteUserAction(Request $request) {

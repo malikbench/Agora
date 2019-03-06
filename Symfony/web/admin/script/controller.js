@@ -15,7 +15,12 @@ $(document).ready(function(){
             method: "POST",
             url: "/admin/ajaxAddUser",
             dataType: "json",
-            data: { prefix: username, password: pwd, quantity: qty }
+            data: { prefix: username, password: pwd, quantity: qty },
+            complete : function(data) {
+                if (data.status == 200) {
+                    location.reload(true);
+                }
+            }
         })
             .done(function( msg ) {
                 alert(msg);
@@ -45,7 +50,13 @@ function ajaxRemoveId(id) {
         method: "POST",
         url: "/admin/ajaxRemoveUser",
         dataType: "json",
-        data: { id: id }
+        data: { id: id },
+        complete : function(data) {
+            if (data.status == 200) {
+                location.reload(true);
+            }
+        }
+
     })
 }
 
@@ -54,7 +65,12 @@ function ajaxPromoteId(id) {
         method: "POST",
         url: "/admin/ajaxPromoteUser",
         dataType: "json",
-        data: { id: id }
+        data: { id: id },
+        complete : function(data) {
+                if (data.status == 200) {
+                    location.reload(true);
+                }
+            }
     })
 }
 
@@ -63,6 +79,11 @@ function ajaxDemoteId(id) {
         method: "POST",
         url: "/admin/ajaxDemoteUser",
         dataType: "json",
-        data: { id: id }
+        data: { id: id },
+        complete : function(data) {
+                if (data.status == 200) {
+                    location.reload(true);
+                }
+            }
     })
 }
