@@ -4,6 +4,13 @@ html {
     background-color: bisque;
 }
 
+body {
+    margin: 0;
+}
+
+#gameContent {
+    margin: 8px;
+}
 
 /* FLEXBOX */
 .flexContainer {
@@ -22,16 +29,77 @@ html {
     flex: 1;
 }
 
+/* Overlay */
+.overlay {
+    position: fixed; /* Sit on top of the page content */
+    visibility: hidden;
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+.overlayContent {
+    margin: 5px;
+    cursor: default;
+    height: 80%;
+    width: 80%;
+    top: 10%;
+    left: 10%;
+    background-color: white;
+    position: absolute;
+}
+
+.visible {
+    visibility: visible;
+}
 
 /* Specific Infos */
 #allPlayersInfo, #playerBar {
-background-color: white;
+    background-color: white;
 }
 
 #objLine {
     background-color: deepskyblue;
 }
 
-#myBar, #yourInfo {
+#myBar, #myInfo, #instructions {
     background-color: lightgray;
+}
+
+#allPlayersInfo, #playerBar, #objLine, #myBar, #myInfo, #instructions {
+    border: black 1px solid;
+    padding: 5px;
+    margin: 5px;
+}
+
+#allPlayersInfo {
+    padding: 0;
+    margin: 0;
+}
+
+.selectedHand, .selectedBoard {
+    border: 2px red solid;
+    padding: 2px;
+}
+
+.selectedPlayer {
+    background-color: aqua;
+}
+
+.playerInfo {
+    border: black 1px solid;
+    cursor: pointer;
+}
+
+.p {
+    margin: 0;
+}
+
+.taken {
+    opacity: 0.5;
 }
