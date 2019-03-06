@@ -34,12 +34,10 @@
             <li><a class="left" href="{{ path('agora_platform_joingame') }}">Rejoindre une partie</a></li>
 
             <li><a class="left" href="{{ path('agora_platform_playerParties', {'userId': app.user.id }) }} ">Mes Parties</a></li>
-
+            {#Crée une partie#}
+            <li><a class="left" href="{{ path('agora_platform_gamelist_create') }}">Créer une partie</a></li>
             {% if is_granted('ROLE_MODO') %}
-                {#Crée une partie#}
-                <li><a class="left" href="{{ path('agora_platform_gamelist_create') }}">Créer une partie</a></li>
-                <li><a class="left" href="{{ path('agora_platform_moderation') }}">Gestion des parties</a></li>
-                <li><a class="left" href="/admin">Gestion des utilisateurs</a></li>
+                <li class="right btn-green"><a href="{{ path('agora_platform_moderation') }}">Espace Modérateur</a></li>
             {% endif %}
 
             {% if is_granted('ROLE_ADMIN') %}

@@ -13,6 +13,11 @@
 
     </head>
     <body>
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a href="{{ path('agora_platform_homepage') }}">Retour à l'accueil</a>
+        </h4>
+    </div>
         <div id="container">
             {% block content %}
                 <div class="row">
@@ -25,7 +30,7 @@
                         {{ render(controller("AGORAAdminPlatformBundle:Gestionuser:getUser")) }}
                     </div>
                 </div>
-                <a href="{{ path('agora_platform_homepage') }}">Retour à l'accueil</a>
+                {#<a href="{{ path('agora_platform_homepage') }}">Retour à l'accueil</a>#}
             {% endblock %}
         </div>
     </body>

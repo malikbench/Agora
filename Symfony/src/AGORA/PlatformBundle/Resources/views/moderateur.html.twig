@@ -42,12 +42,12 @@
     conn.onopen = function(e) {
         console.info("Connection established succesfully");
         {% if app.user is not null %}
-            //On requète l'historique du tchat
-            var clientInformation = {
-                type: "connect",
-                userId: {{ app.user.id }}
-            }
-            conn.send(JSON.stringify(clientInformation));
+        //On requète l'historique du tchat
+        var clientInformation = {
+            type: "connect",
+            userId: {{ app.user.id }}
+        }
+        conn.send(JSON.stringify(clientInformation));
         {% endif %}
 
     };
@@ -79,32 +79,13 @@
 <nav class="navbarPerso">
     <ul>
 
-
-        <li><a class="left" href="{{ path('agora_platform_homepage') }}">Accueil</a></li>
-        <li><a class="left" href="{{ path('agora_platform_gamelist') }}">Liste des Jeux</a></li>
-        <li><a class="left" href="{{ path('agora_platform_contact') }}">Contact</a></li>
-        <li><a class="left" href="{{ path('agora_platform_leaderboard') }}">Classement</a></li>
-
-        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-            {#Déplacement des onglets dans la condition 'si enregistré'#}
-            <li><a class="left" href="{{ path('agora_platform_joingame') }}">Rejoindre une partie</a></li>
-            <li><a class="left" href="{{ path('agora_platform_gamelist_create') }}">Créer une partie</a></li>
-            <li><a class="left" href="{{ path('agora_platform_playerParties', {'userId': app.user.id }) }} ">Mes Parties</a></li>
-
-            {% if is_granted('ROLE_MODO') %}
                 {#Crée une partie#}
-                <li class="right btn-green"><a href="{{ path('agora_platform_moderation') }}">Espace Modérateur</a></li>
-            {% endif %}
+                <li><a class="left" href="{{ path('agora_platform_moderation') }}">Gestion des parties</a></li>
+                <li><a class="left" href="/admin">Gestion des utilisateurs</a></li>
 
-            {% if is_granted('ROLE_ADMIN') %}
-            {% endif %}
             <li><a class="left" href="/logout">Déconnexion</a></li>
             {#On cache "mon Profil-statut"#}
             {#<li class="right span-like"><a href="/profile">Mon Profil - {{ app.user.username }}</a></li>#}
-        {% else %}
-            <li class="right btn-green"><a href="/register">Inscription</a></li>
-            <li class="right btn-green"><a href="/login">Connexion</a></li>
-        {% endif %}
     </ul>
 </nav>
 
@@ -129,10 +110,10 @@
 
         var IsOpenTchat = 0;
         {% if app.user is null %}
-            var div = document.createElement("div");
-            div.textContent = "Veuillez vous connecter pour pouvoir envoyer des messages !";
-            document.getElementById("discussion").appendChild(div);
-            document.getElementById("UserMessage").remove();
+        var div = document.createElement("div");
+        div.textContent = "Veuillez vous connecter pour pouvoir envoyer des messages !";
+        document.getElementById("discussion").appendChild(div);
+        document.getElementById("UserMessage").remove();
         {% else %}
         document.getElementById('UserMessage').addEventListener('keypress', function (event) {
 
@@ -198,7 +179,7 @@
             }
 
         }
-        
+
     </script>
     <p><a>Plan du site</a> - <a>Qui somme-nous ?</a> - <a>Mentions légales</a></p>
     <p>© Copyright - Agora : Salle de jeux virtuelle</p>
