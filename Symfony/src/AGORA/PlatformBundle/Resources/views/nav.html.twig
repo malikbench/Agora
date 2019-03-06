@@ -39,11 +39,11 @@
                 {#Crée une partie#}
                 <li><a class="left" href="{{ path('agora_platform_gamelist_create') }}">Créer une partie</a></li>
                 <li><a class="left" href="{{ path('agora_platform_moderation') }}">Gestion des parties</a></li>
-
+                <li><a class="left" href="/admin">Gestion des utilisateurs</a></li>
             {% endif %}
 
             {% if is_granted('ROLE_ADMIN') %}
-                <li><a class="left" href="/admin">Gestion des utilisateurs</a></li>
+
             {% endif %}
             <li><a class="left" href="/logout">Déconnexion</a></li>
             {#On cache "mon Profil-statut"#}
