@@ -3,38 +3,65 @@ use AGORA\Game\Socket\Game;
 
 class AgustusGame extends Game {
 
-    public function startGame($id) {
-        $em = $this->getDoctrine()->getManager();
-        $game = $em->getRepository("AugustusBundle:AugustusGame")->find($id);
+    public function __construct(EntityManager $em) {
+        $this->manager = $em;
+    }
 
-        if ($game->isGameOver()) {
-            return true;
+    // public function startGame($id) {
+    //     $games = $manager->getRepository("AugustusBundle:AugustusGame");
+    //     $game = $games->findOneById($id)
+
+    //     if ($game->isGameOver()) {
+    //         return true;
+    //     }
+    //     //confirmation de nom
+    //     $this->setToken($board->getBagOfToken()->takeToken());
+
+    //     $game->startGame($id);
+    // }
+
+    // pioche un token dans son sac, si ce jeton est le joker, remet tout dans le sac de token
+    public function drawToken($id) {
+        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
+
+        $game->setToken($game->$board->takeToken());
+        // verif
+        if ($game->getToken() == "joker") {
+            $game->$board->resetBag();
         }
-        //confirmation de nom
-        $this->setToken($board->getBagOfToken()->takeToken());
-
-        $game->startGame($id);
     }
 
-    public function drawToken() {
-        $this->board->getBagOfToken()->takeToken();
-    }
+    // verifie que tous les joueurs ont vérouillé leur tour
+    public function allOk($id) {
+        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
 
-    public function allOk() {
         $ok = false;
-        foreach ($this->players as $player) {
-            $ok = $ok && $player->isLocked();
+        // player = objet ou id?
+        foreach ($game->getPlayers() as $player) {
+            $ok = $ok && $player->getIsLock();
         }
         return $ok;
     }
 
-    public function moveLegion($player,$source,$dest) {
-        if (!$player->historique) {
-            $player->putLegionFromSourceToDest($source, $this->token, $dest);
+    public function moveLegion($id,$playerId,$source,$dest) {
+        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
+        
+        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $player = $players->findOneById($playerId);
+        
+        if (!$player->getHistory()) {
+            // grosse verif a faire en fonction du reel mouvement
+            $player->putLegionFromSourceToDest($source, $game->getToken(), $dest);
         }
     }
 
-    public function aveCesar($player) {
+    public function aveCesar($id, $player) {
+        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id)
+        
         $cards = array();
         foreach ($player->objectif() as $card) {
             if ($card->toCapture() == 0) {
@@ -51,14 +78,21 @@ class AgustusGame extends Game {
         }
     }
 
-    public function claimReward($player) {
-        if(!$player->objAdvantage == 0) {
-            $player->objAdvantage = count($player->ctrlObj());
+    // verif a faire dans le controleur
+    public function claimReward($id, $player) {
+        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
+        
+        if($player->getAdvantage() == 0) {
+            $player->setAdvantage(count($player->ctrlObj()));
         }
     }
 
     public function isGameOver($id){
-        foreach ($this->players as $player) {
+        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id)
+        
+        foreach ($game->players as $player) {
             if (count($player.getDoneCards()) > 7) {
                 return true;
             }
