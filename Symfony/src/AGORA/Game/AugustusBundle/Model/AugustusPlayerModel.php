@@ -34,8 +34,20 @@ class AugustusPlayerModel {
     }
 
     //Mets une legion de la carte Source à la carte dest.
-    public function putLegionFromSourceToDest($idPlayer, $idCardSource, $idCardDest) {
+    public function putLegionFromSourceToDest($idPlayer, $idCardSource, $idCardDest, $tokenSource, $tokenDest) {
+        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
 
+        $player = $players->findOneById($idPlayer);
+
+        $cardModel = new AugustusCardModel($manager);
+
+        $cardModel->getBackToken($idCardSource, $tokenSource);
+        $cardModel->captureToken($idCardDest, $tokenDest);
+
+        $player->$history = [$idCardDest, $tokenDest];
+        
+        $manager.flush();
     }
 
     //??
@@ -43,14 +55,16 @@ class AugustusPlayerModel {
 
     }
 
-    //Prend une nouvelle carte présente sur le plateau si la longueur de currObj est inférieure à 3.
-    public function getNewCard($idPlayer, $idCard) {
-
-    }
-
     //La carte d'id idCard passe de currObj à ctrlObj si tout les tokens de la cartes sont contrôlés.
     public function captureCard($idPlayer, $idCard) {
+        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
 
+        $player = $players->findOneById($idPlayer);
+        $card = $cards->findOneById($idCard);
+
+        $this->ctrlCards[] = $card;
+        $player->cards->removeElement($card);
     }
 }
 

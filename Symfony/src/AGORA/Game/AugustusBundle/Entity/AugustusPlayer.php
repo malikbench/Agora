@@ -76,6 +76,11 @@ class AugustusPlayer
     private $cards;
 
     /**
+     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="player", cascade={"persist"})
+     */
+    private $ctrlCards;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusGame", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
     */
@@ -87,6 +92,7 @@ class AugustusPlayer
     public function __construct()
     {
         $this->cards = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->ctrlCards = new \Doctrine\Common\Collections\ArrayCollection();
         $this->gold = 0;
         $this->wheat = 0;
         $this->legion = 7;
@@ -299,7 +305,7 @@ class AugustusPlayer
     public function setIsLock($isLock)
     {
         $this->isLock = $isLock;
-
+        $this->$history = null;
         return $this;
     }
 
