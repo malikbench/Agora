@@ -24,9 +24,9 @@ class AugustusPlayer
     /**
      * @var int
      *
-     * @ORM\Column(name="score", type="integer")
+     * @ORM\Column(name="advantage", type="integer")
      */
-    private $score;
+    private $advantage;
 
     /**
      * @var int
@@ -89,7 +89,7 @@ class AugustusPlayer
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct(AugustusGame $game)
     {
         $this->cards = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ctrlCards = new \Doctrine\Common\Collections\ArrayCollection();
@@ -97,7 +97,8 @@ class AugustusPlayer
         $this->wheat = 0;
         $this->legion = 7;
         $this->legionMax = 7;
-        $this->score = 0;
+        $this->advantage = 0;
+        $this->game = $game;
     }
 
     /**
@@ -111,27 +112,27 @@ class AugustusPlayer
     }
 
     /**
-     * Set score.
+     * Set advantage.
      *
-     * @param int $score
+     * @param int $advantage
      *
      * @return AugustusPlayer
      */
-    public function setScore($score)
+    public function setScore($advantage)
     {
-        $this->score = $score;
+        $this->advantage = $advantage;
 
         return $this;
     }
 
     /**
-     * Get score.
+     * Get advantage.
      *
      * @return int
      */
     public function getScore()
     {
-        return $this->score;
+        return $this->advantage;
     }
 
     /**
@@ -341,5 +342,39 @@ class AugustusPlayer
     public function getHistory()
     {
         return $this->history;
+    }
+
+    /**
+     * Set advantage.
+     *
+     * @param int $advantage
+     *
+     * @return AugustusPlayer
+     */
+    public function setAdvantage($advantage)
+    {
+        $this->advantage = $advantage;
+
+        return $this;
+    }
+
+    /**
+     * Get advantage.
+     *
+     * @return int
+     */
+    public function getAdvantage()
+    {
+        return $this->advantage;
+    }
+
+    /**
+     * Get ctrlCards.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCtrlCards()
+    {
+        return $this->ctrlCards;
     }
 }
