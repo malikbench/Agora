@@ -20,7 +20,7 @@
             <div id="playersInfo" class="flexContainer flexColumn">
                 <div id="allPlayersInfo" class="flexContainer flexColumn">
                     {% for player in game.players %}
-                        <div class="playerInfo" onclick="selectPlayer(this)">
+                        <div class="playerInfo" onclick="selectPlayer( {{ loop.index0 }} )">
                             <p class="p">
                                 {{ player.name ? player.name : "null" }}<br>
                                 Légions : {{ player.legion }}/{{ player.legionMax }}<br>
@@ -56,8 +56,9 @@
 
                 
                 <div id="playerBar" class="flexContainer flexRow">
-                    {# TODO un <selectedPlayerInfo> par joueur, invisibles#}
-                    <div class="selectedPlayerInfo">
+
+                    {% for selected in game.players %}
+                    <div class="selectedPlayerInfo" style="visibility: hidden">
                         <div>
                             <p class="p">
                         
@@ -80,6 +81,8 @@
                             <button>Récompenses</button>
                         </div>
                     </div>
+                    {% endfor %}
+                    
                 </div>
 
                 <!-- <div class="flex1"></div> -->
@@ -214,15 +217,13 @@
                 var e = document.querySelectorAll(".selectedPlayer");
 
                 e.forEach(function (element) {
-                    element.classList.remove("selectedPlayer");
+                    element.style.visibility = "hidden";
                 });
             }
 
-            function selectPlayer(e) {
+            function selectPlayer(i) {
                 resetSelectedPlayer();
-                e.classList.add("selectedPlayer");
-
-                //TODO set visible info correspondant au joueur
+                document.querySelectorAll(".selectedPlayer")[n].style.visibility = "visible";
             }
         </script>
 
