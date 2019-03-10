@@ -12,13 +12,12 @@
     <body>
         <div class="overlay" onclick="removeOverlay(this)">
             <div class="overlayContent" onclick="event.stopPropagation()">
-                <!-- TODO rien mdr -->
             </div>
         </div>
 
         <div id="gameContent" class="flexContainer">
             <div id="playersInfo" class="flexContainer flexColumn">
-                <div id="allPlayersInfo" class="flexContainer flexColumn">
+                <div id="allPlayersInfo" class="flexContainer flexColumn" onload="selectPlayer(0)">
                     {% for player in game.players %}
                         <div class="playerInfo" onclick="selectPlayer( {{ loop.index0 }} )">
                             <p class="p">
@@ -51,7 +50,7 @@
 
             <div id="boardAndHand" class="flexContainer flexColumn">
                 <div id="instructions">
-                    <p class="p">{# TODO instructions #}</p>
+                    <p class="p">{{ "TODO instructions" }}</p>
                 </div>
 
                 
@@ -71,7 +70,8 @@
                         <div class="flex1"></div>
 
                         {% for card in selectedPlayer.currObj %}
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="170" ondblclick="getOverlay(this)">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="170" ondblclick="getOverlay(cardInfo( {{ card.number }} ))">
+                            }
                         {% endfor %}
 
                         <div class="flex1"></div>
@@ -92,23 +92,25 @@
 
                     <div id="lootBars" class="flexContainer flexColumn">
                         <div id="topLoot" class="flexContainer flexRow">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot3Cards.jpg') }}" alt="Loot3Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot4Cards.jpg') }}" alt="Loot4Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot5Cards.jpg') }}" alt="Loot5Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot6Cards.jpg') }}" alt="Loot6Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootGold.jpg') }}" alt="LootGold" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
+                            <!-- TODO make infos for each loot -->
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '2' )">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot3Cards.jpg') }}" alt="Loot3Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '3' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot4Cards.jpg') }}" alt="Loot4Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '4' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot5Cards.jpg') }}" alt="Loot5Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '5' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot6Cards.jpg') }}" alt="Loot6Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '6' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootGold.jpg') }}" alt="LootGold" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'gold' ))">
                         </div>
 
                         <div class="flex1"></div>
 
                         <div id="botLoot" class="flexContainer flexRow">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootSenator.jpg') }}" alt="LootSenator" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootGreen.jpg') }}" alt="LootGreen" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootMulti.jpg') }}" alt="LootMulti" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootRose.jpg') }}" alt="LootRose" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootOrange.jpg') }}" alt="LootOrange" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootWheat.jpg') }}" alt="LootWheat" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
+                            <!-- TODO make infos for each loot -->
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootSenator.jpg') }}" alt="LootSenator" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'senator' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootGreen.jpg') }}" alt="LootGreen" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'green' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootMulti.jpg') }}" alt="LootMulti" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'multi' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootRose.jpg') }}" alt="LootRose" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'rose' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootOrange.jpg') }}" alt="LootOrange" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'orange' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootWheat.jpg') }}" alt="LootWheat" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'wheat' ))">
                         </div>
                     </div>
 
@@ -116,18 +118,19 @@
 
                     <div id="objLine" class="flexContainer flexRow">
                         <div class="flexContainer flexColumn">
+                            {% set objInfo = "placeholder object info" %}
                             <div>
-                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[0].number ~ '.jpg') }}" alt="Card{{ board.objLine[0].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
-                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[1].number ~ '.jpg') }}" alt="Card{{ board.objLine[1].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
+                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[0].number ~ '.jpg') }}" alt="Card{{ board.objLine[0].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[0].number }} ))">
+                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[1].number ~ '.jpg') }}" alt="Card{{ board.objLine[1].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[1].number }} ))">
                             </div>
                             <div>
-                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[2].number ~ '.jpg') }}" alt="Card{{ board.objLine[2].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
-                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[3].number ~ '.jpg') }}" alt="Card{{ board.objLine[3].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
+                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[2].number ~ '.jpg') }}" alt="Card{{ board.objLine[2].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[2].number }} ))">
+                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[3].number ~ '.jpg') }}" alt="Card{{ board.objLine[3].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[3].number }} ))">
                             </div>
                         </div>
                         <div class="flexContainer flexColumn">
                             <div class="flex1"></div>
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[4].number ~ '.jpg') }}" alt="Card{{ board.objLine[4].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(this)">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[4].number ~ '.jpg') }}" alt="Card{{ board.objLine[4].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[4].number }} ))">
                             <div class="flex1"></div>
                         </div>
                     </div>
@@ -137,7 +140,7 @@
 
                 <div id="myBar" class="flexContainer flexRow">
                     {% for card in me.currObj %}
-                        <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="200" onclick="selectHand(this)" ondblclick="getOverlay()">
+                        <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="200" onclick="selectHand(this)" ondblclick="getOverlay(cardInfo( {{ card.number }} ))">
                     {% endfor %}
 
                     <div class="flex1"></div>
@@ -171,15 +174,63 @@
 
         <!-- SCRIPTS -->
         <script>
-            function getOverlay(element) {//TODO
-                //TODO display info from parameter (document...innerHTML)
+
+            //get infos string from nbr of a card
+            function cardInfo(nbr) {
+                switch(nbr) {
+                  case 1:
+                    return "placeholder info of card 1";
+                  case 2:
+                    return "placeholder info of card 2";
+                  case 3:
+                    return "placeholder info of card 3";
+                  default:
+                    return "could not find info for card n" + nbr;
+                }
+            }
+
+            //get the infos string from nbr of a loot
+            function lootInfo(loot) {
+                switch(loot) {
+                  case '2':
+                    return "placeholder info of loot 2";
+                  case '3':
+                    return "placeholder info of loot 3";
+                  case '4':
+                    return "placeholder info of loot 4";
+                  case '5':
+                    return "placeholder info of loot 5";
+                  case '6':
+                    return "placeholder info of loot 6";
+                  case 'gold':
+                    return "placeholder info of loot gold";
+                  case 'green':
+                    return "placeholder info of loot green";
+                  case 'orange':
+                    return "placeholder info of loot orange";
+                  case 'multi':
+                    return "placeholder info of loot multi";
+                  case 'rose':
+                    return "placeholder info of loot rose";
+                  case 'senator':
+                    return "placeholder info of loot senator";
+                  case 'wheat':
+                    return "placeholder info of loot wheat";
+                  default:
+                    return "could not find info for card n" + nbr;
+                }
+            }
+
+
+            function getOverlay(infos) {
+                document.querySelector(".overlay").innerHTML = infos;
                 document.querySelector(".overlay").classList.add("visible");
                 
             }
 
             function removeOverlay(element) {
                 document.querySelector(".overlay").classList.remove("visible");
-                //TODO  rien mdr
+                document.querySelector(".overlay").innerHTML = "";
             }
 
             function validate() {
