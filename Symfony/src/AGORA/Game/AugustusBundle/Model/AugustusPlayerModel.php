@@ -26,11 +26,11 @@ class AugustusPlayerModel {
 
         $cardModel->captureToken($idCard, $token);
 
-        $player->$legion = $player->$legion - 1;
+        $player->legion = $player->$legion - 1;
 
-        $player->$history = [$idCard, $token];
+        $player->history = [$idCard, $token];
         
-        $manager.flush();
+        $manager->flush();
     }
 
     //Mets une legion de la carte Source à la carte dest.
@@ -45,9 +45,9 @@ class AugustusPlayerModel {
         $cardModel->getBackToken($idCardSource, $tokenSource);
         $cardModel->captureToken($idCardDest, $tokenDest);
 
-        $player->$history = [$idCardDest, $tokenDest];
+        $player->history = [$idCardDest, $tokenDest];
         
-        $manager.flush();
+        $manager->flush();
     }
 
     //??
@@ -65,6 +65,7 @@ class AugustusPlayerModel {
 
         $this->ctrlCards[] = $card;
         $player->cards->removeElement($card);
+        $manager->flush();
     }
 }
 

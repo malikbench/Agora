@@ -42,6 +42,20 @@ class AugustusCard
     private $board;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="tokens", type="array")
+     */
+    private $tokens;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="ctrlTokens", type="array")
+     */
+    private $ctrlTokens;
+
+    /**
      * Get id.
      *
      * @return int
@@ -99,4 +113,76 @@ class AugustusCard
         return $this->points;
     }
 
+
+    /**
+     * Set tokens.
+     *
+     * @param array $tokens
+     *
+     * @return AugustusCard
+     */
+    public function setTokens($tokens)
+    {
+        $this->tokens = $tokens;
+
+        return $this;
+    }
+
+    /**
+     * Get tokens.
+     *
+     * @return array
+     */
+    public function getTokens()
+    {
+        return $this->tokens;
+    }
+
+    /**
+     * Set ctrlTokens.
+     *
+     * @param array $ctrlTokens
+     *
+     * @return AugustusCard
+     */
+    public function setCtrlTokens($ctrlTokens)
+    {
+        $this->ctrlTokens = $ctrlTokens;
+
+        return $this;
+    }
+
+    /**
+     * Get ctrlTokens.
+     *
+     * @return array
+     */
+    public function getCtrlTokens()
+    {
+        return $this->ctrlTokens;
+    }
+
+    /**
+     * Set board.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusBoard $board
+     *
+     * @return AugustusCard
+     */
+    public function setBoard(\AGORA\Game\AugustusBundle\Entity\AugustusBoard $board)
+    {
+        $this->board = $board;
+
+        return $this;
+    }
+
+    /**
+     * Get board.
+     *
+     * @return \AGORA\Game\AugustusBundle\Entity\AugustusBoard
+     */
+    public function getBoard()
+    {
+        return $this->board;
+    }
 }

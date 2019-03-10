@@ -91,9 +91,9 @@ class AgustusGame extends Game {
     // verification que quelqu'un est arrivé à 7 carte controlé
     public function isGameOver($id){
         $games = $manager->getRepository("AugustusBundle:AugustusGame");
-        $game = $games->findOneById($id)
+        $game = $games->findOneById($id);
         
-        foreach ($game->players as $player) {
+        foreach ($game->getPlayers() as $player) {
             if (count($player->getCtrlCards()) > 7) {
                 return true;
             }
