@@ -44,7 +44,12 @@ abstract class AugustusToken
     {
         return [
             self::KNIFE,
-            self::SHIELD
+            self::SHIELD,
+            self::CHARIOT,
+            self::DOUBLESWORD,
+            self::CATAPULT,
+            self::JOKER,
+            self::TEACHES
         ];
     }
 }
