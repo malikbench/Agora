@@ -12,7 +12,7 @@
     <body>
         <div class="overlay" onclick="removeOverlay(this)">
             <div class="overlayContent" onclick="event.stopPropagation()">
-                <!-- TODO -->
+                <!-- TODO rien mdr -->
             </div>
         </div>
 
@@ -54,27 +54,31 @@
                     <p class="p">{# TODO instructions #}</p>
                 </div>
 
+                
                 <div id="playerBar" class="flexContainer flexRow">
-                    <div>
-                        <p class="p">
-                            {# TODO selectedPlayer sera surement en JS #}
-                            {{ selectedPlayer.name }}<br>
-                            Légions :<br>
-                            {{ selectedPlayer.legion }}/{{ selectedPlayer.legionMax }}
-                        </p>
-                    </div>
+                    {# TODO un <selectedPlayerInfo> par joueur, invisibles#}
+                    <div class="selectedPlayerInfo">
+                        <div>
+                            <p class="p">
+                        
+                                {{ selectedPlayer.name }}<br>
+                                Légions :<br>
+                                {{ selectedPlayer.legion }}/{{ selectedPlayer.legionMax }}
+                            </p>
+                        </div>
 
-                    <div class="flex1"></div>
+                        <div class="flex1"></div>
 
-                    {% for card in selectedPlayer.currObj %}
-                        <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="170" ondblclick="getOverlay(this)">
-                    {% endfor %}
+                        {% for card in selectedPlayer.currObj %}
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="170" ondblclick="getOverlay(this)">
+                        {% endfor %}
 
-                    <div class="flex1"></div>
+                        <div class="flex1"></div>
 
-                    <div class="flexContainer flexColumn">
-                        <button>Captures</button>
-                        <button>Récompenses</button>
+                        <div class="flexContainer flexColumn">
+                            <button>Captures</button>
+                            <button>Récompenses</button>
+                        </div>
                     </div>
                 </div>
 
@@ -130,7 +134,7 @@
 
                 <div id="myBar" class="flexContainer flexRow">
                     {% for card in me.currObj %}
-                        <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="200" onclick="selectHand(this)" ondblclick="getOverlay(this)">
+                        <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="200" onclick="selectHand(this)" ondblclick="getOverlay()">
                     {% endfor %}
 
                     <div class="flex1"></div>
@@ -164,14 +168,15 @@
 
         <!-- SCRIPTS -->
         <script>
-            function getOverlay(element) {
+            function getOverlay(element) {//TODO
+                //TODO display info from parameter (document...innerHTML)
                 document.querySelector(".overlay").classList.add("visible");
-                //TODO
+                
             }
 
             function removeOverlay(element) {
                 document.querySelector(".overlay").classList.remove("visible");
-                //TODO if there is smthing todo
+                //TODO  rien mdr
             }
 
             function validate() {
@@ -217,7 +222,7 @@
                 resetSelectedPlayer();
                 e.classList.add("selectedPlayer");
 
-                //TODO
+                //TODO set visible info correspondant au joueur
             }
         </script>
 
