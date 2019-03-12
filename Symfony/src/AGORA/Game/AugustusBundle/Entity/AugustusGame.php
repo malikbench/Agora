@@ -56,11 +56,6 @@ class AugustusGame
     public function addPlayer(\AGORA\Game\AugustusBundle\Entity\Player $player)
     {
         $this->players[] = $player;
-
-        // Attention on ajoute ici le joueur à la carte il faut donc absolument pas ajouter
-        // la carte au joueur dans la fonction setGame de Player.
-        $players->setGame($this);
-
         return $this;
     }
 
