@@ -88,7 +88,14 @@
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             {#Déplacement des onglets dans la condition 'si enregistré'#}
             <li><a class="left" href="{{ path('agora_platform_joingame') }}">Rejoindre une partie</a></li>
-            <li><a class="left" href="{{ path('agora_platform_gamelist_create') }}">Créer une partie</a></li>
+            <li class="dropdown-contener">
+                <a class="left" href="{{ path('agora_platform_gamelist_create') }}">Créer une partie</a>
+                <ul class="dropdown-content">
+                    {% for game in gameList %}
+                        <li><a href="{{ path('agora_platform_game_create', {'gameId' : game.id}) }}">{{ game.nom }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
             <li><a class="left" href="{{ path('agora_platform_playerParties', {'userId': app.user.id }) }} ">Mes Parties</a></li>
 
             {% if is_granted('ROLE_MODO') %}
