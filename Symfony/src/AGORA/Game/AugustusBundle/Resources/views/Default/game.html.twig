@@ -56,22 +56,21 @@
                 
                 <div id="playerBar" class="flexContainer flexRow">
 
-                    {% for selected in game.players %}
+                    {% for player in game.players %}
                     <div class="selectedPlayerInfo" style="visibility: hidden">
                         <div>
                             <p class="p">
                         
-                                {{ selectedPlayer.name }}<br>
+                                {{ player.name }}<br>
                                 Légions :<br>
-                                {{ selectedPlayer.legion }}/{{ selectedPlayer.legionMax }}
+                                {{ player.legion }}/{{ player.legionMax }}
                             </p>
                         </div>
 
                         <div class="flex1"></div>
 
-                        {% for card in selectedPlayer.currObj %}
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="170" ondblclick="getOverlay(cardInfo( {{ card.number }} ))">
-                            }
+                        {% for card in player.currObj %}
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="170" ondblclick="getOverlay(cardInfo( {{ card.number }} ))">  
                         {% endfor %}
 
                         <div class="flex1"></div>
@@ -236,9 +235,51 @@
             function validate() {
                 //DO VARIOUS THINGS
                 //TODO
+				
+				switch (phase) {
+					case 1: //Placement Légion
+						sendCard();
+						break;
+					case 2: //Ave Cesar Loot
+						takeLoot();
+						break;
+					case 3: //Ave Cesar Pouvoir
+						usePower();
+						break;
+					default: //
+						console.log('Sorry, there is a problem of phase (validate function)');
+				}
 
                 resetSelected();
             }
+			
+			//phase 1
+			function sendCard() {
+				//TODO global var fromCard / fromToken et toCard / toToken à faire 
+				var selectedCard = document.querySelector(".selectedHand");
+				if (toCard != null && toToken != null) {
+					if (fromCard == null) {
+					//putLegionOnCard(Card)
+					} else {
+					//putLegionFromDestToSource(dest, source)
+					}
+				}
+			}
+			
+			//phase 2
+			function takeLoot() {
+				//TODO global var loot
+				if (loot != null) {
+					//getLoot(loot)
+					//TODO s'assurer que la variable globale loot ne peut être affectée 
+					//uniquement si le loot checkCondition()
+				}
+			}
+			
+			//phase 3
+			function usePower() {
+				//TODO depends on power
+			}
 
             function resetSelected() {
                 var board = document.querySelectorAll(".selectedBoard");
