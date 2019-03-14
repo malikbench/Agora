@@ -51,9 +51,21 @@ class AugustusCard
     /**
      * @var array
      *
+     * @ORM\Column(name="power", type="AugustusPower")
+     */
+    private $power;
+
+    /**
+     * @var array
+     *
      * @ORM\Column(name="ctrlTokens", type="array")
      */
     private $ctrlTokens;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="ctrlCards", cascade={"persist"})
+     */
+    private $player;
 
     /**
      * Get id.
