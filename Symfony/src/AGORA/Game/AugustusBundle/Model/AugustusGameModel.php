@@ -22,7 +22,7 @@ class AgustusGame extends Game {
 
     // pioche un token dans son sac, si ce jeton est le joker, remet tout dans le sac de token
     public function drawToken($id) {
-        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
 
         $game->setToken($game->$board->takeToken());
@@ -30,11 +30,12 @@ class AgustusGame extends Game {
         if ($game->getToken() == "joker") {
             $game->$board->resetBag();
         }
+        $this->manager->flush();
     }
 
     // verifie que tous les joueurs ont vérouillé leur tour
     public function allOk($id) {
-        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
 
         $ok = false;
@@ -45,16 +46,17 @@ class AgustusGame extends Game {
     }
 
     public function moveLegion($id,$playerId,$source,$dest) {
-        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
         
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->$manager->getRepository('AugustusBundle:AugustusPlayer');
         $player = $players->findOneById($playerId);
         
         if (!$player->getHistory()) {
             // grosse modif a faire en fonction du reel mouvement
             $player->putLegionFromSourceToDest($source, $game->getToken(), $dest);
         }
+        $this->manager->flush();
     }
 
     // surement à deplacer dans le controleur
@@ -80,17 +82,18 @@ class AgustusGame extends Game {
 
     // penser à verif qu'un autre joueur n'a pas la recompense a faire dans le controleur
     public function claimReward($id, $player) {
-        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
         
         if($player->getAdvantage() == 0) {
             $player->setAdvantage(count($player->getCtrlCards()));
         }
+        $this->manager->flush();
     }
 
     // verification que quelqu'un est arrivé à 7 carte controlé
     public function isGameOver($id){
-        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
         
         foreach ($game->getPlayers() as $player) {
