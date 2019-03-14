@@ -320,6 +320,8 @@
             }
 
             function selectBoard(e) {
+                if ({{game.phase}} == "legion") return;
+                
                 resetSelected();
                 var src = e;
                 src.classList.add("selectedBoard");
@@ -337,7 +339,20 @@
                 resetSelectedPlayer();
                 document.querySelectorAll(".selectedPlayer")[n].style.visibility = "visible";
             }
+
+
+
+
+            //disable all drag effect on the images :
+            for (imgElem : document.querrySelecotAll("img")) {
+                imgElem.draggable = false;
+            }
         </script>
+
+
+
+
+
 
         <!-- TCHAT DIV + SCRIPT -->
         <div class="tchat">
