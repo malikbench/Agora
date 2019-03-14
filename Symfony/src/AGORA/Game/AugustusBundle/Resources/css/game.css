@@ -47,12 +47,19 @@ body {
 .overlayContent {
     margin: 5px;
     cursor: default;
-    height: 80%;
-    width: 80%;
+    height: 70%;
+    width: 20%;
     top: 10%;
     left: 10%;
-    background-color: white;
     position: absolute;
+
+    padding: 6px;
+    background-color: #473229; /*brown*/
+
+    color: #bfaaa0;
+    font-size: 150%;
+    text-align: center;
+    border-radius: 20px;
 }
 
 .visible {
@@ -75,7 +82,7 @@ body {
 #allPlayersInfo, #playerBar, #objLine, #myBar, #myInfo, #instructions {
     border-radius: 5px;
 
-    background-color: #abadb2;
+    background-color: #abadb2;  /*grey*/
     color: #0e110f;
 
     padding: 5px;
@@ -104,7 +111,7 @@ body {
     margin: 5px;
     padding: 3px;
 
-    background-color:  #af4024; /*brown*/
+    background-color:  #af4024; /*red-brown*/
     color: black;
 }
 

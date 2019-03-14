@@ -117,11 +117,10 @@
 
                     <div id="objLine" class="flexContainer flexRow">
                         <div class="flexContainer flexColumn">
-                            {% set objInfo = "placeholder object info" %}
                             <div>
                                 <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[0].number ~ '.jpg') }}" alt="Card{{ board.objLine[0].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[0].number }} ))">
                                 <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[1].number ~ '.jpg') }}" alt="Card{{ board.objLine[1].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[1].number }} ))">
-                            </div>
+                            </div>lc::rc
                             <div>
                                 <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[2].number ~ '.jpg') }}" alt="Card{{ board.objLine[2].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[2].number }} ))">
                                 <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[3].number ~ '.jpg') }}" alt="Card{{ board.objLine[3].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[3].number }} ))">
@@ -203,25 +202,32 @@
                     return advantageInfo(6, 10);
                   case 'gold':
                     return "<p>Cette carte revient au joueur qui possède le plus de cartes d'or.</p>" +
-                    "<p>Elle rapportera  5 poins lors du décompte final.</p>";
+                    "<p>Elle rapportera  5 poins lors du décompte final.</p>" +
+                    "<img src=\"{{ asset('bundles/agoragameaugustus/img/Loot/LootGold.jpg') }}\" height='100' />";
                   case 'green':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs vertes.</p>" +
-                    "<p>Elle rapportera  4 poins lors du décompte final.</p>";
+                    "<p>Elle rapportera  4 poins lors du décompte final.</p>" +
+                    "<img src=\"{{ asset('bundles/agoragameaugustus/img/Loot/LootGreen.jpg') }}\" height='100' />";
                   case 'orange':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs oranges.</p>" +
-                    "<p>Elle rapportera  10 poins lors du décompte final.</p>";
+                    "<p>Elle rapportera  10 poins lors du décompte final.</p>" +
+                    "<img src=\"{{ asset('bundles/agoragameaugustus/img/Loot/LootOrange.jpg') }}\" height='100' />";
                   case 'multi':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs de couleurs différentes.</p>" +
-                    "<p>Elle rapportera  6 poins lors du décompte final.</p>";
+                    "<p>Elle rapportera  6 poins lors du décompte final.</p>" +
+                    "<img src=\"{{ asset('bundles/agoragameaugustus/img/Loot/LootMulti.jpg') }}\" height='100' />";
                   case 'rose':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs roses.</p>" +
-                    "<p>Elle rapportera  8 poins lors du décompte final.</p>";
+                    "<p>Elle rapportera  8 poins lors du décompte final.</p>" +
+                    "<img src=\"{{ asset('bundles/agoragameaugustus/img/Loot/LootRose.jpg') }}\" height='100' />";
                   case 'senator':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes sénateurs.</p>" +
-                    "<p>Elle rapportera  2 poins lors du décompte final.</p>";
+                    "<p>Elle rapportera  2 poins lors du décompte final.</p>" +
+                    "<img src=\"{{ asset('bundles/agoragameaugustus/img/Loot/LootSenator.jpg') }}\" height='100' />";
                   case 'wheat':
                     return "<p>Cette carte revient au joueur qui possède le plus de cartes d'blé.</p>" +
-                    "<p>Elle rapportera  5 poins lors du décompte final.</p>";
+                    "<p>Elle rapportera  5 poins lors du décompte final.</p>" +
+                    "<img src=\"{{ asset('bundles/agoragameaugustus/img/Loot/LootWheat.jpg') }}\" height='100' />";
                   default:
                     return "could not find info for card n" + nbr;
                 }
@@ -230,7 +236,8 @@
             function advantageInfo(obj, points) {
                 return "<p>Il vous faut contrôler "+ obj +" objectifs pour saisir cette carte.</p>" +
                     "<p>Elle vous rapportera "+ points +" points lors du décompte final.</p>" +
-                    "<p>Vous ne pouvez saisir qu'une seule carte récompense lors de la partie.</p>";
+                    "<p>Vous ne pouvez saisir qu'une seule carte récompense lors de la partie.</p>" +
+                    "<img src=\"{{ asset('bundles/agoragameaugustus/img/Loot/Loot"+ obj +"Cards.jpg') }}\" height='100' />";
             }
 
 
