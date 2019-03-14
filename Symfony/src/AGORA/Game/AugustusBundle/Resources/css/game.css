@@ -23,6 +23,7 @@ body {
 
 .flexColumn {
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .flex1 {
@@ -68,16 +69,22 @@ body {
 }
 
 #myBar, #myInfo, #instructions {
-    background-color: lightgray;
+
 }
 
 #allPlayersInfo, #playerBar, #objLine, #myBar, #myInfo, #instructions {
-    border: black 1px solid;
+    border-radius: 5px;
+
+    background-color: #abadb2;
+    color: #0e110f;
+
     padding: 5px;
     margin: 5px;
 }
 
 #allPlayersInfo {
+    border: none;
+    background-color: rgba(1, 1, 1, 0);
     padding: 0;
     margin: 0;
 }
@@ -87,13 +94,22 @@ body {
     padding: 2px;
 }
 
-.selectedPlayer {
-    background-color: aqua;
-}
 
 .playerInfo {
-    border: black 1px solid;
+
+    /*border: black 1px solid;*/
+    border-radius: 10px;
+
     cursor: pointer;
+    margin: 5px;
+    padding: 3px;
+
+    background-color:  #af4024; /*brown*/
+    color: black;
+}
+
+.selectedPlayer {
+    background-color: #e29e0b; /* gold */
 }
 
 .p {
