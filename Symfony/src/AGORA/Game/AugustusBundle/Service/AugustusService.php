@@ -28,7 +28,7 @@ class AugustusService
         return $game;
     }
 
-    //Crée la salle pour le jeu selon les arguments recus.
+    //TODO
     public function createRoom($name, $playersNb, $private, $password, $userId) {
         $augGame = new AugustusGameModel();
         $this->manager->persist($augGame);
@@ -51,7 +51,7 @@ class AugustusService
 
         return $game->getId();
     }
-    //todo
+    //TODO
     public function joinLobbyAction(SessionInterface $session, $gameId) {
         //echo "Un autre game id : ".$gameId."\n";
         $user = $this->getUser();
@@ -96,7 +96,7 @@ class AugustusService
         )));
     }
 
-    //supprime une partie
+    //TODO
     public function deleteAction($idGame) {
         $em = $this->getDoctrine()->getManager();
         $game = $em->getRepository('AGORAGameAveCesarBundle:AveCesarGame')->find($idGame);
@@ -142,6 +142,58 @@ class AugustusService
             "players" => $players
         ));
 
+    }
+    //TODO
+    public function createPlayer($user, $gameId) {
+        $avcgame = $this->manager->getRepository('AGORAGameAveCesarBundle:AveCesarGame')->find($gameId);
+        if ($avcgame == null) {
+            throw new \Exception();
+        }
+
+        $game = $this->manager->getRepository('AGORAGameGameBundle:Game')
+            ->findOneBy(array('gameId' => $gameId));
+
+        $players = $this->manager->getRepository('AGORAGameAveCesarBundle:AveCesarPlayer')
+            ->findBy(array('game_id' => $gameId));
+
+        $nbPlayer = count($players);
+
+        if ($nbPlayer >= $game->getNbPlayers()) {
+            return -1;
+        }
+
+        $player = new AveCesarPlayer();
+        $player->setGameId($gameId);
+        $player->setHand("");
+
+
+        // Génération de la prochaine position de départ
+
+        $player->setPosition("0". chr(ord('b') + $nbPlayer));
+        $player->setLap(1);
+        $player->setUserId($user);
+        $player->setCesar(false);
+        //$player->setDeck($this->newDeck());
+        $player->setFinish(0);
+
+        $deck = preg_split("/,/", $this->newDeck());
+        $hand = array_splice($deck, -3);
+        $player->setHand($this->arrayToString($hand));
+        $player->setDeck($this->arrayToString($deck));
+
+        $this->manager->persist($player);
+        $this->manager->flush();
+        $this->setFirstPlayer($player->getId(), $gameId);
+
+        if (!$this->getNextPlayer($gameId)) {
+            $this->setNextPlayer($gameId, $player->getId());
+        }
+
+        if ($nbPlayer + 1 == $game->getNbPlayers()) {
+            $this->initPlayers($gameId);
+        }
+        $this->flush();
+        return $player->getId();
     }
 
 }
