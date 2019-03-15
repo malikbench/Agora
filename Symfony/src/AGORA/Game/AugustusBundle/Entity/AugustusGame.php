@@ -37,6 +37,18 @@ class AugustusGame
     private $token;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="state", type="string")
+     */
+    private $state;
+
+    /**
+     * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", mappedBy="game")
+     */
+    private $avePlayer;
+
+    /**
      * Get id.
      *
      * @return int
@@ -143,5 +155,53 @@ class AugustusGame
     public function getToken()
     {
         return $this->token;
+    }
+
+    /**
+     * Set state.
+     *
+     * @param string $state
+     *
+     * @return AugustusGame
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state.
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Set avePlayer.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusPlayer|null $avePlayer
+     *
+     * @return AugustusGame
+     */
+    public function setAvePlayer(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $avePlayer = null)
+    {
+        $this->avePlayer = $avePlayer;
+
+        return $this;
+    }
+
+    /**
+     * Get avePlayer.
+     *
+     * @return \AGORA\Game\AugustusBundle\Entity\AugustusPlayer|null
+     */
+    public function getAvePlayer()
+    {
+        return $this->avePlayer;
     }
 }

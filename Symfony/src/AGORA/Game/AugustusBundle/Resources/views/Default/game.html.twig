@@ -273,10 +273,11 @@
             function validate() {
                 //DO VARIOUS THINGS
                 //TODO
+				var phase = {{ game.state }};
 				
 				switch (phase) {
 					case 1: //Placement Légion
-						sendCard();
+						putLegion();
 						break;
 					case 2: //Ave Cesar Loot
 						takeLoot();
@@ -290,16 +291,26 @@
 
                 resetSelected();
             }
-			
+
 			//phase 1
-			function sendCard() {
-				//TODO global var fromCard / fromToken et toCard / toToken à faire 
-				var selectedCard = document.querySelector(".selectedHand");
-				if (toCard != null && toToken != null) {
-					if (fromCard == null) {
-					//putLegionOnCard(Card)
+			function putLegion() {
+				//action.from & to
+				var toPlayer = action.add_legion.iPlayer;
+				var toCard = action.add_legion.iCard;
+				var toToken = action.add_legion.iToken;
+				
+				var fromPlayer = action.remove_legion.iPlayer;
+				var fromCard = action.remove_legion.iCard;
+				var fromToken = action.remove_legion.iToken;
+				
+				if (toCard != null && toToken != null && toPlayer != null) {
+					if (fromCard != null && fromToken != null && fromPlayer != null) {
+						//putLegionFromDestToSource(dest, source)
+						sendXHR("{{ path('putLegionFromTo') }}?toPlayer=" + toPlayer + "&toCard=" + toCard + "&toToken=" + toToken
+						+ "&fromPlayer=" + fromPlayer + "&fromCard=" + fromCard + "&fromToken=" + fromToken);
 					} else {
-					//putLegionFromDestToSource(dest, source)
+						//putLegionOnCard(Card)
+						sendXHR("{{ path('putLegion') }}?toPlayer=" + toPlayer + "&toCard=" + toCard + "&toToken=" + toToken);
 					}
 				}
 			}
@@ -317,6 +328,17 @@
 			//phase 3
 			function usePower() {
 				//TODO depends on power
+			}
+			
+			function sendXHR(path) {
+				var xhr = new XMLHttpRequest();
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState == XMLHttpRequest.DONE) {
+						document.write(xhr.responseText);
+					}
+				}
+				xhr.open('GET', "{{ path('ok') }}?" + params, true);
+				xhr.send();
 			}
 
             function resetSelected() {
