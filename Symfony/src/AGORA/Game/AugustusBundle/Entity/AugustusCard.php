@@ -49,11 +49,25 @@ class AugustusCard
     private $tokens;
 
     /**
-     * @var array
+     * @var enum
      *
      * @ORM\Column(name="power", type="AugustusPower")
      */
     private $power;
+
+    /**
+     * @var enum
+     *
+     * @ORM\Column(name="color", type="AugustusColor")
+     */
+    private $color;
+
+    /**
+     * @var enum
+     *
+     * @ORM\Column(name="resource", type="AugustusResource")
+     */
+    private $resource;
 
     /**
      * @var array
@@ -63,9 +77,25 @@ class AugustusCard
     private $ctrlTokens;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="ctrlCards", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", cascade={"persist"})
      */
     private $player;
+
+    public function __construct(int $boardId, int $number, AugustusColor $color, AugustusResource $resource, int $points, AugustusPower $power, Array $tokens)
+    {
+        $this->tokens = $tokens;
+        $this->ctrlTokens = [];
+        $this->number = $number;
+        if ($resource != null) {
+            $this->resource = $resource;
+        }
+        if ($power != null) {
+            $this->power = $power;
+        }
+        $this->points = $points;
+        $this->color = $color;
+        $this->board = $boardId;
+    }
 
     /**
      * Get id.
@@ -196,5 +226,101 @@ class AugustusCard
     public function getBoard()
     {
         return $this->board;
+    }
+
+    /**
+     * Set power.
+     *
+     * @param \AugustusPower $power
+     *
+     * @return AugustusCard
+     */
+    public function setPower(\AugustusPower $power)
+    {
+        $this->power = $power;
+
+        return $this;
+    }
+
+    /**
+     * Get power.
+     *
+     * @return \AugustusPower
+     */
+    public function getPower()
+    {
+        return $this->power;
+    }
+
+    /**
+     * Set color.
+     *
+     * @param \AugustusColor $color
+     *
+     * @return AugustusCard
+     */
+    public function setColor(\AugustusColor $color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color.
+     *
+     * @return \AugustusColor
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * Set resource.
+     *
+     * @param \AugustusResource $resource
+     *
+     * @return AugustusCard
+     */
+    public function setResource(\AugustusResource $resource)
+    {
+        $this->resource = $resource;
+
+        return $this;
+    }
+
+    /**
+     * Get resource.
+     *
+     * @return \AugustusResource
+     */
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    /**
+     * Set player.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusPlayer|null $player
+     *
+     * @return AugustusCard
+     */
+    public function setPlayer(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $player = null)
+    {
+        $this->player = $player;
+
+        return $this;
+    }
+
+    /**
+     * Get player.
+     *
+     * @return \AGORA\Game\AugustusBundle\Entity\AugustusPlayer|null
+     */
+    public function getPlayer()
+    {
+        return $this->player;
     }
 }
