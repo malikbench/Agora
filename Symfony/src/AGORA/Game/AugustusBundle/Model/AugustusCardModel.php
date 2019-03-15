@@ -89,78 +89,6 @@ class AugustusCardModel {
             case AugustusPower::TEACHESISKNIFE: 
                 doTeachesIsKnife($idCard);
                 break;
-            case AugustusPower::ONEPOINTBYSHIELD: 
-                doOnePointByShield($idCard);
-                break;
-            case AugustusPower::ONEPOINTBYDOUBLESWORD: 
-                doOnePointByDoubleSword($idCard);
-                break;
-            case AugustusPower::TWOPOINTBYCHARIOT: 
-                doTwoPointByChariot($idCard);
-                break;
-            case AugustusPower::THREEPOINTBYCATAPULT: 
-                doThreePointByCatapult($idCard);
-                break;
-            case AugustusPower::THREEPOINTBYTEACHES: 
-                doThreePointByTeaches($idCard);
-                break;
-            case AugustusPower::FOURPOINTBYKNIFE: 
-                doFourPointByKnife($idCard);
-                break;
-            case AugustusPower::TWOPOINTBYGREENCARD: 
-                doTwoPointByGreenCard($idCard);
-                break;
-            case AugustusPower::TWOPOINTBYSENATORCARD: 
-                doTwoPointBySenatorCard($idCard);
-                break;
-            case AugustusPower::FOURPOINTBYPINKCARD: 
-                doFourPointByPinkCard($idCard);
-                break;
-            case AugustusPower::FIVEPOINTBYREDCARD: 
-                doFivePointByRedCard($idCard);
-                break;
-            case AugustusPower::SIXPOINTBYORANGECARD: 
-                doSixPointByOrangeCard($idCard);
-                break;
-            case AugustusPower::REMOVEONELEGION: 
-                doRemoveOneLegion($idCard);
-                break;
-            case AugustusPower::REMOVETWOLEGION: 
-                doRemoveTwoLegion($idCard);
-                break;
-            case AugustusPower::REMOVEALLLEGION: 
-                doRemoveAllLegion($idCard);
-                break;
-            case AugustusPower::REMOVEONECARD: 
-                doRemoveOneCard($idCard);
-                break;
-            case AugustusPower::COMPLETECARD: 
-                doRemoveCompleteCard($idCard);
-                break;
-            case AugustusPower::ONELEGIONONANYTHING: 
-                doOneLegionOnAnything($idCard);
-                break;
-            case AugustusPower::TWOLEGIONONANYTHING: 
-                doTwoLegionOnAnything($idCard);
-                break;
-            case AugustusPower::TWOLEGIONONDOUBLESWORD: 
-                doTwoLegionOnDoubleSword($idCard);
-                break;
-            case AugustusPower::TWOLEGIONONCHARIOT: 
-                doTwoLegionOnChariot($idCard);
-                break;
-            case AugustusPower::TWOLEGIONONCATAPULT: 
-                doTwoLegionOnCatapult($idCard);
-                break;
-            case AugustusPower::TWOLEGIONONTEACHES: 
-                doTwoLegionOnTeaches($idCard);
-                break;
-            case AugustusPower::TWOLEGIONONSHIELD: 
-                doTwoLegionOnShield($idCard);
-                break;
-            case AugustusPower::TWOLEGIONONKNIFE: 
-                doTwoLegionOnKnife($idCard);
-                break;
         }
     }
 
@@ -272,7 +200,4 @@ class AugustusCardModel {
         $player -> setBonus($bonus);
     }
 
-    private function doOnePointByShield($idCard) {
-        
-    }
 }
