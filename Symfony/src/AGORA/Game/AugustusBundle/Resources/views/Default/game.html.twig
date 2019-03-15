@@ -147,12 +147,31 @@
 
                 <div id="myBar" class="flexContainer flexRow">
                     {% for card in me.currObj %}
+                        {% set cardIndex = loop.index0 %}
                     <div class="card" style="background-image: url('{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}');">
                         {% for token in card.tokens.length %}
-                        {% if controlledToken[loop.index] %} <!-- TODO  remplacer par la bonne péthode pour savoir si un token est controllé -->
-                        <img src='../../img/Token/legion.png' class="legion" style="top: {{ 31 * loop.index }}px;">
-                        {% endif %}
+                            {% if controlledToken[loop.index0] %} <!-- TODO  remplacer par la bonne méthode pour savoir si un token est controllé -->
+                            <img src='../../img/Token/legion.png' class="legion" style="top: {{ 31 * loop.index }}px;">
+                            {% endif %}
                         {% endfor %}
+                        <div class="cardAction{{ loop.index0 }} cardAction" style="visibility: hidden;">
+                            <div>
+                                <p>Vous pouvez retirer une légion d'un de ces emplacements en le sélectionnant:</p>
+                                {% for token in card.tokens.length %}
+                                    {% if controlledToken[loop.index] %}
+                                    <img class="token" src="../../img/Token/Token{{ token.name }}.jpg" height="32" onclick="selectToken(this, loop.index0, {{ cardIndex }})">
+                                    {% endif %}
+                                {% endfor %}
+                                <button onclick="removeSelectedToken()">Retirer</button>
+
+                                <br>
+                                <br>
+                            </div>
+                            <div>
+                                <p>Vous pouvez placer une légion sur cette carte :</p>
+                                <button onclick="removeSelectedToken()">Placer</button>
+                            <div>
+                        </div>
                     </div>
                     <!--
                         <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="200" onclick="selectHand(this)" ondblclick="getOverlay(cardInfo( {{ card.number }} ))">
@@ -170,7 +189,7 @@
                 <div id="buttons" class="flexContainer flexRow">
                     <div class="flex1"></div>
                     <button onclick="validate()">Valider</button>
-                    <button onclick="resetSelected()">Annuler</button>
+                    <button onclick="resetSelected()">Annuler</button><!-- onclick : devrait peut-être refresh la page -->
                     <div class="flex1"></div>
                 </div>
             </div>
@@ -295,13 +314,13 @@
 			//phase 1
 			function putLegion() {
 				//action.from & to
-				var toPlayer = action.add_legion.iPlayer;
-				var toCard = action.add_legion.iCard;
-				var toToken = action.add_legion.iToken;
+				var toPlayer = action.addToken.iPlayer;
+				var toCard = action.addToken.iCard;
+				var toToken = action.addToken.iToken;
 				
-				var fromPlayer = action.remove_legion.iPlayer;
-				var fromCard = action.remove_legion.iCard;
-				var fromToken = action.remove_legion.iToken;
+				var fromPlayer = action.removeToken.iPlayer;
+				var fromCard = action.removeToken.iCard;
+				var fromToken = action.removeToken.iToken;
 				
 				if (toCard != null && toToken != null && toPlayer != null) {
 					if (fromCard != null && fromToken != null && fromPlayer != null) {
@@ -317,12 +336,15 @@
 			
 			//phase 2
 			function takeLoot() {
-				//TODO global var loot
-				if (loot != null) {
-					//getLoot(loot)
-					//TODO s'assurer que la variable globale loot ne peut être affectée 
-					//uniquement si le loot checkCondition()
-				}
+				var loot = document.querySelectorAll(".selectedBoard");
+                if (loot != null) {
+                    loot = loot.alt.replace("Loot", "");
+                    if (loot != null) {
+                        //getLoot(loot)
+                        //TODO s'assurer que la variable globale loot ne peut être affectée 
+                        sendXHR("{{ path('takeLoot') }}?loot=" + loot);
+                    }
+                }
 			}
 			
 			//phase 3
@@ -337,7 +359,7 @@
 						document.write(xhr.responseText);
 					}
 				}
-				xhr.open('GET', "{{ path('ok') }}?" + params, true);
+				xhr.open('GET', path, true);
 				xhr.send();
 			}
 
@@ -357,6 +379,47 @@
                 resetSelected();
                 var src = e;
                 src.classList.add("selectedHand");
+                
+                if (document.querySelector(".action").hasChildNodes()) {
+                    document.querySelector(".action").firstChild.style.visibility = "hidden";
+                    document.querySelector("#myBar").querySelectorAll(".card")[document.querySelector(".action").childNodes[0].classList[0].replace("cardAction","")].appendChild(document.querySelector(".action").firstChild);
+                }
+
+                e.querySelector(".cardAction").style.visibility = "visible";
+                document.querySelector(".action").appendChild(e.querySelector(".cardAction"));
+            }
+            
+            var action = {};
+            var selectedToken = {};
+            var selectedCard = {};
+            function selectToken(e, indToken, indCard) {
+                document.querySelectorAll(".selectedToken").forEach( function (ee) {
+                    ee.classList.remove("selectedToken");
+                });
+
+                e.classList.add("selectedToken");
+                selectedToken.ind = indToken;
+                //selectedToken.elem = e;
+                selectedCard.ind = indCard;
+            }
+
+            function removeSelectedToken() {
+                removeToken = {};
+                
+                removeToken.token = selectedToken;
+                removeToken.card = selectedCard;
+                
+                action.removeToken = removeToken;
+
+                //selectedToken.elem.style.visibility = "hidden";
+                
+                document.querySelectorAll(".cardAction").forEach( function (ee) {
+                    ee.firstElementChild.innerHTML = "<p>Vous avez retiré une légion, vous ne pouvez plus en retirer davantage.</p>";
+                });
+            }
+            
+            function addBestToken() {
+                //TODO fonction de prise du token le plus rare pour le joueur
             }
 
             function selectBoard(e) {

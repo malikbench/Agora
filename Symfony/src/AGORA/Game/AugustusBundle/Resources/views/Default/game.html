@@ -175,22 +175,45 @@
                         <img src='../../img/Token/legion.png' class="legion" style="top: 31px;">
                         <img src='../../img/Token/legion.png' class="legion" style="top: 62px;">
 
-                        <div class="cardAction" style="visibility: hidden;">
-                            <p>Vous pouvez retirer une légion d'un de ces emplacements en le sélectionnant:</p>
-                            <img class="token" src="../../img/Token/TokenDoubleGlaive.jpg" height="32" onclick="selectToken(this, 0)">
-                            <img class="token" src="../../img/Token/TokenDoubleGlaive.jpg" height="32" onclick="selectToken(this, 1)">
+                        <div class="cardAction0 cardAction" style="visibility: hidden;">
+                            <div>
+                                <p>Vous pouvez retirer une légion d'un de ces emplacements en le sélectionnant:</p>
+                                <img class="token" src="../../img/Token/TokenDoubleGlaive.jpg" height="32" onclick="selectToken(this, 0, 0)">
+                                <img class="token" src="../../img/Token/TokenDoubleGlaive.jpg" height="32" onclick="selectToken(this, 1, 0)">
 
-                            <button onclick="removeSelectedToken()">Retirer</button>
+                                <button onclick="removeSelectedToken()">Retirer</button>
 
-                            <br>
-                            <br>
-                            <p>Vous pouvez placer une légion sur cette carte :</p>
-                            <button onclick="removeSelectedToken()">Placer</button>
+                                <br>
+                                <br>
+                            </div>
+                            <div>
+                                <p>Vous pouvez placer une légion sur cette carte :</p>
+                                <button onclick="addBestToken()">Placer</button>
+                            </div>
                         </div>
                     </div>
                     
+                    <div class="card" style="background-image: url('../../img/Cards/3.jpg');" onclick="selectHand(this)" ondblclick="getOverlay(this)">
+                        <img src='../../img/Token/legion.png' class="legion" style="top: 0px;">
+                        <img src='../../img/Token/legion.png' class="legion" style="top: 31px;">
+                        <img src='../../img/Token/legion.png' class="legion" style="top: 62px;">
 
-                    <img src="../../img/Cards/2.jpg" alt="Card2" height="200" onclick="selectHand(this)" ondblclick="getOverlay(this)">
+                        <div class="cardAction1 cardAction" style="visibility: hidden;">
+                            <div>
+                                <p>Vous pouvez retirer une légion d'un de ces emplacements en le sélectionnant:</p>
+                                <img class="token" src="../../img/Token/TokenDoubleGlaive.jpg" height="32" onclick="selectToken(this, 0, 1)">
+                                <img class="token" src="../../img/Token/TokenDoubleGlaive.jpg" height="32" onclick="selectToken(this, 1, 1)">
+                                <button onclick="removeSelectedToken()">Retirer</button>
+                                <br>
+                                <br>
+                            </div>
+                            <div>
+                                <p>Vous pouvez placer une légion sur cette carte :</p>
+                                <button onclick="addBestToken()">Placer</button>
+                            </div>
+                        </div>
+                    </div>
+
                     <img src="../../img/Cards/2.jpg" alt="Card2" height="200" onclick="selectHand(this)" ondblclick="getOverlay(this)">
                     <img src="../../img/Cards/2.jpg" alt="Card2" height="200" onclick="selectHand(this)" ondblclick="getOverlay(this)">
                     <img src="../../img/Cards/2.jpg" alt="Card2" height="200" onclick="selectHand(this)" ondblclick="getOverlay(this)">
@@ -206,7 +229,7 @@
                 <div id="buttons" class="flexContainer flexRow">
                     <div class="flex1"></div>
                     <button onclick="validate()">Valider</button>
-                    <button onclick="resetSelected()">Annuler</button>
+                    <button onclick="resetSelected()">Annuler</button> <!-- onclick : devrait peut-être refresh la page -->
                     <div class="flex1"></div>
                 </div>
             </div>
@@ -222,7 +245,7 @@
 
                 <div class="flex1"></div>
 
-                <div class="action">  </div>
+                <div class="action"></div>
             </div>
         </div>
 
@@ -263,29 +286,48 @@
                 resetSelected();
                 var src = e;
                 src.classList.add("selectedHand");
+                
+                if (document.querySelector(".action").hasChildNodes()) {
+                    document.querySelector(".action").firstChild.style.visibility = "hidden";
+                    document.querySelector("#myBar").querySelectorAll(".card")[document.querySelector(".action").childNodes[0].classList[0].replace("cardAction","")].appendChild(document.querySelector(".action").firstChild);
+                }
 
-                e.querySelector(".cardAction").style.visibility = "visible"
+                e.querySelector(".cardAction").style.visibility = "visible";
                 document.querySelector(".action").appendChild(e.querySelector(".cardAction"));
             }
 
             var action = {};
             var selectedToken = {};
-            function selectToken(e, i) {
+            var selectedCard = {};
+            function selectToken(e, indToken, indCard) {
                 document.querySelectorAll(".selectedToken").forEach( function (ee) {
                     ee.classList.remove("selectedToken");
                 });
 
                 e.classList.add("selectedToken");
-                selectedToken.ind = i;
-                selectedToken.elem = e;            }
-
-            function removeSelectedToken() {
-                action.removeToken = selectedToken;
-
-                selectedToken.elem.style.visibility = "hidden";
+                selectedToken.ind = indToken;
+                //selectedToken.elem = e;
+                selectedCard.ind = indCard;
             }
 
+            function removeSelectedToken() {
+                var removeToken = {};
+                
+                removeToken.token = selectedToken;
+                removeToken.card = selectedCard;
+                
+                action.removeToken = removeToken;
 
+                //selectedToken.elem.style.visibility = "hidden";
+                
+                document.querySelectorAll(".cardAction").forEach( function (ee) {
+                    ee.firstElementChild.innerHTML = "<p>Vous avez retiré une légion, vous ne pouvez plus en retirer davantage.</p>";
+                });
+            }
+
+            function addBestToken() {
+                //TODO fonction de prise du token le plus rare pour le joueur
+            }
 
             function selectBoard(e) {
                 resetSelected();
