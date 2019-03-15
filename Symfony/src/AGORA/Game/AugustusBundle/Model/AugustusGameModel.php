@@ -7,18 +7,24 @@ class AgustusGame extends Game {
         $this->manager = $em;
     }
 
-    // public function startGame($id) {
-    //     $games = $manager->getRepository("AugustusBundle:AugustusGame");
-    //     $game = $games->findOneById($id)
+    // donne une main de trois cartes à chaque joueur ainsi qu'un jeton sur le plateau
+    public function initGame($id) {
+        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
 
-    //     if ($game->isGameOver()) {
-    //         return true;
-    //     }
-    //     //confirmation de nom
-    //     $this->setToken($board->getBagOfToken()->takeToken());
+        $game->setToken($game->$board->takeToken());
+        // verifier
+        if ($game->getToken() == "joker") {
+            $game->$board->resetBag();
+        }
 
-    //     $game->startGame($id);
-    // }
+        foreach ($game->getPlayers() as $player) {
+            for ($i = 0; i < 3; $i++) {
+             $player->addCard($game->$board->drawCard());
+            }
+        }
+
+    }
 
     // pioche un token dans son sac, si ce jeton est le joker, remet tout dans le sac de token
     public function drawToken($id) {
@@ -45,6 +51,7 @@ class AgustusGame extends Game {
         return $ok;
     }
 
+    // utile?
     public function moveLegion($id,$playerId,$source,$dest) {
         $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
