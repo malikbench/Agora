@@ -37,6 +37,18 @@ class AugustusGame
     private $token;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="state", type="string")
+     */
+    private $state;
+
+    /**
+     * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", mappedBy="game")
+     */
+    private $avePlayer;
+
+    /**
      * Get id.
      *
      * @return int
@@ -56,11 +68,6 @@ class AugustusGame
     public function addPlayer(\AGORA\Game\AugustusBundle\Entity\Player $player)
     {
         $this->players[] = $player;
-
-        // Attention on ajoute ici le joueur à la carte il faut donc absolument pas ajouter
-        // la carte au joueur dans la fonction setGame de Player.
-        $players->setGame($this);
-
         return $this;
     }
 
@@ -84,5 +91,69 @@ class AugustusGame
     public function getPlayers()
     {
         return $this->players;
+    }
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->players = new \Doctrine\Common\Collections\ArrayCollection();
+
+        /*$players = array();
+        for ($i = 0; $i <$playersNb; $i++) {
+            // argument dans le constructeur de player
+            array_push($players, new Player());
+        }*/
+        // argument dans le constructeur de board
+        $board = new Board();
+    }
+
+    /**
+     * Set board.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusBoard|null $board
+     *
+     * @return AugustusGame
+     */
+    public function setBoard(\AGORA\Game\AugustusBundle\Entity\AugustusBoard $board = null)
+    {
+        $this->board = $board;
+
+        return $this;
+    }
+
+    /**
+     * Get board.
+     *
+     * @return \AGORA\Game\AugustusBundle\Entity\AugustusBoard|null
+     */
+    public function getBoard()
+    {
+        return $this->board;
+    }
+
+    /**
+     * Set token.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusToken|null $token
+     *
+     * @return AugustusGame
+     */
+    public function setToken(\AGORA\Game\AugustusBundle\Entity\AugustusToken $token = null)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Get token.
+     *
+     * @return \AGORA\Game\AugustusBundle\Entity\AugustusToken|null
+     */
+    public function getToken()
+    {
+        return $this->token;
     }
 }

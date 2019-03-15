@@ -1,77 +1,56 @@
 <?php
+/**
+ * Created by IntelliJ IDEA.
+ * User: cloudandzak
+ * Date: 14/03/19
+ * Time: 13:07
+ */
+
+namespace AGORA\Game\AugustusBundle\Service;
 
 
-namespace AGORA\Game\AugustusBundle\Controller;
-use AGORA\Game\AugustusBundle\Service\AugustusService;
 
 use AGORA\Game\AugustusBundle\Entity\AugustusGame;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use FOS\UserBundle\Model\UserInterface;
 
-class GameController extends Controller
+class AugustusService
 {
 
-    /**
-     * @Route
-     */
-
-    public function indexAction($gameId) {
-        //Récupération de l'utilisateur connecté
-        $user = $this->getUser();
-
-        if (!is_object($user) || !$user instanceof UserInterface) {
-            throw new AccessDeniedException('Accès refusé, l\'utilisateur n\'est pas connecté.');
-        }
-
-
-        //Recupération dans la bdd des information du jeu
-        /** @var AugustusService $service */
-        $augGame = $service->getGame($gameId);
-
-        //TODO && ask
-        $player = $augGame->getPlayerFromId($user->getId());
-        //récupération du nom de la partie
-        $gameName = $service->getGameName($gameId);
-
-        //Envoie Au twig tout les infomartions qu'il soit afficher
-        return $this->render('AGORAGameAveCesarBundle:Default:game.html.twig',
-            array(
-                'user' => $user,
-                'game' => $augGame,
-                'me' => $player,
-                'gameName' => $gameName,
-            )
-        );
+    protected $manager;
+    //On construit notre api avec un entity manager permettant l'accès à la base de données
+    public function __construct(EntityManager $em) {
+        $this->manager = $em;
+    }
+    //Fonction qui récupere le jeu en bdd
+    public function getGame($gameId) {
+        $game = $this->manager
+            ->getRepository('AugustusBundle:AugustusGame')
+            ->find($gameId);
+        return $game;
     }
 
+    //TODO
+    public function createRoom($name, $playersNb, $private, $password, $userId) {
+        $augGame = new AugustusGameModel();
+        $this->manager->persist($augGame);
+        $this->manager->flush();
 
-    //Création de la partie
-    public function createLobbyAction() {
-        //Recupération de l'utilisateur qui a crée la partie et vérification que celui ci est connecté
-        $user = $this->getUser();
-        if (!is_object($user) || !$user instanceof UserInterface) {
-            throw new AccessDeniedException('Accès refusé, l\'utilisateur n\'est pas connecté.');
-        }
-        //recupere dnas la base de donnée la ou on stock les partie d'Augustus
-        $service = $this->container->get('agora_game.augustus');
+        $game = new Game();
+        $game->setGameId($augGame->getId());
+        $gameInfoManager = $this->manager->getRepository('AGORAPlatformBundle:GameInfo');
+        $gameInfo = $gameInfoManager->findOneBy(array('gameCode' => "aug"));
+        $game->setGameInfoId($gameInfo);
+        $game->setName($name);
+        $game->setNbPlayers($playersNb);
+        $game->setIdHost($userId);
+        $game->setPassword($password);
+        $game->setPrivate($private);
+        $game->setState("waiting");
+        $game->setDateCrea(new \DateTime("now"));
+        $this->manager->persist($game);
+        $this->manager->flush();
 
-        $private = 0;
-        $password = "";
-        //si un mdp a été donnée et la partie est privé initialise le mot de passe
-        if (isset($_POST['private']) && isset($_POST['password']) && $_POST['password']!="" && $_POST['private'] == "on") {
-            $private = 1;
-            $password = $_POST['password'];
-
-        }
-        //création de la salle de jeu et récupération de l'id
-        $gameId = $service->createRoom($_POST['lobbyName'], $_POST['nbPlayers'], $private, $password, $user->getId());
-        return $this->redirect($this->generateUrl('agora_game_join_aug' ,array(
-            "gameId" => $gameId
-        )));
+        return $game->getId();
     }
-
-
     //TODO
     public function joinLobbyAction(SessionInterface $session, $gameId) {
         //echo "Un autre game id : ".$gameId."\n";
@@ -116,8 +95,8 @@ class GameController extends Controller
             "gameId" => $gameId
         )));
     }
+
     //TODO
-    //supprime une partie
     public function deleteAction($idGame) {
         $em = $this->getDoctrine()->getManager();
         $game = $em->getRepository('AGORAGameAveCesarBundle:AveCesarGame')->find($idGame);
@@ -163,6 +142,58 @@ class GameController extends Controller
             "players" => $players
         ));
 
+    }
+    //TODO
+    public function createPlayer($user, $gameId) {
+        $avcgame = $this->manager->getRepository('AGORAGameAveCesarBundle:AveCesarGame')->find($gameId);
+        if ($avcgame == null) {
+            throw new \Exception();
+        }
+
+        $game = $this->manager->getRepository('AGORAGameGameBundle:Game')
+            ->findOneBy(array('gameId' => $gameId));
+
+        $players = $this->manager->getRepository('AGORAGameAveCesarBundle:AveCesarPlayer')
+            ->findBy(array('game_id' => $gameId));
+
+        $nbPlayer = count($players);
+
+        if ($nbPlayer >= $game->getNbPlayers()) {
+            return -1;
+        }
+
+        $player = new AveCesarPlayer();
+        $player->setGameId($gameId);
+        $player->setHand("");
+
+
+        // Génération de la prochaine position de départ
+
+        $player->setPosition("0". chr(ord('b') + $nbPlayer));
+        $player->setLap(1);
+        $player->setUserId($user);
+        $player->setCesar(false);
+        //$player->setDeck($this->newDeck());
+        $player->setFinish(0);
+
+        $deck = preg_split("/,/", $this->newDeck());
+        $hand = array_splice($deck, -3);
+        $player->setHand($this->arrayToString($hand));
+        $player->setDeck($this->arrayToString($deck));
+
+        $this->manager->persist($player);
+        $this->manager->flush();
+        $this->setFirstPlayer($player->getId(), $gameId);
+
+        if (!$this->getNextPlayer($gameId)) {
+            $this->setNextPlayer($gameId, $player->getId());
+        }
+
+        if ($nbPlayer + 1 == $game->getNbPlayers()) {
+            $this->initPlayers($gameId);
+        }
+        $this->flush();
+        return $player->getId();
     }
 
 }

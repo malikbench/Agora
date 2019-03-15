@@ -6,11 +6,14 @@ abstract class AugustusResource
 {
     const WHEAT    = "wheat";
     const GOLD = "gold";
+    const BOTH = "gold";
+
 
     /** @var array user friendly named resource */
     protected static $resourceName = [
         self::GOLD    => 'Or',
         self::WHEAT => 'Blé',
+        self::BOTH => "Both",
     ];
 
     /**
@@ -33,7 +36,8 @@ abstract class AugustusResource
     {
         return [
             self::GOLD,
-            self::WHEAT
+            self::WHEAT,
+            self::BOTH
         ];
     }
 }
