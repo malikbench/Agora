@@ -93,6 +93,8 @@ abstract class AugustusPower
         return [
             self::ONELEGION,
             self::TWOLEGION,
+            self::ONECARD,
+            self::MOVELEGION,
             self::DOUBLESWORDISSHIELD,
             self::SHIELDISCHARIOT,
             self::CHARIOTISCATAPULT,
