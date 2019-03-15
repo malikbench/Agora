@@ -70,7 +70,16 @@
                         <div class="flex1"></div>
 
                         {% for card in player.currObj %}
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="170" ondblclick="getOverlay(cardInfo( {{ card.number }} ))">  
+                        <div class="card" style="background-image: url('{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}');">
+                            {% for token in card.tokens.length %}
+                            {% if controlledToken[loop.index] %} <!-- TODO  remplacer par la bonne péthode pour savoir si un token est controllé -->
+                            <img src='../../img/Token/legion.png' class="legion" style="top: {{ 31 * loop.index }}px;">
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        <!--
+                        <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="200" ondblclick="getOverlay(cardInfo( {{ card.number }} ))">
+                        -->
                         {% endfor %}
 
                         <div class="flex1"></div>
@@ -120,7 +129,7 @@
                             <div>
                                 <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[0].number ~ '.jpg') }}" alt="Card{{ board.objLine[0].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[0].number }} ))">
                                 <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[1].number ~ '.jpg') }}" alt="Card{{ board.objLine[1].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[1].number }} ))">
-                            </div>lc::rc
+                            </div>
                             <div>
                                 <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[2].number ~ '.jpg') }}" alt="Card{{ board.objLine[2].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[2].number }} ))">
                                 <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[3].number ~ '.jpg') }}" alt="Card{{ board.objLine[3].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[3].number }} ))">
@@ -138,7 +147,16 @@
 
                 <div id="myBar" class="flexContainer flexRow">
                     {% for card in me.currObj %}
+                    <div class="card" style="background-image: url('{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}');">
+                        {% for token in card.tokens.length %}
+                        {% if controlledToken[loop.index] %} <!-- TODO  remplacer par la bonne péthode pour savoir si un token est controllé -->
+                        <img src='../../img/Token/legion.png' class="legion" style="top: {{ 31 * loop.index }}px;">
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <!--
                         <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="200" onclick="selectHand(this)" ondblclick="getOverlay(cardInfo( {{ card.number }} ))">
+                    -->
                     {% endfor %}
 
                     <div class="flex1"></div>
@@ -344,7 +362,7 @@
 
 
             //disable all drag effect on the images :
-            for (imgElem : document.querrySelecotAll("img")) {
+            document.querrySelecotAll("img").forEach(function (imgElem)) {
                 imgElem.draggable = false;
             }
         </script>

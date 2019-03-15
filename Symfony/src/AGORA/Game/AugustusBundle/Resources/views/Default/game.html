@@ -101,7 +101,11 @@
 
                     <div class="flex1"></div>
 
-                    <img src="../../img/Cards/1.jpg" alt="Card1" height="170" ondblclick="getOverlay(this)">
+                    <div class="card" style="background-image: url('../../img/Cards/3.jpg');">
+                        <img src='../../img/Token/legion.png' class="legion" style="top: 0px;">
+                        <img src='../../img/Token/legion.png' class="legion" style="top: 31px;">
+                        <img src='../../img/Token/legion.png' class="legion" style="top: 62px;">
+                    </div>
                     <img src="../../img/Cards/1.jpg" alt="Card1" height="170" ondblclick="getOverlay(this)">
                     <img src="../../img/Cards/1.jpg" alt="Card1" height="170" ondblclick="getOverlay(this)">
                     <img src="../../img/Cards/1.jpg" alt="Card1" height="170" ondblclick="getOverlay(this)">
@@ -166,7 +170,26 @@
                 <div class="flex1"></div>
 
                 <div id="myBar" class="flexContainer flexRow">
-                    <img src="../../img/Cards/2.jpg" alt="Card2" height="200" onclick="selectHand(this)" ondblclick="getOverlay(this)">
+                    <div class="card" style="background-image: url('../../img/Cards/3.jpg');" onclick="selectHand(this)" ondblclick="getOverlay(this)">
+                        <img src='../../img/Token/legion.png' class="legion" style="top: 0px;">
+                        <img src='../../img/Token/legion.png' class="legion" style="top: 31px;">
+                        <img src='../../img/Token/legion.png' class="legion" style="top: 62px;">
+
+                        <div class="cardAction" style="visibility: hidden;">
+                            <p>Vous pouvez retirer une légion d'un de ces emplacements en le sélectionnant:</p>
+                            <img class="token" src="../../img/Token/TokenDoubleGlaive.jpg" height="32" onclick="selectToken(this, 0)">
+                            <img class="token" src="../../img/Token/TokenDoubleGlaive.jpg" height="32" onclick="selectToken(this, 1)">
+
+                            <button onclick="removeSelectedToken()">Retirer</button>
+
+                            <br>
+                            <br>
+                            <p>Vous pouvez placer une légion sur cette carte :</p>
+                            <button onclick="removeSelectedToken()">Placer</button>
+                        </div>
+                    </div>
+                    
+
                     <img src="../../img/Cards/2.jpg" alt="Card2" height="200" onclick="selectHand(this)" ondblclick="getOverlay(this)">
                     <img src="../../img/Cards/2.jpg" alt="Card2" height="200" onclick="selectHand(this)" ondblclick="getOverlay(this)">
                     <img src="../../img/Cards/2.jpg" alt="Card2" height="200" onclick="selectHand(this)" ondblclick="getOverlay(this)">
@@ -198,6 +221,8 @@
                 </div>
 
                 <div class="flex1"></div>
+
+                <div class="action">  </div>
             </div>
         </div>
 
@@ -238,7 +263,29 @@
                 resetSelected();
                 var src = e;
                 src.classList.add("selectedHand");
+
+                e.querySelector(".cardAction").style.visibility = "visible"
+                document.querySelector(".action").appendChild(e.querySelector(".cardAction"));
             }
+
+            var action = {};
+            var selectedToken = {};
+            function selectToken(e, i) {
+                document.querySelectorAll(".selectedToken").forEach( function (ee) {
+                    ee.classList.remove("selectedToken");
+                });
+
+                e.classList.add("selectedToken");
+                selectedToken.ind = i;
+                selectedToken.elem = e;            }
+
+            function removeSelectedToken() {
+                action.removeToken = selectedToken;
+
+                selectedToken.elem.style.visibility = "hidden";
+            }
+
+
 
             function selectBoard(e) {
                 resetSelected();

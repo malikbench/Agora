@@ -32,6 +32,7 @@ body {
 
 /* Overlay */
 .overlay {
+    z-index: 3;
     position: fixed; /* Sit on top of the page content */
     visibility: hidden;
     width: 100%; /* Full width (cover the whole page) */
@@ -60,6 +61,14 @@ body {
     font-size: 150%;
     text-align: center;
     border-radius: 20px;
+}
+
+.action {
+    background-color: #abadb2;  /*grey*/
+    color: #0e110f;
+
+    height: 50%;
+    width: 15em;
 }
 
 .visible {
@@ -96,9 +105,8 @@ body {
     margin: 0;
 }
 
-.selectedHand, .selectedBoard {
+.selectedHand, .selectedBoard, .selectedToken {
     border: 2px red solid;
-    padding: 2px;
 }
 
 
@@ -125,4 +133,23 @@ body {
 
 .taken {
     opacity: 0.5;
+}
+
+.card {
+    position: relative;
+    height: 200px;
+    width: 200px;
+
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.legion {
+    position: absolute;
+    left: 15px;
+
+    height: 24px;
+    width: 24px;
 }
