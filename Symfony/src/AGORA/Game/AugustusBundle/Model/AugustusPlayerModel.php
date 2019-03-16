@@ -50,10 +50,6 @@ class AugustusPlayerModel {
         $manager->flush();
     }
 
-    //??
-    public function takeLoot($idPlayer, $idLoot) {
-
-    }
 
     //La carte d'id idCard passe de currObj à ctrlObj si tout les tokens de la cartes sont contrôlés.
     public function captureCard($idPlayer, $idCard) {
@@ -63,9 +59,26 @@ class AugustusPlayerModel {
         $player = $players->findOneById($idPlayer);
         $card = $cards->findOneById($idCard);
 
-        $this->ctrlCards[] = $card;
+        $player->ctrlCards[] = $card;
         $player->cards->removeElement($card);
         $manager->flush();
     }
+
+    public function deleteCtrlCard($idPlayer) {
+        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+
+        $player = $players->findOneById($idPlayer);
+
+        $ctrlCards = $player->getCtrlCards();
+        shuffle($ctrlCards);
+        array_pop($ctrlCards);
+        $player->setCtrlCards($ctrlCards);
+
+        $manager->flush();
+    }
+
+//completeCard
+//addGold
+//addWheat
 }
 
