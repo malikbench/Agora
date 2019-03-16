@@ -59,6 +59,18 @@ class AugustusPlayerModel {
         $player = $players->findOneById($idPlayer);
         $card = $cards->findOneById($idCard);
 
+        switch($card->getResource()) {
+            case "wheat": 
+                $player->setWheat($player->getWheat() + 1);
+                break;
+            case "gold": 
+                $player->setGold($player->getGold() + 1);
+                break;
+            case "both": 
+                $player->setWheat($player->getWheat() + 1);
+                $player->setGold($player->getGold() + 1);
+                break;
+        }
         $player->ctrlCards[] = $card;
         $player->cards->removeElement($card);
         $this->$manager->flush();
@@ -74,11 +86,21 @@ class AugustusPlayerModel {
         array_pop($ctrlCards);
         $player->setCtrlCards($ctrlCards);
 
-        $manager->flush();
+        $this->$manager->flush();
     }
 
-//completeCard
-//addGold
-//addWheat
+    public function completeCard($idCard) {
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
+
+        $card = $cards->findOneById($idCard);
+
+        $ctrl = $card->getCtrlTokens();
+        foreach($ctrl as &$c) {
+            $c == true;
+        }
+        $card->setCtrlTokens($ctrl);
+
+        $this->$manager->flush();
+    }
 }
 
