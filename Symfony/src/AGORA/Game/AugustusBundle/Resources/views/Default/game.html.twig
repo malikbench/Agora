@@ -157,8 +157,8 @@
                         <div class="cardAction{{ loop.index0 }} cardAction" style="visibility: hidden;">
                             <div>
                                 <p>Vous pouvez retirer une légion d'un de ces emplacements en le sélectionnant:</p>
-                                {% for token in card.tokens.length %}
-                                    {% if controlledToken[loop.index] %}
+                                {% for token in card.tokens %}
+                                    {% if controlledToken[loop.index0] %}
                                     <img class="token" src="../../img/Token/Token{{ token.name }}.jpg" height="32" onclick="selectToken(this, loop.index0, {{ cardIndex }})">
                                     {% endif %}
                                 {% endfor %}
@@ -169,7 +169,7 @@
                             </div>
                             <div>
                                 <p>Vous pouvez placer une légion sur cette carte :</p>
-                                <button onclick="removeSelectedToken()">Placer</button>
+                                <button onclick="addBestToken({{ card.tokens }}, {{ card.ctrlTokens }}, {{ cardIndex }})">Placer</button>
                             <div>
                         </div>
                     </div>
@@ -200,7 +200,7 @@
                 <img src="{{ asset('bundles/agoragameaugustus/img/Token/TokenCount.jpg') }}" alt="TokenHelp" width="150">
                 <div class="flexContainer flexRow">
                     <p class="p">Jeton du tour : </p>
-                    <img src="{{ asset('bundles/agoragameaugustus/img/Token/Token' ~ game.currToken ~ '.jpg') }}" alt="{{ game.currToken }}" height="55">
+                    <img src="{{ asset('bundles/agoragameaugustus/img/Token/Token' ~ game.token ~ '.jpg') }}" alt="{{ game.token }}" height="55">
                 </div>
             </div>
         </div>
@@ -292,7 +292,7 @@
             function validate() {
                 //DO VARIOUS THINGS
                 //TODO
-				var phase = {{ game.state }};
+				var phase = {{ game.state ?? null }};
 				
 				switch (phase) {
 					case "legion": //Placement Légion
@@ -431,12 +431,9 @@
             }
 
             function removeSelectedToken() {
-                removeToken = {};
-                
-                removeToken.token = selectedToken;
-                removeToken.card = selectedCard;
-                
-                action.removeToken = removeToken;
+                action.removeToken = {};
+                action.removeToken.token = selectedToken;
+                action.removeToken.card = selectedCard;
 
                 //selectedToken.elem.style.visibility = "hidden";
                 
@@ -445,8 +442,29 @@
                 });
             }
             
-            function addBestToken() {
+            function addBestToken(listToken, listControlled, indCard) {
                 //TODO fonction de prise du token le plus rare pour le joueur
+                var actualToken = {{ game.token ?? null }};
+                //var powerList = {{ me.advantage ?? null }};
+                
+                var indToken;
+                listToken.forEach( function (e, i) {
+                    if (actualToken == e) {
+                        if (! listControlled[i]) {
+                            indToken = i;
+                        }
+                    }
+                });
+                
+                action.addToken = {};
+                action.addToken.card = {};
+                action.addToken.card.ind = indCard;
+                action.addToken.token = {};
+                action.addToken.token.ind = indToken;
+                
+                document.querySelectorAll(".cardAction").forEach( function (ee) {
+                    ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion, vous ne pouvez plus en poser davantage.</p>";
+                });
             }
 
             function selectBoard(e) {
@@ -473,8 +491,8 @@
 
 
 
-            //disable all drag effect on the images :
-            document.querrySelecotAll("img").forEach(function (imgElem)) {
+            //disable all drag effect on the images
+            document.querySelectorAll("img").forEach(function (imgElem)) {
                 imgElem.draggable = false;
             }
         </script>
