@@ -295,15 +295,18 @@
 				var phase = {{ game.state }};
 				
 				switch (phase) {
-					case 1: //Placement Légion
+					case "legion": //Placement Légion
 						putLegion();
 						break;
-					case 2: //Ave Cesar Loot
+					case "aveCesarLoot": //Ave Cesar Loot
 						takeLoot();
-						break;
-					case 3: //Ave Cesar Pouvoir
-						usePower();
-						break;
+                       //A faire a la fin de take loot
+                        {{ game.setState("aveCesarPower") }};
+                        break;
+					case "aveCesarPower": //Ave Cesar Pouvoir
+						usePowers();
+                     {{ game.setState("aveCesarLoot") }};
+                        break;
 					default: //
 						console.log('Sorry, there is a problem of phase (validate function)');
 				}
@@ -348,7 +351,7 @@
 			}
 			
 			//phase 3
-			function usePower() {
+			function usePowers() {
 				//TODO depends on power
 			}
 			
