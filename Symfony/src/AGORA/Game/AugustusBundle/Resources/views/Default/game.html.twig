@@ -335,30 +335,7 @@
 			}
 
             //phase 2
-            function getRessource() {
-                {#order = {{ game.aveCesarOrder() }};#}
-                {#order.forEach(function(player) {#}
-                    {#if(player.getCards().forEach(function(card) {#}
-                        {#if(card.getCtrlTokens().count() == card.getTokens().count()) {#}
-                            {#switch (card.getResource()) {#}
-                                {#case "gold" :#}
-                                    {#player.addWheat();#}
-                                    {#break;#}
-                                {#case "wheat" :#}
-                                    {#player.addGold();#}
-                                    {#break;#}
-                                {#case "both" :#}
-                                    {#player.addGold();#}
-                                    {#player.addWheat();#}
-                                    {#break;#}
-                                {#default :#}
-                                    {#console.log('Sorry, there is a problem of ressource');#}
 
-                            {#}#}
-                        {#}#}
-                    {#}));#}
-                {#});#}
-            }
             // case "TwoLegionOnDoubleSword" :
             function doTwoLegionOnDoubleSword() {
 
@@ -376,7 +353,9 @@
 
             }
             // case "OneCard" :
-            function doOneCard(){
+            function doOneCard() {
+                game.getPlayerConcerned() == {{ me }}
+
 
             }
             // case "RemoveOneLegion" :
@@ -410,6 +389,12 @@
             // case "RemoveAllLegion" :
             function doRemoveAllLegion() {
 
+            }
+            function doRemoveOneCard() {
+
+            }
+            function doCompleteCard() {
+                
             }
 
 
