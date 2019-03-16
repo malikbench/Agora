@@ -6,7 +6,7 @@ abstract class AugustusResource
 {
     const WHEAT    = "wheat";
     const GOLD = "gold";
-    const BOTH = "both";
+    const BOTH = "gold";
 
 
     /** @var array user friendly named resource */
