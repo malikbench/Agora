@@ -49,23 +49,23 @@ class AugustusCard
     private $tokens;
 
     /**
-     * @var enum
+     * @var string
      *
-     * @ORM\Column(name="power", type="AugustusPower")
+     * @ORM\Column(name="power", type="string")
      */
     private $power;
 
     /**
      * @var enum
      *
-     * @ORM\Column(name="color", type="AugustusColor")
+     * @ORM\Column(name="color", type="string")
      */
     private $color;
 
     /**
      * @var enum
      *
-     * @ORM\Column(name="resource", type="AugustusResource")
+     * @ORM\Column(name="resource", type="string")
      */
     private $resource;
 

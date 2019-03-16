@@ -377,4 +377,30 @@ class AugustusPlayer
     {
         return $this->ctrlCards;
     }
+
+    /**
+     * Add ctrlCard.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $ctrlCard
+     *
+     * @return AugustusPlayer
+     */
+    public function addCtrlCard(\AGORA\Game\AugustusBundle\Entity\AugustusCard $ctrlCard)
+    {
+        $this->ctrlCards[] = $ctrlCard;
+
+        return $this;
+    }
+
+    /**
+     * Remove ctrlCard.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $ctrlCard
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeCtrlCard(\AGORA\Game\AugustusBundle\Entity\AugustusCard $ctrlCard)
+    {
+        return $this->ctrlCards->removeElement($ctrlCard);
+    }
 }

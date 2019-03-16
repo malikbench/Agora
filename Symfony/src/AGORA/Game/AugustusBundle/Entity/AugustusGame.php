@@ -32,7 +32,9 @@ class AugustusGame
     private $board;
 
     /**
-     * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusToken", mappedBy="game")
+     * @var enum
+     *
+     * @ORM\Column(name="token", type="string")
      */
     private $token;
 
