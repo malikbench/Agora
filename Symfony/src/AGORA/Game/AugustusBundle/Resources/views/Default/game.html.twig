@@ -101,7 +101,7 @@
                     <div id="lootBars" class="flexContainer flexColumn">
                         <div id="topLoot" class="flexContainer flexRow">
                             <!-- TODO make infos for each loot -->
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '2' )">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '2' ))">
                             <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot3Cards.jpg') }}" alt="Loot3Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '3' ))">
                             <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot4Cards.jpg') }}" alt="Loot4Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '4' ))">
                             <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot5Cards.jpg') }}" alt="Loot5Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '5' ))">
@@ -295,15 +295,17 @@
 				var phase = {{ game.state }};
 				
 				switch (phase) {
-					case 1: //Placement Légion
+					case "legion": //Placement Légion
 						putLegion();
 						break;
-					case 2: //Ave Cesar Loot
-						takeLoot();
-						break;
-					case 3: //Ave Cesar Pouvoir
-						usePower();
-						break;
+					case "aveCesarRessource": //Ave Cesar Pouvoir et ressource
+                        getRessource();
+                        break;
+                    case "aveCesarLoot": //Ave Cesar Loot
+                        takeLoot();
+                        //Si encore des cartes a résoudre a mettre dans takeLoot()
+                        {{ game.setState("aveCesarCard") }};
+                        break;
 					default: //
 						console.log('Sorry, there is a problem of phase (validate function)');
 				}
@@ -333,8 +335,36 @@
 					}
 				}
 			}
-			
-			//phase 2
+
+            //phase 2
+            function getRessource() {
+                order = {{ game.aveCesarOrder(game.getId()) }};
+                order.forEach(function(player) {
+                    if(player.getCards().forEach(function(card) {
+                        if(card.getCtrlTokens().count() == card.getTokens().count()) {
+                            switch (card.getResource()) {
+                                case 'Or' :
+                                    player.addWheat(player.getId());
+                                    break;
+                                case "Blé" :
+                                    player.addGold(player.getId());
+                                    break;
+                                case "Both" :
+                                    player.addGold(player.getId());
+                                    player.addWheat(player.getId());
+                                    break;
+                                default :
+                                    console.log('Sorry, there is a problem of ressource');
+
+                            }
+                            game.setState(card.getPower());
+                        }
+                    }));
+                });
+            }
+
+
+			//phase 3
 			function takeLoot() {
 				var loot = document.querySelectorAll(".selectedBoard");
                 if (loot != null) {
@@ -347,10 +377,7 @@
                 }
 			}
 			
-			//phase 3
-			function usePower() {
-				//TODO depends on power
-			}
+
 			
 			function sendXHR(path) {
 				var xhr = new XMLHttpRequest();
