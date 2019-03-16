@@ -51,6 +51,11 @@ class AugustusGame
     private $avePlayer;
 
     /**
+    * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", mappedBy="game")
+    */
+   private $colorLoot;
+
+    /**
      * Get id.
      *
      * @return int
@@ -109,6 +114,7 @@ class AugustusGame
         }*/
         // argument dans le constructeur de board
         $board = new Board();
+        $colorLoot = array("senator" => null, "green" => null, "pink" => null, "orange" => null, "all" => null);
     }
 
     /**
@@ -205,5 +211,41 @@ class AugustusGame
     public function getAvePlayer()
     {
         return $this->avePlayer;
+    }
+
+    /**
+     * Add colorLoot.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusPlayer $colorLoot
+     *
+     * @return AugustusGame
+     */
+    public function addColorLoot(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $colorLoot)
+    {
+        $this->colorLoot[] = $colorLoot;
+
+        return $this;
+    }
+
+    /**
+     * Remove colorLoot.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusPlayer $colorLoot
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeColorLoot(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $colorLoot)
+    {
+        return $this->colorLoot->removeElement($colorLoot);
+    }
+
+    /**
+     * Get colorLoot.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getColorLoot()
+    {
+        return $this->colorLoot;
     }
 }
