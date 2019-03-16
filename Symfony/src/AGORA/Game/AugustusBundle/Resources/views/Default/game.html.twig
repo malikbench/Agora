@@ -298,13 +298,11 @@
 					case "legion": //Placement Légion
 						putLegion();
 						break;
-					case "aveCesarRessource": //Ave Cesar Pouvoir et ressource
+					case "aveCesarCard": //Ave Cesar Pouvoir et ressource
                         getRessource();
                         break;
                     case "aveCesarLoot": //Ave Cesar Loot
                         takeLoot();
-                        //Si encore des cartes a résoudre a mettre dans takeLoot()
-                        {{ game.setState("aveCesarCard") }};
                         break;
 					default: //
 						console.log('Sorry, there is a problem of phase (validate function)');
@@ -337,31 +335,69 @@
 			}
 
             //phase 2
-            function getRessource() {
-                order = {{ game.aveCesarOrder(game.getId()) }};
-                order.forEach(function(player) {
-                    if(player.getCards().forEach(function(card) {
-                        if(card.getCtrlTokens().count() == card.getTokens().count()) {
-                            switch (card.getResource()) {
-                                case 'Or' :
-                                    player.addWheat(player.getId());
-                                    break;
-                                case "Blé" :
-                                    player.addGold(player.getId());
-                                    break;
-                                case "Both" :
-                                    player.addGold(player.getId());
-                                    player.addWheat(player.getId());
-                                    break;
-                                default :
-                                    console.log('Sorry, there is a problem of ressource');
 
-                            }
-                            game.setState(card.getPower());
-                        }
-                    }));
-                });
+            // case "TwoLegionOnDoubleSword" :
+            function doTwoLegionOnDoubleSword() {
+
             }
+            // case "TwoLegionOnTeaches" :
+            function doTwoLegionOnTeaches() {
+
+            }
+            // case "TwoLegionOnShield" :
+            function doTwoLegionOnShield() {
+
+            }
+            // case "TwoLegionOnKnife" :
+            function doTwoLegionOnKnife(){
+
+            }
+            // case "OneCard" :
+            function doOneCard() {
+                game.getPlayerConcerned() == {{ me }}
+
+
+            }
+            // case "RemoveOneLegion" :
+            function doRemoveOneLegion(){
+
+            }
+            // case "RemoveTwoLegion" :
+            function doRemoveTwoLegion() {
+
+            }
+            // case "MoveLegion" :
+            function doMoveLegion() {
+
+            }
+            // case "OneLegionOnAnything" :
+            function doOneLegionOnAnything() {
+
+            }
+            // case "TwoLegionOnChariot" :
+            function doTwoLegionOnChariot() {
+
+            }
+            // case "TwoLegionOnCatapult" :
+            function doTwoLegionOnCatapult() {
+
+            }
+            // case "TwoLegionOnAnything" :
+            function doTwoLegionOnAnything() {
+
+            }
+            // case "RemoveAllLegion" :
+            function doRemoveAllLegion() {
+
+            }
+            function doRemoveOneCard() {
+
+            }
+            function doCompleteCard() {
+                
+            }
+
+
 
 
 			//phase 3
