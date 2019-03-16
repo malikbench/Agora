@@ -12,7 +12,7 @@ agora_game_ave_cesar:
 
 agora_game_sqp:
     resource: "@AGORAGameSQPBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /game/sqp
 
 agora_admin_platform:
     resource: "@AGORAAdminPlatformBundle/Resources/config/routing.yml"
