@@ -66,27 +66,6 @@ class AgustusGame extends Game {
         $this->manager->flush();
     }
 
-    // surement à deplacer dans le controleur
-    // public function aveCesar($id, $player) {
-    //     $games = $manager->getRepository("AugustusBundle:AugustusGame");
-    //     $game = $games->findOneById($id)
-        
-    //     $cards = array();
-    //     foreach ($player->objectif() as $card) {
-    //         if ($card->toCapture() == 0) {
-    //             array_push($cards, $card);
-    //         }
-    //     }
-    //     foreach ($cards as $card) {
-    //         $player->increaseLegion($card->captured);
-    //         $card->doPower();
-    //         $player->captureObj($card);
-    //         $this->claimReward($player); //controlleur?
-    //         //recuperation de l'objectif (controlleur)
-    //         //pioche du nouvel objectif (controlleur)
-    //     }
-    // }
-
     // penser à verif qu'un autre joueur n'a pas la recompense a faire dans le controleur
     public function claimReward($id, $player) {
         $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
@@ -109,5 +88,21 @@ class AgustusGame extends Game {
             }
         }
         return false;
+    }
+
+    // calcul et renvoie un tableau avec l'ordre des joueurs pour la phase ave cesar
+    public function aveCesarOrder($id) {
+        $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
+
+        $capture = array();
+        foreach ($game->getPlayers() as $player) {
+            foreach ($player->getCards() as $card) {
+                if (count($card->getTokens()) == count($card->getCtrlTokens())) {
+                    $capture[$card->getNumber()] = $player;
+                }
+            }
+        }
+        return array_unique($capture);
     }
 }
