@@ -16,7 +16,7 @@ class AugustusCardModel {
 
     //Passe le token token de la liste des Tokens a celle des Tokens capturés.
     public function captureToken($idCard, $token) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -29,12 +29,12 @@ class AugustusCardModel {
         $card->setTokens(array_push($beg, $end));
         $card->setCtrlTokens(array_push($card->getCtrlTokens()), $token);
 
-        $manager->flush();
+        $this->$manager->flush();
     }
 
     //Passe le token d'id idToken de la liste des Tokens capturés a celle des Tokens.
     public function getBackToken($idCard, $token) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -47,12 +47,12 @@ class AugustusCardModel {
         $card->setTokens(array_push($beg, $end));
         $card->setCtrlTokens(array_push($card->getTokens()), $token);
 
-        $manager->flush();
+        $this->$manager->flush();
     }
 
     //La liste des Tokens est elle vide ?
     public function isCapturable($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -63,7 +63,7 @@ class AugustusCardModel {
 
     //Effectue le pouvoir lié a son type de pouvoir.
     public function doPower($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -90,10 +90,11 @@ class AugustusCardModel {
                 doTeachesIsKnife($idCard);
                 break;
         }
+        $this->$manager->flush();
     }
 
     private function doOneLegion($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -102,7 +103,7 @@ class AugustusCardModel {
     }
 
     private function doTwoLegion($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -111,7 +112,7 @@ class AugustusCardModel {
     }
 
     private function  doDoubleSwordIsShield($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -129,7 +130,7 @@ class AugustusCardModel {
     }
 
     private function  doShieldIsChariot($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -165,7 +166,7 @@ class AugustusCardModel {
     }
 
     private function doCatapultIsTeaches($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -183,7 +184,7 @@ class AugustusCardModel {
     }
 
     private function doTeachesIsKnife($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
