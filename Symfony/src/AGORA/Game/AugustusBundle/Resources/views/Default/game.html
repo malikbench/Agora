@@ -172,7 +172,6 @@
                 <div id="myBar" class="flexContainer flexRow">
                     <div class="card" style="background-image: url('../../img/Cards/3.jpg');" onclick="selectHand(this)" ondblclick="getOverlay(this)">
                         <img src='../../img/Token/legion.png' class="legion" style="top: 0px;">
-                        <img src='../../img/Token/legion.png' class="legion" style="top: 31px;">
                         <img src='../../img/Token/legion.png' class="legion" style="top: 62px;">
 
                         <div class="cardAction0 cardAction" style="visibility: hidden;">
@@ -188,7 +187,7 @@
                             </div>
                             <div>
                                 <p>Vous pouvez placer une légion sur cette carte :</p>
-                                <button onclick="addBestToken()">Placer</button>
+                                <button onclick="addBestToken(['Double glaive', 'Double glaive', 'Bouclier'], [1, 0, 1], 0)">Placer</button>
                             </div>
                         </div>
                     </div>
@@ -209,7 +208,7 @@
                             </div>
                             <div>
                                 <p>Vous pouvez placer une légion sur cette carte :</p>
-                                <button onclick="addBestToken()">Placer</button>
+                                <button onclick="addBestToken(['Double glaive', 'Double glaive', 'Bouclier'], [1, 1, 1], 1)">Placer</button>
                             </div>
                         </div>
                     </div>
@@ -311,12 +310,9 @@
             }
 
             function removeSelectedToken() {
-                var removeToken = {};
-                
-                removeToken.token = selectedToken;
-                removeToken.card = selectedCard;
-                
-                action.removeToken = removeToken;
+                action.removeToken = {};
+                action.removeToken.token = selectedToken;
+                action.removeToken.card = selectedCard;
 
                 //selectedToken.elem.style.visibility = "hidden";
                 
@@ -325,8 +321,35 @@
                 });
             }
 
-            function addBestToken() {
+            function addBestToken(listToken, listControlled, indCard) {
                 //TODO fonction de prise du token le plus rare pour le joueur
+                var actualToken = "Double glaive";
+                //var powerList = {{ me.getPowers }};
+
+                
+                var indToken = null;
+                
+                listToken.forEach( function (e, i) {
+                    if (actualToken == e) {
+                        if (! listControlled[i]) {
+                            indToken = i;
+                        }
+                    }
+                });
+                
+                if (indToken != null) {
+                    action.addToken = {};
+                    action.addToken.card = {};
+                    action.addToken.card.ind = indCard;
+                    action.addToken.token = {};
+                    action.addToken.token.ind = indToken;
+                    
+                    document.querySelectorAll(".cardAction").forEach( function (ee) {
+                        ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion, vous ne pouvez plus en poser davantage.</p>";
+                    });
+                } else {
+                    alert("On ne peut capturer aucun token de cette carte");
+                }
             }
 
             function selectBoard(e) {
