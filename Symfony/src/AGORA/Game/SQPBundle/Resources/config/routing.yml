@@ -3,7 +3,7 @@ agora_game_create_sqp:
     defaults: { _controller: AGORAGameSQPBundle:Default:createLobby }
 
 agora_game_join_sqp:
-    path: /join{idGame}
+    path: /join/{idGame}
     defaults: { _controller: AGORAGameSQPBundle:Default:joinLobby, idGame: "1" }
 
 agora_game_delete_sqp:

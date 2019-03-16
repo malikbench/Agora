@@ -36,7 +36,7 @@ INSERT INTO `game_info` (`id`, `description`, `imageURL`, `reglesURL`, `nom`, `m
 VALUES
 (1, 'Ave cesar, un jeu franchement incroyable ! Avec des chars ! Excitant n\'est-ce pas ?', 'ave-caesar.jpg','http://jeuxstrategie.free.fr/Ave_cesar_complet.php'                              , 'Ave Cesar'  , 3, 6, 'avc'),
 (2, 'Le 6 qui prend est un jeu de cartes passionnant qui creuse les méninges !'           , '6QP.png'       ,'https://www.gigamic.com/files/catalog/products/rules/rules-6quiprend-05-2012.pdf', '6 qui prend', 2, 4, 'sqp'),
-(3, 'Gagnez de l\'influence en plaçant vos légions pour devenir Consul à Rome.'           , 'augustus.jpg'  ,'http://regle.jeuxsoc.fr/augus_rg.pdf'                                            , 'Augustus'   , 3, 6, 'aug');
+(3, 'Gagnez de l\'influence en plaçant vos légions pour devenir Consul à Rome.'           , 'augustus.jpg'  ,'http://regle.jeuxsoc.fr/augus_rg.pdf'                                            , 'Augustus'   , 2, 6, 'aug');
 
 
 -- Dump completed on 2018-05-31 13:32:52
