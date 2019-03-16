@@ -492,15 +492,19 @@
                     }
                 });
                 
-                action.addToken = {};
-                action.addToken.card = {};
-                action.addToken.card.ind = indCard;
-                action.addToken.token = {};
-                action.addToken.token.ind = indToken;
-                
-                document.querySelectorAll(".cardAction").forEach( function (ee) {
-                    ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion, vous ne pouvez plus en poser davantage.</p>";
-                });
+                if (indToken != null) {
+                    action.addToken = {};
+                    action.addToken.card = {};
+                    action.addToken.card.ind = indCard;
+                    action.addToken.token = {};
+                    action.addToken.token.ind = indToken;
+                    
+                    document.querySelectorAll(".cardAction").forEach( function (ee) {
+                        ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion, vous ne pouvez plus en poser davantage.</p>";
+                    });
+                } else {
+                    alert("On ne peut capturer aucun token de cette carte");
+                }
             }
 
             function selectBoard(e) {
