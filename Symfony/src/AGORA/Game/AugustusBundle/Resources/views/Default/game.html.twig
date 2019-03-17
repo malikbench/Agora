@@ -455,23 +455,23 @@
                 var actualTokens = [{{ game.token ?? null }}];
                 var powerList = {{ me.equivalences ?? null }};
 
-                {% if game.getState() == "TwoLegionOnDoubleSword" && game.getAffectedPlayer() == me %}
+                {% if game.getState() == "TwoLegionOnDoubleSword" and game.getAffectedPlayer() == me %}
                      actualTokens = ["double sword"];
-                {% elseif game.getState() == "TwoLegionOnTeaches" && game.getAffectedPlayer() == me %}
+                {% elseif game.getState() == "TwoLegionOnTeaches" and game.getAffectedPlayer() == me %}
                      actualTokens = ["teaches"];
-                {% elseif game.getState() == "TwoLegionOnShield" && game.getAffectedPlayer() == me %}
+                {% elseif game.getState() == "TwoLegionOnShield" and game.getAffectedPlayer() == me %}
                     actualTokens = ["shield"];
-                {% elseif game.getState() == "TwoLegionOnKnife" && game.getAffectedPlayer() == me %}
+                {% elseif game.getState() == "TwoLegionOnKnife" and game.getAffectedPlayer() == me %}
                     actualTokens = ["knife"];
-                {% elseif  game.getState() == "OneLegionOnAnything" && game.getAffectedPlayer() == me %}
+                {% elseif  game.getState() == "OneLegionOnAnything" and game.getAffectedPlayer() == me %}
                     actualTokens = ["double sword", "shield","chariot", "catapult", "teaches","knife" ];
-                {% elseif game.getState() == "TwoLegionOnChariot" && game.getAffectedPlayer() == me %}
+                {% elseif game.getState() == "TwoLegionOnChariot" and game.getAffectedPlayer() == me %}
                     actualTokens = ["chariot"];
-                {% elseif  game.getState() == "TwoLegionOnCatapult" && game.getAffectedPlayer() ==  me  %}
+                {% elseif  game.getState() == "TwoLegionOnCatapult" and game.getAffectedPlayer() ==  me  %}
                     actualTokens = ["catapult"];
-                {% elseif  game.getState() == "TwoLegionOnAnything" && game.getAffectedPlayer() == me %}
+                {% elseif  game.getState() == "TwoLegionOnAnything" and game.getAffectedPlayer() == me %}
                     actualTokens = ["double sword", "shield","chariot", "catapult", "teaches","knife" ];
-                {% endif %}
+                {% else %}
                 switch (actualToken) {
                     case "shield" :
                         if (powerList.contains("ShieldIsChariot")) {
@@ -526,7 +526,8 @@
                         }
                         break;
                 }
-                
+                {% endif %}
+
                 //recherche sur la carte
                 var indToken = -1;
                 listToken.forEach( function (e, i) {
