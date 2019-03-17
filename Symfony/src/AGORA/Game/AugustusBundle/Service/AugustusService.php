@@ -1,14 +1,6 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: cloudandzak
- * Date: 14/03/19
- * Time: 13:07
- */
 
 namespace AGORA\Game\AugustusBundle\Service;
-
-
 
 use AGORA\Game\AugustusBundle\Entity\AugustusGame;
 
@@ -16,10 +8,20 @@ class AugustusService
 {
 
     protected $manager;
-    //On construit notre api avec un entity manager permettant l'accès à la base de données
+
+    // $em est passé en argument dans services.yml
     public function __construct(EntityManager $em) {
         $this->manager = $em;
     }
+
+$gameId = $service->createRoom($_POST['lobbyName'], $_POST['nbPlayers'], $private, $password, $user->getId());
+        return $this->redirect($this->generateUrl('agora_game_join_aug' ,array(
+            "gameId" => $gameId
+        )));
+    public function createRoom($name, $nbPlayers, $isPrivate, $password) {
+        $gameModel = new AugustusGame();
+    }
+
     //Fonction qui récupere le jeu en bdd
     public function getGame($gameId) {
         $game = $this->manager

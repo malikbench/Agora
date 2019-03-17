@@ -1,4 +1,4 @@
 services:
-#    augustus.example:
-#        class: AGORA\Game\AugustusBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    agora_game.augustus:
+        class: AGORA\Game\AugustusBundle\Service\AugustusService
+        arguments: ["@doctrine.orm.entity_manager"]
