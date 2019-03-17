@@ -2,10 +2,13 @@
 
 namespace AGORA\Game\AugustusBundle\Service;
 
-use AGORA\Game\AugustusBundle\Model\AugustusGameModel
+use AGORA\Game\AugustusBundle\Model\AugustusGameModel;
+use AGORA\Game\AugustusBundle\Model\AugustusPlayerModel;
 
-class AugustusService
-{
+use Doctrine\ORM\EntityManager;
+
+
+class AugustusService {
 
     protected $manager;
     public $gameModel;
@@ -18,12 +21,11 @@ class AugustusService
 
         $this->gameModel = new AugustusGameModel($em);
         $this->playerModel = new AugustusPlayerModel($em);
-        $this->boardModel = new AugustusGameModel($em);
     }
 
 
-    public function createRoom($name, $nbPlayers, $isPrivate, $password) {
-        $this->gameModel->createGame($name, $nbPlayers, $isPrivate, $password);
+    public function createRoom($name, $nbPlayers, $isPrivate, $password, $hostId) {
+        $this->gameModel->createGame($name, $nbPlayers, $isPrivate, $password, $hostId);
     }
 
 
@@ -36,9 +38,25 @@ class AugustusService
         return $game;
     }
 
-    
-    public function createPlayer($user, $gameId) {
-        $this->playerModel->createPlayer($user, $gameId);
+    //Fonction qui récupere le jeu en bdd
+    public function getPlayer($user, $gameId) {
+        $players = $this->$manager->getRepository('AugustusBundle:AugustusPlayer');
+        $player = $players->findOneBy([
+            'userId' => $user->getId(),
+            'game' => $gameId,
+        ]);
+        return $player;
+    }
+
+
+    public function joinPlayer($user, $gameId) {
+        $player = $this->getPlayer();
+
+        if ($player == null) {
+            return $this->playerModel->createPlayer($user->getId(), $gameId);
+        }
+
+        return $player->getId();
     }
     
 

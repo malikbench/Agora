@@ -1,7 +1,10 @@
 <?php
 
-namespace AGORA\Game\Model\AugustusCardModel;
+namespace AGORA\Game\AugustusBundle\Model;
 
+use AGORA\Game\AugustusBundle\Entity\AugustusCard;
+use AGORA\Game\AugustusBundle\Entity\AugustusToken;
+use AGORA\Game\AugustusBundle\Entity\AugustusPower;
 use Doctrine\ORM\EntityManager;
 
 //Fonction agissant sur AugustusCard
