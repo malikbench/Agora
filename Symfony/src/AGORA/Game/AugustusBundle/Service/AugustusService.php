@@ -2,10 +2,9 @@
 
 namespace AGORA\Game\AugustusBundle\Service;
 
-use AGORA\Game\AugustusBundle\Model\AugustusGameModel
+use AGORA\Game\AugustusBundle\Model\AugustusGameModel;
 
-class AugustusService
-{
+class AugustusService {
 
     protected $manager;
     public $gameModel;
