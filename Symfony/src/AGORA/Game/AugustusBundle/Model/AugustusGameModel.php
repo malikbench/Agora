@@ -153,9 +153,16 @@ class AugustusGameModel {
                 break;
             case "AveCesar":
                 $card = $this->getCapturableCardFromPlayer($game->getAffectedPlayer());
-                $this->$manager->getRepository("AugustusBundle:AugustusPlayer")->captureCard($game->getAffectedPlayer(), $card->getId());
+                $players = $this->$manager->getRepository("AugustusBundle:AugustusPlayer");
+                $players->captureCard($game->getAffectedPlayer(), $card->getId());
                 if ($states[0] == "AveCesar") {
                     $card->doPower();
+                }
+                if ($players->getNbOfCardColor($card->getPlayer(), $card->getColor()) == 3) {
+                    $this->fillColorLoot($id, $card->getPlayer(), $card->getColor());
+                }
+                if ($player->haveOneCardOfEach($card->getPlayer())) {
+                    $this->fillColorLoot($id, $card->getPlayer(), "all");
                 }
                 $game->setState($game->getNextStates()[0]);
                 $game->setAffectedPlayer($game->getNextAffecteds()[0]);
@@ -179,10 +186,17 @@ class AugustusGameModel {
             $game = $games->findOneById($id);
 
             $card = getCapturableCardFromPlayer($game->getAffectedPlayer());
-            if ($card) {
-                $this->$manager->getRepository("AugustusBundle:AugustusPlayer")->captureCard($game->getAffectedPlayer(), $card->getId());
+            if ($card) {                
+                $players = $this->$manager->getRepository("AugustusBundle:AugustusPlayer");
+                $players->captureCard($game->getAffectedPlayer(), $card->getId());
+                if ($players->getNbOfCardColor($card->getPlayer(), $card->getColor()) == 3) {
+                    $this->fillColorLoot($id, $card->getPlayer(), $card->getColor());
+                }
+                if ($player->haveOneCardOfEach($card->getPlayer())) {
+                    $this->fillColorLoot($id, $card->getPlayer(), "all");
+                }
                 if ($this->isPowerWithAction($card->getId())) {
-                    $game->setState($card->getPower()->getPowerName($card->getPower()));
+                    $game->setState($card->getPower());
                 } else {
                     $card->doPower();
                 }
@@ -222,7 +236,7 @@ class AugustusGameModel {
             array_push($affecteds, $capturer[$i]);
             $card = $capturer->getCardByNumber($capturer[$i], $i);
             if ($this->isPowerWithAction($card->getId())) {
-                    array_push($states, $card->getPower()->getPowerName($card->getPower()));
+                    array_push($states, $card->getPower());
                     array_push($affecteds, $capturer[$i]);
             }
         }
@@ -263,5 +277,123 @@ class AugustusGameModel {
         }
 
         return null;
+    }
+
+    public function fillColorLoot($id, $idPlayer, $type) {
+        $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
+        $colorLoot = $game->getColorLoot();
+
+        if (array_key_exists($colorLoot, $type) && !$colorLoot[$type]) {
+            $colorLoot[$type] = $idPlayer;
+            $game->setColorLoot($colorLoot);
+        }
+
+        $this->manager->flush();
+    }
+
+    public function getWinner($id) {
+        $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
+        $players = $this->$manager->getRepository("AugustusBundle:AugustusPlayer");
+        $participants = $game->getPlayers();
+
+        $winner = $participants[0];
+        $best = $this->getScores($id, $participants[0]->getId());
+        array_shift($participants);
+        foreach ($participants as $player) {
+            $score = $this->getScores($id, $player->getId());
+            if ($score > $best ||
+                $score == $best && $players->getNbOfCardColor($player->getId(), AugustusColor::SENATOR) > $players->getNbOfCardColor($winner->getId(), AugustusColor::SENATOR)) {
+                $best = $score;
+                $winner = $player;
+            }
+        }
+
+        return $winner;
+    }
+
+    public function getScores($id, $idPlayer) {
+        $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
+        $players = $this->$manager->getRepository("AugustusBundle:AugustusPlayer");
+        $player = $players->findOneById($idPlayer);
+
+        // points des recompenses
+        $rewards = $player->getAdvantage();
+        if ($game->getColorLoot()["senator"] == $idPlayer) {
+            $rewards += 2;
+        }
+        if ($game->getColorLoot()["green"] == $idPlayer) {
+            $rewards += 4;
+        }
+        if ($game->getColorLoot()["all"] == $idPlayer) {
+            $rewards += 6;
+        }
+        if ($game->getColorLoot()["pink"] == $idPlayer) {
+            $rewards += 8;
+        }
+        if ($game->getColorLoot()["orange"] == $idPlayer) {
+            $rewards += 10;
+        }
+        // pb or / blé
+
+        // points direct des objectifs
+        $obj = 0;
+        $cardPower = array();
+        foreach ($player->getCtrlCards() as $card) {
+            $obj += $card->getPoints();
+            if ($card->getPoints() != 0) {
+                array_push($cardPower, $card);
+            }
+        }
+
+        // points des pouvoirs des objectifs
+        $power = 0;
+        foreach ($cardPower as $card) {
+            switch($card->getPower()) {
+                case "onePointByShield":
+                    $pts = $players->getNbOfToken($idPlayer, AugustusToken::SHIELD);
+                    $power += ($pts > 8 ? 8 : $pts);
+                    break;
+                case "onePointByDoubleSword":
+                    $pts = $players->getNbOfToken($idPlayer, AugustusToken::DOUBLESWORD);
+                    $power += ($pts > 6 ? 6 : $pts);
+                    break;
+                case "twoPointByChariot":
+                    $pts = $players->getNbOfToken($idPlayer, AugustusToken::CHARIOT) * 2;
+                    $power += ($pts > 10 ? 10 : $pts);
+                    break;
+                case "threePointByCatapult":
+                    $pts = $players->getNbOfToken($idPlayer, AugustusToken::CATAPULT) * 3;
+                    $power += ($pts > 12 ? 12 : $pts);
+                    break;
+                case "threePointByTeaches":
+                    $pts = $players->getNbOfToken($idPlayer, AugustusToken::TEACHES) * 3;
+                    $power += ($pts > 15 ? 15 : $pts);
+                    break;
+                case "fourPointByKnife":
+                    $pts = $players->getNbOfToken($idPlayer, AugustusToken::KNIFE) * 4;
+                    $power += ($pts > 20 ? 20 : $pts);
+                    break;
+                case "twoPointByGreenCard":
+                    $power += $players->getNbOfCardColor($idPlayer, AugustusColor::GREEN) * 2;
+                    break;
+                case "twoPointBySenatorCard":
+                    $power += $players->getNbOfCardColor($idPlayer, AugustusColor::SENATOR) * 2;
+                    break;
+                case "fourPointByPinkCard":
+                    $power += $players->getNbOfCardColor($idPlayer, AugustusColor::PINK) * 4;
+                    break;
+                case "fivePointByRedCard":
+                    $power += $players->getNbOfRedPower($idPlayer) * 5;
+                    break;
+                case "sixPointByOrangeCard":
+                    $power += $players->getNbOfCardColor($idPlayer, AugustusColor::ORANGE) * 6;
+                    break;
+            }
+        }
+
+        return $rewards + $obj + $power;    
     }
 }

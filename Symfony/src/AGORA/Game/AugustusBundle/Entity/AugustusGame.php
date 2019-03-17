@@ -53,9 +53,23 @@ class AugustusGame
     private $affectedPlayer;
 
     /**
-    * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", mappedBy="game")
+     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", mappedBy="game")
+     */
+    private $colorLoot;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="nextStates", type="array")
+     */
+    private $nextStates;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="nextAffecteds", type="array")
     */
-   private $colorLoot;
+   private $nextAffecteds;
 
     /**
      * Get id.
@@ -254,5 +268,105 @@ class AugustusGame
     public function getColorLoot()
     {
         return $this->colorLoot;
+    }
+
+    /**
+     * Add nextState.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\integer $nextState
+     *
+     * @return AugustusGame
+     */
+    public function addNextState(\AGORA\Game\AugustusBundle\Entity\integer $nextState)
+    {
+        $this->nextStates[] = $nextState;
+
+        return $this;
+    }
+
+    /**
+     * Remove nextState.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\integer $nextState
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeNextState(\AGORA\Game\AugustusBundle\Entity\integer $nextState)
+    {
+        return $this->nextStates->removeElement($nextState);
+    }
+
+    /**
+     * Get nextStates.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNextStates()
+    {
+        return $this->nextStates;
+    }
+
+    /**
+     * Add nextAffected.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\integer $nextAffected
+     *
+     * @return AugustusGame
+     */
+    public function addNextAffected(\AGORA\Game\AugustusBundle\Entity\integer $nextAffected)
+    {
+        $this->nextAffecteds[] = $nextAffected;
+
+        return $this;
+    }
+
+    /**
+     * Remove nextAffected.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\integer $nextAffected
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeNextAffected(\AGORA\Game\AugustusBundle\Entity\integer $nextAffected)
+    {
+        return $this->nextAffecteds->removeElement($nextAffected);
+    }
+
+    /**
+     * Get nextAffecteds.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNextAffecteds()
+    {
+        return $this->nextAffecteds;
+    }
+
+    /**
+     * Set nextStates.
+     *
+     * @param array $nextStates
+     *
+     * @return AugustusGame
+     */
+    public function setNextStates($nextStates)
+    {
+        $this->nextStates = $nextStates;
+
+        return $this;
+    }
+
+    /**
+     * Set nextAffecteds.
+     *
+     * @param array $nextAffecteds
+     *
+     * @return AugustusGame
+     */
+    public function setNextAffecteds($nextAffecteds)
+    {
+        $this->nextAffecteds = $nextAffecteds;
+
+        return $this;
     }
 }
