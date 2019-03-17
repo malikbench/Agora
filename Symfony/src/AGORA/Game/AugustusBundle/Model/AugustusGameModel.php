@@ -159,12 +159,40 @@ class AugustusGameModel {
             case "waiting":
                 $this->initGame($id);
                 break;
+            default:
+                $this->nextStep($id);
+                break;
         }
 
         $this->manager->flush();
     }
 
-    // calcul et renvoie un tableau avec l'ordre des joueurs pour la phase ave cesar
+    private function nextStep($id) {
+        if ($this->allOk($id)) {
+            $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
+            $game = $games->findOneById($id);
+
+            $card = getCapturableCardFromPlayer($game->getAffectedPlayer());
+            if ($card) {
+                $this->$manager->getRepository("AugustusBundle:AugustusPlayer")->captureCard($game->getAffectedPlayer(), $card->getId());
+                if ($this->isPowerWithAction($card->getId())) {
+                    $game->setState($card->getPower()->getPowerName($card->getPower()));
+                } else {
+                    $card->doPower();
+                }
+            } else {
+                $game->setState($game->getNextStates()[0]);
+                $game->setAffectedPlayer($game->getNextAffecteds()[0]);
+                $game->setNextStates(array_slice($game->getNextStates(), 1));
+                $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
+            }
+        }
+        $this->manager->flush();
+    }
+
+    // calcul et renvoie un tableau à deux dimensions avec:
+    // tableau[0] = la suite d'états à prendre pour la phase AveCesar
+    // tableau[1] = la suite de joueurs qui "activerons" ces états
     public function aveCesarSteps($id) {
         $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
@@ -186,22 +214,8 @@ class AugustusGameModel {
         foreach ($index as $i) {
             array_push($states, "AveCesar");
             array_push($affecteds, $capturer[$i]);
-            $card = $capturer->getCardByNumber($i);
-            if ($card->getPower() == AugustusPower::TWOLEGIONONDOUBLESWORD ||
-                $card->getPower() == AugustusPower::TWOLEGIONONTEACHES ||
-                $card->getPower() == AugustusPower::TWOLEGIONONSHIELD ||
-                $card->getPower() == AugustusPower::TWOLEGIONONKNIFE ||
-                $card->getPower() == AugustusPower::ONECARD ||
-                $card->getPower() == AugustusPower::REMOVEONELEGION ||
-                $card->getPower() == AugustusPower::REMOVETWOLEGION ||
-                $card->getPower() == AugustusPower::MOVELEGION ||
-                $card->getPower() == AugustusPower::ONELEGIONONANYTHING ||
-                $card->getPower() == AugustusPower::TWOLEGIONONCHARIOT ||
-                $card->getPower() == AugustusPower::TWOLEGIONONCATAPULT ||
-                $card->getPower() == AugustusPower::TWOLEGIONONANYTHING ||
-                $card->getPower() == AugustusPower::REMOVEALLLEGION ||
-                $card->getPower() == AugustusPower::REMOVEONECARD ||
-                $card->getPower() == AugustusPower::COMPLETECARD) {
+            $card = $capturer->getCardByNumber($capturer[$i], $i);
+            if ($this->isPowerWithAction($card->getId())) {
                     array_push($states, $card->getPower()->getPowerName($card->getPower()));
                     array_push($affecteds, $capturer[$i]);
             }
@@ -211,7 +225,28 @@ class AugustusGameModel {
         return array($states, $affecteds);
     }
 
-    public function getCapturableCardFromPlayer($idPlayer) {
+    private function isPowerWithAction($idCard) {
+        $cards = $this->$manager->getRepository("AugustusBundle:AugustusCard");
+        $card = $cards->findOneById($idCard);
+
+        return $card->getPower() == AugustusPower::TWOLEGIONONDOUBLESWORD ||
+            $card->getPower() == AugustusPower::TWOLEGIONONTEACHES ||
+            $card->getPower() == AugustusPower::TWOLEGIONONSHIELD ||
+            $card->getPower() == AugustusPower::TWOLEGIONONKNIFE ||
+            $card->getPower() == AugustusPower::ONECARD ||
+            $card->getPower() == AugustusPower::REMOVEONELEGION ||
+            $card->getPower() == AugustusPower::REMOVETWOLEGION ||
+            $card->getPower() == AugustusPower::MOVELEGION ||
+            $card->getPower() == AugustusPower::ONELEGIONONANYTHING ||
+            $card->getPower() == AugustusPower::TWOLEGIONONCHARIOT ||
+            $card->getPower() == AugustusPower::TWOLEGIONONCATAPULT ||
+            $card->getPower() == AugustusPower::TWOLEGIONONANYTHING ||
+            $card->getPower() == AugustusPower::REMOVEALLLEGION ||
+            $card->getPower() == AugustusPower::REMOVEONECARD ||
+            $card->getPower() == AugustusPower::COMPLETECARD;
+    }
+
+    private function getCapturableCardFromPlayer($idPlayer) {
         $players = $this->$manager->getRepository("AugustusBundle:AugustusPlayer");
         $player = $players->findOneById($idPlayer);
 
