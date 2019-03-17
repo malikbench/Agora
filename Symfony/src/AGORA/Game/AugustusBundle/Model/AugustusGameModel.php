@@ -98,38 +98,40 @@ class AugustusGameModel {
     }
 
     // passe les parametre au jeu du prchain tour de jeu
-    // public function applyStep($id) {
-    //     $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
-    //     $game = $games->findOneById($id);
+    public function applyStep($id) {
+        $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
         
-    //     switch($game->getState()) {
-    //         case "legion":
-    //             if ($this->allOk($id)) {
-    //                 $steps = $this->aveCesarSteps($id);
-    //                 $states = $steps[0];
-    //                 $affecteds = $steps[1];
-    //                 $game->setState($steps[0]);
-    //                 $game->setAffectedPlayer($affecteds[0]);
-    //                 $game->setNextStates(array_slice($states, 1));
-    //                 $game->setNextAffecteds(array_slice($affecteds, 1));
-    //             }
-    //         case "AveCesar":
-    //             $this->getCapturableCardFromPlayer()
-    //             // capture de la carte
-    //             // recup du blé / or
-    //             if ($states[0] == "AveCesar") {
+        switch($game->getState()) {
+            case "legion":
+                if ($this->allOk($id)) {
+                    $steps = $this->aveCesarSteps($id);
+                    $states = $steps[0];
+                    $affecteds = $steps[1];
+                    $game->setState($steps[0]);
+                    $game->setAffectedPlayer($affecteds[0]);
+                    $game->setNextStates(array_slice($states, 1));
+                    $game->setNextAffecteds(array_slice($affecteds, 1));
+                }
+                break;
+            case "AveCesar":
+                $card = $this->getCapturableCardFromPlayer($game->getAffectedPlayer());
+                $this->$manager->getRepository("AugustusBundle:AugustusPlayer")->captureCard($game->getAffectedPlayer(), $card->getId());
+                if ($states[0] == "AveCesar") {
+                    $card->doPower();
+                }
+                $game->setState($game->getNextStates()[0]);
+                $game->setAffectedPlayer($game->getNextAffecteds()[0]);
+                $game->setNextStates(array_slice($game->getNextStates(), 1));
+                $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
+                break;
+            case "waiting":
+                $this->initGame($id);
+                break;
+        }
 
-    //             }
-    //             if ($this->allOk($id)) {
-    //                 $game->setState($game->getNextStates()[0]);
-    //                 $game->setAffectedPlayer($game->getNextAffecteds()[0]);
-    //                 $game->setNextStates(array_slice($game->getNextStates(), 1));
-    //                 $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
-    //             }     
-    //     }
-
-    //     $this->manager->flush();
-    // }
+        $this->manager->flush();
+    }
 
     // calcul et renvoie un tableau avec l'ordre des joueurs pour la phase ave cesar
     public function aveCesarSteps($id) {
@@ -173,6 +175,7 @@ class AugustusGameModel {
                     array_push($affecteds, $capturer[$i]);
             }
         }
+        array_push($states, "legion");
 
         return array($states, $affecteds);
     }
