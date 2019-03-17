@@ -1,7 +1,10 @@
 <?php
 
-namespace AGORA\Game\Model\AugustusPlayerModel;
+namespace AGORA\Game\Model;
 
+use AGORA\Game\AugustusBundel\Entity\AugustusGame;
+use AGORA\Game\AugustusBundel\Entity\AugustusPlayer;
+use AGORA\Game\GameBundle\Entity\Game;
 use Doctrine\ORM\EntityManager;
 
 //Fonction agissant sur AugustusPlayer
@@ -12,6 +15,48 @@ class AugustusPlayerModel {
     //On construit notre api avec un entity manager permettant l'accès à la base de données
     public function __construct(EntityManager $em) {
         $this->manager = $em;
+    }
+
+    public function createPlayer($user, $gameId) {
+        $augGame = $this->manager->getRepository('AGORAGameAugustusBundle:AugustusGame')->find($gameId);
+        if ($augGame == null) {
+            throw new \Exception();
+        }
+
+        $game = $this->manager->getRepository('AGORAGameGameBundle:Game')
+            ->findOneBy(array('gameId' => $gameId));
+
+        $players = $this->manager->getRepository('AGORAGameAugustusBundle:AugustusPlayer')
+            ->findBy(array('game' => $gameId));
+
+        $nbPlayer = count($players);
+        if ($nbPlayer >= $game->getNbPlayers()) {
+            return -1;
+        }
+
+        $player = new AveCesarPlayer();
+        $player->setGameId($gameId);
+        
+        /*
+        TODO
+        set les attributs de nouveau Player
+        ET rajouter un attribut userName qui référence le nom du joueur pour la plateforme
+           l'info se récupère dans la BDD du UserBundle
+        */
+
+        $this->manager->persist($player);
+        $this->manager->flush();
+
+        if ($nbPlayer + 1 == $game->getNbPlayers()) {
+            $this->initPlayers($gameId);
+            /*
+            TODO implémenter initPlayers :
+            appelée une fois que la salle est pleine
+            initialise les joueurs pour la partie (cartes à contrôler etc)
+            */
+        }
+        $this->flush();
+        return $player->getId();
     }
 
     //Mets une légion sur la carte et retire le jeton de la carte correspondant au jeton du tour en cours.
