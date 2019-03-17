@@ -2,22 +2,32 @@
 
 namespace AGORA\Game\AugustusBundle\Model;
 
-use AGORA\Game\AugustusBundel\Entity\AugustusGame;
+use AGORA\Game\AugustusBundle\Entity\AugustusGame;
+use AGORA\Game\AugustusBundle\Entity\AugustusPlayer;
+use AGORA\Game\AugustusBundle\Entity\AugustusBoard;
+use AGORA\Game\AugustusBundle\Entity\AugustusCard;
+use AGORA\Game\AugustusBundle\Entity\AugustusToken;
+
+use AGORA\Game\AugustusBundle\Model\AugustusBoardModel;
+
 use AGORA\Game\GameBundle\Entity\Game;
 use Doctrine\ORM\EntityManager;
 
 class AugustusGameModel {
 
     protected $manager;
+    public $boardModel;
 
     public function __construct(EntityManager $em) {
         $this->manager = $em;
+
+        $this->boardModel = new AugustusBoardModel($em);
     }
 
     public function createGame($name, $nbPlayers, $isPrivate, $password, $hostId) {
         $augGame = new AugustusGame();
 
-        $augGame->setBoard(new Board());
+        $augGame->setBoard((new AugustusBoard())->getId());
         $colorLoot = array("senator" => null, "green" => null, "pink" => null, "orange" => null, "all" => null);
 
         $this->manager->persist($augGame);
@@ -46,15 +56,11 @@ class AugustusGameModel {
         $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
 
-        $game->setToken($game->$board->takeToken());
-        // verifier
-        if ($game->getToken() == AugustusToken::Joker) {
-            $game->$board->resetBag();
-        }
+        $this->drawToken($id);
 
         foreach ($game->getPlayers() as $player) {
             for ($i = 0; i < 3; $i++) {
-             $player->addCard($game->$board->drawCard());
+             $player->addCard($this->$boardModel->takeCard($game->getBoard()));
             }
         }
         $game->setState("legion");
@@ -66,10 +72,10 @@ class AugustusGameModel {
         $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
 
-        $game->setToken($game->$board->takeToken());
+        $this->$boardModel->takeToken($game->getBoard());
         // verifier
-        if ($game->getToken() == AugustusToken::JOKER) {
-            $game->$board->resetBag();
+        if ($game->getToken() == AugustusToken::Joker) {
+            $this->$boardModel->resetBag($game->getBoard());
         }
         $this->manager->flush();
     }
