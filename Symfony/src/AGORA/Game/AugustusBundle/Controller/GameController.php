@@ -78,9 +78,8 @@ class GameController extends Controller {
         /** @var AugustusService $service */
         $augGame = $service->getGame($gameId);
 
-        //TODO && ask
-        $player = $augGame->getPlayerFromId($user->getId());
-        //récupération du nom de la partie
+        $player = $augGame->getPlayer($user, $gameId);
+        
         $gameName = $service->getGameName($gameId);
 
         //Envoie Au twig tout les infomartions qu'il soit afficher
