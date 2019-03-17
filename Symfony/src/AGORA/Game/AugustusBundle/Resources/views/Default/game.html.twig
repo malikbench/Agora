@@ -162,7 +162,7 @@
                                     <img class="token" src="../../img/Token/Token{{ token.name }}.jpg" alt="" height="32" onclick="selectToken(this, loop.index0, {{ cardIndex }})">
                                     {% endif %}
                                 {% endfor %}
-                                <button onclick="removeSelectedToken()">Retirer</button>
+                                <button onclick="removeSelectedLegion()">Retirer</button>
 
                                 <br>
                                 <br>
@@ -313,7 +313,7 @@
                 //DO VARIOUS THINGS
                 //TODO
                 if (gottaRemove === 0) {
-                    var phase = {{ game.state ?? null }};
+                    let phase = "{{ game.state ?? null }}";
 
                     switch (phase) {
                         case "legion": //Placement Légion
@@ -332,16 +332,21 @@
                 }
             }
 
-            {#{% if game.state == "TwoLegionOnDoubleSword" %}#}
 			function putLegion() {
-				//action.from & to
-				var toPlayer = action.addToken.iPlayer;
-				var toCard = action.addToken.iCard;
-				var toToken = action.addToken.iToken;
+                {% if me.getLegion == 0 %}
+                document.querySelectorAll(".cardAction").forEach( function (ee) {
+                    ee.lastElementChild.innerHTML = "<p>Vous n'avez plus de légion libre, si vous le souhaitez vous pouvez déplacé une légion.</p>";
+                });
 
-				var fromPlayer = action.removeToken.iPlayer;
-				var fromCard = action.removeToken.iCard;
-				var fromToken = action.removeToken.iToken;
+                {% else %}
+				//action.from & to
+				let toPlayer = action.addToken.iPlayer;
+				let toCard = action.addToken.iCard;
+				let toToken = action.addToken.iToken;
+
+				let fromPlayer = action.removeToken.iPlayer;
+				let fromCard = action.removeToken.iCard;
+				let fromToken = action.removeToken.iToken;
 
 				if (toCard != null && toToken != null && toPlayer != null) {
 					if (fromCard != null && fromToken != null && fromPlayer != null) {
@@ -353,6 +358,7 @@
 						sendXHR("{{ path('putLegion') }}?toPlayer=" + toPlayer + "&toCard=" + toCard + "&toToken=" + toToken);
 					}
 				}
+                {% endif %}
 			}
 
             //phase 2
@@ -378,7 +384,8 @@
             //TODO
             // la limite de addAction et removeAction est levée
             // les limites d'action du joueur sont donc le nombre de légion qu'il a posés
-            // addAction = removeAction = {{ me.maxLegion - me.legion }};
+            //Limite de mouvement = nb de legion posé * 2
+            //{#// addAction = removeAction = {{ me.maxLegion - me.legion }};#}
             function doMoveLegion() {
 
             }
@@ -400,9 +407,9 @@
 
 			//phase 3
 			function takeLoot() {
-				var loot = document.querySelectorAll(".selectedBoard");
+				let loot = document.querySelectorAll(".selectedBoard");
                 if (loot != null) {
-                    var lootString = loot.alt.replace("Loot", "");
+                    let lootString = loot.alt.replace("Loot", "");
                     if (lootString != null) {
                         //getLoot(loot)
                         //TODO s'assurer que la variable globale loot ne peut être affectée
@@ -414,7 +421,7 @@
 
 
 			function sendXHR(path) {
-				var xhr = new XMLHttpRequest();
+				let xhr = new XMLHttpRequest();
 				xhr.onreadystatechange = function() {
 					if (xhr.readyState === XMLHttpRequest.DONE) {
 						document.write(xhr.responseText);
@@ -425,8 +432,8 @@
 			}
 
             function resetSelected() {
-                var board = document.querySelectorAll(".selectedBoard");
-                var hand = document.querySelectorAll(".selectedHand");
+                let board = document.querySelectorAll(".selectedBoard");
+                let hand = document.querySelectorAll(".selectedHand");
 
                 board.forEach(function (element) {
                     element.classList.remove("selectedBoard");
@@ -438,7 +445,7 @@
 
             function selectHand(e) {
                 resetSelected();
-                var src = e;
+                let src = e;
                 src.classList.add("selectedHand");
 
                 if (document.querySelector(".action").hasChildNodes()) {
@@ -451,12 +458,12 @@
             }
 
             {% if game.state.includes("Two") and game.getAffectedPlayer() == me %}
-            var addAction = 2;
-            var removeAction = 2;
+            let addAction = 2;
+            let removeAction = 2;
             {% endif %}
-            var action = {};
-            var selectedToken = {};
-            var selectedCard = {};
+            let action = {};
+            let selectedToken = {};
+            let selectedCard = {};
             function selectToken(e, indToken, indCard) {
                 document.querySelectorAll(".selectedToken").forEach( function (ee) {
                     ee.classList.remove("selectedToken");
@@ -468,7 +475,7 @@
                 selectedCard.ind = indCard;
             }
 
-            function removeSelectedToken() {
+            function removeSelectedLegion() {
                 if (selectedToken !== {} && selectedCard !== {}) {
                     action.removeToken = {};
                     if ((typeof(removeAction) != 'undefined' && removeAction === 2) || gottaRemove === 2) {
@@ -494,13 +501,14 @@
                     alert("Aucun emplacement selectionné");
                 }
             }
-
             //Vérifie si le joueur peut poser une légion sur la carte et si il le peut propose le token le plus rare
             function addBestToken(e, listToken, listControlled, indCard) {
-                var actualToken = "{{ game.token ?? null }}";
-                var actualTokens = [{{ game.token ?? null }}];
+                let actualToken = "{{ game.token ?? null }}";
+                let actualTokens = [];
+                actualTokens = [{{ game.token ?? null }}];
                 actualTokens.push(actualToken);
-                var powerList = {{ me.equivalences ?? null }};
+                let powerList = [];
+                powerList = {{ me.equivalences ?? null }};
 
                 {% if game.getState() == "TwoLegionOnDoubleSword" and game.getAffectedPlayer() == me %}
                      actualTokens = ["double sword"];
@@ -577,7 +585,7 @@
                 {% endif %}
 
                 //recherche sur la carte
-                var indToken = -1;
+                let indToken = -1;
                 listToken.forEach( function (e, i) {
                     if (actualTokens.contains(e)) {
                         if (! listControlled[i]) {
@@ -631,12 +639,12 @@
                 if ("{{ game.getState }}" === "legion") return;
 
                 resetSelected();
-                var src = e;
+                let src = e;
                 src.classList.add("selectedBoard");
             }
 
             function resetSelectedPlayer() {
-                var e = document.querySelectorAll(".selectedPlayer");
+                let e = document.querySelectorAll(".selectedPlayer");
 
                 e.forEach(function (element) {
                     element.style.visibility = "hidden";
@@ -674,14 +682,14 @@
         <button id="buttAcc" onclick="window.location.href = '{{ app.request.getSchemeAndHttpHost() }}'">Accueil</button>
         <script>//Script gérant le tchat
             document.getElementById('UserMessage').addEventListener('keypress', function (event) {
-                var key = event.hasOwnProperty('which') ? event.which : event.keyCode;
+                let key = event.hasOwnProperty('which') ? event.which : event.keyCode;
                 if (key === 13) { // 13 est la touche entrée
-                    var div = document.createElement("div");
-                    var message = document.getElementById('UserMessage').value;
+                    let div = document.createElement("div");
+                    let message = document.getElementById('UserMessage').value;
                     /*
                     var clientInformation = {
-                        gameId: "{{ game.id }}",
-                            playerId: "{{ player.id }}",
+                        {#gameId: "{{ game.id }}",#}
+                            {#playerId: "{{ player.id }}",#}
                             action : {
                                 type: "message",
                                 username: playerUsername,
@@ -697,7 +705,7 @@
                     conn.send(JSON.stringify(clientInformation));
                 }
             });
-            var flecheTchat = document.getElementById("flecheTchat");
+            let flecheTchat = document.getElementById("flecheTchat");
             flecheTchat.addEventListener("click", tchatOnClick);
         </script>
     </body>
