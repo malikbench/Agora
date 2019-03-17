@@ -44,9 +44,11 @@ class AugustusGame
     private $state;
 
     /**
-     * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", mappedBy="game")
+     * @var int
+     *
+     * @ORM\Column(name="affectedPlayer", type="integer")
      */
-    private $avePlayer;
+    private $affectedPlayer;
 
     /**
     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", mappedBy="game")
@@ -104,13 +106,6 @@ class AugustusGame
     public function __construct()
     {
         $this->players = new \Doctrine\Common\Collections\ArrayCollection();
-
-        /*$players = array();
-        for ($i = 0; $i <$playersNb; $i++) {
-            // argument dans le constructeur de player
-            array_push($players, new Player());
-        }*/
-        // argument dans le constructeur de board
         $board = new Board();
         $colorLoot = array("senator" => null, "green" => null, "pink" => null, "orange" => null, "all" => null);
     }
@@ -188,27 +183,27 @@ class AugustusGame
     }
 
     /**
-     * Set avePlayer.
+     * Set affectedPlayer.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\AugustusPlayer|null $avePlayer
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusPlayer|null $affectedPlayer
      *
      * @return AugustusGame
      */
-    public function setAvePlayer(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $avePlayer = null)
+    public function setAffectedPlayer(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $affectedPlayer = null)
     {
-        $this->avePlayer = $avePlayer;
+        $this->affectedPlayer = $affectedPlayer;
 
         return $this;
     }
 
     /**
-     * Get avePlayer.
+     * Get affectedPlayer.
      *
      * @return \AGORA\Game\AugustusBundle\Entity\AugustusPlayer|null
      */
-    public function getAvePlayer()
+    public function getAffectedPlayer()
     {
-        return $this->avePlayer;
+        return $this->affectedPlayer;
     }
 
     /**

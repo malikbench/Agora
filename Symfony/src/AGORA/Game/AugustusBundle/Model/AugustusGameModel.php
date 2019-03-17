@@ -1,7 +1,10 @@
 <?php
 use AGORA\Game\Socket\Game;
+use Doctrine\ORM\EntityManager;
 
-class AgustusGame extends Game {
+class AugustusGameModel {
+
+    protected $manager;
 
     public function __construct(EntityManager $em) {
         $this->manager = $em;
@@ -9,12 +12,12 @@ class AgustusGame extends Game {
 
     // donne une main de trois cartes à chaque joueur ainsi qu'un jeton sur le plateau
     public function initGame($id) {
-        $games = $manager->getRepository("AugustusBundle:AugustusGame");
+        $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
 
         $game->setToken($game->$board->takeToken());
         // verifier
-        if ($game->getToken() == "joker") {
+        if ($game->getToken() == AugustusToken::Joker) {
             $game->$board->resetBag();
         }
 
@@ -23,7 +26,8 @@ class AgustusGame extends Game {
              $player->addCard($game->$board->drawCard());
             }
         }
-
+        $game->setState("legion");
+        $this->manager->flush();
     }
 
     // pioche un token dans son sac, si ce jeton est le joker, remet tout dans le sac de token
@@ -33,7 +37,7 @@ class AgustusGame extends Game {
 
         $game->setToken($game->$board->takeToken());
         // verifier
-        if ($game->getToken() == "joker") {
+        if ($game->getToken() == AugustusToken::JOKER) {
             $game->$board->resetBag();
         }
         $this->manager->flush();
@@ -67,9 +71,12 @@ class AgustusGame extends Game {
     }
 
     // penser à verif qu'un autre joueur n'a pas la recompense a faire dans le controleur
-    public function claimReward($id, $player) {
+    public function claimReward($id, $playerId) {
         $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
+
+        $players = $this->$manager->getRepository("AugustusBundle:AugustusPlayer");
+        $player = $players->findOneById($playerid);
         
         if($player->getAdvantage() == 0) {
             $player->setAdvantage(count($player->getCtrlCards()));
@@ -90,19 +97,96 @@ class AgustusGame extends Game {
         return false;
     }
 
+    // passe les parametre au jeu du prchain tour de jeu
+    // public function applyStep($id) {
+    //     $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
+    //     $game = $games->findOneById($id);
+        
+    //     switch($game->getState()) {
+    //         case "legion":
+    //             if ($this->allOk($id)) {
+    //                 $steps = $this->aveCesarSteps($id);
+    //                 $states = $steps[0];
+    //                 $affecteds = $steps[1];
+    //                 $game->setState($steps[0]);
+    //                 $game->setAffectedPlayer($affecteds[0]);
+    //                 $game->setNextStates(array_slice($states, 1));
+    //                 $game->setNextAffecteds(array_slice($affecteds, 1));
+    //             }
+    //         case "AveCesar":
+    //             $this->getCapturableCardFromPlayer()
+    //             // capture de la carte
+    //             // recup du blé / or
+    //             if ($states[0] == "AveCesar") {
+
+    //             }
+    //             if ($this->allOk($id)) {
+    //                 $game->setState($game->getNextStates()[0]);
+    //                 $game->setAffectedPlayer($game->getNextAffecteds()[0]);
+    //                 $game->setNextStates(array_slice($game->getNextStates(), 1));
+    //                 $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
+    //             }     
+    //     }
+
+    //     $this->manager->flush();
+    // }
+
     // calcul et renvoie un tableau avec l'ordre des joueurs pour la phase ave cesar
-    public function aveCesarOrder($id) {
+    public function aveCesarSteps($id) {
         $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
 
-        $capture = array();
+        $states = array();
+        $affecteds = array();
+        
+        $capturer = array();
+        $index = array();
         foreach ($game->getPlayers() as $player) {
-            foreach ($player->getCards() as $card) {
+            foreach ($player->getCards() as $card) {    //remplacer par while
                 if (count($card->getTokens()) == count($card->getCtrlTokens())) {
-                    $capture[$card->getNumber()] = $player;
+                    $capturer[$card->getNumber()] = $player->getId();
+                    array_push($index, $card->getNumber());
                 }
             }
         }
-        return array_unique($capture);
+        sort($index);
+        foreach ($index as $i) {
+            array_push($states, "AveCesar");
+            array_push($affecteds, $capturer[$i]);
+            $card = $capturer->getCardByNumber($i);
+            if ($card->getPower() == AugustusPower::TWOLEGIONONDOUBLESWORD ||
+                $card->getPower() == AugustusPower::TWOLEGIONONTEACHES ||
+                $card->getPower() == AugustusPower::TWOLEGIONONSHIELD ||
+                $card->getPower() == AugustusPower::TWOLEGIONONKNIFE ||
+                $card->getPower() == AugustusPower::ONECARD ||
+                $card->getPower() == AugustusPower::REMOVEONELEGION ||
+                $card->getPower() == AugustusPower::REMOVETWOLEGION ||
+                $card->getPower() == AugustusPower::MOVELEGION ||
+                $card->getPower() == AugustusPower::ONELEGIONONANYTHING ||
+                $card->getPower() == AugustusPower::TWOLEGIONONCHARIOT ||
+                $card->getPower() == AugustusPower::TWOLEGIONONCATAPULT ||
+                $card->getPower() == AugustusPower::TWOLEGIONONANYTHING ||
+                $card->getPower() == AugustusPower::REMOVEALLLEGION ||
+                $card->getPower() == AugustusPower::REMOVEONECARD ||
+                $card->getPower() == AugustusPower::COMPLETECARD) {
+                    array_push($states, $card->getPower()->getPowerName($card->getPower()));
+                    array_push($affecteds, $capturer[$i]);
+            }
+        }
+
+        return array($states, $affecteds);
+    }
+
+    public function getCapturableCardFromPlayer($idPlayer) {
+        $players = $this->$manager->getRepository("AugustusBundle:AugustusPlayer");
+        $player = $players->findOneById($idPlayer);
+
+        foreach ($player->getCards() as $card) {
+            if (count($card->getTokens()) == count($card->getCtrlTokens())) {
+                return $card;
+            }
+        }
+
+        return null;
     }
 }
