@@ -2,19 +2,74 @@
 
 
 namespace AGORA\Game\AugustusBundle\Controller;
-use AGORA\Game\AugustusBundle\Service\AugustusService;
 
+use AGORA\Game\AugustusBundle\Service\AugustusService;
 use AGORA\Game\AugustusBundle\Entity\AugustusGame;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use FOS\UserBundle\Model\UserInterface;
 
-class GameController extends Controller
-{
+class GameController extends Controller {
 
-    /**
-     * @Route
-     */
+    
+    //Création de la partie
+    public function createRoomAction() {
+        //Recupération de l'utilisateur qui a créé la partie et vérification que celui-çi est connecté
+        $user = $this->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('Accès refusé, l\'utilisateur n\'est pas connecté.');
+        }
+
+        //recupere dnas la base de donnée la ou on stock les partie d'Augustus
+        $service = $this->container->get('agora_game.augustus');
+
+        $private = 0;
+        $password = "";
+
+        //si un mdp a été donné et la partie est privé initialise le mot de passe
+        if (isset($_POST['private']) && isset($_POST['password']) && $_POST['password']!="" && $_POST['private'] == "on") {
+            $private = 1;
+            $password = $_POST['password'];
+
+        }
+
+        //création de la salle de jeu et récupération de l'id
+        $gameId = $service->createRoom($_POST['lobbyName'], $_POST['nbPlayers'], $private, $password, $user->getId());
+        return $this->redirect($this->generateUrl('agora_game_join_aug' ,array(
+            "gameId" => $gameId
+        )));
+    }
+
+
+    public function joinLobbyAction(SessionInterface $session, $gameId) {
+        $user = $this->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('Accès refusé, l\'utilisateur n\'est pas connecté.');
+        }
+
+
+        $service = $this->container->get('agora_game.ave_cesar');
+
+        if (!$service->playerAlreadyCreated($gameId, $user->getId())) {
+            $result = $service->createPlayer($user, $gameId);
+        } else {
+            return $this->redirect($this->generateUrl('agora_game_ave_cesar_homepage' ,array(
+                "gameId" => $gameId
+            )));
+        }
+
+        // Game Full
+        if ($result == -1) {
+            $this->redirect($this->generateUrl('agora_platform_joingame'));
+        }
+
+        return $this->redirect($this->generateUrl('agora_game_ave_cesar_homepage' ,array(
+            "gameId" => $gameId
+        )));
+    }
+
+
 
     public function indexAction($gameId) {
         //Récupération de l'utilisateur connecté
@@ -46,76 +101,10 @@ class GameController extends Controller
     }
 
 
-    //Création de la partie
-    public function createLobbyAction() {
-        //Recupération de l'utilisateur qui a crée la partie et vérification que celui ci est connecté
-        $user = $this->getUser();
-        if (!is_object($user) || !$user instanceof UserInterface) {
-            throw new AccessDeniedException('Accès refusé, l\'utilisateur n\'est pas connecté.');
-        }
-        //recupere dnas la base de donnée la ou on stock les partie d'Augustus
-        $service = $this->container->get('agora_game.augustus');
-
-        $private = 0;
-        $password = "";
-        //si un mdp a été donnée et la partie est privé initialise le mot de passe
-        if (isset($_POST['private']) && isset($_POST['password']) && $_POST['password']!="" && $_POST['private'] == "on") {
-            $private = 1;
-            $password = $_POST['password'];
-
-        }
-        //création de la salle de jeu et récupération de l'id
-        $gameId = $service->createRoom($_POST['lobbyName'], $_POST['nbPlayers'], $private, $password, $user->getId());
-        return $this->redirect($this->generateUrl('agora_game_join_aug' ,array(
-            "gameId" => $gameId
-        )));
-    }
+    
 
 
-    //TODO
-    public function joinLobbyAction(SessionInterface $session, $gameId) {
-        //echo "Un autre game id : ".$gameId."\n";
-        $user = $this->getUser();
-        if (!is_object($user) || !$user instanceof UserInterface) {
-            throw new AccessDeniedException('Accès refusé, l\'utilisateur n\'est pas connecté.');
-        }
-
-        ///initialise le joueur dans le classement Elo si c'est ça première partie
-        $em = $this->getDoctrine()->getManager();
-        if ($em->getRepository('AGORAPlatformBundle:Leaderboard')->findOneBy(array('idPlayer' => $user->getId(), 'idGame' => 1)) == null) {
-            $lb = new Leaderboard;
-
-            $g = $em->getRepository('AGORAPlatformBundle:GameInfo')->find(1); //avecesar est le premier jeu de gameinfo
-            $lb -> setIdGame($g);
-
-            $lb -> setIdPlayer($user);
-            $lb -> setELO(2000);
-            $lb -> setNbVic(0);
-            $lb -> setNbDef(0);
-
-            $em->persist($lb);
-            $em->flush();
-        }
-
-        $service = $this->container->get('agora_game.ave_cesar');
-
-        if (!$service->playerAlreadyCreated($gameId, $user->getId())) {
-            $result = $service->createPlayer($user, $gameId);
-        } else {
-            return $this->redirect($this->generateUrl('agora_game_ave_cesar_homepage' ,array(
-                "gameId" => $gameId
-            )));
-        }
-
-        // Game Full
-        if ($result == -1) {
-            $this->redirect($this->generateUrl('agora_platform_joingame'));
-        }
-
-        return $this->redirect($this->generateUrl('agora_game_ave_cesar_homepage' ,array(
-            "gameId" => $gameId
-        )));
-    }
+    
     //TODO
     //supprime une partie
     public function deleteAction($idGame) {

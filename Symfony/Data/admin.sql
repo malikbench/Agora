@@ -48,7 +48,8 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (0,'admin','admin','agora.dev.test@gmail.com','agora.dev.test@gmail.com',1,'ZNQ47xY9i69QrnOR8XjqaLDt/U2ggZPEOsY7QIo6uSE','tzCv7nPocweDKNY+17zPVL1QFf77F/2PIYW1w7v0xiMiKUfkAbdK7wxaBIboAsB1+oIBzwATwARlIbsWca3cSg==','2018-05-31 11:46:05',NULL,NULL,'a:1:{i:0;s:10:\"ROLE_ADMIN\";}');
+INSERT INTO `user` VALUES (0,'admin','admin','agora.dev.test@gmail.com','agora.dev.test@gmail.com',1,'ZNQ47xY9i69QrnOR8XjqaLDt/U2ggZPEOsY7QIo6uSE','tzCv7nPocweDKNY+17zPVL1QFf77F/2PIYW1w7v0xiMiKUfkAbdK7wxaBIboAsB1+oIBzwATwARlIbsWca3cSg==','2018-05-31 11:46:05',NULL,NULL,'a:1:{i:0;s:10:\"ROLE_ADMIN\";}'),
+(25, 'Paul', 'paul', 'paul@gmail.com', 'paul@gmail.com', 1, 'j2hUA3.wFiJJN10rj9hxmxs.InsLsJF9yQsalAxJEDE', 'qDm01Xx32Ac1UrXbowD1SnwpLO+jKR1HEDUUJzaAX+Fjt4bA5bxm9zzg5GKXLS8rFq3npPmwf77XBT81XFtywg==', NULL, 'cBSCXXnivdq9VEdLXFxkaoYzIUf2kNeCK_aQZlBT-to', NULL, 'a:0:{}');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
