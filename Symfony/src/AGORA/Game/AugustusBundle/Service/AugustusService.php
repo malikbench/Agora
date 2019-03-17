@@ -36,9 +36,25 @@ class AugustusService
         return $game;
     }
 
-    
-    public function createPlayer($user, $gameId) {
-        $this->playerModel->createPlayer($user, $gameId);
+    //Fonction qui récupere le jeu en bdd
+    public function getPlayer($user, $gameId) {
+        $players = $this->$manager->getRepository('AugustusBundle:AugustusPlayer');
+        $player = $players->findOneBy([
+            'userId' => $user->getId(),
+            'game' => $gameId,
+        ]);
+        return $player;
+    }
+
+
+    public function joinPlayer($user, $gameId) {
+        $player = $this->getPlayer();
+
+        if ($player == null) {
+            return $this->playerModel->createPlayer($user->getId(), $gameId);
+        }
+
+        return $player->getId();
     }
     
 

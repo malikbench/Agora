@@ -42,29 +42,23 @@ class GameController extends Controller {
     }
 
 
-    public function joinLobbyAction(SessionInterface $session, $gameId) {
+    public function joinRoomAction(SessionInterface $session, $gameId) {
         $user = $this->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('Accès refusé, l\'utilisateur n\'est pas connecté.');
         }
 
 
-        $service = $this->container->get('agora_game.ave_cesar');
+        $service = $this->container->get('agora_game.augustus');
 
-        if (!$service->playerAlreadyCreated($gameId, $user->getId())) {
-            $result = $service->createPlayer($user, $gameId);
-        } else {
-            return $this->redirect($this->generateUrl('agora_game_ave_cesar_homepage' ,array(
-                "gameId" => $gameId
-            )));
-        }
+        $playerId = $service->joinPlayer($user, $gameId);
 
-        // Game Full
-        if ($result == -1) {
+        // if the game is full
+        if ($playerId == -1) {
             $this->redirect($this->generateUrl('agora_platform_joingame'));
         }
 
-        return $this->redirect($this->generateUrl('agora_game_ave_cesar_homepage' ,array(
+        return $this->redirect($this->generateUrl('agora_game_augustus_index' ,array(
             "gameId" => $gameId
         )));
     }

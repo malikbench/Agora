@@ -6,6 +6,7 @@ agora_game_augustus_join:
   path: /join/{gameId}
   defaults: { _controller: AugustusBundle:Game:joinRoom }
 
-augustus_homepage:
-    path:     /join/{gameId}
-    defaults: { _controller: AugustusBundle:Default:index }
+agora_game_augustus_index:
+  path: /index/{gameId}
+  defaults: { _controller: AugustusBundle:Game:index }
+
