@@ -13,10 +13,10 @@ class AugustusGameModel {
 
     public function createGame($name, $nbPlayers, $isPrivate, $password, $hostId) {
         $augGame = new AugustusGame();
-        /*
-        TODO
-        set les propriétés de l'entité Game
-        */
+
+        $augGame->setBoard(new Board());
+        $colorLoot = array("senator" => null, "green" => null, "pink" => null, "orange" => null, "all" => null);
+
         $this->manager->persist($augGame);
         $this->manager->flush();
 
