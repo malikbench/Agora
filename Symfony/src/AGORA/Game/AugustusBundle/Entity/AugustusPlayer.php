@@ -93,11 +93,25 @@ class AugustusPlayer
     */
     private $game;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="userId", type="integer")
+     */
+    private $userId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="userName", type="string")
+     */
+    private $userName;
+
 
     /**
      * Constructor
      */
-    public function __construct(AugustusGame $game)
+    public function __construct()
     {
         $this->cards = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ctrlCards = new \Doctrine\Common\Collections\ArrayCollection();
@@ -106,7 +120,6 @@ class AugustusPlayer
         $this->legion = 7;
         $this->legionMax = 7;
         $this->advantage = 0;
-        $this->game = $game;
     }
 
     /**

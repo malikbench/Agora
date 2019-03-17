@@ -17,7 +17,7 @@ class AugustusPlayerModel {
         $this->manager = $em;
     }
 
-    public function createPlayer($user, $gameId) {
+    public function createPlayer($userId, $gameId) {
         $augGame = $this->manager->getRepository('AGORAGameAugustusBundle:AugustusGame')->find($gameId);
         if ($augGame == null) {
             throw new \Exception();
@@ -36,13 +36,12 @@ class AugustusPlayerModel {
 
         $player = new AveCesarPlayer();
         $player->setGameId($gameId);
+
+        $user = $this->manager->getRepository('AGORAUserBundle:User')
+            ->findOneBy(array('userId' => $userId));
         
-        /*
-        TODO
-        set les attributs de nouveau Player
-        ET rajouter un attribut userName qui référence le nom du joueur pour la plateforme
-           l'info se récupère dans la BDD du UserBundle
-        */
+        $player->setUserId($user->getId());
+        $player->setUserName($user->getUserName());
 
         $this->manager->persist($player);
         $this->manager->flush();
@@ -54,8 +53,9 @@ class AugustusPlayerModel {
             appelée une fois que la salle est pleine
             initialise les joueurs pour la partie (cartes à contrôler etc)
             */
+            //Peut etre a faire dans game 
         }
-        $this->flush();
+        $this->manager->flush();
         return $player->getId();
     }
 
@@ -146,6 +146,22 @@ class AugustusPlayerModel {
         $card->setCtrlTokens($ctrl);
 
         $this->$manager->flush();
+    }
+
+    public function getCardByNumber($idPlayer, $number) {
+        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+
+        $player = $players->findOneById($idPlayer);
+
+        $cards = $player->getCards();
+
+        foreach($cards as $c) {
+            if ($c->getNumber() == $number) {
+                return $c;
+            }
+        }
+
+        return null;
     }
 }
 
