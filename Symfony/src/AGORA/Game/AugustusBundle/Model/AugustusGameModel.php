@@ -1,4 +1,7 @@
 <?php
+
+namespace AGORA\Game\AugustusBundle\Model;
+
 use AGORA\Game\AugustusBundel\Entity\AugustusGame;
 use AGORA\Game\GameBundle\Entity\Game;
 use Doctrine\ORM\EntityManager;
