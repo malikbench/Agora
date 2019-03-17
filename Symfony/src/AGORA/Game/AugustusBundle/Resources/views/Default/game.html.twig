@@ -336,24 +336,6 @@
 
             //phase 2
 
-            // case "TwoLegionOnDoubleSword" :
-            function doTwoLegionOnDoubleSword() {
-                if({{game.getAffectedPlayer()}} == {{ me }} && {{ game.getState() == "TwoLegionOnDoubleSword" }}) {
-
-                }
-            }
-            // case "TwoLegionOnTeaches" :
-            function doTwoLegionOnTeaches() {
-
-            }
-            // case "TwoLegionOnShield" :
-            function doTwoLegionOnShield() {
-
-            }
-            // case "TwoLegionOnKnife" :
-            function doTwoLegionOnKnife(){
-
-            }
 
             // case "RemoveOneLegion" :
             function doRemoveOneLegion(){
@@ -367,22 +349,7 @@
             function doMoveLegion() {
 
             }
-            // case "OneLegionOnAnything" :
-            function doOneLegionOnAnything() {
 
-            }
-            // case "TwoLegionOnChariot" :
-            function doTwoLegionOnChariot() {
-
-            }
-            // case "TwoLegionOnCatapult" :
-            function doTwoLegionOnCatapult() {
-
-            }
-            // case "TwoLegionOnAnything" :
-            function doTwoLegionOnAnything() {
-
-            }
             // case "RemoveAllLegion" :
             function doRemoveAllLegion() {
 
@@ -468,7 +435,7 @@
                 //selectedToken.elem.style.visibility = "hidden";
                 
                 document.querySelectorAll(".cardAction").forEach( function (ee) {
-                    ee.firstElementChild.innerHTML = "<p>Vous avez retiré une légion, vous ne pouvez plus en retirer davantage.</p>";
+                    ee.firstElementChild.innerHTML = "<p>Vous avez retiré une légion, vous ne pouvez plus en retirer ce tour d avantage.</p>";
                 });
             }
 
@@ -476,6 +443,30 @@
             function addBestToken(listToken, listControlled, indCard) {
                 var actualTokens = [{{ game.getToken ?? null }}];
                 var powerList = {{ me.getEquivalences ?? null }}
+
+                {% if (game.getState() == "TwoLegionOnDoubleSword") and game.getAffectedPlayer() == me %}
+                     actualTokens = ["double sword"];
+                {% elseif game.getState() == "TwoLegionOnTeaches" and game.getAffectedPlayer() == me %}
+                     actualTokens = ["teaches"];
+
+                {% elseif game.getState() == "TwoLegionOnShield" and game.getAffectedPlayer() == me %}
+                    actualTokens = ["shield"];
+
+                {% elseif game.getState() == "TwoLegionOnKnife" and game.getAffectedPlayer() == me %}
+                    actualTokens = ["knife"];
+
+                {% elseif  game.getState() == "OneLegionOnAnything" and game.getAffectedPlayer() == me %}
+                    actualTokens = ["double sword", "shield","chariot", "catapult", "teaches","knife" ];
+
+                {% elseif game.getState() == "TwoLegionOnChariot" and game.getAffectedPlayer() == me %}
+                    actualTokens = ["chariot"];
+
+                {% elseif  game.getState() == "TwoLegionOnCatapult" and game.getAffectedPlayer() ==  me  %}
+                    actualTokens = ["catapult"];
+
+                {% elseif  game.getState() == "TwoLegionOnAnything" and game.getAffectedPlayer() == me %}
+                    actualTokens = ["double sword", "shield","chariot", "catapult", "teaches","knife" ];
+                {% else %}
                 switch (actualToken) {
                     case "shield" :
                         if (powerList.contains("ShieldIsChariot")) {
@@ -542,6 +533,7 @@
                         break;
                 }
 
+                {% endif %}
                 var indToken = -1;
                 listToken.forEach( function (e, i) {
                     if (actualTokens.contains(e)) {
@@ -557,7 +549,10 @@
                     action.addToken.card.ind = indCard;
                     action.addToken.token = {};
                     action.addToken.token.ind = indToken;
-                    {#{% if game.state == "TwoLegionOnDoubleSword" %}#}
+
+                    {% if game.state.includes("Two") and game.getAffectedPlayer() == me %}
+
+                    {% else %}
                     document.querySelectorAll(".cardAction").forEach( function (ee) {
                         ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion ce tour, vous ne pouvez plus en poser d avantage.</p>";
                     });
