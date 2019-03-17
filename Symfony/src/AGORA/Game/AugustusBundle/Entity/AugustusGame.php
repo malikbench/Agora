@@ -108,8 +108,6 @@ class AugustusGame
     public function __construct()
     {
         $this->players = new \Doctrine\Common\Collections\ArrayCollection();
-        $board = new Board();
-        $colorLoot = array("senator" => null, "green" => null, "pink" => null, "orange" => null, "all" => null);
     }
 
     /**
@@ -218,6 +216,20 @@ class AugustusGame
     public function addColorLoot(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $colorLoot)
     {
         $this->colorLoot[] = $colorLoot;
+
+        return $this;
+    }
+
+    /**
+     * set colorLoot.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusPlayer $colorLoot
+     *
+     * @return AugustusGame
+     */
+    public function setColorLoot(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $colorLoot)
+    {
+        $this->colorLoot = $colorLoot;
 
         return $this;
     }
