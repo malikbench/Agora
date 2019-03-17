@@ -16,8 +16,8 @@ class AugustusPlayerModel {
 
     //Mets une légion sur la carte et retire le jeton de la carte correspondant au jeton du tour en cours.
     public function putLegionOnCard($idPlayer, $idCard, $token) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $players = $this->$manager->getRepository('AugustusBundle:AugustusPlayer');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $player = $players->findOneById($idPlayer);
         $card = $cards->findOneById($idCard);
@@ -30,13 +30,13 @@ class AugustusPlayerModel {
 
         $player->history = [$idCard, $token];
         
-        $manager->flush();
+        $this->$manager->flush();
     }
 
     //Mets une legion de la carte Source à la carte dest.
     public function putLegionFromSourceToDest($idPlayer, $idCardSource, $idCardDest, $tokenSource, $tokenDest) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $players = $this->$manager->getRepository('AugustusBundle:AugustusPlayer');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $player = $players->findOneById($idPlayer);
 
@@ -47,25 +47,60 @@ class AugustusPlayerModel {
 
         $player->history = [$idCardDest, $tokenDest];
         
-        $manager->flush();
+        $this->$manager->flush();
     }
 
-    //??
-    public function takeLoot($idPlayer, $idLoot) {
-
-    }
 
     //La carte d'id idCard passe de currObj à ctrlObj si tout les tokens de la cartes sont contrôlés.
     public function captureCard($idPlayer, $idCard) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $players = $this->$manager->getRepository('AugustusBundle:AugustusPlayer');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $player = $players->findOneById($idPlayer);
         $card = $cards->findOneById($idCard);
 
-        $this->ctrlCards[] = $card;
+        switch($card->getResource()) {
+            case "wheat": 
+                $player->setWheat($player->getWheat() + 1);
+                break;
+            case "gold": 
+                $player->setGold($player->getGold() + 1);
+                break;
+            case "both": 
+                $player->setWheat($player->getWheat() + 1);
+                $player->setGold($player->getGold() + 1);
+                break;
+        }
+        $player->ctrlCards[] = $card;
         $player->cards->removeElement($card);
-        $manager->flush();
+        $this->$manager->flush();
+    }
+
+    public function deleteCtrlCard($idPlayer) {
+        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+
+        $player = $players->findOneById($idPlayer);
+
+        $ctrlCards = $player->getCtrlCards();
+        shuffle($ctrlCards);
+        array_pop($ctrlCards);
+        $player->setCtrlCards($ctrlCards);
+
+        $this->$manager->flush();
+    }
+
+    public function completeCard($idCard) {
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
+
+        $card = $cards->findOneById($idCard);
+
+        $ctrl = $card->getCtrlTokens();
+        foreach($ctrl as &$c) {
+            $c == true;
+        }
+        $card->setCtrlTokens($ctrl);
+
+        $this->$manager->flush();
     }
 }
 

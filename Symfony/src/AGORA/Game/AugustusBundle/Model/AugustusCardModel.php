@@ -16,54 +16,58 @@ class AugustusCardModel {
 
     //Passe le token token de la liste des Tokens a celle des Tokens capturés.
     public function captureToken($idCard, $token) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
         $tokens = $card->getTokens();
 
         $ind = array_search($token, $tokens);
-        $beg = array_slice($tokens, 0, ind);
-        $end = array_slice($tokens, ind + 1, count($tokens));
 
-        $card->setTokens(array_push($beg, $end));
-        $card->setCtrlTokens(array_push($card->getCtrlTokens()), $token);
+        $ctrl = $card->getCtrlTokens();
+        $ctrl[$ind] = true;
+        $card->setCtrlTokens($ctrl);
 
-        $manager->flush();
+        $this->$manager->flush();
     }
 
     //Passe le token d'id idToken de la liste des Tokens capturés a celle des Tokens.
     public function getBackToken($idCard, $token) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
         $tokens = $card->getCtrlTokens();
 
         $ind = array_search($token, $tokens);
-        $beg = array_slice($tokens, 0, ind);
-        $end = array_slice($tokens, ind + 1, count($tokens));
 
-        $card->setTokens(array_push($beg, $end));
-        $card->setCtrlTokens(array_push($card->getTokens()), $token);
+        $ctrl = $card->getCtrlTokens();
+        $ctrl[$ind] = false;
+        $card->setCtrlTokens($ctrl);
 
-        $manager->flush();
+        $this->$manager->flush();
     }
 
     //La liste des Tokens est elle vide ?
     public function isCapturable($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
-        $tokens = $card->getTokens();
+        $res = true;
+        foreach($card->getCtrlTokens() as $c) {
+            if ($c == false) {
+                $res = false;
+                break;
+            }
+        }
 
-        return count($tokens) == 0;
+        return res;
     }
 
     //Effectue le pouvoir lié a son type de pouvoir.
     public function doPower($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -90,10 +94,11 @@ class AugustusCardModel {
                 doTeachesIsKnife($idCard);
                 break;
         }
+        $this->$manager->flush();
     }
 
     private function doOneLegion($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -102,7 +107,7 @@ class AugustusCardModel {
     }
 
     private function doTwoLegion($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -111,39 +116,39 @@ class AugustusCardModel {
     }
 
     private function  doDoubleSwordIsShield($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
         $player = $card->getPlayer();
-        $bonus = $player -> getBonus();
-        if($bonus[AugustusToken::SHIELD]->length == 0) {
-            $bonus[AugustusToken::SHIELD] = [];
+        $equivalences = $player -> getEquivalences();
+        if($equivalences[AugustusToken::SHIELD]->length == 0) {
+            $equivalences[AugustusToken::SHIELD] = [];
         }
-        $bonus[AugustusToken::SHIELD]->array_push(AugustusToken::DOUBLESWORD);
-        if($bonus[AugustusToken::DOUBLESWORD]->length == 0) {
-            $bonus[AugustusToken::DOUBLESWORD] = [];
+        $equivalences[AugustusToken::SHIELD]->array_push(AugustusToken::DOUBLESWORD);
+        if($equivalences[AugustusToken::DOUBLESWORD]->length == 0) {
+            $equivalences[AugustusToken::DOUBLESWORD] = [];
         }
-        $bonus[AugustusToken::DOUBLESWORD] = array_push(AugustusToken::SHIELD);
-        $player -> setBonus($bonus);
+        $equivalences[AugustusToken::DOUBLESWORD] = array_push(AugustusToken::SHIELD);
+        $player -> setEquivalences($equivalences);
     }
 
     private function  doShieldIsChariot($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
         $player = $card->getPlayer();
-        $bonus = $player -> getBonus();
-        if($bonus[AugustusToken::SHIELD]->length == 0) {
-            $bonus[AugustusToken::SHIELD] = [];
+        $equivalences = $player -> getEquivalences();
+        if($equivalences[AugustusToken::SHIELD]->length == 0) {
+            $equivalences[AugustusToken::SHIELD] = [];
         }
-        $bonus[AugustusToken::SHIELD]->array_push(AugustusToken::CHARIOT);
-        if($bonus[AugustusToken::CHARIOT]->length == 0) {
-            $bonus[AugustusToken::CHARIOT] = [];
+        $equivalences[AugustusToken::SHIELD]->array_push(AugustusToken::CHARIOT);
+        if($equivalences[AugustusToken::CHARIOT]->length == 0) {
+            $equivalences[AugustusToken::CHARIOT] = [];
         }
-        $bonus[AugustusToken::CHARIOT]->array_push(AugustusToken::SHIELD);
-        $player -> setBonus($bonus);
+        $equivalences[AugustusToken::CHARIOT]->array_push(AugustusToken::SHIELD);
+        $player -> setEquivalences($equivalences);
     }
 
     private function doChariotIsCatapult($idCard) {
@@ -152,52 +157,52 @@ class AugustusCardModel {
         $card = $cards->findOneById($idCard);
 
         $player = $card->getPlayer();
-        $bonus = $player -> getBonus();
-        if($bonus[AugustusToken::CHARIOT]->length == 0) {
-            $bonus[AugustusToken::CHARIOT] = [];
+        $equivalences = $player -> getEquivalences();
+        if($equivalences[AugustusToken::CHARIOT]->length == 0) {
+            $equivalences[AugustusToken::CHARIOT] = [];
         }
-        $bonus[AugustusToken::CHARIOT]->array_push(AugustusToken::CATAPULT);
-        if($bonus[AugustusToken::CATAPULT]->length == 0) {
-            $bonus[AugustusToken::CATAPULT] = [];
+        $equivalences[AugustusToken::CHARIOT]->array_push(AugustusToken::CATAPULT);
+        if($equivalences[AugustusToken::CATAPULT]->length == 0) {
+            $equivalences[AugustusToken::CATAPULT] = [];
         }
-        $bonus[AugustusToken::CATAPULT]->array_push(AugustusToken::CHARIOT);
-        $player -> setBonus($bonus);
+        $equivalences[AugustusToken::CATAPULT]->array_push(AugustusToken::CHARIOT);
+        $player -> setEquivalences($equivalences);
     }
 
     private function doCatapultIsTeaches($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
         $player = $card->getPlayer();
-        $bonus = $player -> getBonus();
-        if($bonus[AugustusToken::CATAPULT]->length == 0) {
-            $bonus[AugustusToken::CATAPULT] = [];
+        $equivalences = $player -> getEquivalences();
+        if($equivalences[AugustusToken::CATAPULT]->length == 0) {
+            $equivalences[AugustusToken::CATAPULT] = [];
         }
-        $bonus[AugustusToken::CATAPULT]->array_push(AugustusToken::TEACHES);
-        if($bonus[AugustusToken::TEACHES]->length == 0) {
-            $bonus[AugustusToken::TEACHES] = [];
+        $equivalences[AugustusToken::CATAPULT]->array_push(AugustusToken::TEACHES);
+        if($equivalences[AugustusToken::TEACHES]->length == 0) {
+            $equivalences[AugustusToken::TEACHES] = [];
         }
-        $bonus[AugustusToken::TEACHES]->array_push(AugustusToken::CATAPULT);
-        $player -> setBonus($bonus);
+        $equivalences[AugustusToken::TEACHES]->array_push(AugustusToken::CATAPULT);
+        $player -> setEquivalences($equivalences);
     }
 
     private function doTeachesIsKnife($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
         $player = $card->getPlayer();
-        $bonus = $player -> getBonus();
-        if($bonus[AugustusToken::TEACHES]->length == 0) {
-            $bonus[AugustusToken::TEACHES] = [];
+        $equivalences = $player -> getEquivalences();
+        if($equivalences[AugustusToken::TEACHES]->length == 0) {
+            $equivalences[AugustusToken::TEACHES] = [];
         }
-        $bonus[AugustusToken::TEACHES]->array_push(AugustusToken::KNIFE);
-        if($bonus[AugustusToken::KNIFE]->length == 0) {
-            $bonus[AugustusToken::KNIFE] = [];
+        $equivalences[AugustusToken::TEACHES]->array_push(AugustusToken::KNIFE);
+        if($equivalences[AugustusToken::KNIFE]->length == 0) {
+            $equivalences[AugustusToken::KNIFE] = [];
         }
-        $bonus[AugustusToken::KNIFE]->array_push(AugustusToken::TEACHES);
-        $player -> setBonus($bonus);
+        $equivalences[AugustusToken::KNIFE]->array_push(AugustusToken::TEACHES);
+        $player -> setEquivalences($equivalences);
     }
 
 }

@@ -71,6 +71,13 @@ class AugustusPlayer
     private $history;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="equivalences", type="array")
+     */
+    private $equivalences;
+
+    /**
      * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="player", cascade={"persist"})
      */
     private $cards;
@@ -85,6 +92,7 @@ class AugustusPlayer
      * @ORM\JoinColumn(nullable=false)
     */
     private $game;
+
 
     /**
      * Constructor
@@ -376,5 +384,55 @@ class AugustusPlayer
     public function getCtrlCards()
     {
         return $this->ctrlCards;
+    }
+
+    /**
+     * Add ctrlCard.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $ctrlCard
+     *
+     * @return AugustusPlayer
+     */
+    public function addCtrlCard(\AGORA\Game\AugustusBundle\Entity\AugustusCard $ctrlCard)
+    {
+        $this->ctrlCards[] = $ctrlCard;
+
+        return $this;
+    }
+
+    /**
+     * Remove ctrlCard.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $ctrlCard
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeCtrlCard(\AGORA\Game\AugustusBundle\Entity\AugustusCard $ctrlCard)
+    {
+        return $this->ctrlCards->removeElement($ctrlCard);
+    }
+
+    /**
+     * Set equivalences.
+     *
+     * @param array $equivalences
+     *
+     * @return AugustusPlayer
+     */
+    public function setEquivalences($equivalences)
+    {
+        $this->equivalences = $equivalences;
+
+        return $this;
+    }
+
+    /**
+     * Get equivalences.
+     *
+     * @return array
+     */
+    public function getEquivalences()
+    {
+        return $this->equivalences;
     }
 }

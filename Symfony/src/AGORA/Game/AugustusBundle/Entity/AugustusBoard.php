@@ -30,9 +30,16 @@ class AugustusBoard
      * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="board")
      */
     private $objLine;
+
+    /**
+     * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusGame", mappedBy="board")
+     */
+    private $game;
     
     /**
-     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusToken", mappedBy="board")
+     * @var array
+     *
+     * @ORM\Column(name="tokenBag", type="array")
      */
     private $tokenBag;
     
@@ -901,4 +908,94 @@ class AugustusBoard
   {
       return $this->tokenBag->clear();
   }
+
+    /**
+     * Set tokenBag.
+     *
+     * @param array $tokenBag
+     *
+     * @return AugustusBoard
+     */
+    public function setTokenBag($tokenBag)
+    {
+        $this->tokenBag = $tokenBag;
+
+        return $this;
+    }
+
+    /**
+     * Add deck.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $deck
+     *
+     * @return AugustusBoard
+     */
+    public function addDeck(\AGORA\Game\AugustusBundle\Entity\AugustusCard $deck)
+    {
+        $this->deck[] = $deck;
+
+        return $this;
+    }
+
+    /**
+     * Remove deck.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $deck
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDeck(\AGORA\Game\AugustusBundle\Entity\AugustusCard $deck)
+    {
+        return $this->deck->removeElement($deck);
+    }
+
+    /**
+     * Add objLine.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $objLine
+     *
+     * @return AugustusBoard
+     */
+    public function addObjLine(\AGORA\Game\AugustusBundle\Entity\AugustusCard $objLine)
+    {
+        $this->objLine[] = $objLine;
+
+        return $this;
+    }
+
+    /**
+     * Remove objLine.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $objLine
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeObjLine(\AGORA\Game\AugustusBundle\Entity\AugustusCard $objLine)
+    {
+        return $this->objLine->removeElement($objLine);
+    }
+
+    /**
+     * Set game.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusGame|null $game
+     *
+     * @return AugustusBoard
+     */
+    public function setGame(\AGORA\Game\AugustusBundle\Entity\AugustusGame $game = null)
+    {
+        $this->game = $game;
+
+        return $this;
+    }
+
+    /**
+     * Get game.
+     *
+     * @return \AGORA\Game\AugustusBundle\Entity\AugustusGame|null
+     */
+    public function getGame()
+    {
+        return $this->game;
+    }
 }
