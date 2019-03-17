@@ -1,5 +1,6 @@
 <?php
-use AGORA\Game\Socket\Game;
+use AGORA\Game\AugustusBundel\Entity\AugustusGame;
+use AGORA\Game\GameBundle\Entity\Game;
 use Doctrine\ORM\EntityManager;
 
 class AugustusGameModel {
@@ -8,6 +9,33 @@ class AugustusGameModel {
 
     public function __construct(EntityManager $em) {
         $this->manager = $em;
+    }
+
+    public function createGame($name, $nbPlayers, $isPrivate, $password, $hostId) {
+        $augGame = new AugustusGame();
+        /*
+        TODO
+        set les propriétés de l'entité Game
+        */
+        $this->manager->persist($augGame);
+        $this->manager->flush();
+
+        $game = new Game();
+        $game->setGameId($augGame->getId());
+        $gameInfoManager = $this->manager->getRepository('AGORAPlatformBundle:GameInfo');
+        $gameInfo = $gameInfoManager->findOneBy(array('gameCode' => "aug"));
+        $game->setGameInfoId($gameInfo);
+        $game->setName($name);
+        $game->setNbPlayers($nbPlayers);
+        $game->setIdHost($hostId);
+        $game->setPassword($password);
+        $game->setPrivate($isPrivate);
+        $game->setState("waiting");
+        $game->setDateCrea(new \DateTime("now"));
+        $this->manager->persist($game);
+        $this->manager->flush();
+
+        return $game->getId();
     }
 
     // donne une main de trois cartes à chaque joueur ainsi qu'un jeton sur le plateau
