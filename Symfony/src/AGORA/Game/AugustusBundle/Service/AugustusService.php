@@ -3,6 +3,10 @@
 namespace AGORA\Game\AugustusBundle\Service;
 
 use AGORA\Game\AugustusBundle\Model\AugustusGameModel;
+use AGORA\Game\AugustusBundle\Model\AugustusPlayerModel;
+
+use Doctrine\ORM\EntityManager;
+
 
 class AugustusService {
 
@@ -17,12 +21,11 @@ class AugustusService {
 
         $this->gameModel = new AugustusGameModel($em);
         $this->playerModel = new AugustusPlayerModel($em);
-        $this->boardModel = new AugustusGameModel($em);
     }
 
 
-    public function createRoom($name, $nbPlayers, $isPrivate, $password) {
-        $this->gameModel->createGame($name, $nbPlayers, $isPrivate, $password);
+    public function createRoom($name, $nbPlayers, $isPrivate, $password, $hostId) {
+        $this->gameModel->createGame($name, $nbPlayers, $isPrivate, $password, $hostId);
     }
 
 

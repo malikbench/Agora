@@ -1,9 +1,12 @@
 <?php
 
-namespace AGORA\Game\Model;
+namespace AGORA\Game\AugustusBundle\Model;
 
-use AGORA\Game\AugustusBundel\Entity\AugustusGame;
-use AGORA\Game\AugustusBundel\Entity\AugustusPlayer;
+use AGORA\Game\AugustusBundle\Entity\AugustusGame;
+use AGORA\Game\AugustusBundle\Entity\AugustusPlayer;
+use AGORA\Game\AugustusBundle\Entity\AugustusCard;
+use AGORA\Game\AugustusBundle\Entity\AugustusToken;
+
 use AGORA\Game\GameBundle\Entity\Game;
 use Doctrine\ORM\EntityManager;
 

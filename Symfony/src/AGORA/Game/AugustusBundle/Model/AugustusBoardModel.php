@@ -1,10 +1,10 @@
 <?php
 
-namespace AGORA\Game\Model\AugustusBoardModel;
+namespace AGORA\Game\AugustusBundle\Model;
 
 use Doctrine\ORM\EntityManager;
 
-class AgustusBoardModel {
+class AugustusBoardModel {
   
   protected $manager;
   
