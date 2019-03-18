@@ -22,12 +22,12 @@ class AugustusBoard
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="board")
+     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="board", cascade={"persist"})
      */
     private $deck;
 
     /**
-     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="board")
+     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="board", cascade={"persist"})
      */
     private $objLine;
 
