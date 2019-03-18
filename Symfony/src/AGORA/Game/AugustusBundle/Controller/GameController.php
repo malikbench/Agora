@@ -10,7 +10,9 @@ use AGORA\Game\Socket\ConnectionStorage;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use FOS\UserBundle\Model\UserInterface;
+
 
 class GameController extends Controller {
 
@@ -18,6 +20,8 @@ class GameController extends Controller {
      * @var $connectionStorage Les connexions liées a un jeu.
      */
     protected $connectionStorage;
+
+    private $logger;
 
     function __construct() {
         $this->connectionStorage = new ConnectionStorage();
@@ -47,8 +51,9 @@ class GameController extends Controller {
 
         //création de la salle de jeu et récupération de l'id
         $gameId = $service->createRoom($_POST['lobbyName'], $_POST['nbPlayers'], $private, $password, $user->getId());
+
         return $this->redirect($this->generateUrl('agora_game_join_aug' ,array(
-            "gameId" => $gameId
+            'gameId' => $gameId
         )));
     }
 

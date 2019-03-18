@@ -13,7 +13,6 @@ class AugustusService {
     protected $manager;
     public $gameModel;
     public $playerModel;
-    public $boardModel;
 
     // $em est passé en argument dans services.yml
     public function __construct(EntityManager $em) {
@@ -25,7 +24,7 @@ class AugustusService {
 
 
     public function createRoom($name, $nbPlayers, $isPrivate, $password, $hostId) {
-        $this->gameModel->createGame($name, $nbPlayers, $isPrivate, $password, $hostId);
+        return $this->gameModel->createGame($name, $nbPlayers, $isPrivate, $password, $hostId);
     }
 
 
@@ -39,18 +38,34 @@ class AugustusService {
     }
 
     //Fonction qui récupere le jeu en bdd
-    public function getPlayer($user, $gameId) {
-        $players = $this->$manager->getRepository('AugustusBundle:AugustusPlayer');
+    public function getPlayerFromUser($user, $gameId) {
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
         $player = $players->findOneBy([
             'userId' => $user->getId(),
-            'game' => $gameId,
+            'game' => $this->getGame($gameId),
         ]);
         return $player;
     }
 
+    public function getPlayerFromId($playerId, $gameId) {
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
+        $player = $players->findOneBy([
+            'id' => $playerId
+        ]);
+        return $player;
+    }
+
+    public function getPlayers($gameId) {
+        return $this->getGame($gameId)->getPlayers();
+    }
+
+    public function areAllPlayersReady($gameId) {
+        return $this->gameModel->allOk($gameId);
+    }
+
 
     public function joinPlayer($user, $gameId) {
-        $player = $this->getPlayer();
+        $player = $this->getPlayerFromUser($user, $gameId);
 
         if ($player == null) {
             return $this->playerModel->createPlayer($user->getId(), $gameId);
