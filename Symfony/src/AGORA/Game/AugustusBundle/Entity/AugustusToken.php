@@ -11,6 +11,7 @@ abstract class AugustusToken
     const CATAPULT = "catapult";
     const JOKER = "joker";
     const TEACHES = "teaches";
+    const NOTOKEN = "";
 
     /** @var array user friendly named token */
     protected static $tokenName = [
@@ -21,6 +22,7 @@ abstract class AugustusToken
         self::CATAPULT => 'Catapulte',
         self::JOKER => 'Joker',
         self::TEACHES => 'Enseigne',
+        self::NOTOKEN => '',
 
     ];
 
@@ -49,7 +51,8 @@ abstract class AugustusToken
             self::DOUBLESWORD,
             self::CATAPULT,
             self::JOKER,
-            self::TEACHES
+            self::TEACHES,
+            self::NOTOKEN
         ];
     }
 }

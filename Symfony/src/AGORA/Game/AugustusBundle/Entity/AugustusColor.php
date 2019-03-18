@@ -8,6 +8,7 @@ abstract class AugustusColor
     const GREEN = "green";
     const PINK = "pink";
     const ORANGE  = "orange";
+    const NOCOLOR  = "";
 
     /** @var array user friendly named color */
     protected static $colorName = [
@@ -15,6 +16,7 @@ abstract class AugustusColor
         self::GREEN => 'Vert',
         self::PINK => 'Rose',
         self::ORANGE  => 'Orange',
+        self::NOCOLOR  => '',
     ];
 
     /**
@@ -39,7 +41,8 @@ abstract class AugustusColor
             self::SENATOR,
             self::GREEN,
             self::PINK,
-            self::ORANGE
+            self::ORANGE,
+            self::NOCOLOR
         ];
     }
 }
