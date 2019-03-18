@@ -673,7 +673,7 @@ class AugustusBoard
     $toCapture->add(AugustusToken::TEACHES);
     $toCapture->add(AugustusToken::TEACHES);
     $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this->id, 84, AugustusColor::GREEN, AugustusResource::NORESOURCE, 12, AugustusPower::NOPOWER, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 84, AugustusColor::GREEN, AugustusResource::NORESOURCE, 12, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
     $toCapture->add(AugustusToken::TEACHES);
