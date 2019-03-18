@@ -222,7 +222,9 @@
         <script>
             let gottaRemove = 0;
             let gottaRemoveAllTokenOnCard = false;
-            {% if (game.getState() == "RemoveOneLegion" and (me.legionMax - me.legion >= 1) or (game.getState() == "RemoveTwoLegion" and me.legionMax - me.legion == 1) %}
+            let gotToCompleteCard = false;
+            {% if (game.getState() == "RemoveOneLegion" and (me.legionMax - me.legion >= 1) and game.affectedPlayer() = me.getId() or
+                (game.getState() == "RemoveTwoLegion" and me.legionMax - me.legion == 1) %}
             gottaRemove = 1;
             (function () {
                 document.querySelector("#valider").disabled = true;
@@ -231,7 +233,7 @@
                 });
                 document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez retirer 1 légion";
             })();
-            {% elseif game.getState() == "RemoveTwoLegion" and me.legionMax - me.legion >= 2 %}
+            {% elseif game.getState() == "RemoveTwoLegion" and me.legionMax - me.legion >= 2 and game.affectedPlayer() = me.getId() %}
             gottaRemove = 2;
             (function () {
                 document.querySelector("#valider").disabled = true;
@@ -240,17 +242,27 @@
                 });
                 document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez retirer 2 légions";
             })();
-            {% elseif game.getState() == "RemoveAllLegion" and me.legionMax != me.legion %}
+            {% elseif game.getState() == "RemoveAllLegion" and me.legionMax != me.legion and game.affectedPlayer() = me.getId() %}
             gottaRemoveAllTokenOnCard = true;
             (function () {
                 document.querySelector("#valider").disabled = true;
-                document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez choisir une carte avec des légions dessus. Toutes les légions se retirent de la carte.";
+                document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez choisir une carte. Toutes les légions se retireront de la carte.";
             })();
-            {% elseif game.getState() == "RemoveAllLegion" and me.legionMax == me.legion %}
-            validate();
-            window.onload = function() {
-                validate();
-            };
+            {% elseif game.getState() == "CompleteCard" and game.affectedPlayer() = me.getId() %}
+            gotToCompleteCard = true;
+            (function () {
+                document.querySelector("#valider").disabled = true;
+                document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez choisir une carte. Toutes les légions se retireront de la carte.";
+            })();
+            {% elseif (game.getState() == "RemoveAllLegion" and game.getAffectedPlayer() == me.getId()) or
+                ( game.getState() == "RemoveTwoLegion" and game.getAffectedPlayer() == me.getId()) or
+                (game.getState() == "RemoveOneLegion" and game.getAffectedPlayer() == me.getId()) or
+                (game.getState() == "CompleteCard" and game.getAffectedPlayer() != me.getId())
+            %}
+            (function () {
+                document.querySelector("#valider").disabled = true;
+                document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez attendre les autres joueurs.";
+            })();
             {% endif %}
 
             //get infos string from nbr of a card
@@ -396,11 +408,7 @@
             function doMoveLegion() {
             }
 
-            //TODO
-            // selectionner une carte qui n'est pas celle capturée,
-            // le back la passe de cards à ctrlCards
-            function doCompleteCard() {
-            }
+
 
             //TODO
             // selectionner une carte de la liste des objectifs.
@@ -408,6 +416,18 @@
             function oneCard() {
             }
             */
+
+            //TODO
+            // selectionner une carte qui n'est pas celle capturée,
+            // le back la passe de cards à ctrlCards
+            function doCompleteCard(indCard) {
+                {% if game.affectedPlayer() == me.getId() %}
+                action.completeCard = {};
+                action.completeCard.card = indCard;
+                document.querySelector("#valider").disabled = false;
+                gotToCompleteCard = false;
+
+            }
 
 			//phase 3
 			function takeLoot() {
@@ -467,7 +487,7 @@
             }
 
             //FONCTION DE SELECTION DE LA LEGION A RETIRER
-            {% if game.state.includes("Two") and game.getAffectedPlayer() == me %}
+            {% if game.state.includes("Two") and game.getAffectedPlayer() == me.getId() %}
             let addAction = 2;
             let removeAction = 2;
             {% endif %}
@@ -539,21 +559,21 @@
                     let powerList = [];
                     powerList = {{ me.equivalences ?? null }};
 
-                    {% if game.getState() == "TwoLegionOnDoubleSword" and game.getAffectedPlayer() == me %}
+                    {% if game.getState() == "TwoLegionOnDoubleSword" and game.getAffectedPlayer() == me.getId() %}
                     actualTokens = ["double sword"];
-                    {% elseif game.getState() == "TwoLegionOnTeaches" and game.getAffectedPlayer() == me %}
+                    {% elseif game.getState() == "TwoLegionOnTeaches" and game.getAffectedPlayer() == me.getId() %}
                     actualTokens = ["teaches"];
-                    {% elseif game.getState() == "TwoLegionOnShield" and game.getAffectedPlayer() == me %}
+                    {% elseif game.getState() == "TwoLegionOnShield" and game.getAffectedPlayer() == me.getId() %}
                     actualTokens = ["shield"];
-                    {% elseif game.getState() == "TwoLegionOnKnife" and game.getAffectedPlayer() == me %}
+                    {% elseif game.getState() == "TwoLegionOnKnife" and game.getAffectedPlayer() == me.getId() %}
                     actualTokens = ["knife"];
-                    {% elseif  game.getState() == "OneLegionOnAnything" and game.getAffectedPlayer() == me %}
+                    {% elseif  game.getState() == "OneLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
                     actualTokens = ["double sword", "shield","chariot", "catapult", "teaches","knife" ];
-                    {% elseif game.getState() == "TwoLegionOnChariot" and game.getAffectedPlayer() == me %}
+                    {% elseif game.getState() == "TwoLegionOnChariot" and game.getAffectedPlayer() == me.getId() %}
                     actualTokens = ["chariot"];
-                    {% elseif  game.getState() == "TwoLegionOnCatapult" and game.getAffectedPlayer() ==  me  %}
+                    {% elseif  game.getState() == "TwoLegionOnCatapult" and game.getAffectedPlayer() ==  me.getId()  %}
                     actualTokens = ["catapult"];
-                    {% elseif  game.getState() == "TwoLegionOnAnything" and game.getAffectedPlayer() == me %}
+                    {% elseif  game.getState() == "TwoLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
                     actualTokens = ["double sword", "shield","chariot", "catapult", "teaches","knife" ];
                     {% else %}
                     switch (actualToken) {
