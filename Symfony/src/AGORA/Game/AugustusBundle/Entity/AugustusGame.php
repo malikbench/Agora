@@ -71,6 +71,20 @@ class AugustusGame
     */
    private $nextAffecteds;
 
+   /**
+    * @var int
+    *
+    * @ORM\Column(name="goldOwner", type="integer")
+    */
+   private $goldOwner;
+
+   /**
+    * @var int
+    *
+    * @ORM\Column(name="wheatOwner", type="integer")
+    */
+   private $wheatOwner;
+
     /**
      * Get id.
      *
@@ -122,6 +136,15 @@ class AugustusGame
     public function __construct()
     {
         $this->players = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->board = new AugustusBoard();
+        $this->token = AugustusToken::NOTOKEN;
+        $this->state = "waiting";
+        $this->affectedPlayer = -1;
+        $this->colorLoot = array(AugustusColor::SENATOR => -1, AugustusColor::GREEN => -1, AugustusColor::PINK => -1, AugustusColor::ORANGE => -1, "all" => -1);
+        $this->nextStates = [];
+        $this->nextAffecteds = [];
+        $this->goldOwner = -1;
+        $this->wheatOwner = -1;
     }
 
     /**
@@ -368,5 +391,53 @@ class AugustusGame
         $this->nextAffecteds = $nextAffecteds;
 
         return $this;
+    }
+
+    /**
+     * Set goldOwner.
+     *
+     * @param int $goldOwner
+     *
+     * @return AugustusGame
+     */
+    public function setGoldOwner($goldOwner)
+    {
+        $this->goldOwner = $goldOwner;
+
+        return $this;
+    }
+
+    /**
+     * Get goldOwner.
+     *
+     * @return int
+     */
+    public function getGoldOwner()
+    {
+        return $this->goldOwner;
+    }
+
+    /**
+     * Set wheatOwner.
+     *
+     * @param int $wheatOwner
+     *
+     * @return AugustusGame
+     */
+    public function setWheatOwner($wheatOwner)
+    {
+        $this->wheatOwner = $wheatOwner;
+
+        return $this;
+    }
+
+    /**
+     * Get wheatOwner.
+     *
+     * @return int
+     */
+    public function getWheatOwner()
+    {
+        return $this->wheatOwner;
     }
 }
