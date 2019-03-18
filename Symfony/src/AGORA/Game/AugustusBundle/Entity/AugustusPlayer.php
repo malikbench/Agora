@@ -120,6 +120,7 @@ class AugustusPlayer
         $this->legion = 7;
         $this->legionMax = 7;
         $this->advantage = 0;
+        $this->isLock = false;
     }
 
     /**
@@ -255,11 +256,11 @@ class AugustusPlayer
     /**
      * Add card.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\Card $card
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $card
      *
      * @return AugustusPlayer
      */
-    public function addCard(\AGORA\Game\AugustusBundle\Entity\Card $card)
+    public function addCard(\AGORA\Game\AugustusBundle\Entity\AugustusCard $card)
     {
         $this->cards[] = $card;
 
@@ -273,11 +274,11 @@ class AugustusPlayer
     /**
      * Remove card.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\Card $card
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $card
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeCard(\AGORA\Game\AugustusBundle\Entity\Card $card)
+    public function removeCard(\AGORA\Game\AugustusBundle\Entity\AugustusCard $card)
     {
         return $this->cards->removeElement($card);
     }
@@ -447,5 +448,53 @@ class AugustusPlayer
     public function getEquivalences()
     {
         return $this->equivalences;
+    }
+
+    /**
+     * Set userId.
+     *
+     * @param int $userId
+     *
+     * @return AugustusPlayer
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get userId.
+     *
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * Set userName.
+     *
+     * @param string $userName
+     *
+     * @return AugustusPlayer
+     */
+    public function setUserName($userName)
+    {
+        $this->userName = $userName;
+
+        return $this;
+    }
+
+    /**
+     * Get userName.
+     *
+     * @return string
+     */
+    public function getUserName()
+    {
+        return $this->userName;
     }
 }
