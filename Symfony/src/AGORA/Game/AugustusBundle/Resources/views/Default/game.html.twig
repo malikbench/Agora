@@ -6,7 +6,7 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('bundles/agoragameaugustus/css/game.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('bundles/agoragameaugustus/css/tchat.css') }}">
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-        <script> var playerUsername = "";</script>
+        <script> //let playerUsername = "";</script>
     </head>
 
     <body>
@@ -148,13 +148,23 @@
                 <div id="myBar" class="flexContainer flexRow">
                     {% for card in me.currObj %}
                         {% set cardIndex = loop.index0 %}
-                    <div class="card" style="background-image: url('{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}');">
+                    <div class="card" style="background-image: url('{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}');" onclick="selectHand(this)" ondblclick="getOverlay(this)">
                         {% for token in card.tokens.length %}
                         {% if controlledToken[loop.index0] %} <!-- TODO  remplacer par la bonne méthode pour savoir si un token est controllé -->
                         <img src='../../img/Token/legion.png' alt="" class="legion" style="top: {{ 31 * loop.index }}px;">
                         {% endif %}
                         {% endfor %}
                         <div class="cardAction{{ loop.index0 }} cardAction" style="visibility: hidden;">
+                            {% if game.getState() == "RemoveAllLegion" and me.legionMax != me.legion %}
+                                <div>
+                                    {% if true in controlledToken %}
+                                        <p>Vous pouvez retirer toutes les légions de cette carte.</p>
+                                        <button onclick="removeAllLegionOnCard({{ cardIndex }})">Retirer</button>
+                                    {% else %}
+                                        <p>Vous ne pouvez pas selectionner cette carte car il n'y a pas de légion dessus.</p>
+                                    {% endif %}
+                                </div>
+                            {% else %}
                             <div>
                                 <p>Vous pouvez retirer une légion d'un de ces emplacements en le sélectionnant:</p>
                                 {% for token in card.tokens %}
@@ -171,6 +181,7 @@
                                 <p>Vous pouvez placer une légion sur cette carte :</p>
                                 <button onclick="addBestToken(this, {{ card.tokens }}, {{ card.ctrlTokens }}, {{ cardIndex }})">Placer</button>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                     <!--
@@ -202,6 +213,10 @@
                     <p class="p">Jeton du tour : </p>
                     <img src="{{ asset('bundles/agoragameaugustus/img/Token/Token' ~ game.token ~ '.jpg') }}" alt="{{ game.token }}" height="55">
                 </div>
+
+                <div class="flex1"></div>
+
+                <div class="action"></div>
             </div>
         </div>
 
@@ -209,7 +224,8 @@
 
         <!-- SCRIPTS -->
         <script>
-            var gottaRemove = 0;
+            let gottaRemove = 0;
+            let gottaRemoveAllTokenOnCard = false;
             {% if (game.getState() == "RemoveOneLegion" and (me.legionMax - me.legion >= 1) or (game.getState() == "RemoveTwoLegion" and me.legionMax - me.legion == 1) %}
             gottaRemove = 1;
             (function () {
@@ -228,6 +244,17 @@
                 });
                 document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez retirer 2 légions";
             })();
+            {% elseif game.getState() == "RemoveAllLegion" and me.legionMax != me.legion %}
+            gottaRemoveAllTokenOnCard = true;
+            (function () {
+                document.querySelector("#valider").disabled = true;
+                document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez choisir une carte avec des légions dessus. Toutes les légions se retirent de la carte.";
+            })();
+            {% elseif game.getState() == "RemoveAllLegion" and me.legionMax == me.legion %}
+            validate();
+            window.onload = function() {
+                validate();
+            };
             {% endif %}
 
             //get infos string from nbr of a card
@@ -365,43 +392,24 @@
             /*
             //Ces fonctions peuvent toutes être gérées via les fonctions de base (remove & add)Token
 
-            // case "RemoveOneLegion" :
-            //DONE
-            // forcer le joueur à retirer une légion
-            // sinon, il ne peut pas appuyer sur le boutton validate et activer la fonction validate()
-            function doRemoveOneLegion(){
-
-            }
-
-            // case "RemoveTwoLegion" :
-            //DONE
-            // idem avec deux légions
-            function doRemoveTwoLegion() {
-
-            }
-
-            // case "MoveLegion" :
-            //TODO
+            //TODO moveLegion
             // la limite de addAction et removeAction est levée
             // les limites d'action du joueur sont donc le nombre de légion qu'il a posés
             //Limite de mouvement = nb de legion posé * 2
             //{#// addAction = removeAction = {{ me.maxLegion - me.legion }};#}
             function doMoveLegion() {
-
-            }
-
-            // case "RemoveAllLegion" :
-            //TODO
-            // selectionner une carte, le back enleve les légions de la carte
-            function doRemoveAllLegion() {
-
             }
 
             //TODO
             // selectionner une carte qui n'est pas celle capturée,
             // le back la passe de cards à ctrlCards
             function doCompleteCard() {
+            }
 
+            //TODO
+            // selectionner une carte de la liste des objectifs.
+            // La fonction sera peut-être la même que celle utilisée pour récupérer un objectif après un AveCesar
+            function oneCard() {
             }
             */
 
@@ -418,15 +426,13 @@
                 }
             }
 
-
-
 			function sendXHR(path) {
 				let xhr = new XMLHttpRequest();
 				xhr.onreadystatechange = function() {
 					if (xhr.readyState === XMLHttpRequest.DONE) {
 						document.write(xhr.responseText);
 					}
-				}
+				};
 				xhr.open('GET', path, true);
 				xhr.send();
 			}
@@ -445,22 +451,31 @@
 
             function selectHand(e) {
                 resetSelected();
-                let src = e;
-                src.classList.add("selectedHand");
+                e.classList.add("selectedHand");
 
                 if (document.querySelector(".action").hasChildNodes()) {
-                    document.querySelector(".action").firstChild.style.visibility = "hidden";
-                    document.querySelector("#myBar").querySelectorAll(".card")[document.querySelector(".action").childNodes[0].classList[0].replace("cardAction","")].appendChild(document.querySelector(".action").firstChild);
+                    document.querySelector(".action").firstElementChild.style.visibility = "hidden";
+                    document.querySelector("#myBar").querySelectorAll(".card")[parseInt(document.querySelector(".action").firstElementChild.classList[0].replace("cardAction",""))].appendChild(document.querySelector(".action").firstChild);
                 }
 
                 e.querySelector(".cardAction").style.visibility = "visible";
                 document.querySelector(".action").appendChild(e.querySelector(".cardAction"));
             }
 
+            //FONCTION POUR LE POUVOIR "Retirer toutes les légions d'une carte"
+            function removeAllLegionOnCard(indCard) {
+			    action.removeAllLegion = {};
+			    action.removeAllLegion.card = indCard;
+                document.querySelector("#valider").disabled = false;
+                gottaRemoveAllTokenOnCard = false;
+            }
+
+            //FONCTION DE SELECTION DE LA LEGION A RETIRER
             {% if game.state.includes("Two") and game.getAffectedPlayer() == me %}
             let addAction = 2;
             let removeAction = 2;
             {% endif %}
+            let legion = {{ me.legion ?? 0 }};
             let action = {};
             let selectedToken = {};
             let selectedCard = {};
@@ -475,6 +490,7 @@
                 selectedCard.ind = indCard;
             }
 
+            //FONCTION DE RETIRAGE DE LA LEGION SELECTIONNE
             function removeSelectedLegion() {
                 if (selectedToken !== {} && selectedCard !== {}) {
                     action.removeToken = {};
@@ -483,10 +499,11 @@
                         action.removeToken.card2 = selectedCard;
                         selectedToken.elem.style.visibility = "hidden";
                         selectedToken.elem = null;
+
                     } else if (gottaRemove <= 1) {
                         action.removeToken.token = selectedToken;
                         action.removeToken.card = selectedCard;
-                        document.querySelectorAll(".cardAction").forEach( function (ee) {
+                        document.querySelectorAll(".cardAction").forEach(function (ee) {
                             ee.firstElementChild.innerHTML = "<p>Vous avez retiré une légion, vous ne pouvez plus en retirer d'avantage ce tour.</p>";
                         });
                     }
@@ -497,141 +514,173 @@
                         gottaRemove = 0;
                         document.querySelector("#instructions").firstElementChild.innerHTML = "Vous pouvez valider vos actions";
                     }
+
+                    legion += 1;
+                    document.querySelector("#myInfo").innerHTML = "<p class=\"p\">\n" +
+                        "{{ me.name }}<br>\n" +
+                        "Légions :<br>\n" +
+                        legion + "/{{ me.legionMax }}<br>\n" +
+                        "Score :<br>\n" +
+                        "{{ me.score }}\n" +
+                        "<br>\n" +
+                        "Resssources :<br>\n" +
+                        "Blé : {{ me.wheat }}<br>\n" +
+                        "Or : {{ me.gold }}<br>\n" +
+                        "</p>";
                 } else {
                     alert("Aucun emplacement selectionné");
                 }
             }
+
+            // FONCTION DE POSE D'UNE LEGION
             //Vérifie si le joueur peut poser une légion sur la carte et si il le peut propose le token le plus rare
             function addBestToken(e, listToken, listControlled, indCard) {
-                let actualToken = "{{ game.token ?? null }}";
-                let actualTokens = [];
-                actualTokens = [{{ game.token ?? null }}];
-                actualTokens.push(actualToken);
-                let powerList = [];
-                powerList = {{ me.equivalences ?? null }};
+                if (legion > 0) {
+                    let actualToken = "{{ game.token ?? null }}";
+                    let actualTokens = [];
+                    actualTokens = [{{ game.token ?? null }}];
+                    actualTokens.push(actualToken);
+                    let powerList = [];
+                    powerList = {{ me.equivalences ?? null }};
 
-                {% if game.getState() == "TwoLegionOnDoubleSword" and game.getAffectedPlayer() == me %}
-                     actualTokens = ["double sword"];
-                {% elseif game.getState() == "TwoLegionOnTeaches" and game.getAffectedPlayer() == me %}
-                     actualTokens = ["teaches"];
-                {% elseif game.getState() == "TwoLegionOnShield" and game.getAffectedPlayer() == me %}
+                    {% if game.getState() == "TwoLegionOnDoubleSword" and game.getAffectedPlayer() == me %}
+                    actualTokens = ["double sword"];
+                    {% elseif game.getState() == "TwoLegionOnTeaches" and game.getAffectedPlayer() == me %}
+                    actualTokens = ["teaches"];
+                    {% elseif game.getState() == "TwoLegionOnShield" and game.getAffectedPlayer() == me %}
                     actualTokens = ["shield"];
-                {% elseif game.getState() == "TwoLegionOnKnife" and game.getAffectedPlayer() == me %}
+                    {% elseif game.getState() == "TwoLegionOnKnife" and game.getAffectedPlayer() == me %}
                     actualTokens = ["knife"];
-                {% elseif  game.getState() == "OneLegionOnAnything" and game.getAffectedPlayer() == me %}
+                    {% elseif  game.getState() == "OneLegionOnAnything" and game.getAffectedPlayer() == me %}
                     actualTokens = ["double sword", "shield","chariot", "catapult", "teaches","knife" ];
-                {% elseif game.getState() == "TwoLegionOnChariot" and game.getAffectedPlayer() == me %}
+                    {% elseif game.getState() == "TwoLegionOnChariot" and game.getAffectedPlayer() == me %}
                     actualTokens = ["chariot"];
-                {% elseif  game.getState() == "TwoLegionOnCatapult" and game.getAffectedPlayer() ==  me  %}
+                    {% elseif  game.getState() == "TwoLegionOnCatapult" and game.getAffectedPlayer() ==  me  %}
                     actualTokens = ["catapult"];
-                {% elseif  game.getState() == "TwoLegionOnAnything" and game.getAffectedPlayer() == me %}
+                    {% elseif  game.getState() == "TwoLegionOnAnything" and game.getAffectedPlayer() == me %}
                     actualTokens = ["double sword", "shield","chariot", "catapult", "teaches","knife" ];
-                {% else %}
-                switch (actualToken) {
-                    case "shield" :
-                        if (powerList.contains("ShieldIsChariot")) {
-                            actualTokens.push("chariot");
-                        }
-                        if (powerList.contains("DoubleSwordIsShield")) {
+                    {% else %}
+                    switch (actualToken) {
+                        case "shield" :
+                            if (powerList.contains("ShieldIsChariot")) {
+                                actualTokens.push("chariot");
+                            }
+                            if (powerList.contains("DoubleSwordIsShield")) {
+                                actualTokens.push("double sword");
+                            }
+                            break;
+                        case "knife" :
+                            if (powerList.contains("TeachesIsKnife")) {
+                                actualTokens.push("teaches");
+                            }
+                            break;
+                        case "chariot" :
+                            if (powerList.contains("ChariotIsCatapult")) {
+                                actualTokens.push("catapult");
+                            }
+                            if (powerList.contains("ShieldIsChariot")) {
+                                actualTokens.push("shield");
+                            }
+                            break;
+                        case "double sword" :
+                            if (powerList.contains("DoubleSwordIsShield")) {
+                                actualTokens.push("shield");
+                            }
+                            break;
+                        case "catapult" :
+                            if (powerList.contains("ChariotIsCatapult")) {
+                                actualTokens.push("chariot");
+                            }
+                            if (powerList.contains("CatapultIsTeaches")) {
+                                actualTokens.push("teaches");
+                            }
+                            break;
+                        case "joker" :
                             actualTokens.push("double sword");
-                        }
-                        break;
-                    case "knife" :
-                        if (powerList.contains("TeachesIsKnife")) {
-                            actualTokens.push("teaches");
-                        }
-                        break;
-                    case "chariot" :
-                        if (powerList.contains("ChariotIsCatapult")) {
-                            actualTokens.push("catapult");
-                        }
-                        if (powerList.contains("ShieldIsChariot")) {
                             actualTokens.push("shield");
-                        }
-                        break;
-                    case "double sword" :
-                        if (powerList.contains("DoubleSwordIsShield")) {
-                            actualTokens.push("shield");
-                        }
-                        break;
-                    case "catapult" :
-                        if (powerList.contains("ChariotIsCatapult")) {
                             actualTokens.push("chariot");
-                        }
-                        if (powerList.contains("CatapultIsTeaches")) {
-                            actualTokens.push("teaches");
-                        }
-                        break;
-                    case "joker" :
-                        actualTokens.push("double sword");
-                        actualTokens.push("shield");
-                        actualTokens.push("chariot");
-                        actualTokens.push("catapult");
-                        actualTokens.push("teaches");
-                        actualTokens.push("knife");
-                        break;
-                    case "teaches" :
-                        if (powerList.contains("CatapultIsTeaches")) {
                             actualTokens.push("catapult");
-                        }
-                        if (powerList.contains("TeachesIsKnife")) {
+                            actualTokens.push("teaches");
                             actualTokens.push("knife");
+                            break;
+                        case "teaches" :
+                            if (powerList.contains("CatapultIsTeaches")) {
+                                actualTokens.push("catapult");
+                            }
+                            if (powerList.contains("TeachesIsKnife")) {
+                                actualTokens.push("knife");
+                            }
+                            break;
+                        default:
+                            console.log("Erreur, pas de token actuel détecté");
+                            break;
+                    }
+                    {% endif %}
+
+                    //recherche sur la carte
+                    let indToken = -1;
+                    listToken.forEach( function (e, i) {
+                        if (actualTokens.contains(e)) {
+                            if (! listControlled[i]) {
+                                indToken = i;
+                            }
                         }
-                        break;
-                    default:
-                        console.log("Erreur, pas de token actuel détecté");
-                        break;
-                }
-                {% endif %}
+                    });
 
-                //recherche sur la carte
-                let indToken = -1;
-                listToken.forEach( function (e, i) {
-                    if (actualTokens.contains(e)) {
-                        if (! listControlled[i]) {
-                            indToken = i;
+                    //si la recherche est ok
+                    if (indToken !== -1) {
+                        action.addToken = {};
+
+                        if (typeof(addAction) != 'undefined' && addAction === 2) {
+                            action.addToken.card = {};
+                            action.addToken.card.ind = indCard;
+                            action.addToken.token = {};
+                            action.addToken.token.ind = indToken;
+                            addAction = 1;
+
+                            // on doit changer le tableau des tokens controlés
+                            listControlled[indToken] = 1;
+                            e.onclick = function () {
+                                addBestToken(this, listToken, listControlled, indCard);
+                            };
                         }
-                    }
-                });
+                        else if (typeof(addAction) != 'undefined' && addAction === 1) {
+                            action.addToken.card2 = {};
+                            action.addToken.card2.ind = indCard;
+                            action.addToken.token2 = {};
+                            action.addToken.token2.ind = indToken;
 
-                //si la recherche est ok
-                if (indToken !== -1) {
-                    action.addToken = {};
+                            document.querySelectorAll(".cardAction").forEach( function (ee) {
+                                ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion ce tour, vous ne pouvez plus en poser d avantage.</p>";
+                            });
+                        }
+                        else {
+                            action.addToken.card = {};
+                            action.addToken.card.ind = indCard;
+                            action.addToken.token = {};
+                            action.addToken.token.ind = indToken;
+                            document.querySelectorAll(".cardAction").forEach( function (ee) {
+                                ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion ce tour, vous ne pouvez plus en poser d avantage.</p>";
+                            });
+                        }
 
-                    if (typeof(addAction) != 'undefined' && addAction === 2) {
-                        action.addToken.card = {};
-                        action.addToken.card.ind = indCard;
-                        action.addToken.token = {};
-                        action.addToken.token.ind = indToken;
-                        addAction = 1;
-
-                        // on doit changer le tableau des tokens controlés
-                        listControlled[indToken] = 1;
-                        e.onclick = function () {
-                            addBestToken(this, listToken, listControlled, indCard);
-                        };
-                    }
-                    else if (typeof(addAction) != 'undefined' && addAction === 1) {
-                        action.addToken.card2 = {};
-                        action.addToken.card2.ind = indCard;
-                        action.addToken.token2 = {};
-                        action.addToken.token2.ind = indToken;
-
-                        document.querySelectorAll(".cardAction").forEach( function (ee) {
-                            ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion ce tour, vous ne pouvez plus en poser d avantage.</p>";
-                        });
-                    }
-                    else {
-                        action.addToken.card = {};
-                        action.addToken.card.ind = indCard;
-                        action.addToken.token = {};
-                        action.addToken.token.ind = indToken;
-                        document.querySelectorAll(".cardAction").forEach( function (ee) {
-                            ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion ce tour, vous ne pouvez plus en poser d avantage.</p>";
-                        });
+                        legion -= 1;
+                        document.querySelector("#myInfo").innerHTML = "<p class=\"p\">\n" +
+                            "{{ me.name }}<br>\n" +
+                            "Légions :<br>\n" +
+                            legion + "/{{ me.legionMax }}<br>\n" +
+                            "Score :<br>\n" +
+                            "{{ me.score }}\n" +
+                            "<br>\n" +
+                            "Resssources :<br>\n" +
+                            "Blé : {{ me.wheat }}<br>\n" +
+                            "Or : {{ me.gold }}<br>\n" +
+                            "</p>";
+                    } else {
+                        alert("On ne peut capturer aucun token de cette carte");
                     }
                 } else {
-                    alert("On ne peut capturer aucun token de cette carte");
+                    alert("Vous n'avez plus de légion à poser");
                 }
             }
 
@@ -639,8 +688,7 @@
                 if ("{{ game.getState }}" === "legion") return;
 
                 resetSelected();
-                let src = e;
-                src.classList.add("selectedBoard");
+                e.classList.add("selectedBoard");
             }
 
             function resetSelectedPlayer() {
@@ -653,7 +701,7 @@
 
             function selectPlayer(i) {
                 resetSelectedPlayer();
-                document.querySelectorAll(".selectedPlayer")[n].style.visibility = "visible";
+                document.querySelectorAll(".selectedPlayer")[i].style.visibility = "visible";
             }
 
 
