@@ -36,6 +36,7 @@ abstract class AugustusPower
     const TWOLEGIONONTEACHES = "twoLegionOnTeaches";
     const TWOLEGIONONSHIELD = "twoLegionOnShield";
     const TWOLEGIONONKNIFE = "twoLegionOnKnife";
+    const NOPOWER = "";
 
     /** @var array user friendly named power */
     protected static $powerName = [
@@ -69,7 +70,9 @@ abstract class AugustusPower
         self::TWOLEGIONONCATAPULT => "twoLegionOnCatapult",
         self::TWOLEGIONONTEACHES => "twoLegionOnTeaches",
         self::TWOLEGIONONSHIELD => "twoLegionOnShield",
-        self::TWOLEGIONONKNIFE => "twoLegionOnKnife"
+        self::TWOLEGIONONKNIFE => "twoLegionOnKnife",
+        self::NOPOWER => ""
+        
     ];
 
     /**
@@ -123,7 +126,8 @@ abstract class AugustusPower
             self::TWOLEGIONONCATAPULT,
             self::TWOLEGIONONTEACHES,
             self::TWOLEGIONONSHIELD,
-            self::TWOLEGIONONKNIFE
+            self::TWOLEGIONONKNIFE,
+            self::NOPOWER
         ];
     }
 }
