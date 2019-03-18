@@ -109,6 +109,9 @@ body {
     border: 2px red solid;
 }
 
+.choosenLoot {
+	border: 2px green solid;
+}
 
 .playerInfo {
 
