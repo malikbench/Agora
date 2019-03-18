@@ -28,7 +28,7 @@ class AugustusGameModel {
 
     public function createGame($name, $nbPlayers, $isPrivate, $password, $hostId) {
         $augGame = new AugustusGame();
-
+        
         $this->manager->persist($augGame);
         $this->manager->flush();
 
