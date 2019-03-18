@@ -157,12 +157,8 @@
                         <div class="cardAction{{ loop.index0 }} cardAction" style="visibility: hidden;">
                             {% if game.getState() == "RemoveAllLegion" and me.legionMax != me.legion %}
                                 <div>
-                                    {% if true in controlledToken %}
-                                        <p>Vous pouvez retirer toutes les légions de cette carte.</p>
-                                        <button onclick="removeAllLegionOnCard({{ cardIndex }})">Retirer</button>
-                                    {% else %}
-                                        <p>Vous ne pouvez pas selectionner cette carte car il n'y a pas de légion dessus.</p>
-                                    {% endif %}
+                                    <p>Vous pouvez retirer toutes les légions de cette carte.</p>
+                                    <button onclick="removeAllLegionOnCard({{ cardIndex }})">Retirer</button>
                                 </div>
                             {% else %}
                             <div>
