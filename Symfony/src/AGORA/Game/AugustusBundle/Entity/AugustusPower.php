@@ -36,6 +36,8 @@ abstract class AugustusPower
     const TWOLEGIONONTEACHES = "twoLegionOnTeaches";
     const TWOLEGIONONSHIELD = "twoLegionOnShield";
     const TWOLEGIONONKNIFE = "twoLegionOnKnife";
+    const ONECARD = "oneCard";
+    const MOVELEGION = "moveLegion";
     const NOPOWER = "noPower";
 
     /** @var array user friendly named power */
@@ -71,6 +73,8 @@ abstract class AugustusPower
         self::TWOLEGIONONTEACHES => "twoLegionOnTeaches",
         self::TWOLEGIONONSHIELD => "twoLegionOnShield",
         self::TWOLEGIONONKNIFE => "twoLegionOnKnife",
+        self::ONECARD => "oneCard",
+        self::MOVELEGION => "moveLegion",
         self::NOPOWER => "noPower"
         
     ];
@@ -126,7 +130,8 @@ abstract class AugustusPower
             self::TWOLEGIONONCATAPULT,
             self::TWOLEGIONONTEACHES,
             self::TWOLEGIONONSHIELD,
-            self::TWOLEGIONONKNIFE,
+            self::ONECARD,
+            self::MOVELEGION,
             self::NOPOWER
         ];
     }
