@@ -6,11 +6,22 @@ namespace AGORA\Game\AugustusBundle\Controller;
 use AGORA\Game\AugustusBundle\Service\AugustusService;
 use AGORA\Game\AugustusBundle\Entity\AugustusGame;
 
+use AGORA\Game\Socket\ConnectionStorage;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use FOS\UserBundle\Model\UserInterface;
 
 class GameController extends Controller {
+
+    /**
+     * @var $connectionStorage Les connexions liées a un jeu.
+     */
+    protected $connectionStorage;
+
+    function __construct() {
+        $this->connectionStorage = new ConnectionStorage();
+    }
 
     
     //Création de la partie
@@ -73,29 +84,73 @@ class GameController extends Controller {
             throw new AccessDeniedException('Accès refusé, l\'utilisateur n\'est pas connecté.');
         }
 
+        $service = $this->container->get('agora_game.augustus');
+        $playerId = $service->getPlayerFromUser($user, $gameId)->getId();
 
-        //Recupération dans la bdd des information du jeu
-        /** @var AugustusService $service */
-        $augGame = $service->getGame($gameId);
+        return $this->renderIndex($gameId, $playerId);
+    }
 
-        $player = $augGame->getPlayer($user, $gameId);
-        
-        $gameName = $service->getGameName($gameId);
 
-        //Envoie Au twig tout les infomartions qu'il soit afficher
-        return $this->render('AGORAGameAveCesarBundle:Default:game.html.twig',
+    private function renderIndex($gameId, $playerId) {
+        $service = $this->container->get('agora_game.augustus');
+
+        $game = $service->getGame($gameId);
+        $player = $service->getPlayerFromId($playerId, $gameId);
+
+        //Envoie Au twig tout les infomartions qu'il doit afficher
+        return $this->render('AGORAGameAugustusBundle:Default:game.html.twig',
             array(
-                'user' => $user,
                 'game' => $augGame,
                 'me' => $player,
-                'gameName' => $gameName,
             )
         );
     }
 
 
     
+    public function handleAction($conn, $gameId, $playerId, $action) {
+        $service = $this->container->get('agora_game.augustus');
 
+        if ($action->type == "connect") {
+            $this->connectionStorage->addConnection($gameId, $playerId, $conn);
+
+            foreach ($service->getPlayers($gameId) as $player) {
+                $c = $this->connectionStorage->getConnection($gameId, $player->getId());
+
+                $c->send($this->renderIndex($gameId, $player->getId()));
+                return;
+            }
+        }
+
+        switch ($action->type) {
+            case "legion":
+
+                break;
+            case "aveCesar":
+
+                break;
+            case "removeAllLegions":
+
+                break;
+            case "completeCard":
+
+                break;
+            default:
+        }
+
+        $service->getPlayerFromId($playerId)->setIsLock(true);
+        if ($service->areAllPlayersReady($gameId)) {
+            $players = $service->getPlayers($gameId);
+
+            foreach ($service->getPlayers($gameId) as $player) {
+                $c = $this->connectionStorage->getConnection($gameId, $player->getId());
+
+                $c->send($this->renderIndex($gameId, $player->getId()));
+                return;
+            }
+        }
+
+    }
 
     
     //TODO
