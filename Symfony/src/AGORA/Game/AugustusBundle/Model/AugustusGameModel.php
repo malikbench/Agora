@@ -379,7 +379,12 @@ class AugustusGameModel {
         if ($game->getColorLoot()[AugustusColor::ORANGE] == $idPlayer) {
             $rewards += 10;
         }
-        // pb or / blé
+        if ($idPlayer == $game->getGoldOwner()) {
+            $rewards += 5;
+        }
+        if ($idPlayer == $game->getWheatOwner()) {
+            $rewards += 5;
+        }
 
         // points direct des objectifs
         $obj = 0;
