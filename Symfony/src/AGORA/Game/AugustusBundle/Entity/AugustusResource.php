@@ -7,7 +7,7 @@ abstract class AugustusResource
     const WHEAT    = "wheat";
     const GOLD = "gold";
     const BOTH = "both";
-    const NORESOURCE = "";
+    const NORESOURCE = "noResource";
 
 
     /** @var array user friendly named resource */
@@ -15,7 +15,7 @@ abstract class AugustusResource
         self::GOLD    => 'Or',
         self::WHEAT => 'Blé',
         self::BOTH => 'Both',
-        self::NORESOURCE => '',
+        self::NORESOURCE => 'NoResource',
     ];
 
     /**

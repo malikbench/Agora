@@ -64,8 +64,8 @@ class AugustusPlayerModel {
 
     //Mets une légion sur la carte et retire le jeton de la carte correspondant au jeton du tour en cours.
     public function putLegionOnCard($idPlayer, $idCard, $token) {
-        $players = $this->$manager->getRepository('AugustusBundle:AugustusPlayer');
-        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
+        $cards = $this->manager->getRepository('AugustusBundle:AugustusCard');
 
         $player = $players->findOneById($idPlayer);
         $card = $cards->findOneById($idCard);
@@ -74,17 +74,17 @@ class AugustusPlayerModel {
 
         $cardModel->captureToken($idCard, $token);
 
-        $player->legion = $player->$legion - 1;
+        $player->legion = $player->legion - 1;
 
         $player->history = [$idCard, $token];
         
-        $this->$manager->flush();
+        $this->manager->flush();
     }
 
     //Mets une legion de la carte Source à la carte dest.
     public function putLegionFromSourceToDest($idPlayer, $idCardSource, $idCardDest, $tokenSource, $tokenDest) {
-        $players = $this->$manager->getRepository('AugustusBundle:AugustusPlayer');
-        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
+        $cards = $this->manager->getRepository('AugustusBundle:AugustusCard');
 
         $player = $players->findOneById($idPlayer);
 
@@ -95,14 +95,14 @@ class AugustusPlayerModel {
 
         $player->history = [$idCardDest, $tokenDest];
         
-        $this->$manager->flush();
+        $this->manager->flush();
     }
 
 
     //La carte d'id idCard passe de currObj à ctrlObj si tout les tokens de la cartes sont contrôlés.
     public function captureCard($idPlayer, $idCard) {
-        $players = $this->$manager->getRepository('AugustusBundle:AugustusPlayer');
-        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
+        $cards = $this->manager->getRepository('AugustusBundle:AugustusCard');
 
         $player = $players->findOneById($idPlayer);
         $card = $cards->findOneById($idCard);
@@ -121,7 +121,7 @@ class AugustusPlayerModel {
         }
         $player->ctrlCards[] = $card;
         $player->cards->removeElement($card);
-        $this->$manager->flush();
+        $this->manager->flush();
     }
 
     public function deleteCtrlCard($idPlayer) {
@@ -134,11 +134,11 @@ class AugustusPlayerModel {
         array_pop($ctrlCards);
         $player->setCtrlCards($ctrlCards);
 
-        $this->$manager->flush();
+        $this->manager->flush();
     }
 
     public function completeCard($idCard) {
-        $cards = $this->$manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
@@ -148,7 +148,7 @@ class AugustusPlayerModel {
         }
         $card->setCtrlTokens($ctrl);
 
-        $this->$manager->flush();
+        $this->manager->flush();
     }
 
     public function getCardByNumber($idPlayer, $number) {
@@ -165,6 +165,111 @@ class AugustusPlayerModel {
         }
 
         return null;
+    }
+
+    public function getNbOfCardColor($idPlayer, $color) {
+        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+
+        $player = $players->findOneById($idPlayer);
+
+        $ctrlCards = $player->getCtrlCards();
+
+        $res = 0;
+
+        foreach($ctrlCards as $c) {
+            if ($c -> getColor() == $color) {
+                $res = $res + 1;
+            }
+        }
+
+        return $res;
+    }
+
+    public function getNbOfToken($idPlayer, $token) {
+        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+
+        $player = $players->findOneById($idPlayer);
+
+        $ctrlCards = $player->getCtrlCards();
+
+        $res = 0;
+
+        foreach($ctrlCards as $c) {
+            $tokens = $c->getTokens();
+            foreach($tokens as $t) {
+                if ($t == $token) {
+                    $res = $res + 1;
+                }
+            }
+        }
+        return $res;
+    }
+
+    public function haveOneCardOfEach($idPlayer) {
+        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+
+        $player = $players->findOneById($idPlayer);
+
+        $ctrlCards = $player->getCtrlCards();
+
+        $pink = false;
+        $green = false;
+        $senator = false;
+        $orange = false;
+
+        foreach($ctrlCards as $c) {
+            switch($c -> getColor()) {
+                case AugustusColor::PINK : {
+                    $pink = true;
+                    break;
+                }
+                case AugustusColor::GREEN : {
+                    $green = true;
+                    break;
+                }
+                case AugustusColor::ORANGE : {
+                    $orange = true;
+                    break;
+                }
+                case AugustusColor::SENATOR : {
+                    $senator = true;
+                    break;
+                }
+            }
+        }
+        return $pink && $green && $senator && $orange;
+    }
+
+    public function getNbOfRedPower($idPlayer) {
+        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+
+        $player = $players->findOneById($idPlayer);
+
+        $ctrlCards = $player->getCtrlCards();
+
+        $res = 0;
+
+        foreach($ctrlCards as $c) {
+            switch($c -> getPower()) {
+                case AugustusPower::REMOVEONELEGION : {
+                    $res = $res + 1;
+                    break;
+                }
+                case AugustusPower::REMOVETWOLEGION : {
+                    $res = $res + 1;                    
+                    break;
+                }
+                case AugustusPower::REMOVEALLLEGION : {
+                    $res = $res + 1;                    
+                    break;
+                }
+                case AugustusPower::REMOVEONECARD : {
+                    $res = $res + 1;
+                    break;
+                }
+            }
+        }
+        return $pink && $green && $senator && $orange;
     }
 }
 
