@@ -145,6 +145,8 @@ class AugustusGameModel {
                 $card = $this->getCapturableCardFromPlayer($game->getAffectedPlayer());
                 $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
                 $players->captureCard($game->getAffectedPlayer(), $card->getId());
+                $this->changeGoldOwner($id, $game->getAffectedPlayer());
+                $this->changeWheatOwner($id, $game->getAffectedPlayer());
                 if ($states[0] == "AveCesar") {
                     $card->doPower();
                 }
@@ -179,6 +181,8 @@ class AugustusGameModel {
             if ($card) {                
                 $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
                 $players->captureCard($game->getAffectedPlayer(), $card->getId());
+                $this->changeGoldOwner($id, $game->getAffectedPlayer());
+                $this->changeWheatOwner($id, $game->getAffectedPlayer());
                 if ($players->getNbOfCardColor($card->getPlayer(), $card->getColor()) == 3) {
                     $this->fillColorLoot($id, $card->getPlayer(), $card->getColor());
                 }
@@ -280,6 +284,50 @@ class AugustusGameModel {
         if (array_key_exists($colorLoot, $type) && !$colorLoot[$type]) {
             $colorLoot[$type] = $idPlayer;
             $game->setColorLoot($colorLoot);
+        }
+
+        $this->manager->flush();
+    }
+
+    private function changeGoldOwner($id, $idPlayer) {
+        $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
+        $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
+        $actualPlayer = $players->findOneById($id);
+
+        
+        if ($actualPlayer->getGold() != 0) {
+            if ($game->getGoldOwner() == -1) {
+                $game->setGoldOwner($idPlayer);
+            } else {
+                $otherPlayer = $players->findOneById($game->getGoldOwner());
+
+                if ($actualPlayer->getGold() >= $otherPlayer->getGold()) {
+                    $game->setGoldOwner($idPlayer);
+                }
+            }
+        }
+
+        $this->manager->flush();
+    }
+
+    private function changeWheatOwner($id, $idPlayer) {
+        $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
+        $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
+        $actualPlayer = $players->findOneById($id);
+
+        
+        if ($actualPlayer->getWheat() != 0) {
+            if ($game->getWheatOwner() == -1) {
+                $game->setWheatOwner($idPlayer);
+            } else {
+                $otherPlayer = $players->findOneById($game->getWheatOwner());
+
+                if ($actualPlayer->getWheat() >= $otherPlayer->getWheat()) {
+                    $game->setWheatOwner($idPlayer);
+                }
+            }
         }
 
         $this->manager->flush();
