@@ -36,7 +36,7 @@ abstract class AugustusPower
     const TWOLEGIONONTEACHES = "twoLegionOnTeaches";
     const TWOLEGIONONSHIELD = "twoLegionOnShield";
     const TWOLEGIONONKNIFE = "twoLegionOnKnife";
-    const NOPOWER = "";
+    const NOPOWER = "noPower";
 
     /** @var array user friendly named power */
     protected static $powerName = [
@@ -71,7 +71,7 @@ abstract class AugustusPower
         self::TWOLEGIONONTEACHES => "twoLegionOnTeaches",
         self::TWOLEGIONONSHIELD => "twoLegionOnShield",
         self::TWOLEGIONONKNIFE => "twoLegionOnKnife",
-        self::NOPOWER => ""
+        self::NOPOWER => "noPower"
         
     ];
 
