@@ -16,7 +16,7 @@ class AugustusBoard
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
+     * @ORM\id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -54,656 +54,656 @@ class AugustusBoard
     
     // Ajout des cartes dans le deck.
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 1, AugustusColor::SENATOR, NULL, 3, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 1, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 3, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 2, AugustusColor::VERT, NULL, 3, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 2, AugustusColor::GREEN, AugustusResource::NORESOURCE, 3, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 3, AugustusColor::ROSE, NULL, 6, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 3, AugustusColor::PINK, AugustusResource::NORESOURCE, 6, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 4, AugustusColor::SENATOR, NULL, 6, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 4, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 6, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 5, AugustusColor::VERT, AugustusResource::WHEAT, 3, AugustusPower::ONELEGION, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 5, AugustusColor::GREEN, AugustusResource::WHEAT, 3, AugustusPower::ONELEGION, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 6, AugustusColor::SENATOR, NULL, 3, AugustusPower::ONELEGION, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 6, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 3, AugustusPower::ONELEGION, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugustusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 7, AugustusColor::VERT, AugustusResource::WHEAT, 0, AugustusPower::ONEPOINTBYDOUBLESWORD, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 8, AugustusColor::SENATOR, NULL, 0, AugustusPower::ONEPOINTBYDOUBLESWORD, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 7, AugustusColor::GREEN, AugustusResource::WHEAT, 0, AugustusPower::ONEPOINTBYDOUBLESWORD, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugustusToken::SHIELD);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 9, AugustusColor::VERT, NULL, 3, AugustusPower::DOUBLESWORDISSHIELD, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugustusToken::SHIELD);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 10, AugustusColor::ROSE, AugustusResource::WHEAT, 3, AugustusPower::DOUBLESWORDISSHIELD, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 11, AugustusColor::SENATOR, NULL, 0, AugustusPower::ONEPOINTBYSHIELD, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 8, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 0, AugustusPower::ONEPOINTBYDOUBLESWORD, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 9, AugustusColor::GREEN, AugustusResource::NORESOURCE, 3, AugustusPower::DOUBLESWORDISSHIELD, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 10, AugustusColor::PINK, AugustusResource::WHEAT, 3, AugustusPower::DOUBLESWORDISSHIELD, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 12, AugustusColor::VERT, NULL, 0, AugustusPower::ONEPOINTBYSHIELD, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 11, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 0, AugustusPower::ONEPOINTBYSHIELD, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 12, AugustusColor::GREEN, AugustusResource::NORESOURCE, 0, AugustusPower::ONEPOINTBYSHIELD, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 13, AugustusColor::SENATOR, NULL, 3, AugustusPower::TWOLEGIONONDOUBLESWORD, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 13, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 3, AugustusPower::TWOLEGIONONDOUBLESWORD, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 14, AugustusColor::VERT, NULL, 3, AugustusPower::TWOLEGIONONDOUBLESWORD, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 14, AugustusColor::GREEN, AugustusResource::NORESOURCE, 3, AugustusPower::TWOLEGIONONDOUBLESWORD, $toCapture->toArray()));
     
     $toCapture->clear();
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 15, AugustusColor::SENATOR, NULL, 3, AugustusPower::TWOLEGION, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::CHARIOT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 15, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 3, AugustusPower::TWOLEGION, $toCapture->toArray()));
     
     $toCapture->clear();
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 16, AugustusColor::VERT, NULL, 3, AugustusPower::TWOLEGION, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::CHARIOT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 16, AugustusColor::GREEN, AugustusResource::NORESOURCE, 3, AugustusPower::TWOLEGION, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 17, AugustusColor::ROSE, NULL, 8, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 17, AugustusColor::PINK, AugustusResource::NORESOURCE, 8, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 18, AugustusColor::SENATOR, NULL, 8, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 18, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 8, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 19, AugustusColor::VERT, NULL, 3, AugustusPower::TWOLEGIONONTEACHES, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 19, AugustusColor::GREEN, AugustusResource::NORESOURCE, 3, AugustusPower::TWOLEGIONONTEACHES, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 20, AugustusColor::SENATOR, NULL, 3, AugustusPower::TWOLEGIONONTEACHES, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 20, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 3, AugustusPower::TWOLEGIONONTEACHES, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 21, AugustusColor::ROSE, NULL, 9, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 21, AugustusColor::PINK, AugustusResource::NORESOURCE, 9, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 22, AugustusColor::SENATOR, NULL, 9, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 22, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 9, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 23, AugustusColor::VERT, NULL, 10, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 23, AugustusColor::GREEN, AugustusResource::NORESOURCE, 10, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 24, AugustusColor::ORANGE, AugustusResource::GOLD, 10, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 24, AugustusColor::ORANGE, AugustusResource::GOLD, 10, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugustusToken::CHARIOT);
-    $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 25, AugustusColor::SENATOR, NULL, 0, AugustusPower::TWOPOINTBYCHARIOT, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 26, AugustusColor::VERT, AugustusResource::GOLD, 0, AugustusPower::TWOPOINTBYCHARIOT, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 25, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 0, AugustusPower::TWOPOINTBYCHARIOT, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 27, AugustusColor::SENATOR, NULL, 0, AugustusPower::THREEPOINTBYCATAPULT, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 26, AugustusColor::GREEN, AugustusResource::GOLD, 0, AugustusPower::TWOPOINTBYCHARIOT, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 28, AugustusColor::ROSE, NULL, 0, AugustusPower::THREEPOINTBYCATAPULT, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 27, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 0, AugustusPower::THREEPOINTBYCATAPULT, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 28, AugustusColor::PINK, AugustusResource::NORESOURCE, 0, AugustusPower::THREEPOINTBYCATAPULT, $toCapture->toArray()));
     
     $toCapture->clear();
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 29, AugustusColor::SENATOR, NULL, 4, AugustusPower::TWOLEGIONONSHIELD, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::CATAPULT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 29, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 4, AugustusPower::TWOLEGIONONSHIELD, $toCapture->toArray()));
     
     $toCapture->clear();
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 30, AugustusColor::VERT, NULL, 4, AugustusPower::TWOLEGIONONSHIELD, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::CATAPULT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 30, AugustusColor::GREEN, AugustusResource::NORESOURCE, 4, AugustusPower::TWOLEGIONONSHIELD, $toCapture->toArray()));
     
     $toCapture->clear();
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 31, AugustusColor::ROSE, NULL, 4, AugustusPower::SHIELDISCHARIOT, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 31, AugustusColor::PINK, AugustusResource::NORESOURCE, 4, AugustusPower::SHIELDISCHARIOT, $toCapture->toArray()));
     
     $toCapture->clear();
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 32, AugustusColor::SENATOR, NULL, 4, AugustusPower::SHIELDISCHARIOT, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 32, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 4, AugustusPower::SHIELDISCHARIOT, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 33, AugustusColor::VERT, NULL, 5, AugustusPower::TWOLEGIONONKNIFE, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 33, AugustusColor::GREEN, AugustusResource::NORESOURCE, 5, AugustusPower::TWOLEGIONONKNIFE, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 34, AugustusColor::SENATOR, NULL, 5, AugustusPower::TWOLEGIONONKNIFE, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 34, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 5, AugustusPower::TWOLEGIONONKNIFE, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 35, AugustusColor::ROSE, NULL, 5, AugustusPower::ONECARD, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 35, AugustusColor::PINK, AugustusResource::NORESOURCE, 5, AugustusPower::ONECARD, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 36, AugustusColor::SENATOR, NULL, 5, AugustusPower::ONECARD, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 36, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 5, AugustusPower::ONECARD, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 37, AugustusColor::VERT, NULL, 6, AugustusPower::REMOVEONELEGION, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 37, AugustusColor::GREEN, AugustusResource::NORESOURCE, 6, AugustusPower::REMOVEONELEGION, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CHARIOT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 38, AugustusColor::ORANGE, NULL, 6, AugustusPower::REMOVEONELEGION, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 38, AugustusColor::ORANGE, AugustusResource::NORESOURCE, 6, AugustusPower::REMOVEONELEGION, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugustusToken::CHARIOT);
-    $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 39, AugustusColor::SENATOR, NULL, 11, NULL, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 40, AugustusColor::VERT, AugustusResource::WHEAT, 11, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 39, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 11, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 41, AugustusColor::SENATOR, NULL, 2, AugustusPower::REMOVETWOLEGION, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 40, AugustusColor::GREEN, AugustusResource::WHEAT, 11, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 42, AugustusColor::VERT, NULL, 2, AugustusPower::REMOVETWOLEGION, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 41, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 2, AugustusPower::REMOVETWOLEGION, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 42, AugustusColor::GREEN, AugustusResource::NORESOURCE, 2, AugustusPower::REMOVETWOLEGION, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 43, AugustusColor::SENATOR, NULL, 2, AugustusPower::MOVELEGION, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 43, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 2, AugustusPower::MOVELEGION, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 44, AugustusColor::ROSE, NULL, 2, AugustusPower::MOVELEGION, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 44, AugustusColor::PINK, AugustusResource::NORESOURCE, 2, AugustusPower::MOVELEGION, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 45, AugustusColor::ROSE, AugustusResource::GOLD, 6, AugustusPower::ONELEGIONONANYTHING, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 45, AugustusColor::PINK, AugustusResource::GOLD, 6, AugustusPower::ONELEGIONONANYTHING, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 46, AugustusColor::SENATOR, NULL, 6, AugustusPower::ONELEGIONONANYTHING, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 46, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 6, AugustusPower::ONELEGIONONANYTHING, $toCapture->toArray()));
     
     $toCapture->clear();
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 47, AugustusColor::VERT, NULL, 0, AugustusPower::TWOPOINTBYGREENCARD, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 47, AugustusColor::GREEN, AugustusResource::NORESOURCE, 0, AugustusPower::TWOPOINTBYGREENCARD, $toCapture->toArray()));
     
     $toCapture->clear();
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 48, AugustusColor::SENATOR, NULL, 0, AugustusPower::TWOPOINTBYSENATORCARD, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 48, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 0, AugustusPower::TWOPOINTBYSENATORCARD, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 49, AugustusColor::ROSE, NULL, 0, AugustusPower::FOURPOINTBYPINKCARD, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 49, AugustusColor::PINK, AugustusResource::NORESOURCE, 0, AugustusPower::FOURPOINTBYPINKCARD, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 50, AugustusColor::SENATOR, NULL, 12, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 50, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 12, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 51, AugustusColor::VERT, NULL, 5, AugustusPower::TWOLEGIONONCHARIOT, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 52, AugustusColor::ORANGE, NULL, 5, AugustusPower::TWOLEGIONONCHARIOT, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
-    $toCapture->add(AugustusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 53, AugustusColor::SENATOR, NULL, 0, AugustusPower::THREEPOINTBYTEACHES, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 51, AugustusColor::GREEN, AugustusResource::NORESOURCE, 5, AugustusPower::TWOLEGIONONCHARIOT, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 52, AugustusColor::ORANGE, AugustusResource::NORESOURCE, 5, AugustusPower::TWOLEGIONONCHARIOT, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
     $toCapture->add(AugustusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 54, AugustusColor::VERT, NULL, 0, AugustusPower::THREEPOINTBYTEACHES, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 53, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 0, AugustusPower::THREEPOINTBYTEACHES, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugustusToken::CHARIOT);
-    $toCapture->add(AugustusToken::CHARIOT);
-    $toCapture->add(AugustusToken::CATAPULT);
-    $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 55, AugustusColor::SENATOR, NULL, 5, AugustusPower::CHARIOTISCATAPULT, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugustusToken::CHARIOT);
-    $toCapture->add(AugustusToken::CHARIOT);
-    $toCapture->add(AugustusToken::CATAPULT);
-    $toCapture->add(AugustusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 56, AugustusColor::ROSE, NULL, 5, AugustusPower::CHARIOTISCATAPULT, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
     $toCapture->add(AugustusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 57, AugustusColor::SENATOR, NULL, 13, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 54, AugustusColor::GREEN, AugustusResource::NORESOURCE, 0, AugustusPower::THREEPOINTBYTEACHES, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 55, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 5, AugustusPower::CHARIOTISCATAPULT, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 56, AugustusColor::PINK, AugustusResource::NORESOURCE, 5, AugustusPower::CHARIOTISCATAPULT, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
     $toCapture->add(AugustusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 58, AugustusColor::VERT, NULL, 13, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 57, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 13, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugustusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 59, AugustusColor::ROSE, NULL, 7, AugustusPower::TWOLEGIONONCATAPULT, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugustusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 60, AugustusColor::SENATOR, NULL, 7, AugustusPower::TWOLEGIONONCATAPULT, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugustusToken::KNIFE);
-    $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 61, AugustusColor::VERT, NULL, 14, NULL, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 58, AugustusColor::GREEN, AugustusResource::NORESOURCE, 13, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 59, AugustusColor::PINK, AugustusResource::NORESOURCE, 7, AugustusPower::TWOLEGIONONCATAPULT, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 60, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 7, AugustusPower::TWOLEGIONONCATAPULT, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::KNIFE);
     $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 62, AugustusColor::ORANGE, NULL, 14, NULL, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 61, AugustusColor::GREEN, AugustusResource::NORESOURCE, 14, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugustusToken::CHARIOT);
-    $toCapture->add(AugustusToken::CATAPULT);
     $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 63, AugustusColor::VERT, AugustusResource::GOLD, 0, AugustusPower::FOURPOINTBYKNIFE, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 62, AugustusColor::ORANGE, AugustusResource::NORESOURCE, 14, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
     $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 64, AugustusColor::SENATOR, NULL, 0, AugustusPower::FIVEPOINTBYREDCARD, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 63, AugustusColor::GREEN, AugustusResource::GOLD, 0, AugustusPower::FOURPOINTBYKNIFE, $toCapture->toArray()));
     
     $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 65, AugustusColor::VERT, NULL, 0, AugustusPower::FOURPOINTBYKNIFE, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 66, AugustusColor::ROSE, NULL, 0, AugustusPower::FOURPOINTBYPINKCARD, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 67, AugustusColor::SENATOR, NULL, 0, AugustusPower::TWOPOINTBYSENATORCARD, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 68, AugustusColor::VERT, AugustusResource::BOTH, 0, AugustusPower::TWOPOINTBYGREENCARD, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
-    $toCapture->add(AugustusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 69, AugustusColor::ORANGE, AugustusResource::GOLD, 0, AugustusPower::SIXPOINTBYORANGECARD, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 64, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 0, AugustusPower::FIVEPOINTBYREDCARD, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::CHARIOT);
-    $toCapture->add(AugustusToken::CHARIOT);
-    $toCapture->add(AugustusToken::CATAPULT);
-    $toCapture->add(AugustusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 70, AugustusColor::VERT, NULL, 3, AugustusPower::TWOLEGIONONANYTHING, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CATAPULT);
     $toCapture->add(AugustusToken::TEACHES);
     $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 71, AugustusColor::SENATOR, NULL, 0, AugustusPower::FIVEPOINTBYREDCARD, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 65, AugustusColor::GREEN, AugustusResource::NORESOURCE, 0, AugustusPower::FOURPOINTBYKNIFE, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CATAPULT);
     $toCapture->add(AugustusToken::TEACHES);
     $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 72, AugustusColor::VERT, NULL, 3, AugustusPower::TWOLEGIONONANYTHING, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 73, AugustusColor::ROSE, NULL, 7, AugustusPower::CATAPULTISTEACHES, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 74, AugustusColor::SENATOR, NULL, 7, AugustusPower::CATAPULTISTEACHES, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::TEACHES);
-    $toCapture->add(AugustusToken::TEACHES);
-    $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 75, AugustusColor::VERT, NULL, 5, AugustusPower::REMOVEALLLEGION, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::TEACHES);
-    $toCapture->add(AugustusToken::TEACHES);
-    $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 76, AugustusColor::ORANGE, NULL, 5, AugustusPower::REMOVEALLLEGION, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 66, AugustusColor::PINK, AugustusResource::NORESOURCE, 0, AugustusPower::FOURPOINTBYPINKCARD, $toCapture->toArray()));
     
     $toCapture->clear();
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 77, AugustusColor::ROSE, NULL, 15, NULL, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CHARIOT);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::TEACHES);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 78, AugustusColor::SENATOR, NULL, 15, NULL, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugustusToken::TEACHES);
-    $toCapture->add(AugustusToken::TEACHES);
-    $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 79, AugustusColor::VERT, NULL, 16, NULL, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugustusToken::TEACHES);
-    $toCapture->add(AugustusToken::TEACHES);
-    $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 80, AugustusColor::ROSE, NULL, 16, NULL, $toCapture->toArray()));
-    
-    $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
-    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
     $toCapture->add(AugustusToken::TEACHES);
-    $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 81, AugustusColor::SENATOR, NULL, 5, AugustusPower::REMOVEONECARD, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 67, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 0, AugustusPower::TWOPOINTBYSENATORCARD, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 68, AugustusColor::GREEN, AugustusResource::BOTH, 0, AugustusPower::TWOPOINTBYGREENCARD, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 69, AugustusColor::ORANGE, AugustusResource::GOLD, 0, AugustusPower::SIXPOINTBYORANGECARD, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 70, AugustusColor::GREEN, AugustusResource::NORESOURCE, 3, AugustusPower::TWOLEGIONONANYTHING, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 71, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 0, AugustusPower::FIVEPOINTBYREDCARD, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 72, AugustusColor::GREEN, AugustusResource::NORESOURCE, 3, AugustusPower::TWOLEGIONONANYTHING, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 73, AugustusColor::PINK, AugustusResource::NORESOURCE, 7, AugustusPower::CATAPULTISTEACHES, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 74, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 7, AugustusPower::CATAPULTISTEACHES, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 75, AugustusColor::GREEN, AugustusResource::NORESOURCE, 5, AugustusPower::REMOVEALLLEGION, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 76, AugustusColor::ORANGE, AugustusResource::NORESOURCE, 5, AugustusPower::REMOVEALLLEGION, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 77, AugustusColor::PINK, AugustusResource::NORESOURCE, 15, AugustusPower::NOPOWER, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 78, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 15, AugustusPower::NOPOWER, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 79, AugustusColor::GREEN, AugustusResource::NORESOURCE, 16, AugustusPower::NOPOWER, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 80, AugustusColor::PINK, AugustusResource::NORESOURCE, 16, AugustusPower::NOPOWER, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
     $toCapture->add(AugustusToken::SHIELD);
     $toCapture->add(AugustusToken::CHARIOT);
     $toCapture->add(AugustusToken::CATAPULT);
     $toCapture->add(AugustusToken::TEACHES);
     $toCapture->add(AugustusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 82, AugustusColor::ROSE, NULL, 5, AugustusPower::REMOVEONECARD, $toCapture->toArray()));
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 81, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 5, AugustusPower::REMOVEONECARD, $toCapture->toArray()));
+    
+    $toCapture->clear();
+    $toCapture->add(AugustusToken::DOUBLESWORD);
+    $toCapture->add(AugustusToken::SHIELD);
+    $toCapture->add(AugustusToken::CHARIOT);
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 82, AugustusColor::PINK, AugustusResource::NORESOURCE, 5, AugustusPower::REMOVEONECARD, $toCapture->toArray()));
     
     $toCapture->clear();
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 83, AugustusColor::ORANGE, NULL, 0, AugustusPower::SIXPOINTBYORANGECARD, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 83, AugustusColor::ORANGE, AugustusResource::NORESOURCE, 0, AugustusPower::SIXPOINTBYORANGECARD, $toCapture->toArray()));
     
     $toCapture->clear();
     $toCapture->add(AugustusToken::SHIELD);
-    $toCapture->add(AugutusToken::CATAPULT);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 84, AugustusColor::VERT, NULL, 12, NULL, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::CATAPULT);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this->id, 84, AugustusColor::GREEN, AugustusResource::NORESOURCE, 12, AugustusPower::NOPOWER, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::KNIFE);
-    $toCapture->add(AugutusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 85, AugustusColor::SENATOR, NULL, 10, AugustusPower::TEACHESISKNIFE, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 85, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 10, AugustusPower::TEACHESISKNIFE, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::KNIFE);
-    $toCapture->add(AugutusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 86, AugustusColor::ROSE, AugustusResource::WHEAT, 10, AugustusPower::TEACHESISKNIFE, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 86, AugustusColor::PINK, AugustusResource::WHEAT, 10, AugustusPower::TEACHESISKNIFE, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::KNIFE);
-    $toCapture->add(AugutusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 87, AugustusColor::ORANGE, AugustusResource::BOTH, 4, AugustusPower::COMPLETECARD, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 87, AugustusColor::ORANGE, AugustusResource::BOTH, 4, AugustusPower::COMPLETECARD, $toCapture->toArray()));
     
     $toCapture->clear();
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::TEACHES);
-    $toCapture->add(AugutusToken::KNIFE);
-    $toCapture->add(AugutusToken::KNIFE);
-    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\Card($this->id, 88, AugustusColor::SENATOR, NULL, 6, AugustusPower::COMPLETECARD, $toCapture->toArray()));
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::TEACHES);
+    $toCapture->add(AugustusToken::KNIFE);
+    $toCapture->add(AugustusToken::KNIFE);
+    $this->deck->add(new \AGORA\Game\AugustusBundle\Entity\AugustusCard($this, 88, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 6, AugustusPower::COMPLETECARD, $toCapture->toArray()));
     
     // Ensuite on mélange le deck, il y a 88 cartes donc un swap de 150 paires semble correcte pour un mélange.
     for ($i = 0; $i < 150; $i++) {

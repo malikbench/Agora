@@ -81,7 +81,7 @@ class AugustusCard
      */
     private $player;
 
-    public function __construct(int $boardId, int $number, AugustusColor $color, AugustusResource $resource, int $points, AugustusPower $power, Array $tokens)
+    public function __construct(AugustusBoard $boardId, int $number, string $color, string $resource, int $points, string $power, Array $tokens)
     {
         $this->tokens = $tokens;
         $this->ctrlTokens = [];
