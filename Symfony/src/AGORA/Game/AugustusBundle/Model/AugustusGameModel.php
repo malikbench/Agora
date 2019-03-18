@@ -111,12 +111,18 @@ class AugustusGameModel {
     public function claimReward($id, $playerId) {
         $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
-
         $players = $this->$manager->getRepository("AugustusBundle:AugustusPlayer");
         $player = $players->findOneById($playerid);
         
-        if($player->getAdvantage() == 0) {
-            $player->setAdvantage(count($player->getCtrlCards()));
+        $advantage = count(($player->getCtrlCards()) - 1) * 2;
+        foreach ($game->getPlayers() as $gamer) {
+            if ($gamer->getAdvantage() == $advantage) {
+                $advantage = 0;
+            }
+        }
+
+        if ($player->getAdvantage() == 0 && $advantage != 0) {
+            $player->setAdvantage($advantage);
         }
         $this->manager->flush();
     }
@@ -279,6 +285,7 @@ class AugustusGameModel {
         return null;
     }
 
+    // rempli le taleau de loot
     public function fillColorLoot($id, $idPlayer, $type) {
         $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
@@ -292,6 +299,7 @@ class AugustusGameModel {
         $this->manager->flush();
     }
 
+    // retourne le gagnant de la partie
     public function getWinner($id) {
         $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
@@ -313,6 +321,7 @@ class AugustusGameModel {
         return $winner;
     }
 
+    // retourne le score du joueur
     public function getScores($id, $idPlayer) {
         $games = $this->$manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
