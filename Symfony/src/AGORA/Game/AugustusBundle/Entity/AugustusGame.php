@@ -22,7 +22,7 @@ class AugustusGame
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", mappedBy="game")
+     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", mappedBy="game", cascade={"persist"})
      */
     private $players;
 
@@ -53,7 +53,7 @@ class AugustusGame
     private $affectedPlayer;
 
     /**
-     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", mappedBy="game")
+     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", mappedBy="game", cascade={"persist"})
      */
     private $colorLoot;
 
