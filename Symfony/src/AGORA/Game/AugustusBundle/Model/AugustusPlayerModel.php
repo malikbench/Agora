@@ -21,7 +21,7 @@ class AugustusPlayerModel {
     }
 
     public function createPlayer($userId, $gameId) {
-        $augGame = $this->manager->getRepository('AGORAGameAugustusBundle:AugustusGame')->find($gameId);
+        $augGame = $this->manager->getRepository('AugustusBundle:AugustusGame')->find($gameId);
         if ($augGame == null) {
             throw new \Exception();
         }
@@ -29,7 +29,7 @@ class AugustusPlayerModel {
         $game = $this->manager->getRepository('AGORAGameGameBundle:Game')
             ->findOneBy(array('gameId' => $gameId));
 
-        $players = $this->manager->getRepository('AGORAGameAugustusBundle:AugustusPlayer')
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer')
             ->findBy(array('game' => $gameId));
 
         $nbPlayer = count($players);
@@ -37,11 +37,11 @@ class AugustusPlayerModel {
             return -1;
         }
 
-        $player = new AveCesarPlayer();
-        $player->setGameId($gameId);
+        $player = new AugustusPlayer();
+        $player->setGame($augGame);
 
         $user = $this->manager->getRepository('AGORAUserBundle:User')
-            ->findOneBy(array('userId' => $userId));
+            ->findOneBy(array('id' => $userId));
         
         $player->setUserId($user->getId());
         $player->setUserName($user->getUserName());

@@ -37,11 +37,6 @@ class AugustusBoard {
      * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="board", cascade={"persist"})
      */
     private $objLine;
-
-    /**
-     * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusGame", mappedBy="board")
-     */
-    private $game;
     
     /**
      * @var array
@@ -51,8 +46,7 @@ class AugustusBoard {
     private $tokenBag;
     
     // Le constructeur.
-    public function __construct() {
-        
+    public function __construct(AugustusGame $game) {
         // Il y a 88 objectifs (cartes) dans le deck au debut d'une partie.
         $this->deck = new \Doctrine\Common\Collections\ArrayCollection();
         
@@ -783,11 +777,11 @@ class AugustusBoard {
   /**
    * Add card to deck.
    *
-   * @param \AGORA\Game\AugustusBundle\Entity\Card $card
+   * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $card
    *
    * @return boolean TRUE if this element is added, FALSE otherwise.
    */
-  public function addCardToDeck(\AGORA\Game\AugustusBundle\Entity\Card $card)
+  public function addCardToDeck(\AGORA\Game\AugustusBundle\Entity\AugustusCard $card)
   {
       return $this->deck->add($card);
   }
@@ -795,11 +789,11 @@ class AugustusBoard {
   /**
    * Remove card from deck.
    *
-   * @param \AGORA\Game\AugustusBundle\Entity\Card $card
+   * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $card
    *
    * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
    */
-  public function removeCardFromDeck(\AGORA\Game\AugustusBundle\Entity\Card $card)
+  public function removeCardFromDeck(\AGORA\Game\AugustusBundle\Entity\AugustusCard $card)
   {
       return $this->deck->removeElement($card);
   }
@@ -817,11 +811,11 @@ class AugustusBoard {
   /**
    * Add obj to line.
    *
-   * @param \AGORA\Game\AugustusBundle\Entity\Card $card
+   * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $card
    *
    * @return boolean TRUE if this element is added, FALSE otherwise.
    */
-  public function addObjToLine(\AGORA\Game\AugustusBundle\Entity\Card $card)
+  public function addObjToLine(\AGORA\Game\AugustusBundle\Entity\AugustusCard $card)
   {
       return $this->objLine->add($card);
   }
@@ -829,11 +823,11 @@ class AugustusBoard {
   /**
    * Remove obj from line.
    *
-   * @param \AGORA\Game\AugustusBundle\Entity\Card $card
+   * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $card
    *
    * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
    */
-  public function removeObjFromLine(\AGORA\Game\AugustusBundle\Entity\Card $card)
+  public function removeObjFromLine(\AGORA\Game\AugustusBundle\Entity\AugustusCard $card)
   {
       return $this->objLine->removeElement($card);
   }
@@ -851,11 +845,11 @@ class AugustusBoard {
   /**
    * Add token to bag.
    *
-   * @param \AGORA\Game\AugustusBundle\Entity\Token $token
+   * @param \AGORA\Game\AugustusBundle\Entity\AugustusToken $token
    *
    * @return boolean TRUE if this element is added, FALSE otherwise.
    */
-  public function addTokenToBag(\AGORA\Game\AugustusBundle\Entity\Token $token)
+  public function addTokenToBag(\AGORA\Game\AugustusBundle\Entity\AugustusToken $token)
   {
       return $this->tokenBag->add($token);
   }
@@ -863,11 +857,11 @@ class AugustusBoard {
   /**
    * Add token to bag with index.
    *
-   * @params int $index, \AGORA\Game\AugustusBundle\Entity\Token $token
+   * @params int $index, \AGORA\Game\AugustusBundle\Entity\AugustusToken $token
    *
    * @return boolean TRUE if this element is added, FALSE otherwise.
    */
-  public function addTokenToBagWithIndex(int $index, \AGORA\Game\AugustusBundle\Entity\Token $token)
+  public function addTokenToBagWithIndex(int $index, \AGORA\Game\AugustusBundle\Entity\AugustusToken $token)
   {
       return $this->tokenBag->set($index, $token);
   }
@@ -875,11 +869,11 @@ class AugustusBoard {
   /**
    * Remove token from bag.
    *
-   * @param \AGORA\Game\AugustusBundle\Entity\Token $token
+   * @param \AGORA\Game\AugustusBundle\Entity\AugustusToken $token
    *
    * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
    */
-  public function removeTokenFromBag(\AGORA\Game\AugustusBundle\Entity\Token $token)
+  public function removeTokenFromBag(\AGORA\Game\AugustusBundle\Entity\AugustusToken $token)
   {
       return $this->tokenBag->removeElement($token);
   }
@@ -982,27 +976,4 @@ class AugustusBoard {
         return $this->objLine->removeElement($objLine);
     }
 
-    /**
-     * Set game.
-     *
-     * @param \AGORA\Game\AugustusBundle\Entity\AugustusGame|null $game
-     *
-     * @return AugustusBoard
-     */
-    public function setGame(\AGORA\Game\AugustusBundle\Entity\AugustusGame $game = null)
-    {
-        $this->game = $game;
-
-        return $this;
-    }
-
-    /**
-     * Get game.
-     *
-     * @return \AGORA\Game\AugustusBundle\Entity\AugustusGame|null
-     */
-    public function getGame()
-    {
-        return $this->game;
-    }
 }
