@@ -127,11 +127,33 @@ class GameController extends Controller {
             }
         }
 
+        $player = $service->getPlayerFromId($playerid, $gameId);
+
         switch ($action->type) {
             case "legion":
+                for ($i = 0; $i < count($action->removeToken->token); $i++) {
+                    $card = $player->cards[$action->removeToken->card[i]];
 
+                    $card->ctrlTokens[$action->removeToken->token[i]];
+                    $player->setLegion($player->getLegion() + 1);
+                }
+
+                for ($i = 0; $i < count($action->addToken->token); $i++) {
+                    $card = $player->cards[$action->addToken->card[i]];
+
+                    $card->ctrlTokens[$action->addToken->token[i]];
+                    $player->setLegion($player->getLegion() - 1);
+                }
+
+
+                $this->manager->flush();
                 break;
             case "aveCesar":
+                if ($action->aveCesar->takeLoot) {
+                    $service->gameModel->claimReward($gameId, $playerId);
+                }
+
+                //TODO piocher une carte
 
                 break;
             case "removeAllLegions":
