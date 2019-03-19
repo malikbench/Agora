@@ -2,6 +2,7 @@
 
 namespace AGORA\Game\AugustusBundle\Entity;
 
+use AGORA\Game\AugustusBundle\Entity\AugustusGame;
 use AGORA\Game\AugustusBundle\Entity\AugustusCard;
 use AGORA\Game\AugustusBundle\Entity\AugustusToken;
 use AGORA\Game\AugustusBundle\Entity\AugustusColor;
@@ -39,7 +40,7 @@ class AugustusBoard {
     private $objLine;
 
     /**
-     * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusGame", mappedBy="board", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusGame", inversedBy="board", cascade={"persist"})
      */
     private $game;
     
@@ -787,7 +788,7 @@ class AugustusBoard {
    *
    * @return boolean TRUE if this element is added, FALSE otherwise.
    */
-  public function addCardToDeck(\AGORA\Game\AugustusBundle\Entity\Card $card)
+  public function addCardToDeck(AugustusCard $card)
   {
       return $this->deck->add($card);
   }
@@ -799,7 +800,7 @@ class AugustusBoard {
    *
    * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
    */
-  public function removeCardFromDeck(\AGORA\Game\AugustusBundle\Entity\Card $card)
+  public function removeCardFromDeck(AugustusCard $card)
   {
       return $this->deck->removeElement($card);
   }
@@ -821,7 +822,7 @@ class AugustusBoard {
    *
    * @return boolean TRUE if this element is added, FALSE otherwise.
    */
-  public function addObjToLine(\AGORA\Game\AugustusBundle\Entity\Card $card)
+  public function addObjToLine(AugustusCard $card)
   {
       return $this->objLine->add($card);
   }
@@ -833,7 +834,7 @@ class AugustusBoard {
    *
    * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
    */
-  public function removeObjFromLine(\AGORA\Game\AugustusBundle\Entity\Card $card)
+  public function removeObjFromLine(AugustusCard $card)
   {
       return $this->objLine->removeElement($card);
   }
@@ -855,7 +856,7 @@ class AugustusBoard {
    *
    * @return boolean TRUE if this element is added, FALSE otherwise.
    */
-  public function addTokenToBag(\AGORA\Game\AugustusBundle\Entity\Token $token)
+  public function addTokenToBag(AugustusToken $token)
   {
       return $this->tokenBag->add($token);
   }
@@ -867,7 +868,7 @@ class AugustusBoard {
    *
    * @return boolean TRUE if this element is added, FALSE otherwise.
    */
-  public function addTokenToBagWithIndex(int $index, \AGORA\Game\AugustusBundle\Entity\Token $token)
+  public function addTokenToBagWithIndex(int $index, AugustusToken $token)
   {
       return $this->tokenBag->set($index, $token);
   }
@@ -879,7 +880,7 @@ class AugustusBoard {
    *
    * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
    */
-  public function removeTokenFromBag(\AGORA\Game\AugustusBundle\Entity\Token $token)
+  public function removeTokenFromBag(AugustusToken $token)
   {
       return $this->tokenBag->removeElement($token);
   }
@@ -937,7 +938,7 @@ class AugustusBoard {
      *
      * @return AugustusBoard
      */
-    public function addDeck(\AGORA\Game\AugustusBundle\Entity\AugustusCard $deck)
+    public function addDeck(AugustusCard $deck)
     {
         $this->deck[] = $deck;
 
@@ -951,7 +952,7 @@ class AugustusBoard {
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeDeck(\AGORA\Game\AugustusBundle\Entity\AugustusCard $deck)
+    public function removeDeck(AugustusCard $deck)
     {
         return $this->deck->removeElement($deck);
     }
@@ -963,7 +964,7 @@ class AugustusBoard {
      *
      * @return AugustusBoard
      */
-    public function addObjLine(\AGORA\Game\AugustusBundle\Entity\AugustusCard $objLine)
+    public function addObjLine(AugustusCard $objLine)
     {
         $this->objLine[] = $objLine;
 
@@ -977,7 +978,7 @@ class AugustusBoard {
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeObjLine(\AGORA\Game\AugustusBundle\Entity\AugustusCard $objLine)
+    public function removeObjLine(AugustusCard $objLine)
     {
         return $this->objLine->removeElement($objLine);
     }
@@ -989,7 +990,7 @@ class AugustusBoard {
      *
      * @return AugustusBoard
      */
-    public function setGame(\AGORA\Game\AugustusBundle\Entity\AugustusGame $game = null)
+    public function setGame(AugustusGame $game = null)
     {
         $this->game = $game;
 

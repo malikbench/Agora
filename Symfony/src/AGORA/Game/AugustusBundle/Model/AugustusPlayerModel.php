@@ -20,7 +20,7 @@ class AugustusPlayerModel {
     public function __construct(EntityManager $em) {
         $this->manager = $em;
 
-        $this->cardModel = new AugustusCardModel();
+        $this->cardModel = new AugustusCardModel($em);
     }
 
     public function createPlayer($userId, $gameId) {
