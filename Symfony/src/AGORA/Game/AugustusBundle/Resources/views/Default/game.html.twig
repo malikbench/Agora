@@ -2,9 +2,9 @@
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <title>Augustus - {{ gameName }}</title>
-        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/agoragameaugustus/css/game.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/agoragameaugustus/css/tchat.css') }}">
+        <title>Augustus - </title>
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/augustus/css/game.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/agoragameavecesar/css/tchat.css') }}">
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
         <script> //let playerUsername = "";</script>
     </head>
@@ -21,9 +21,9 @@
                     {% for player in game.players %}
                         <div class="playerInfo" onclick="selectPlayer( {{ loop.index0 }} )">
                             <p class="p">
-                                {{ player.name ? player.name : "null" }}<br>
+                                {{ player.userName ? player.userName : "null" }}<br>
                                 Légions : {{ player.legion }}/{{ player.legionMax }}<br>
-                                Objectifs sous contrôle : {{ player.ctrlObj|length }}
+                                Objectifs sous contrôle : {{ player.ctrlCards|length }}
                             </p>
                         </div>
                     {% endfor %}
@@ -33,7 +33,7 @@
 
                 <div id="myInfo">
                     <p class="p">
-                        {{ me.name }}<br>
+                        {{ me.userName }}<br>
                         Légions :<br>
                         {{ me.legion }}/{{ me.legionMax }}<br>
                         Score :<br>
@@ -61,7 +61,7 @@
                         <div>
                             <p class="p">
 
-                                {{ player.name }}<br>
+                                {{ player.userName }}<br>
                                 Légions :<br>
                                 {{ player.legion }}/{{ player.legionMax }}
                             </p>
@@ -69,7 +69,7 @@
 
                         <div class="flex1"></div>
 
-                        {% for card in player.currObj %}
+                        {% for card in player.cards %}
                         <div class="card" style="background-image: url('{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}');">
                             {% for token in card.tokens.length %}
                             {% if controlledToken[loop.index] %} <!-- TODO  remplacer par la bonne péthode pour savoir si un token est controllé -->
@@ -101,24 +101,24 @@
                     <div id="lootBars" class="flexContainer flexColumn">
                         <div id="topLoot" class="flexContainer flexRow">
                             <!-- TODO make infos for each loot -->
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100" class="{{ not loot.isAvailable ? "taken" : (game.state == "aveCesar" and game.getAffectedPlayer() == me.getId() and me.ctrlCards|length == 2 ? "choosenLoot") }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '2' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot3Cards.jpg') }}" alt="Loot3Cards" height="100" class="{{ not loot.isAvailable ? "taken" : (game.state == "aveCesar" and game.getAffectedPlayer() == me.getId() and me.ctrlCards|length == 3 ? "choosenLoot") }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '3' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot4Cards.jpg') }}" alt="Loot4Cards" height="100" class="{{ not loot.isAvailable ? "taken" : (game.state == "aveCesar" and game.getAffectedPlayer() == me.getId() and me.ctrlCards|length == 4 ? "choosenLoot") }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '4' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot5Cards.jpg') }}" alt="Loot5Cards" height="100" class="{{ not loot.isAvailable ? "taken" : (game.state == "aveCesar" and game.getAffectedPlayer() == me.getId() and me.ctrlCards|length == 5 ? "choosenLoot") }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '5' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot6Cards.jpg') }}" alt="Loot6Cards" height="100" class="{{ not loot.isAvailable ? "taken" : (game.state == "aveCesar" and game.getAffectedPlayer() == me.getId() and me.ctrlCards|length == 6 ? "choosenLoot") }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '6' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootGold.jpg') }}" alt="LootGold" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'gold' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '2' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot3Cards.jpg') }}" alt="Loot3Cards" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '3' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot4Cards.jpg') }}" alt="Loot4Cards" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '4' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot5Cards.jpg') }}" alt="Loot5Cards" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '5' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot6Cards.jpg') }}" alt="Loot6Cards" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '6' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootGold.jpg') }}" alt="LootGold" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'gold' ))">
                         </div>
 
                         <div class="flex1"></div>
 
                         <div id="botLoot" class="flexContainer flexRow">
                             <!-- TODO make infos for each loot -->
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootSenator.jpg') }}" alt="LootSenator" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'senator' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootGreen.jpg') }}" alt="LootGreen" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'green' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootMulti.jpg') }}" alt="LootMulti" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'multi' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootRose.jpg') }}" alt="LootRose" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'rose' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootOrange.jpg') }}" alt="LootOrange" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'orange' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootWheat.jpg') }}" alt="LootWheat" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'wheat' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootSenator.jpg') }}" alt="LootSenator" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'senator' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootGreen.jpg') }}" alt="LootGreen" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'green' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootMulti.jpg') }}" alt="LootMulti" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'multi' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootRose.jpg') }}" alt="LootRose" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'rose' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootOrange.jpg') }}" alt="LootOrange" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'orange' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootWheat.jpg') }}" alt="LootWheat" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'wheat' ))">
                         </div>
                     </div>
 
@@ -146,7 +146,7 @@
                 <!-- <div class="flex1"></div> -->
 
                 <div id="myBar" class="flexContainer flexRow">
-                    {% for card in me.currObj %}
+                    {% for card in me.cards %}
                         {% set cardIndex = loop.index0 %}
                     <div class="card" style="background-image: url('{{ asset('bundles/agoragameaugustus/img/Cards/' ~ card.number ~ '.jpg') }}');" onclick="selectHand(this)" ondblclick="getOverlay(this)">
                         {% for token in card.tokens.length %}
@@ -223,7 +223,7 @@
                 <div class="flex1"></div>
 
                 <div class="action">
-                    {% if game.state == "aveCesar" and game.affectedPlayer() = me.getId() %}
+                    {% if game.state == "aveCesar" and game.affectedPlayer() == me.getId() %}
                         {% if me.advantage == 0 and me.ctrlCards >= 2 %}
                         <div>
                             <p>Vous pouvez prendre la récompense entourée en vert. Vous ne pouvez prendre qu'une seule récompense de ce type.</p>
@@ -239,7 +239,7 @@
                             <p>Récuperer l'objectif sélectionné ?</p>
                             <button onclick="takeObj()">Prendre</button>
                         </div>
-                    {% elseif game.state == "OneCard" and game.affectedPlayer() = me.getId() %}
+                    {% elseif game.state == "OneCard" and game.affectedPlayer() == me.getId() %}
                         <div>
                             <p>Vous devez récuperer un des objectifs sur le terrain.</p>
                             <p>Récuperer l'objectif sélectionné ?</p>
@@ -257,8 +257,8 @@
             let gottaRemove = 0;
             let gottaRemoveAllTokenOnCard = false;
             let gotToCompleteCard = false;
-            {% if (game.getState() == "RemoveOneLegion" and (me.legionMax - me.legion >= 1) and game.affectedPlayer() = me.getId() or
-                (game.getState() == "RemoveTwoLegion" and me.legionMax - me.legion == 1) %}
+            {% if (game.getState() == "RemoveOneLegion" and (me.legionMax - me.legion >= 1) and game.affectedPlayer() == me.getId() or
+                (game.getState() == "RemoveTwoLegion" and me.legionMax - me.legion == 1)) %}
             gottaRemove = 1;
             (function () {
                 document.querySelector("#valider").disabled = true;
@@ -267,7 +267,7 @@
                 });
                 document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez retirer 1 légion";
             })();
-            {% elseif game.getState() == "RemoveTwoLegion" and me.legionMax - me.legion >= 2 and game.affectedPlayer() = me.getId() %}
+            {% elseif game.getState() == "RemoveTwoLegion" and me.legionMax - me.legion >= 2 and game.affectedPlayer() == me.getId() %}
             gottaRemove = 2;
             (function () {
                 document.querySelector("#valider").disabled = true;
@@ -276,13 +276,13 @@
                 });
                 document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez retirer 2 légions";
             })();
-            {% elseif game.getState() == "RemoveAllLegion" and me.legionMax != me.legion and game.affectedPlayer() = me.getId() %}
+            {% elseif game.getState() == "RemoveAllLegion" and me.legionMax != me.legion and game.affectedPlayer() == me.getId() %}
             gottaRemoveAllTokenOnCard = true;
             (function () {
                 document.querySelector("#valider").disabled = true;
                 document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez choisir une carte. Toutes les légions se retireront de la carte.";
             })();
-            {% elseif game.getState() == "CompleteCard" and game.affectedPlayer() = me.getId() %}
+            {% elseif game.getState() == "CompleteCard" and game.affectedPlayer() == me.getId() %}
             gotToCompleteCard = true;
             (function () {
                 document.querySelector("#valider").disabled = true;
@@ -413,24 +413,7 @@
 
                 {% else %}
 				//action.from & to
-				let toPlayer = action.addToken.iPlayer;
-				let toCard = action.addToken.iCard;
-				let toToken = action.addToken.iToken;
-
-				let fromPlayer = action.removeToken.iPlayer;
-				let fromCard = action.removeToken.iCard;
-				let fromToken = action.removeToken.iToken;
-
-				if (toCard != null && toToken != null && toPlayer != null) {
-					if (fromCard != null && fromToken != null && fromPlayer != null) {
-						//putLegionFromDestToSource(dest, source)
-						sendXHR("{{ path('putLegionFromTo') }}?toPlayer=" + toPlayer + "&toCard=" + toCard + "&toToken=" + toToken
-						+ "&fromPlayer=" + fromPlayer + "&fromCard=" + fromCard + "&fromToken=" + fromToken);
-					} else {
-						//putLegionOnCard(Card)
-						sendXHR("{{ path('putLegion') }}?toPlayer=" + toPlayer + "&toCard=" + toCard + "&toToken=" + toToken);
-					}
-				}
+                sendAction();
                 {% endif %}
 			}
 
@@ -460,15 +443,9 @@
                 {% endif %}
             }
 
-			function sendXHR(path) {
-				let xhr = new XMLHttpRequest();
-				xhr.onreadystatechange = function() {
-					if (xhr.readyState === XMLHttpRequest.DONE) {
-						document.write(xhr.responseText);
-					}
-				};
-				xhr.open('GET', path, true);
-				xhr.send();
+			function sendAction(path) {
+                //TODO send via webSocket
+				console.log(action);
 			}
 
             function resetSelected() {
@@ -509,7 +486,7 @@
             
             {# Cas normal #}
             //FONCTION DE SELECTION DE LA LEGION A RETIRER
-            {% if game.state.includes("Two") and game.getAffectedPlayer() == me.getId() %}
+            {% if "Two" in game.state and game.getAffectedPlayer() == me.getId() %}
             let addAction = 2;
             let removeAction = 2;
             {% elseif game.state == "OneLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
@@ -562,7 +539,7 @@
 
                     legion += 1;
                     document.querySelector("#myInfo").innerHTML = "<p class=\"p\">\n" +
-                        "{{ me.name }}<br>\n" +
+                        "{{ me.userName }}<br>\n" +
                         "Légions :<br>\n" +
                         legion + "/{{ me.legionMax }}<br>\n" +
                         "Score :<br>\n" +
@@ -705,7 +682,7 @@
 
                         legion -= 1;
                         document.querySelector("#myInfo").innerHTML = "<p class=\"p\">\n" +
-                            "{{ me.name }}<br>\n" +
+                            "{{ me.userName }}<br>\n" +
                             "Légions :<br>\n" +
                             legion + "/{{ me.legionMax }}<br>\n" +
                             "Score :<br>\n" +
@@ -767,7 +744,7 @@
 
                     legion += 1;
                     document.querySelector("#myInfo").innerHTML = "<p class=\"p\">\n" +
-                        "{{ me.name }}<br>\n" +
+                        "{{ me.userName }}<br>\n" +
                         "Légions :<br>\n" +
                         legion + "/{{ me.legionMax }}<br>\n" +
                         "Score :<br>\n" +
@@ -830,7 +807,7 @@
 
                         legion -= 1;
                         document.querySelector("#myInfo").innerHTML = "<p class=\"p\">\n" +
-                            "{{ me.name }}<br>\n" +
+                            "{{ me.userName }}<br>\n" +
                             "Légions :<br>\n" +
                             legion + "/{{ me.legionMax }}<br>\n" +
                             "Score :<br>\n" +

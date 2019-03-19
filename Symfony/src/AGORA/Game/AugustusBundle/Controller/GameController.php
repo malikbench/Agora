@@ -74,7 +74,7 @@ class GameController extends Controller {
             $this->redirect($this->generateUrl('agora_platform_joingame'));
         }
 
-        return $this->redirect($this->generateUrl('agora_game_augustus_index' ,array(
+        return $this->redirect($this->generateUrl('agora_game_index_aug' ,array(
             "gameId" => $gameId
         )));
     }
@@ -103,10 +103,11 @@ class GameController extends Controller {
         $player = $service->getPlayerFromId($playerId, $gameId);
 
         //Envoie Au twig tout les infomartions qu'il doit afficher
-        return $this->render('AGORAGameAugustusBundle:Default:game.html.twig',
+        return $this->render('AugustusBundle:Default:game.html.twig',
             array(
-                'game' => $augGame,
-                'me' => $player,
+                'game'  => $game,
+                'board' => $game->getBoard(),
+                'me'    => $player,
             )
         );
     }

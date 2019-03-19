@@ -2,6 +2,11 @@
 
 namespace AGORA\Game\AugustusBundle\Entity;
 
+use AGORA\Game\AugustusBundle\Entity\AugustusPlayer;
+use AGORA\Game\AugustusBundle\Entity\AugustusCard;
+use AGORA\Game\AugustusBundle\Entity\AugustusBoard;
+use AGORA\Game\AugustusBundle\Entity\AugustusToken;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -100,11 +105,11 @@ class AugustusGame
     /**
      * Add player.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\Player $player
+     * @param AugustusPlayer $player
      *
      * @return AugustusPlayer
      */
-    public function addPlayer(\AGORA\Game\AugustusBundle\Entity\Player $player)
+    public function addPlayer(AugustusPlayer $player)
     {
         $this->players[] = $player;
         return $this;
@@ -113,11 +118,11 @@ class AugustusGame
     /**
      * Remove player.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\Player $player
+     * @param AugustusPlayer $player
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removePlayer(\AGORA\Game\AugustusBundle\Entity\Player $player)
+    public function removePlayer(AugustusPlayer $player)
     {
         return $this->players->removeElement($player);
     }
@@ -155,7 +160,7 @@ class AugustusGame
      *
      * @return AugustusGame
      */
-    public function setBoard(\AGORA\Game\AugustusBundle\Entity\AugustusBoard $board = null)
+    public function setBoard(AugustusBoard $board = null)
     {
         $this->board = $board;
 
@@ -179,7 +184,7 @@ class AugustusGame
      *
      * @return AugustusGame
      */
-    public function setToken(\AGORA\Game\AugustusBundle\Entity\AugustusToken $token = null)
+    public function setToken(AugustusToken $token = null)
     {
         $this->token = $token;
 
@@ -227,7 +232,7 @@ class AugustusGame
      *
      * @return AugustusGame
      */
-    public function setAffectedPlayer(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $affectedPlayer = null)
+    public function setAffectedPlayer(AugustusPlayer $affectedPlayer = null)
     {
         $this->affectedPlayer = $affectedPlayer;
 
@@ -251,7 +256,7 @@ class AugustusGame
      *
      * @return AugustusGame
      */
-    public function addColorLoot(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $colorLoot)
+    public function addColorLoot(AugustusPlayer $colorLoot)
     {
         $this->colorLoot[] = $colorLoot;
 
@@ -265,7 +270,7 @@ class AugustusGame
      *
      * @return AugustusGame
      */
-    public function setColorLoot(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $colorLoot)
+    public function setColorLoot(AugustusPlayer $colorLoot)
     {
         $this->colorLoot = $colorLoot;
 
@@ -279,7 +284,7 @@ class AugustusGame
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeColorLoot(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $colorLoot)
+    public function removeColorLoot(AugustusPlayer $colorLoot)
     {
         return $this->colorLoot->removeElement($colorLoot);
     }
@@ -297,11 +302,11 @@ class AugustusGame
     /**
      * Add nextState.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\integer $nextState
+     * @param int $nextState
      *
      * @return AugustusGame
      */
-    public function addNextState(\AGORA\Game\AugustusBundle\Entity\integer $nextState)
+    public function addNextState(int $nextState)
     {
         $this->nextStates[] = $nextState;
 
@@ -311,11 +316,11 @@ class AugustusGame
     /**
      * Remove nextState.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\integer $nextState
+     * @param int $nextState
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeNextState(\AGORA\Game\AugustusBundle\Entity\integer $nextState)
+    public function removeNextState(int $nextState)
     {
         return $this->nextStates->removeElement($nextState);
     }
@@ -333,11 +338,11 @@ class AugustusGame
     /**
      * Add nextAffected.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\integer $nextAffected
+     * @param int $nextAffected
      *
      * @return AugustusGame
      */
-    public function addNextAffected(\AGORA\Game\AugustusBundle\Entity\integer $nextAffected)
+    public function addNextAffected(int $nextAffected)
     {
         $this->nextAffecteds[] = $nextAffected;
 
@@ -347,11 +352,11 @@ class AugustusGame
     /**
      * Remove nextAffected.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\integer $nextAffected
+     * @param int $nextAffected
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeNextAffected(\AGORA\Game\AugustusBundle\Entity\integer $nextAffected)
+    public function removeNextAffected(int $nextAffected)
     {
         return $this->nextAffecteds->removeElement($nextAffected);
     }
