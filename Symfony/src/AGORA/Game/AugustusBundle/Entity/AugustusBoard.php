@@ -39,7 +39,7 @@ class AugustusBoard {
     private $objLine;
 
     /**
-     * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusGame", mappedBy="board")
+     * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusGame", mappedBy="board", cascade={"persist"})
      */
     private $game;
     
