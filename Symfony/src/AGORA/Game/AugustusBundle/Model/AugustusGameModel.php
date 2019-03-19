@@ -47,7 +47,7 @@ class AugustusGameModel {
         $this->manager->persist($game);
         $this->manager->flush();
 
-        return $game->getId();
+        return $augGame->getId();
     }
 
     // donne une main de trois cartes à chaque joueur ainsi qu'un jeton sur le plateau
