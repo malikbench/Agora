@@ -74,7 +74,7 @@ class GameController extends Controller {
             $this->redirect($this->generateUrl('agora_platform_joingame'));
         }
 
-        return $this->redirect($this->generateUrl('agora_game_augustus_index' ,array(
+        return $this->redirect($this->generateUrl('agora_game_index_aug' ,array(
             "gameId" => $gameId
         )));
     }
@@ -103,10 +103,11 @@ class GameController extends Controller {
         $player = $service->getPlayerFromId($playerId, $gameId);
 
         //Envoie Au twig tout les infomartions qu'il doit afficher
-        return $this->render('AGORAGameAugustusBundle:Default:game.html.twig',
+        return $this->render('AugustusBundle:Default:game.html.twig',
             array(
-                'game' => $augGame,
-                'me' => $player,
+                'game'  => $game,
+                'board' => $game->getBoard(),
+                'me'    => $player,
             )
         );
     }
@@ -127,11 +128,33 @@ class GameController extends Controller {
             }
         }
 
+        $player = $service->getPlayerFromId($playerid, $gameId);
+
         switch ($action->type) {
             case "legion":
+                for ($i = 0; $i < count($action->removeToken->token); $i++) {
+                    $card = $player->cards[$action->removeToken->card[i]];
 
+                    $card->ctrlTokens[$action->removeToken->token[i]];
+                    $player->setLegion($player->getLegion() + 1);
+                }
+
+                for ($i = 0; $i < count($action->addToken->token); $i++) {
+                    $card = $player->cards[$action->addToken->card[i]];
+
+                    $card->ctrlTokens[$action->addToken->token[i]];
+                    $player->setLegion($player->getLegion() - 1);
+                }
+
+
+                $this->manager->flush();
                 break;
             case "aveCesar":
+                if ($action->aveCesar->takeLoot) {
+                    $service->gameModel->claimReward($gameId, $playerId);
+                }
+
+                //TODO piocher une carte
 
                 break;
             case "removeAllLegions":

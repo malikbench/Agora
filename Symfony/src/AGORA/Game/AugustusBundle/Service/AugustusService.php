@@ -33,7 +33,7 @@ class AugustusService {
     public function getGame($gameId) {
         $game = $this->manager
             ->getRepository('AugustusBundle:AugustusGame')
-            ->find($gameId);
+            ->findOneById($gameId);
         return $game;
     }
 
@@ -42,7 +42,7 @@ class AugustusService {
         $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
         $player = $players->findOneBy([
             'userId' => $user->getId(),
-            'game' => $this->getGame($gameId),
+            'game' => $gameId,
         ]);
         return $player;
     }

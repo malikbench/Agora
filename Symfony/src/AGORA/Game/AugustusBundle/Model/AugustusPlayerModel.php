@@ -14,10 +14,13 @@ use Doctrine\ORM\EntityManager;
 class AugustusPlayerModel {
 
     protected $manager;
+    private $cardModel;
     
     //On construit notre api avec un entity manager permettant l'accès à la base de données
     public function __construct(EntityManager $em) {
         $this->manager = $em;
+
+        $this->cardModel = new AugustusCardModel($em);
     }
 
     public function createPlayer($userId, $gameId) {
@@ -70,11 +73,27 @@ class AugustusPlayerModel {
         $player = $players->findOneById($idPlayer);
         $card = $cards->findOneById($idCard);
 
-        $cardModel = new AugustusCardModel($manager);
 
-        $cardModel->captureToken($idCard, $token);
+        $this->cardModel->captureToken($idCard, $token);
 
         $player->legion = $player->legion - 1;
+
+        $player->history = [$idCard, $token];
+        
+        $this->manager->flush();
+    }
+
+    //Enleve une légion sur la carte et ajoute le jeton de la carte correspondant au jeton du tour en cours.
+    public function removeLegionFromCard($idPlayer, $idCard, $token) {
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
+        $cards = $this->manager->getRepository('AugustusBundle:AugustusCard');
+
+        $player = $players->findOneById($idPlayer);
+        $card = $cards->findOneById($idCard);
+
+        $this->cardModel->getBackToken($idCard, $token);
+
+        $player->legion = $player->legion + 1;
 
         $player->history = [$idCard, $token];
         
@@ -88,9 +107,8 @@ class AugustusPlayerModel {
 
         $player = $players->findOneById($idPlayer);
 
-        $cardModel = new AugustusCardModel($manager);
-
-        $cardModel->getBackToken($idCardSource, $tokenSource);
+        
+        $this->cardModel->getBackToken($idCardSource, $tokenSource);
         $cardModel->captureToken($idCardDest, $tokenDest);
 
         $player->history = [$idCardDest, $tokenDest];
