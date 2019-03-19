@@ -40,11 +40,11 @@ class AugustusPlayerModel {
             return -1;
         }
 
-        $player = new AveCesarPlayer();
-        $player->setGameId($gameId);
+        $player = new AugustusPlayer();
+        $player->setGame($augGame);
 
         $user = $this->manager->getRepository('AGORAUserBundle:User')
-            ->findOneBy(array('userId' => $userId));
+            ->findOneBy(array('id' => $userId));
         
         $player->setUserId($user->getId());
         $player->setUserName($user->getUserName());

@@ -27,7 +27,7 @@ class AugustusGame
     private $players;
 
     /**
-     * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusBoard", mappedBy="game",cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusBoard", cascade={"persist"})
      */
     private $board;
 
@@ -138,7 +138,6 @@ class AugustusGame
     public function __construct()
     {
         $this->players = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->board = new AugustusBoard();
         $this->token = AugustusToken::NOTOKEN;
         $this->state = "waiting";
         $this->affectedPlayer = -1;

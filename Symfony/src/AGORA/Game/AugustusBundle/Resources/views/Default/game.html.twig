@@ -101,24 +101,24 @@
                     <div id="lootBars" class="flexContainer flexColumn">
                         <div id="topLoot" class="flexContainer flexRow">
                             <!-- TODO make infos for each loot -->
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '2' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot3Cards.jpg') }}" alt="Loot3Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '3' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot4Cards.jpg') }}" alt="Loot4Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '4' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot5Cards.jpg') }}" alt="Loot5Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '5' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot6Cards.jpg') }}" alt="Loot6Cards" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '6' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootGold.jpg') }}" alt="LootGold" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'gold' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100" class="{{ not loot.isAvailable ? "taken" : (game.state == "aveCesar" and game.getAffectedPlayer() == me.getId() and me.ctrlCards|length == 2 ? "choosenLoot") }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '2' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot3Cards.jpg') }}" alt="Loot3Cards" height="100" class="{{ not loot.isAvailable ? "taken" : (game.state == "aveCesar" and game.getAffectedPlayer() == me.getId() and me.ctrlCards|length == 3 ? "choosenLoot") }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '3' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot4Cards.jpg') }}" alt="Loot4Cards" height="100" class="{{ not loot.isAvailable ? "taken" : (game.state == "aveCesar" and game.getAffectedPlayer() == me.getId() and me.ctrlCards|length == 4 ? "choosenLoot") }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '4' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot5Cards.jpg') }}" alt="Loot5Cards" height="100" class="{{ not loot.isAvailable ? "taken" : (game.state == "aveCesar" and game.getAffectedPlayer() == me.getId() and me.ctrlCards|length == 5 ? "choosenLoot") }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '5' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/Loot6Cards.jpg') }}" alt="Loot6Cards" height="100" class="{{ not loot.isAvailable ? "taken" : (game.state == "aveCesar" and game.getAffectedPlayer() == me.getId() and me.ctrlCards|length == 6 ? "choosenLoot") }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '6' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootGold.jpg') }}" alt="LootGold" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'gold' ))">
                         </div>
 
                         <div class="flex1"></div>
 
                         <div id="botLoot" class="flexContainer flexRow">
                             <!-- TODO make infos for each loot -->
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootSenator.jpg') }}" alt="LootSenator" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'senator' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootGreen.jpg') }}" alt="LootGreen" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'green' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootMulti.jpg') }}" alt="LootMulti" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'multi' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootRose.jpg') }}" alt="LootRose" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'rose' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootOrange.jpg') }}" alt="LootOrange" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'orange' ))">
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootWheat.jpg') }}" alt="LootWheat" height="100" class="{{ not loot.isAvailable ? taken }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'wheat' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootSenator.jpg') }}" alt="LootSenator" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'senator' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootGreen.jpg') }}" alt="LootGreen" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'green' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootMulti.jpg') }}" alt="LootMulti" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'multi' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootRose.jpg') }}" alt="LootRose" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'rose' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootOrange.jpg') }}" alt="LootOrange" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'orange' ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Loot/LootWheat.jpg') }}" alt="LootWheat" height="100" class="{{ not loot.isAvailable ? "taken" }}" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'wheat' ))">
                         </div>
                     </div>
 
@@ -127,17 +127,17 @@
                     <div id="objLine" class="flexContainer flexRow">
                         <div class="flexContainer flexColumn">
                             <div>
-                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[0].number ~ '.jpg') }}" alt="Card{{ board.objLine[0].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[0].number }} ))">
-                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[1].number ~ '.jpg') }}" alt="Card{{ board.objLine[1].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[1].number }} ))">
+                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[0].number ~ '.jpg') }}" alt="Card{{ board.objLine[0].number }}" height="100" onclick="selectObj(this, 0)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[0].number }} ))">
+                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[1].number ~ '.jpg') }}" alt="Card{{ board.objLine[1].number }}" height="100" onclick="selectObj(this, 1)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[1].number }} ))">
                             </div>
                             <div>
-                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[2].number ~ '.jpg') }}" alt="Card{{ board.objLine[2].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[2].number }} ))">
-                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[3].number ~ '.jpg') }}" alt="Card{{ board.objLine[3].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[3].number }} ))">
+                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[2].number ~ '.jpg') }}" alt="Card{{ board.objLine[2].number }}" height="100" onclick="selectObj(this, 2)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[2].number }} ))">
+                                <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[3].number ~ '.jpg') }}" alt="Card{{ board.objLine[3].number }}" height="100" onclick="selectObj(this, 3)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[3].number }} ))">
                             </div>
                         </div>
                         <div class="flexContainer flexColumn">
                             <div class="flex1"></div>
-                            <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[4].number ~ '.jpg') }}" alt="Card{{ board.objLine[4].number }}" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[4].number }} ))">
+                            <img src="{{ asset('bundles/agoragameaugustus/img/Cards/' ~ game.board.objLine[4].number ~ '.jpg') }}" alt="Card{{ board.objLine[4].number }}" height="100" onclick="selectObj(this, 4)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[4].number }} ))">
                             <div class="flex1"></div>
                         </div>
                     </div>
@@ -160,12 +160,22 @@
                                     <p>Vous pouvez retirer toutes les légions de cette carte.</p>
                                     <button onclick="removeAllLegionOnCard({{ cardIndex }})">Retirer</button>
                                 </div>
+                            {% elseif game.state == "doCompleteCard" and game.getAffectedPlayer() == me.getId() %}
+                                <div>
+                                    <p>Vous pouvez capturer cet objectif.</p>
+                                    <button onclick="doCompleteCard({{ cardIndex }})">Capturer</button>
+                                </div>
+                            {% elseif (game.getState() == "RemoveAllLegion" and game.getAffectedPlayer() == me.getId())
+                                or (game.state == "doCompleteCard" and game.getAffectedPlayer() != me.getId()) %}
+                                <div>
+                                    <p>Veuillez attendre que les autres joueurs aient fini leurs actions.</p>
+                                </div>
                             {% else %}
                             <div>
                                 <p>Vous pouvez retirer une légion d'un de ces emplacements en le sélectionnant:</p>
                                 {% for token in card.tokens %}
                                     {% if controlledToken[loop.index0] %}
-                                    <img class="token" src="../../img/Token/Token{{ token.name }}.jpg" alt="" height="32" onclick="selectToken(this, loop.index0, {{ cardIndex }})">
+                                    <img class="token" src="../../img/Token/Token{{ token.name }}.jpg" alt="" height="32" onclick="selectToken(this, {{ loop.index0 }}, {{ cardIndex }})">
                                     {% endif %}
                                 {% endfor %}
                                 <button onclick="removeSelectedLegion()">Retirer</button>
@@ -212,7 +222,31 @@
 
                 <div class="flex1"></div>
 
-                <div class="action"></div>
+                <div class="action">
+                    {% if game.state == "aveCesar" and game.affectedPlayer() = me.getId() %}
+                        {% if me.advantage == 0 and me.ctrlCards >= 2 %}
+                        <div>
+                            <p>Vous pouvez prendre la récompense entourée en vert. Vous ne pouvez prendre qu'une seule récompense de ce type.</p>
+                            <p>Prendre la récompense.</p>
+                            <button onclick="takeLoot(1)">Oui</button>
+                            <button onclick="takeLoot(0)">Non</button>
+                            <br>
+                            <br>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <p>Vous devez récuperer un des objectifs sur le terrain.</p>
+                            <p>Récuperer l'objectif sélectionné ?</p>
+                            <button onclick="takeObj()">Prendre</button>
+                        </div>
+                    {% elseif game.state == "OneCard" and game.affectedPlayer() = me.getId() %}
+                        <div>
+                            <p>Vous devez récuperer un des objectifs sur le terrain.</p>
+                            <p>Récuperer l'objectif sélectionné ?</p>
+                            <button onclick="takeObj()">Prendre</button>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
 
@@ -374,7 +408,7 @@
 			function putLegion() {
                 {% if me.getLegion == 0 %}
                 document.querySelectorAll(".cardAction").forEach( function (ee) {
-                    ee.lastElementChild.innerHTML = "<p>Vous n'avez plus de légion libre, si vous le souhaitez vous pouvez déplacé une légion.</p>";
+                    ee.lastElementChild.innerHTML = "<p>Vous n'avez plus de legion libre, si vous le souhaitez vous pouvez déplacer une légion.</p>";
                 });
 
                 {% else %}
@@ -400,59 +434,30 @@
                 {% endif %}
 			}
 
-            //phase 2
             /*
-            //Ces fonctions peuvent toutes être gérées via les fonctions de base (remove & add)Token
-
-            //TODO
-            //validate -> ajouter un champ type à action (voir Slack)
+            //TODO validate
+            // -> ajouter un champ type à action (voir Slack)
+            // -> verifier toutes les conditions pour chaque pouvoir avant de valider l'envoi d'une requête
             
             //TODO removeAllLegion
             // verifier pour validate que 
             // gottaRemoveAllTokenOnCard == false
             
             //TODO moveLegion
-            // la limite de addAction et removeAction est levée
-            // les limites d'action du joueur sont donc le nombre de légion qu'il a posés
-            // Limite de mouvement = nb de legion posé * 2
-            //{#// addAction = removeAction = {{ me.maxLegion - me.legion }};#}
-            // IMPORTANT
-            // addAction == removeAction
-            function doMoveLegion() {
-            }
-
-
-
-            //TODO
-            // selectionner une carte de la liste des objectifs.
-            // La fonction sera peut-être la même que celle utilisée pour récupérer un objectif après un AveCesar
-            function oneCard() {
-            }
+            // pour validate, addAction == removeAction
             */
 
-            //TODO
+            // TODO
+            // verifier pour validate que
+            // gotToCompleteCard == false
             // selectionner une carte qui n'est pas celle capturée,
             // le back la passe de cards à ctrlCards
             function doCompleteCard(indCard) {
                 {% if game.affectedPlayer() == me.getId() %}
-                action.completeCard = {};
-                action.completeCard.card = indCard;
+                action.completeCard = indCard;
                 document.querySelector("#valider").disabled = false;
                 gotToCompleteCard = false;
-
-            }
-
-			//phase 3
-			function aveCesar() {
-				let loot = document.querySelectorAll(".selectedBoard");
-                if (loot != null) {
-                    let lootString = loot.alt.replace("Loot", "");
-                    if (lootString != null) {
-                        //getLoot(loot)
-                        //TODO s'assurer que la variable globale loot ne peut être affectée
-                        sendXHR("{{ path('takeLoot') }}?loot=" + lootString);
-                    }
-                }
+                {% endif %}
             }
 
 			function sendXHR(path) {
@@ -493,9 +498,11 @@
 
             //FONCTION POUR LE POUVOIR "Retirer toutes les légions d'une carte"
             function removeAllLegionOnCard(indCard) {
+                {% if game.affectedPlayer() == me.getId() %}
 			    action.removeAllLegion = indCard;
                 document.querySelector("#valider").disabled = false;
                 gottaRemoveAllTokenOnCard = false;
+                {% endif %}
             }
 
             {% if game.state != "MoveLegion" %}
@@ -505,6 +512,9 @@
             {% if game.state.includes("Two") and game.getAffectedPlayer() == me.getId() %}
             let addAction = 2;
             let removeAction = 2;
+            {% elseif game.state == "OneLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
+            let addAction = 1;
+            let removeAction = 1;
             {% endif %}
             let legion = {{ me.legion ?? 0 }};
             let action = {};
@@ -859,8 +869,39 @@
                 document.querySelectorAll(".selectedPlayer")[i].style.visibility = "visible";
             }
 
+            //SELECTIONNER LE LOOT DISPO
+            function takeLoot(choice) {
+                if (document.querySelectorAll(".choosenLoot").length !== 0) {
+                    if (typeof(action.aveCesar) == 'undefined') {
+                        action.aveCesar = {};
+                    }
+                    action.aveCesar.takeLoot = choice;
+                    document.querySelector(".action").firstElementChild.innerHTML = "<p>Vous avez choisi de " + (choice === 1 ? "prendre" : "laisser") + " la récompense</p><br><br>"
+                } else {
+                    alert("Il n'y a pas de récompenses à récupérer sur le plateau.");
+                }
+            }
 
+            //SELECTIONNER UN OBJECTIF DE LA OBJLINE
+            let selectedObj = -1;
+            function selectObj(e, indObj) {
+                document.querySelectorAll(".selectedBoard").forEach( function (ee) {
+                    ee.classList.remove("selectedBoard");
+                });
 
+                e.classList.add("selectedBoard");
+                selectedObj = indObj;
+            }
+
+            //PRENDRE L'OBJECTIF SELECTIONNE
+            function takeObj() {
+                if (selectedObj !== -1) {
+                    action.aveCesar.card = selectedObj;
+                    document.querySelector(".action").lastElementChild.innerHTML = "<p>Vous avez choisi l'objectif à prendre.</p>"
+                } else {
+                    alert("Vous n'avez pas selectionné d'objectif.");
+                }
+            }
 
             //disable all drag effect on the images
             document.querySelectorAll("img").forEach(function (imgElem) {
