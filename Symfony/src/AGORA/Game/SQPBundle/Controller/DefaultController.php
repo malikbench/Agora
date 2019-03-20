@@ -125,10 +125,18 @@ class DefaultController extends Controller
             $em->persist($player);
             $em->flush();
         } else if ($player == null) {//Le joueur n'est pas crée et la partie est pleine
-			return $this->render('AGORAPlatformBundle:Accueil:accueil.html.twig', array(
-			));
+//			return $this->render('AGORAPlatformBundle:Accueil:accueil.html.twig', array(
+//			));
+            return $this->redirect($this->generateUrl('agora_platform_joingame'));
         }
         $players = $playersRep->getAllPlayersFromLobby($idGame);
+
+        $nbPlayer = count($players);
+        $maxPlayer = $game->getNbPlayers();
+
+        if ($maxPlayer != $nbPlayer) {
+            return $this->redirect($this->generateUrl('agora_platform_joingame'));
+        }
 
         return $this->render('AGORAGameSQPBundle:Default:index.html.twig' ,array(
             "game" => $game,
