@@ -16,7 +16,39 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $gameInfoRepository = $em->getRepository('AGORAPlatformBundle:GameInfo');
+
         $allGameInfo = $gameInfoRepository->findAll();
+
+        $playersSQPRepository = $em->getRepository('AGORAGameSQPBundle:SQPPlayer');
+        $gamesSQPRepository = $em->getRepository('AGORAGameSQPBundle:SQPGame');
+        $gamesSQP = $gamesSQPRepository->findAll();
+        $gamesRepository = $em->getRepository('AGORAGameGameBundle:Game');
+        $games = $gamesRepository->findAll();
+        $usersRepository = $em->getRepository('AGORAUserBundle:User');
+        $users = $usersRepository->findAll();
+        $playersSQP = array();
+        foreach ($gamesSQP as $game) {
+            $playersSQP[''.$game->getId()] = $playersSQPRepository->getAllPlayersFromLobby($game->getId());
+        }
+        $players = array();
+        /** @var AveCesarService $service */
+        $service = $this->container->get('agora_game.ave_cesar');
+        foreach ($games as $game) {
+            if ($game->getGameInfoId()->getGameCode() == "avc") {
+                $players['avc'][''.$game->getId()] = $service->getAllPlayers($game->getId());
+            }
+        }
+
+        $user = $this->getUser();
+        if ($user != null && $user->hasRole('ROLE_ADMIN')) {
+            return $this->render('AGORAPlatformBundle:Accueil:moderation.html.twig', array(
+                "gamesSQP" => $gamesSQP,
+                "users" => $users,
+                "games" => $games,
+                "playersSQP" => $playersSQP,
+                "players" => $players));
+        }
+
         return $this->render('AGORAPlatformBundle:Accueil:accueil.html.twig', array(
             "gameList" => $allGameInfo));
     }
@@ -84,6 +116,7 @@ class DefaultController extends Controller
         $em->flush();
 
         return $this->render('AGORAPlatformBundle:Accueil:acceuil.html.twig');
+
     }
     
     public function gameListAction($game = null) {
