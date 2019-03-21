@@ -266,7 +266,7 @@ class AugustusPlayer
 
         // Attention on ajoute ici le joueur à la carte il faut donc absolument pas ajouter
         // la carte au joueur dans la fonction setPlayer de Card.
-        $cards->setPlayer($this);
+        $card->setPlayer($this);
 
         return $this;
     }

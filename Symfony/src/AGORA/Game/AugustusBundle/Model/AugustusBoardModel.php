@@ -17,7 +17,7 @@ class AugustusBoardModel {
   public function fillLine($idBoard) {
     
     // Récupération du board avec son id.
-    $boards = $manager->getRepository('AugustusBundle:AugustusBoard');
+    $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
     $board = $boards->findOneById($idBoard);
     
     for ($i = sizeof($board->getObjLine()->toArray()); $i < 5; $i++) {
@@ -30,7 +30,7 @@ class AugustusBoardModel {
   public function resetBag($idBoard) {
     
     // Récupération du board avec son id.
-    $boards = $manager->getRepository('AugustusBundle:AugustusBoard');
+    $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
     $board = $boards->findOneById($idBoard);
     
     // On vide le sac.
@@ -76,7 +76,7 @@ class AugustusBoardModel {
   public function takeToken($idBoard) {
     
     // Récupération du board avec son id.
-    $boards = $manager->getRepository('AugustusBundle:AugustusBoard');
+    $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
     $board = $boards->findOneById($idBoard);
     
     $token = $board->getTokenBag()->last();
@@ -89,7 +89,7 @@ class AugustusBoardModel {
   public function takeCard($idBoard) {
     
     // Récupération du board avec son id.
-    $boards = $manager->getRepository('AugustusBundle:AugustusBoard');
+    $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
     $board = $boards->findOneById($idBoard);
     
     $card = $board->getDeck()->last();

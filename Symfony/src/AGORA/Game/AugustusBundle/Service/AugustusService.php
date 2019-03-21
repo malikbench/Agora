@@ -68,7 +68,21 @@ class AugustusService {
         $player = $this->getPlayerFromUser($user, $gameId);
 
         if ($player == null) {
-            return $this->playerModel->createPlayer($user->getId(), $gameId);
+            $retId = $this->playerModel->createPlayer($user->getId(), $gameId);
+
+            $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
+            $game = $games->findOneById($gameId);
+
+            $rooms = $this->manager->getRepository("AGORAGameGameBundle:Game");
+            $room = $rooms->findOneBy([
+                'gameId' => $gameId,
+            ]);
+
+            if (count($game->getPlayers()) == $room->getNbPlayers()) {
+                $this->gameModel->initGame($gameId);
+            }
+
+            return $retId;
         }
 
         return $player->getId();

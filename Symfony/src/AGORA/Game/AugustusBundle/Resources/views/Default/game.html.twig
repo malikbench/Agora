@@ -64,9 +64,9 @@
 
                         {% for card in player.cards %}
                         <div class="card" style="background-image: url('{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}');">
-                            {% for token in card.tokens.length %}
-                            {% if controlledToken[loop.index] %} <!-- TODO  remplacer par la bonne péthode pour savoir si un token est controllé -->
-                            <img src='../../img/Token/legion.png' alt="" class="legion" style="top: {{ 31 * loop.index }}px;">
+                            {% for token in card.tokens %}
+                            {% if card.ctrlTokens[loop.index0] %}
+                            <img src='../../img/Token/legion.png' alt="" class="legion" style="top: {{ 31 * loop.index0 }}px;">
                             {% endif %}
                             {% endfor %}
                         </div>
@@ -142,8 +142,8 @@
                     {% for card in me.cards %}
                         {% set cardIndex = loop.index0 %}
                     <div class="card" style="background-image: url('{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}');" onclick="selectHand(this)" ondblclick="getOverlay(this)">
-                        {% for token in card.tokens.length %}
-                        {% if controlledToken[loop.index0] %} <!-- TODO  remplacer par la bonne méthode pour savoir si un token est controllé -->
+                        {% for token in card.tokens %}
+                        {% if card.ctrlTokens[loop.index0] %} 
                         <img src='../../img/Token/legion.png' alt="" class="legion" style="top: {{ 31 * loop.index }}px;">
                         {% endif %}
                         {% endfor %}
@@ -299,6 +299,9 @@
             //get infos string from nbr of a card
             function cardInfo(nbr) {
                 switch(nbr) {
+
+
+                    //TODO for twig pour chaque case:card
                   case 1:
                     return "placeholder info of card 1";
                   case 2:
@@ -323,6 +326,7 @@
                     return advantageInfo(5, 8);
                   case '6':
                     return advantageInfo(6, 10);
+                    //TODO trouver le bon path
                   case 'gold':
                     return "<p>Cette carte revient au joueur qui possède le plus de cartes d'or.</p>" +
                     "<p>Elle rapportera  5 poins lors du décompte final.</p>" +
@@ -361,18 +365,19 @@
                     "<p>Elle vous rapportera "+ points +" points lors du décompte final.</p>" +
                     "<p>Vous ne pouvez saisir qu'une seule carte récompense lors de la partie.</p>" +
                     "<img src=\"{{ asset('bundles/augustus/img/Loot/Loot"+ obj +"Cards.jpg') }}\" height='100' />";
+                    //TODO regler ce soucis mdr
             }
 
 
             function getOverlay(infos) {
-                document.querySelector(".overlay").innerHTML = infos;
+                document.querySelector(".overlayContent").innerHTML = infos;
                 document.querySelector(".overlay").classList.add("visible");
 
             }
 
             function removeOverlay(/* element */) {
                 document.querySelector(".overlay").classList.remove("visible");
-                document.querySelector(".overlay").innerHTML = "";
+                document.querySelector(".overlayContent").innerHTML = "";
             }
 
             function validate() {
@@ -829,7 +834,7 @@
             function resetSelectedPlayer() {
                 let selected = document.querySelectorAll(".selectedPlayer")[0];
                 if (selected != undefined) {
-                    e.classList.remove("selectedPlayer");
+                    selected.classList.remove("selectedPlayer");
                 }
 
                 let e = document.querySelectorAll(".selectedPlayerInfo");

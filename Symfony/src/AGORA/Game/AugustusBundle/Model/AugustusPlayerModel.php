@@ -52,15 +52,6 @@ class AugustusPlayerModel {
         $this->manager->persist($player);
         $this->manager->flush();
 
-        if ($nbPlayer + 1 == $game->getNbPlayers()) {
-            $this->initPlayers($gameId);
-            /*
-            TODO implémenter initPlayers :
-            appelée une fois que la salle est pleine
-            initialise les joueurs pour la partie (cartes à contrôler etc)
-            */
-            //Peut etre a faire dans game 
-        }
         $this->manager->flush();
         return $player->getId();
     }

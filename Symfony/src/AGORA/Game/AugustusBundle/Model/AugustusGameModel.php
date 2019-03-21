@@ -58,7 +58,7 @@ class AugustusGameModel {
         $this->drawToken($id);
 
         foreach ($game->getPlayers() as $player) {
-            for ($i = 0; i < 3; $i++) {
+            for ($i = 0; $i < 3; $i++) {
              $player->addCard($this->boardModel->takeCard($game->getBoard()));
             }
         }

@@ -856,7 +856,7 @@ class AugustusBoard {
    *
    * @return boolean TRUE if this element is added, FALSE otherwise.
    */
-  public function addTokenToBag(AugustusToken $token)
+  public function addTokenToBag(string $token)
   {
       return $this->tokenBag->add($token);
   }
@@ -868,7 +868,7 @@ class AugustusBoard {
    *
    * @return boolean TRUE if this element is added, FALSE otherwise.
    */
-  public function addTokenToBagWithIndex(int $index, AugustusToken $token)
+  public function addTokenToBagWithIndex(int $index, string $token)
   {
       return $this->tokenBag->set($index, $token);
   }
@@ -880,7 +880,7 @@ class AugustusBoard {
    *
    * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
    */
-  public function removeTokenFromBag(AugustusToken $token)
+  public function removeTokenFromBag(string $token)
   {
       return $this->tokenBag->removeElement($token);
   }
