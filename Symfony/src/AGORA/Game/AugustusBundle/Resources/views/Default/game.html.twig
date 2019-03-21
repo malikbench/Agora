@@ -19,7 +19,7 @@
             <div id="playersInfo" class="flexContainer flexColumn">
                 <div id="allPlayersInfo" class="flexContainer flexColumn" onload="selectPlayer(0)">
                     {% for player in game.players %}
-                        <div class="playerInfo" onclick="selectPlayer( {{ loop.index0 }} )">
+                        <div class="playerInfo" onclick="selectPlayer(this, {{ loop.index0 }} )">
                             <p class="p">
                                 {{ player.userName ? player.userName : "null" }}<br>
                                 Légions : {{ player.legion }}/{{ player.legionMax }}<br>
@@ -58,14 +58,7 @@
 
                     {% for player in game.players %}
                     <div class="selectedPlayerInfo" style="visibility: hidden">
-                        <div>
-                            <p class="p">
-
-                                {{ player.userName }}<br>
-                                Légions :<br>
-                                {{ player.legion }}/{{ player.legionMax }}
-                            </p>
-                        </div>
+                        
 
                         <div class="flex1"></div>
 
@@ -563,7 +556,7 @@
                     actualTokens = [{{ game.token ?? null }}];
                     actualTokens.push(actualToken);
                     let powerList = [];
-                    powerList = {{ me.equivalences ?? null }};
+                    //powerList = {{ me.equivalences ?? null }};
 
                     {% if game.getState() == "TwoLegionOnDoubleSword" and game.getAffectedPlayer() == me.getId() %}
                     actualTokens = ["double sword"];
@@ -834,16 +827,22 @@
             }
 
             function resetSelectedPlayer() {
-                let e = document.querySelectorAll(".selectedPlayer");
+                let selected = document.querySelectorAll(".selectedPlayer")[0];
+                if (selected != undefined) {
+                    e.classList.remove("selectedPlayer");
+                }
+
+                let e = document.querySelectorAll(".selectedPlayerInfo");
 
                 e.forEach(function (element) {
                     element.style.visibility = "hidden";
                 });
             }
 
-            function selectPlayer(i) {
+            function selectPlayer(elem, i) {
                 resetSelectedPlayer();
-                document.querySelectorAll(".selectedPlayer")[i].style.visibility = "visible";
+                elem.classList.add("selectedPlayer");
+                document.querySelectorAll(".selectedPlayerInfo")[i].style.visibility = "visible";
             }
 
             //SELECTIONNER LE LOOT DISPO
@@ -930,4 +929,9 @@
             flecheTchat.addEventListener("click", tchatOnClick);
         </script>
     </body>
+
+
+    <script>
+        //var augustusSocket = new WebSocket("ws://", "protocolOne");
+    </script>
 </html>

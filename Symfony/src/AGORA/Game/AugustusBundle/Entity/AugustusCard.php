@@ -2,6 +2,14 @@
 
 namespace AGORA\Game\AugustusBundle\Entity;
 
+use \AGORA\Game\AugustusBundle\Entity\AugustusBoard;
+use \AGORA\Game\AugustusBundle\Entity\AugustusGame;
+use \AGORA\Game\AugustusBundle\Entity\AugustusCard;
+use \AGORA\Game\AugustusBundle\Entity\AugustusColor;
+use \AGORA\Game\AugustusBundle\Entity\AugustusToken;
+use \AGORA\Game\AugustusBundle\Entity\AugustusResource;
+use \AGORA\Game\AugustusBundle\Entity\AugustusPower;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -211,7 +219,7 @@ class AugustusCard
      *
      * @return AugustusCard
      */
-    public function setBoard(\AGORA\Game\AugustusBundle\Entity\AugustusBoard $board)
+    public function setBoard(AugustusBoard $board)
     {
         $this->board = $board;
 
@@ -235,7 +243,7 @@ class AugustusCard
      *
      * @return AugustusCard
      */
-    public function setPower(\AugustusPower $power)
+    public function setPower(AugustusPower $power)
     {
         $this->power = $power;
 
@@ -259,7 +267,7 @@ class AugustusCard
      *
      * @return AugustusCard
      */
-    public function setColor(\AugustusColor $color)
+    public function setColor(AugustusColor $color)
     {
         $this->color = $color;
 
@@ -283,7 +291,7 @@ class AugustusCard
      *
      * @return AugustusCard
      */
-    public function setResource(\AugustusResource $resource)
+    public function setResource(AugustusResource $resource)
     {
         $this->resource = $resource;
 
@@ -307,7 +315,7 @@ class AugustusCard
      *
      * @return AugustusCard
      */
-    public function setPlayer(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $player = null)
+    public function setPlayer(AugustusPlayer $player = null)
     {
         $this->player = $player;
 
