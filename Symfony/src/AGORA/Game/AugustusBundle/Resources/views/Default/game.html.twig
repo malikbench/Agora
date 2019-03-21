@@ -932,6 +932,33 @@
 
 
     <script>
-        //var augustusSocket = new WebSocket("ws://", "protocolOne");
+        let augustusSocket = null;
+        try {
+            //Connextion vers le serveur
+         augustusSocket = new WebSocket("ws://localhost::8088");
+        } catch (e) {
+            console.error(e);
+        }
+        //si il y a eu une erreure on la récupere ici
+        augustusSocket.onerror = function (error) {
+            console.error(error);
+        };
+
+        //Quan la connnection est établie
+        augustusSocket.onopen = function (event) {
+            console.log("Connexion étabie.");
+
+
+             this.onclose = function (event) {
+                 console.log("Connnexion terminé.");
+
+             };
+             this.onmessage = function (event) {
+                 console.log("Message: ", event.data);
+             };
+
+        };
+
+
     </script>
-</html>
+</html>s
