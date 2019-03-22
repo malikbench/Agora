@@ -167,7 +167,7 @@
                             <div>
                                 <p>Vous pouvez retirer une légion d'un de ces emplacements en le sélectionnant:</p>
                                 {% for token in card.tokens %}
-                                    {% if controlledToken[loop.index0] %}
+                                    {% if card.ctrlTokens[loop.index0] %}
                                     <img class="token" src="../../img/Token/Token{{ token.name }}.jpg" alt="" height="32" onclick="selectToken(this, {{ loop.index0 }}, {{ cardIndex }})">
                                     {% endif %}
                                 {% endfor %}
@@ -994,6 +994,7 @@
         //si il y a eu une error on la récupere ici
         augustusSocket.onerror = function (error) {
             console.error(error);
+            alert(error);
         };
 
         //Quand la connnection est établie
@@ -1004,8 +1005,7 @@
 
 
              this.onclose = function (event) {
-                 console.log("Connnexion terminé.");
-
+                 console.log("Connnexion terminée.");
              };
              //recoit un message -> change body according to message
              this.onmessage = function (event) {

@@ -6,8 +6,10 @@
  * Time: 15:18
  */
 
-namespace AGORA\Game\AugustusBundle\AugustusSocket;
+namespace AGORA\Game\AugustusBundle\Controller;
 
+
+use AGORA\Game\AugustusBundle\Controller\GameController;
 
 use AGORA\Game\Socket\Chat\Chat;
 use Ratchet\ConnectionInterface;
@@ -30,7 +32,7 @@ class AugustusSocket implements MessageComponentInterface{
     public function __construct(Container $container) {
         $this->container = $container;
 
-        $controller = $this->container->get('agora_game.augustusController')
+        $controller = $this->container->get('agora_game.augustusController');
     }
 
 
