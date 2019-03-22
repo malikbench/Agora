@@ -166,16 +166,19 @@ class GameController extends Controller {
             default:
         }
 
+
         $service->getPlayerFromId($playerId)->setIsLock(true);
         if ($service->areAllPlayersReady($gameId)) {
             $players = $service->getPlayers($gameId);
+
+            //applyStep
 
             foreach ($service->getPlayers($gameId) as $player) {
                 $c = $this->connectionStorage->getConnection($gameId, $player->getId());
 
                 $c->send($this->renderIndex($gameId, $player->getId()));
-                return;
             }
+            //return
         }
 
     }
