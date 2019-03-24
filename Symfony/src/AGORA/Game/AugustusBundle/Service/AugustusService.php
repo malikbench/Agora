@@ -13,6 +13,7 @@ class AugustusService {
     protected $manager;
     public $gameModel;
     public $playerModel;
+    public $cardModel;
 
     // $em est passé en argument dans services.yml
     public function __construct(EntityManager $em) {
@@ -20,6 +21,7 @@ class AugustusService {
 
         $this->gameModel = new AugustusGameModel($em);
         $this->playerModel = new AugustusPlayerModel($em);
+        $this->cardModel = new AugustusCardModel($em);
     }
 
 
