@@ -173,13 +173,20 @@
                                 </div>
                             {% else %}
                             <div>
+                                {% if 1 in card.ctrlTokens %}
                                 <p>Vous pouvez retirer une légion d'un de ces emplacements en le sélectionnant:</p>
+
                                 {% for token in card.tokens %}
                                     {% if card.ctrlTokens[loop.index0] %}
                                     <img class="token" src="../../img/Token/Token{{ token.name }}.jpg" alt="" height="32" onclick="selectToken(this, {{ loop.index0 }}, {{ cardIndex }})">
                                     {% endif %}
                                 {% endfor %}
+
                                 <button onclick="removeSelectedLegion()">Retirer</button>
+                                {% else %}
+                                    <p>Aucune légion sur cette carte a retiré</p>
+
+                                {% endif %}
 
                                 <br>
                                 <br>
@@ -405,7 +412,7 @@
             function validate() {
                 //DO VARIOUS THINGS
                 //TODO
-                if (gottaRemove === 0) {
+                if (gottaRemove == 0) {
                     let phase = "{{ game.state ?? null }}";
 
                     switch (phase) {
