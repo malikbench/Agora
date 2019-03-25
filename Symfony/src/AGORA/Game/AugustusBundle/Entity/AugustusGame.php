@@ -37,7 +37,7 @@ class AugustusGame
     private $board;
 
     /**
-     * @var enum
+     * @var string
      *
      * @ORM\Column(name="token", type="string")
      */
@@ -180,11 +180,11 @@ class AugustusGame
     /**
      * Set token.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\AugustusToken|null $token
+     * @param string $token
      *
      * @return AugustusGame
      */
-    public function setToken(AugustusToken $token = null)
+    public function setToken(string $token = "")
     {
         $this->token = $token;
 
@@ -194,7 +194,7 @@ class AugustusGame
     /**
      * Get token.
      *
-     * @return \AGORA\Game\AugustusBundle\Entity\AugustusToken|null
+     * @return string
      */
     public function getToken()
     {
