@@ -72,7 +72,6 @@ class AugustusGameModel {
         $game = $games->findOneById($id);
 
         $this->boardModel->takeToken($game->getBoard());
-        // verifier
         if ($game->getToken() == AugustusToken::JOKER) {
             $this->boardModel->resetBag($game->getBoard());
         }
@@ -172,6 +171,10 @@ class AugustusGameModel {
         $this->manager->flush();
     }
 
+    // Utiliser pendant une phase ave cesar (applyStep)
+    // Si le joueur actuel vient de récupérer une carte grace à un pouvoir
+    // dans ce cas on met le pouvoir de celle-ci dans state
+    // Sinon on passe au state suivant
     private function nextStep($id) {
         if ($this->allOk($id)) {
             $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
@@ -207,7 +210,7 @@ class AugustusGameModel {
     // calcul et renvoie un tableau à deux dimensions avec:
     // tableau[0] = la suite d'états à prendre pour la phase AveCesar
     // tableau[1] = la suite de joueurs qui "activerons" ces états
-    public function aveCesarSteps($id) {
+    private function aveCesarSteps($id) {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
 
@@ -217,7 +220,7 @@ class AugustusGameModel {
         $capturer = array();
         $index = array();
         foreach ($game->getPlayers() as $player) {
-            foreach ($player->getCards() as $card) {    //remplacer par while
+            foreach ($player->getCards() as $card) {
                 if (count($card->getTokens()) == count($card->getCtrlTokens())) {
                     $capturer[$card->getNumber()] = $player->getId();
                     array_push($index, $card->getNumber());
@@ -240,6 +243,8 @@ class AugustusGameModel {
         return array($states, $affecteds);
     }
 
+    // Retourne un bouleen disant si la carte à un pouvoir qui necéssite
+    // un state particulier
     private function isPowerWithAction($idCard) {
         $cards = $this->manager->getRepository("AugustusBundle:AugustusCard");
         $card = $cards->findOneById($idCard);
@@ -262,6 +267,8 @@ class AugustusGameModel {
             $power == AugustusPower::COMPLETECARD;
     }
 
+    // retourne la carte où un joueur à réussi à placer toutes les légions
+    // ou null
     private function getCapturableCardFromPlayer($idPlayer) {
         $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
         $player = $players->findOneById($idPlayer);
@@ -289,6 +296,7 @@ class AugustusGameModel {
         $this->manager->flush();
     }
 
+    // change le propriétaire de la carte avantage gold
     private function changeGoldOwner($id, $idPlayer) {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
@@ -311,6 +319,7 @@ class AugustusGameModel {
         $this->manager->flush();
     }
 
+    // change le propriétaire de la carte avantage wheat
     private function changeWheatOwner($id, $idPlayer) {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
