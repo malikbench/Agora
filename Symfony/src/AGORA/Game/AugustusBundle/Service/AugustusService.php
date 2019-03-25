@@ -4,6 +4,8 @@ namespace AGORA\Game\AugustusBundle\Service;
 
 use AGORA\Game\AugustusBundle\Model\AugustusGameModel;
 use AGORA\Game\AugustusBundle\Model\AugustusPlayerModel;
+use AGORA\Game\AugustusBundle\Model\AugustusCardModel;
+
 
 use Doctrine\ORM\EntityManager;
 
