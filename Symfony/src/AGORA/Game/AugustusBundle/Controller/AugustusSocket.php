@@ -31,6 +31,7 @@ class AugustusSocket implements MessageComponentInterface {
         $this->container = $container;
 
         $this->controller = $this->container->get('agora_game.augustusController');
+        $this->controller->setContainer($container);
     }
 
 

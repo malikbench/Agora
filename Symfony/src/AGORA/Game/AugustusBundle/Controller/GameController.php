@@ -113,7 +113,7 @@ class GameController extends Controller {
 
     
     public function handleAction($conn, $gameId, $playerId, $action) {
-        $service = $this->get('agora_game.augustus');
+        $service = $this->container->get('agora_game.augustus');
 
         if ($action->type == "connect") {
             $this->connectionStorage->addConnection($gameId, $playerId, $conn);
