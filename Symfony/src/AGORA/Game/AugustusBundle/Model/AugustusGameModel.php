@@ -59,7 +59,7 @@ class AugustusGameModel {
 
         foreach ($game->getPlayers() as $player) {
             for ($i = 0; $i < 3; $i++) {
-             $player->addCard($this->boardModel->takeCard($game->getBoard()));
+                $player->addCard($this->boardModel->takeCard($game->getBoard()));
             }
         }
         $game->setState("legion");
@@ -71,7 +71,7 @@ class AugustusGameModel {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
 
-        $this->boardModel->takeToken($game->getBoard());
+        $game->setToken($this->boardModel->takeToken($game->getBoard()->getId()));
         if ($game->getToken() == AugustusToken::JOKER) {
             $this->boardModel->resetBag($game->getBoard());
         }
@@ -229,7 +229,7 @@ class AugustusGameModel {
         }
         sort($index);
         foreach ($index as $i) {
-            array_push($states, "AveCesar");
+            array_push($states, "aveCesar");
             array_push($affecteds, $capturer[$i]);
             $card = $capturer->getCardByNumber($capturer[$i], $i);
             if ($this->isPowerWithAction($card->getId())) {

@@ -50,7 +50,7 @@
 
             <div id="boardAndHand" class="flexContainer flexColumn">
                 <div id="instructions">
-                    <p class="p">{{ "TODO instructions" }}</p>
+                    <p class="p">{{ "En attente de joueurs" }}</p>
                 </div>
 
 
@@ -181,9 +181,9 @@
                             {% endif %}
                         </div>
                     </div>
-                    <!--
-                        <img src="{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="200" onclick="selectHand(this)" ondblclick="getOverlay(cardInfo( {{ card.number }} ))">
-                    -->
+
+                        {#<img src="{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="200" onclick="selectHand(this)" ondblclick="getOverlay(cardInfo( {{ card.number }} ))">#}
+
                     {% endfor %}
 
                     <div class="flex1"></div>
@@ -208,7 +208,7 @@
                 <img src="{{ asset('bundles/augustus/img/Token/TokenCount.jpg') }}" alt="TokenHelp" width="150">
                 <div class="flexContainer flexRow">
                     <p class="p">Jeton du tour : </p>
-                    <img src="{{ asset('bundles/augustus/img/Token/Token' ~ game.token ~ '.jpg') }}" alt="{{ game.token }}" height="55">
+                    <img src="{{ asset('bundles/augustus/img/Token/Token' ~ game.getToken ~ '.jpg') }}" alt="{{ game.getToken }}" height="55">
                 </div>
 
                 <div class="flex1"></div>
@@ -297,15 +297,33 @@
             //get infos string from nbr of a card
             function cardInfo(nbr) {
                 switch(nbr) {
-
-
-                    //TODO for twig pour chaque case:card
-                  case 1:
-                    return "placeholder info of card 1";
-                  case 2:
-                    return "placeholder info of card 2";
-                  case 3:
-                    return "placeholder info of card 3";
+                //TODO for twig pour chaque case:card
+                
+                //for player in players
+                //player.cards
+                {% for player in game.players %}
+                    {% for card in player.cards %}
+                    case {{ card.number }}:
+                        return "<p>Cette carte de couleur {{ card.color }} rapporte {{ card.points }} points à celui qui la capture.</p>"
+                        + "<p>Pour la capturer, le joueur qui la possède doit poser {{ card.tokens|length }} légions dessus.</p>"
+                        + "<p>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir" : "Cette carte possède le pouvoir " ~ card.power }}</p>"
+                        + "<p>{{ card.resource == 'noRessource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}</p>"
+                        + "<p>{{ card.player == null ? "Personne ne possède cette carte" : card.player.userName ~ " possède cette carte." }}</p>"
+                        + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{card.number}}.jpg\" height='100' />";
+                    {% endfor %}
+                {% endfor %}
+                
+                //board.objLine
+				{% for card in game.board.objLine %}
+				case {{ card.number }}:
+					case {{ card.number }}:
+                        return "<p>Cette carte de couleur {{ card.color }} rapporte {{ card.points }} points à celui qui la capture.</p>"
+                        + "<p>Pour la capturer, le joueur qui la possède doit poser {{ card.tokens|length }} légions dessus.</p>"
+                        + "<p>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir" : "Cette carte possède le pouvoir " ~ card.power }}</p>"
+                        + "<p>{{ card.resource == 'noRessource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}</p>"
+                        + "<p>{{ card.player == null ? "Personne ne possède cette carte" : card.player.userName ~ " possède cette carte." }}</p>"
+                        + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{card.number}}.jpg\" height='100' />";
+				{% endfor %}
                   default:
                     return "could not find info for card n" + nbr;
                 }
@@ -362,7 +380,6 @@
                     "<p>Elle vous rapportera "+ points +" points lors du décompte final.</p>" +
                     "<p>Vous ne pouvez saisir qu'une seule carte récompense lors de la partie.</p>" +
                     "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot"+ obj +"Cards.jpg\" height='100' />";
-                    //TODO regler ce soucis mdr
             }
 
 
@@ -553,9 +570,9 @@
             //Vérifie si le joueur peut poser une légion sur la carte et si il le peut propose le token le plus rare
             function addBestToken(e, listToken, listControlled, indCard) {
                 if (legion > 0) {
-                    let actualToken = "{{ game.token ?? null }}";
+                    let actualToken = "{{ game.getToken ?? null }}";
                     let actualTokens = [];
-                    actualTokens = [{{ game.token ?? null }}];
+                    actualTokens = [{{ game.getToken ?? null }}];
                     actualTokens.push(actualToken);
                     let powerList = [];
                     //powerList = {{ me.equivalences ?? null }};
