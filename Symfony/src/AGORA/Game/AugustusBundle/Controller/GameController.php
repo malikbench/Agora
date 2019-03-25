@@ -154,21 +154,18 @@ class GameController extends Controller {
                     $service->gameModel->claimReward($gameId, $playerId);
                 }
 
-                //TODO piocher une carte
+                $game = $service->getGame($gameId);
+                $board = $game->getBoard();
+                $card = $board->getObjLine()[$action->aveCesar->card];
+                $player->addCard($service->gameModel->boardModel->takeCardFromCenter($board->getId(), $card->getId()));
 
+                $this->manager->flush();
                 break;
             case "removeAllLegions":
-                $card = 0;//Redemander a Amaury comment acceder a la carte
-                $tokens = $card->getTokens();
-                foreach($tokens as $t) {
-                    $service->cardModel->getBackToken($card->getId(), $t);
-                }
-                $this->manager->flush();
+
                 break;
             case "completeCard":
-                $card = 0;//Redemander a Amaury comment acceder a la carte
-                $service->playerModel->completeCard($card->getId());
-                $this->manager->flush();
+                
                 break;
             default:
         }
