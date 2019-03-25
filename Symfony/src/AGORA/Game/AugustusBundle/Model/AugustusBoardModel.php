@@ -96,4 +96,19 @@ class AugustusBoardModel {
     $board->removeCardFromDeck($board->getDeck()->last());
     return $card;
   }
+
+  public function takeCardFromCenter($idBoard, $idCard) {
+    $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
+    $board = $boards->findOneById($idBoard);
+
+    $cards = $this->manager->getRepository('AugustusBundle:AugustusCard');
+    $card = $cards->findOneById($idCard);
+
+    $ind = $cards->indexOf($card);
+    $cardInLine = $cards->remove($ind);
+
+    $board->removeObjFromLine($cardInLine);
+
+    return $cardInLine;
+  }
 }
