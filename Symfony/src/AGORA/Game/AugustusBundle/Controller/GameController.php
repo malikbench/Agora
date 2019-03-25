@@ -105,7 +105,7 @@ class GameController extends Controller {
             array(
                 'game'  => $game,
                 'board' => $game->getBoard(),
-                'me'    => $player,
+                'me'    => $player
             )
         );
     }
