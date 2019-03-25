@@ -158,7 +158,8 @@ class GameController extends Controller {
 
                 break;
             case "removeAllLegions":
-                $card = 0;//Redemander a Amaury comment acceder a la carte
+                $cards = $player->getCards();
+                $card = $cards[$action->removeAllLegion];
                 $tokens = $card->getTokens();
                 foreach($tokens as $t) {
                     $service->cardModel->getBackToken($card->getId(), $t);
@@ -166,7 +167,8 @@ class GameController extends Controller {
                 $this->manager->flush();
                 break;
             case "completeCard":
-                $card = 0;//Redemander a Amaury comment acceder a la carte
+                $cards = $player->getCards();
+                $card = $cards[$action->removeAllLegion];
                 $service->playerModel->completeCard($card->getId());
                 $this->manager->flush();
                 break;
