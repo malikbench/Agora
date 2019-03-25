@@ -162,10 +162,19 @@ class GameController extends Controller {
                 $this->manager->flush();
                 break;
             case "removeAllLegions":
-
+                $cards = $player->getCards();
+                $card = $cards[$action->removeAllLegion];
+                $tokens = $card->getTokens();
+                foreach($tokens as $t) {
+                    $service->cardModel->getBackToken($card->getId(), $t);
+                }
+                $this->manager->flush();
                 break;
             case "completeCard":
-                
+                $cards = $player->getCards();
+                $card = $cards[$action->removeAllLegion];
+                $service->playerModel->completeCard($card->getId());
+                $this->manager->flush();
                 break;
             default:
         }
