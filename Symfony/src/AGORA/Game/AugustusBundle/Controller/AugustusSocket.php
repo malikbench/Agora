@@ -24,15 +24,13 @@ class AugustusSocket implements MessageComponentInterface{
      */
     private $games;
 
-
     private $container;
-
     private $controller;
 
     public function __construct(Container $container) {
         $this->container = $container;
 
-        $controller = $this->container->get('agora_game.augustusController');
+        $this->controller = $this->container->get('agora_game.augustusController');
     }
 
 

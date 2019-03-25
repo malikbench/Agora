@@ -36,7 +36,7 @@ class AugustusSocketCommand extends Command
             ' Starting Augustus ',// Empty line
         ]);
 
-        //La magie !!! Récupère la classe dans Modele/SQPAPI.php
+        
         $container = $this->getApplication()->getKernel()->getContainer();
         $server = IoServer::factory(
             new HttpServer(
