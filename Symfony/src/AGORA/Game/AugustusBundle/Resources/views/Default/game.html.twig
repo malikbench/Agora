@@ -912,50 +912,8 @@
                 imgElem.draggable = false;
             });
         </script>
-
-
-
-
-
-
-        <!-- TCHAT DIV + SCRIPT -->
-        <div class="tchat">
-            <div class="titleTchat">
-                <img id="flecheTchat" src="{{ asset('bundles/agoragameavecesar/image/fleche_historique_bas.png') }}" alt="x">
-                <i>Chat du lobby</i>
-            </div>
-            <div id="discussion"></div>
-            <textarea id="UserMessage" placeholder="Entrez votre message ici"></textarea>
-        </div>
+        
         <button id="buttAcc" onclick="window.location.href = '{{ app.request.getSchemeAndHttpHost() }}'">Accueil</button>
-        <script>//Script gérant le tchat
-            document.getElementById('UserMessage').addEventListener('keypress', function (event) {
-                let key = event.hasOwnProperty('which') ? event.which : event.keyCode;
-                if (key === 13) { // 13 est la touche entrée
-                    let div = document.createElement("div");
-                    let message = document.getElementById('UserMessage').value;
-                    /*
-                    var clientInformation = {
-                        {#gameId: "{{ game.id }}",#}
-                            {#playerId: "{{ player.id }}",#}
-                            action : {
-                                type: "message",
-                                username: playerUsername,
-                                message: message
-                                },
-                            gameCode : "aug"
-                        };
-                    */
-                    div.textContent = "Moi : " + message;
-                    document.getElementById('UserMessage').value = "";
-                    div.className = "messageMy";
-                    document.getElementById("discussion").appendChild(div);
-                    conn.send(JSON.stringify(clientInformation));
-                }
-            });
-            let flecheTchat = document.getElementById("flecheTchat");
-            flecheTchat.addEventListener("click", tchatOnClick);
-        </script>
     </body>
 
 
