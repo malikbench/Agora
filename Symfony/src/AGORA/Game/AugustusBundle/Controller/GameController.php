@@ -21,12 +21,8 @@ class GameController extends Controller {
      */
     protected $connectionStorage;
 
-    private $service
-
-    function __construct(AugustusService $serivce) {
+    function __construct() {
         $this->connectionStorage = new ConnectionStorage();
-
-        $this->service = $service;
     }
 
     
@@ -37,6 +33,9 @@ class GameController extends Controller {
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('Accès refusé, l\'utilisateur n\'est pas connecté.');
         }
+
+        //recupere dnas la base de donnée la ou on stock les partie d'Augustus
+        $service = $this->container->get('agora_game.augustus');
 
         $private = 0;
         $password = "";
@@ -63,6 +62,9 @@ class GameController extends Controller {
             throw new AccessDeniedException('Accès refusé, l\'utilisateur n\'est pas connecté.');
         }
 
+
+        $service = $this->container->get('agora_game.augustus');
+
         $playerId = $service->joinPlayer($user, $gameId);
 
         // if the game is full
@@ -85,6 +87,7 @@ class GameController extends Controller {
             throw new AccessDeniedException('Accès refusé, l\'utilisateur n\'est pas connecté.');
         }
 
+        $service = $this->container->get('agora_game.augustus');
         $playerId = $service->getPlayerFromUser($user, $gameId)->getId();
 
         return $this->renderIndex($gameId, $playerId);
@@ -92,6 +95,7 @@ class GameController extends Controller {
 
 
     private function renderIndex($gameId, $playerId) {
+        $service = $this->container->get('agora_game.augustus');
 
         $game = $service->getGame($gameId);
         $player = $service->getPlayerFromId($playerId, $gameId);
@@ -109,6 +113,7 @@ class GameController extends Controller {
 
     
     public function handleAction($conn, $gameId, $playerId, $action) {
+        $service = $this->get('agora_game.augustus');
 
         if ($action->type == "connect") {
             $this->connectionStorage->addConnection($gameId, $playerId, $conn);

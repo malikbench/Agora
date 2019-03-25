@@ -17,7 +17,7 @@ use Ratchet\MessageComponentInterface;
 use SplObjectStorage;
 use Symfony\Component\DependencyInjection\Container;
 
-class AugustusSocket implements MessageComponentInterface{
+class AugustusSocket implements MessageComponentInterface {
 
     /**
      * @var $games Map<String, Game>
