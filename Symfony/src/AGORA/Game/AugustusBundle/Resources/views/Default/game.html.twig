@@ -981,23 +981,41 @@
             }(DOMParser));
 
         let augustusSocket = null;
+        function sendAction(action) {
+            let message = {
+                gameId: {{game.id}},
+                playerId: {{me.id}},
+                action: action
+            };
+
+            return augustusSocket.send(JSON.stringify(message));
+        }
+
+        
         try {
             //Connextion vers le serveur
-         augustusSocket = new WebSocket("ws://localhost::8088");
+            var urlSock = "{{ app.request.getSchemeAndHttpHost() }}";
+            //On enlève le http (ou https)
+            urlSock = urlSock.split("/");
+            urlSock = urlSock[2];
+            //On enlève le port
+            urlSock = urlSock.split(":");
+            urlSock = urlSock[0];
+            augustusSocket = new WebSocket('ws://'+ urlSock +':8088');
         } catch (e) {
-            console.error(e);
+            console.error("error on opening wSocket :\n" + e);
         }
         //si il y a eu une error on la récupere ici
         augustusSocket.onerror = function (error) {
-            console.error(error);
-            alert(error);
+            console.error("error on wSocket :" + error);
         };
 
         //Quand la connnection est établie
         //on envoie un object la socket avec le type connect
         augustusSocket.onopen = function (event) {
-            console.log("Connexion étabie.");
-            augustusSocket.send(JSON.stringify(action = {type: "connect"}));
+            console.info("Connexion étabie.");
+            let action = {type: "connect"};
+            sendAction(action);
 
 
              this.onclose = function (event) {
