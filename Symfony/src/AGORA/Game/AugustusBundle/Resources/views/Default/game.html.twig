@@ -297,15 +297,33 @@
             //get infos string from nbr of a card
             function cardInfo(nbr) {
                 switch(nbr) {
-
-
-                    //TODO for twig pour chaque case:card
-                  case 1:
-                    return "placeholder info of card 1";
-                  case 2:
-                    return "placeholder info of card 2";
-                  case 3:
-                    return "placeholder info of card 3";
+                //TODO for twig pour chaque case:card
+                
+                //for player in players
+                //player.cards
+                {% for player in game.players %}
+                    {% for card in player.cards %}
+                    case {{ card.number }}:
+                        return "<p>Cette carte de couleur {{ card.color }} rapporte {{ card.points }} points à celui qui la capture.</p>"
+                        + "<p>Pour la capturer, le joueur qui la possède doit poser {{ card.tokens|length }} légions dessus.</p>"
+                        + "<p>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir" : "Cette carte possède le pouvoir " ~ card.power }}</p>"
+                        + "<p>{{ card.resource == 'noRessource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}</p>"
+                        + "<p>{{ card.player == null ? "Personne ne possède cette carte" : card.player.userName ~ " possède cette carte." }}</p>"
+                        + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{card.number}}.jpg\" height='100' />";
+                    {% endfor %}
+                {% endfor %}
+                
+                //board.objLine
+				{% for card in game.board.objLine %}
+				case {{ card.number }}:
+					case {{ card.number }}:
+                        return "<p>Cette carte de couleur {{ card.color }} rapporte {{ card.points }} points à celui qui la capture.</p>"
+                        + "<p>Pour la capturer, le joueur qui la possède doit poser {{ card.tokens|length }} légions dessus.</p>"
+                        + "<p>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir" : "Cette carte possède le pouvoir " ~ card.power }}</p>"
+                        + "<p>{{ card.resource == 'noRessource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}</p>"
+                        + "<p>{{ card.player == null ? "Personne ne possède cette carte" : card.player.userName ~ " possède cette carte." }}</p>"
+                        + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{card.number}}.jpg\" height='100' />";
+				{% endfor %}
                   default:
                     return "could not find info for card n" + nbr;
                 }
@@ -362,7 +380,6 @@
                     "<p>Elle vous rapportera "+ points +" points lors du décompte final.</p>" +
                     "<p>Vous ne pouvez saisir qu'une seule carte récompense lors de la partie.</p>" +
                     "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot"+ obj +"Cards.jpg\" height='100' />";
-                    //TODO regler ce soucis mdr
             }
 
 
