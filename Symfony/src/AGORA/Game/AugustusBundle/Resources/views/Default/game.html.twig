@@ -57,7 +57,7 @@
                 <div id="playerBar" class="flexContainer flexRow">
 
                     {% for player in game.players %}
-                    <div class="selectedPlayerInfo" style="visibility: hidden">
+                    <div class="selectedPlayerInfo flexContainer flexRow" style="display: none">
                         
 
                         <div class="flex1"></div>
@@ -93,7 +93,6 @@
 
                     <div id="lootBars" class="flexContainer flexColumn">
                         <div id="topLoot" class="flexContainer flexRow">
-                            <!-- TODO make infos for each loot -->
                             <img src="{{ asset('bundles/augustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '2' ))">
                             <img src="{{ asset('bundles/augustus/img/Loot/Loot3Cards.jpg') }}" alt="Loot3Cards" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '3' ))">
                             <img src="{{ asset('bundles/augustus/img/Loot/Loot4Cards.jpg') }}" alt="Loot4Cards" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '4' ))">
@@ -105,7 +104,6 @@
                         <div class="flex1"></div>
 
                         <div id="botLoot" class="flexContainer flexRow">
-                            <!-- TODO make infos for each loot -->
                             <img src="{{ asset('bundles/augustus/img/Loot/LootSenator.jpg') }}" alt="LootSenator" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'senator' ))">
                             <img src="{{ asset('bundles/augustus/img/Loot/LootGreen.jpg') }}" alt="LootGreen" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'green' ))">
                             <img src="{{ asset('bundles/augustus/img/Loot/LootMulti.jpg') }}" alt="LootMulti" height="100" onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'multi' ))">
@@ -178,7 +176,7 @@
                             </div>
                             <div>
                                 <p>Vous pouvez placer une légion sur cette carte :</p>
-                                <button onclick="addBestToken(this, {{ card.tokens }}, {{ card.ctrlTokens }}, {{ cardIndex }})">Placer</button>
+                                <button onclick="addBestToken(this, [ {{ card.tokens|join(',') }} ], [ {{ card.ctrlTokens|join(',') }} ], {{ cardIndex }})">Placer</button>
                             </div>
                             {% endif %}
                         </div>
@@ -326,7 +324,6 @@
                     return advantageInfo(5, 8);
                   case '6':
                     return advantageInfo(6, 10);
-                    //TODO trouver le bon path
                   case 'gold':
                     return "<p>Cette carte revient au joueur qui possède le plus de cartes d'or.</p>" +
                     "<p>Elle rapportera  5 poins lors du décompte final.</p>" +
@@ -365,7 +362,6 @@
                     "<p>Elle vous rapportera "+ points +" points lors du décompte final.</p>" +
                     "<p>Vous ne pouvez saisir qu'une seule carte récompense lors de la partie.</p>" +
                     "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot"+ obj +"Cards.jpg\" height='100' />";
-                    //TODO regler ce soucis mdr
             }
 
 
@@ -840,14 +836,14 @@
                 let e = document.querySelectorAll(".selectedPlayerInfo");
 
                 e.forEach(function (element) {
-                    element.style.visibility = "hidden";
+                    element.style.display = "none";
                 });
             }
 
             function selectPlayer(elem, i) {
                 resetSelectedPlayer();
                 elem.classList.add("selectedPlayer");
-                document.querySelectorAll(".selectedPlayerInfo")[i].style.visibility = "visible";
+                document.querySelectorAll(".selectedPlayerInfo")[i].style.display = "flex";
             }
 
             //SELECTIONNER LE LOOT DISPO
