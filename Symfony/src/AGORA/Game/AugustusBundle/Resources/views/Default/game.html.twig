@@ -975,11 +975,24 @@
              };
              //recoit un message -> change body according to message
              this.onmessage = function (event) {
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', '/game/augustus/body/{{ game.id }}/{{ me.id }}');
+                xhr.send();
+                xhr.onload = function() {
+                  if (xhr.status != 200) {
+                    alert('erreur lors du rafraîchissement de l\'affichage');
+                  } else {
+                    document.body.innerHTML = xhr.response;
+                  }
+                };
+
+                /*
                 var lines = event.data.split('\n');
                 lines.splice(0,3);
                 var newBody = lines.join('\n');
                 console.log(newBody);
                 document.body.innerHTML = newBody;
+                */
              };
 
         };

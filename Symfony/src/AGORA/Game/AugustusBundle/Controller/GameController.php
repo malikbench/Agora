@@ -135,14 +135,10 @@ class GameController extends Controller {
         if ($action->type == "connect") {
             $this->connectionStorage->addConnection($gameId, $playerId, $conn);
 
-            foreach ($service->getPlayers($gameId) as $player) {
-                $c = $this->connectionStorage->getConnection($gameId, $player->getId());
+            foreach ($this->connectionStorage->getAllConnections($gameId) as $c) {
 
-                echo "send body to player : ";
-                $id = $player->getId();
-                echo "$id\n";
-
-                $c->send($this->bodyAction($gameId, $player->getId()));
+                //$c->send($this->bodyAction($gameId, $player->getId()));
+                $c->send("refresh");
             }
 
             return;
