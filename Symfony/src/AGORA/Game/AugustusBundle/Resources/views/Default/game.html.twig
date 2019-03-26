@@ -5,8 +5,6 @@
         <title>Augustus - </title>
         <link rel="stylesheet" type="text/css" href="{{ asset('bundles/augustus/css/game.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('bundles/agoragameavecesar/css/tchat.css') }}">
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-        <script> //let playerUsername = "";</script>
     </head>
 
     <body>
@@ -19,13 +17,16 @@
             <div id="playersInfo" class="flexContainer flexColumn">
                 <div id="allPlayersInfo" class="flexContainer flexColumn" onload="selectPlayer(0)">
                     {% for player in game.players %}
-                        <div class="playerInfo" onclick="selectPlayer(this, {{ loop.index0 }} )">
+                        {% if player.getId != me.getId %}
+
+                            <div class="playerInfo" onclick="selectPlayer(this, {{ loop.index0 }} )">
                             <p class="p">
                                 {{ player.userName ? player.userName : "null" }}<br>
                                 Légions : {{ player.legion }}/{{ player.legionMax }}<br>
-                                Objectifs sous contrôle : {{ player.ctrlCards|length }}
+                                Objectifs sous contrôle : {{ player.ctrlCards.count }}
                             </p>
                         </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
 
@@ -36,9 +37,6 @@
                         {{ me.userName }}<br>
                         Légions :<br>
                         {{ me.legion }}/{{ me.legionMax }}<br>
-                        Score :<br>
-                        {{ me.score }}
-                        <br>
                         Resssources :<br>
                         Blé : {{ me.wheat }}<br>
                         Or : {{ me.gold }}<br>
@@ -50,20 +48,31 @@
 
             <div id="boardAndHand" class="flexContainer flexColumn">
                 <div id="instructions">
-                    <p class="p">{{ "En attente de joueurs" }}</p>
+
+                    {% if me.isLock == true %}
+                        <p class="p">{{ "Veuillez patienter" }}</p>
+                    {% elseif game.getState == "legion"  %}
+                        <p class="p">{{ "Veuillez placer votre légion" }}</p>
+                    {% elseif game.getState == "aveCesar"  %}
+                        <p class="p">{{ "Choisissez votre carte" }}</p>
+                    {% else %}
+                        <p class="p">{{ "En attente des joueurs" }}</p>
+                    {% endif %}
+
                 </div>
 
 
                 <div id="playerBar" class="flexContainer flexRow">
 
                     {% for player in game.players %}
-                    <div class="selectedPlayerInfo flexContainer flexRow" style="display: none">
+
+                        <div class="selectedPlayerInfo flexContainer flexRow" style="display: none">
                         
 
                         <div class="flex1"></div>
 
                         {% for card in player.cards %}
-                        <div class="card" style="background-image: url('{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}');">
+                        <div class="card" style="background-image: url('{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}');" ondblclick="getOverlay(cardInfo({{ card.number }}))">
                             {% for token in card.tokens %}
                             {% if card.ctrlTokens[loop.index0] %}
                             <img src='../../img/Token/legion.png' alt="" class="legion" style="top: {{ 31 * loop.index0 }}px;">
@@ -118,17 +127,17 @@
                     <div id="objLine" class="flexContainer flexRow">
                         <div class="flexContainer flexColumn">
                             <div>
-                                <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[0].number ~ '.jpg') }}" alt="Card{{ board.objLine[0].number }}" height="100" onclick="selectObj(this, 0)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[0].number }} ))">
-                                <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[1].number ~ '.jpg') }}" alt="Card{{ board.objLine[1].number }}" height="100" onclick="selectObj(this, 1)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[1].number }} ))">
+                                <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[0].number ~ '.jpg') }}" alt="Card{{ board.objLine[0].number }}" height="100" onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayed == me.getId %}selectObj(this, 0){% endif %}" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[0].number }} ))">
+                                <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[1].number ~ '.jpg') }}" alt="Card{{ board.objLine[1].number }}" height="100" onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayed == me.getId %}selectObj(this, 1){% endif %}"  ondblclick="getOverlay(cardInfo( {{ game.board.objLine[1].number }} ))">
                             </div>
                             <div>
-                                <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[2].number ~ '.jpg') }}" alt="Card{{ board.objLine[2].number }}" height="100" onclick="selectObj(this, 2)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[2].number }} ))">
-                                <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[3].number ~ '.jpg') }}" alt="Card{{ board.objLine[3].number }}" height="100" onclick="selectObj(this, 3)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[3].number }} ))">
+                                <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[2].number ~ '.jpg') }}" alt="Card{{ board.objLine[2].number }}" height="100" onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayed == me.getId %}selectObj(this, 2){% endif %}"  ondblclick="getOverlay(cardInfo( {{ game.board.objLine[2].number }} ))">
+                                <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[3].number ~ '.jpg') }}" alt="Card{{ board.objLine[3].number }}" height="100" onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayed == me.getId %}selectObj(this, 3){% endif %}"  ondblclick="getOverlay(cardInfo( {{ game.board.objLine[3].number }} ))">
                             </div>
                         </div>
                         <div class="flexContainer flexColumn">
                             <div class="flex1"></div>
-                            <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[4].number ~ '.jpg') }}" alt="Card{{ board.objLine[4].number }}" height="100" onclick="selectObj(this, 4)" ondblclick="getOverlay(cardInfo( {{ game.board.objLine[4].number }} ))">
+                            <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[4].number ~ '.jpg') }}" alt="Card{{ board.objLine[4].number }}" height="100" onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayed == me.getId %}selectObj(this, 4){% endif %}"  ondblclick="getOverlay(cardInfo( {{ game.board.objLine[4].number }} ))">
                             <div class="flex1"></div>
                         </div>
                     </div>
@@ -139,7 +148,7 @@
                 <div id="myBar" class="flexContainer flexRow">
                     {% for card in me.cards %}
                         {% set cardIndex = loop.index0 %}
-                    <div class="card" style="background-image: url('{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}');" onclick="selectHand(this)" ondblclick="getOverlay(this)">
+                    <div class="card" style="background-image: url('{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}');" onclick="selectHand(this)" ondblclick="getOverlay(cardInfo({{ card.number }}))">
                         {% for token in card.tokens %}
                         {% if card.ctrlTokens[loop.index0] %} 
                         <img src='../../img/Token/legion.png' alt="" class="legion" style="top: {{ 31 * loop.index }}px;">
@@ -163,20 +172,27 @@
                                 </div>
                             {% else %}
                             <div>
+                                {% if 1 in card.ctrlTokens %}
                                 <p>Vous pouvez retirer une légion d'un de ces emplacements en le sélectionnant:</p>
+
                                 {% for token in card.tokens %}
                                     {% if card.ctrlTokens[loop.index0] %}
                                     <img class="token" src="../../img/Token/Token{{ token.name }}.jpg" alt="" height="32" onclick="selectToken(this, {{ loop.index0 }}, {{ cardIndex }})">
                                     {% endif %}
                                 {% endfor %}
+
                                 <button onclick="removeSelectedLegion()">Retirer</button>
+                                {% else %}
+                                    <p>Aucune légion sur cette carte a retiré</p>
+
+                                {% endif %}
 
                                 <br>
                                 <br>
                             </div>
                             <div>
                                 <p>Vous pouvez placer une légion sur cette carte :</p>
-                                <button onclick="addBestToken(this, [ {{ card.tokens|join(',') }} ], [ {{ card.ctrlTokens|join(',') }} ], {{ cardIndex }})">Placer</button>
+                                <button onclick="addBestToken(this, [ '{{ card.tokens|join('\',\'') }}' ], [ '{{ card.ctrlTokens|join('\',\'') }}' ], {{ cardIndex }})">Placer</button>
                             </div>
                             {% endif %}
                         </div>
@@ -197,7 +213,7 @@
                 <div id="buttons" class="flexContainer flexRow">
                     <div class="flex1"></div>
                     <button id="valider" onclick="validate()">Valider</button>
-                    <button id="annuler" onclick="resetSelected()">Annuler</button><!-- onclick : devrait peut-être refresh la page -->
+                    {#<button id="annuler" onclick="resetSelected()">Annuler</button><!-- onclick : devrait peut-être refresh la page -->#}
                     <div class="flex1"></div>
                 </div>
             </div>
@@ -245,6 +261,7 @@
 
         <!-- SCRIPTS -->
         <script>
+            let action = {};
             let gottaRemove = 0;
             let gottaRemoveAllTokenOnCard = false;
             let gotToCompleteCard = false;
@@ -304,25 +321,23 @@
                 {% for player in game.players %}
                     {% for card in player.cards %}
                     case {{ card.number }}:
-                        return "<p>Cette carte de couleur {{ card.color }} rapporte {{ card.points }} points à celui qui la capture.</p>"
-                        + "<p>Pour la capturer, le joueur qui la possède doit poser {{ card.tokens|length }} légions dessus.</p>"
-                        + "<p>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir" : "Cette carte possède le pouvoir " ~ card.power }}</p>"
-                        + "<p>{{ card.resource == 'noRessource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}</p>"
-                        + "<p>{{ card.player == null ? "Personne ne possède cette carte" : card.player.userName ~ " possède cette carte." }}</p>"
-                        + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{card.number}}.jpg\" height='100' />";
+                        return "<p>Cette carte de couleur {{ card.color }} rapporte {{ card.points }} points à celui qui la capture."
+                        + "<br>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir." : "Cette carte possède un pouvoir." }}"
+                        + "<br>{{ card.resource == 'noResource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}"
+                        + "<br>{{ card.player == null ? "Personne ne possède cette carte." : card.player.userName ~ " possède cette carte." }}</p>"
+                        + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' />";
                     {% endfor %}
                 {% endfor %}
                 
                 //board.objLine
 				{% for card in game.board.objLine %}
 				case {{ card.number }}:
-					case {{ card.number }}:
-                        return "<p>Cette carte de couleur {{ card.color }} rapporte {{ card.points }} points à celui qui la capture.</p>"
-                        + "<p>Pour la capturer, le joueur qui la possède doit poser {{ card.tokens|length }} légions dessus.</p>"
-                        + "<p>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir" : "Cette carte possède le pouvoir " ~ card.power }}</p>"
-                        + "<p>{{ card.resource == 'noRessource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}</p>"
-                        + "<p>{{ card.player == null ? "Personne ne possède cette carte" : card.player.userName ~ " possède cette carte." }}</p>"
-                        + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{card.number}}.jpg\" height='100' />";
+                    case {{ card.number }}:
+                        return "<p>Cette carte de couleur {{ card.color }} rapporte {{ card.points }} points à celui qui la capture."
+                            + "<br>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir." : "Cette carte possède un pouvoir." }}"
+                            + "<br>{{ card.resource == 'noResource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}"
+                            + "<br>{{ card.player == null ? "Personne ne possède cette carte." : card.player.userName ~ " possède cette carte." }}</p>"
+                            + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' />";
 				{% endfor %}
                   default:
                     return "could not find info for card n" + nbr;
@@ -395,29 +410,26 @@
             }
 
             function validate() {
-                //DO VARIOUS THINGS
-                //TODO
-                if (gottaRemove === 0) {
-                    let phase = "{{ game.state ?? null }}";
-
-                    switch (phase) {
-                        case "legion": //Placement Légion
-                            putLegion();
-                            break;
-                        case "aveCesarCard": //Ave Cesar Pouvoir et ressource
-                            getRessource();
-                            break;
-                        case "aveCesarLoot": //Ave Cesar Loot
-                            takeLoot();
-                            break;
-                        default: //
-                            console.log('Sorry, there is a problem of phase (validate function)');
+                if (gottaRemove == 0) {
+                    if(JSON.stringify(action) === "{}") {
+                        if (confirm("Certain de ne rien vouloir jouer ?")) {
+                            alert("Votre coup a été joué.");
+                            sendAction();
+                            resetSelected();
+                        }
+                    } else {
+                        alert("Votre coup a été joué.");
+                        sendAction();
+                        resetSelected();
                     }
-                    resetSelected();
+                } else {
+                    alert("Vous devez encore retiré des légions.");
+
                 }
             }
 
-			function putLegion() {
+
+            function putLegion() {
                 {% if me.getLegion == 0 %}
                 document.querySelectorAll(".cardAction").forEach( function (ee) {
                     ee.lastElementChild.innerHTML = "<p>Vous n'avez plus de legion libre, si vous le souhaitez vous pouvez déplacer une légion.</p>";
@@ -425,22 +437,10 @@
 
                 {% else %}
 				//action.from & to
-                sendAction();
                 {% endif %}
 			}
 
-            /*
-            //TODO validate
-            // -> ajouter un champ type à action (voir Slack)
-            // -> verifier toutes les conditions pour chaque pouvoir avant de valider l'envoi d'une requête
-            
-            //TODO removeAllLegion
-            // verifier pour validate que 
-            // gottaRemoveAllTokenOnCard == false
-            
-            //TODO moveLegion
-            // pour validate, addAction == removeAction
-            */
+
 
             // TODO
             // verifier pour validate que
@@ -455,10 +455,6 @@
                 {% endif %}
             }
 
-			function sendAction(path) {
-                //TODO send via webSocket
-				console.log(action);
-			}
 
             function resetSelected() {
                 let board = document.querySelectorAll(".selectedBoard");
@@ -476,9 +472,9 @@
                 resetSelected();
                 e.classList.add("selectedHand");
 
-                if (document.querySelector(".action").hasChildNodes()) {
+                if (document.querySelector(".action").querySelectorAll("div").length !== 0) {
                     document.querySelector(".action").firstElementChild.style.visibility = "hidden";
-                    document.querySelector("#myBar").querySelectorAll(".card")[parseInt(document.querySelector(".action").firstElementChild.classList[0].replace("cardAction",""))].appendChild(document.querySelector(".action").firstChild);
+                    document.querySelector("#myBar").querySelectorAll(".card")[parseInt(document.querySelector(".action").firstElementChild.classList[0].replace("cardAction",""))].appendChild(document.querySelector(".action").firstElementChild);
                 }
 
                 e.querySelector(".cardAction").style.visibility = "visible";
@@ -506,7 +502,7 @@
             let removeAction = 1;
             {% endif %}
             let legion = {{ me.legion ?? 0 }};
-            let action = {};
+            action = {};
             let selectedToken = {};
             let selectedCard = {};
             function selectToken(e, indToken, indCard) {
@@ -554,9 +550,6 @@
                         "{{ me.userName }}<br>\n" +
                         "Légions :<br>\n" +
                         legion + "/{{ me.legionMax }}<br>\n" +
-                        "Score :<br>\n" +
-                        "{{ me.score }}\n" +
-                        "<br>\n" +
                         "Resssources :<br>\n" +
                         "Blé : {{ me.wheat }}<br>\n" +
                         "Or : {{ me.gold }}<br>\n" +
@@ -572,7 +565,6 @@
                 if (legion > 0) {
                     let actualToken = "{{ game.getToken ?? null }}";
                     let actualTokens = [];
-                    actualTokens = [{{ game.getToken ?? null }}];
                     actualTokens.push(actualToken);
                     let powerList = [];
                     //powerList = {{ me.equivalences ?? null }};
@@ -596,36 +588,36 @@
                     {% else %}
                     switch (actualToken) {
                         case "shield" :
-                            if (powerList.contains("ShieldIsChariot")) {
+                            if (powerList.includes("ShieldIsChariot")) {
                                 actualTokens.push("chariot");
                             }
-                            if (powerList.contains("DoubleSwordIsShield")) {
+                            if (powerList.includes("DoubleSwordIsShield")) {
                                 actualTokens.push("double sword");
                             }
                             break;
                         case "knife" :
-                            if (powerList.contains("TeachesIsKnife")) {
+                            if (powerList.includes("TeachesIsKnife")) {
                                 actualTokens.push("teaches");
                             }
                             break;
                         case "chariot" :
-                            if (powerList.contains("ChariotIsCatapult")) {
+                            if (powerList.includes("ChariotIsCatapult")) {
                                 actualTokens.push("catapult");
                             }
-                            if (powerList.contains("ShieldIsChariot")) {
+                            if (powerList.includes("ShieldIsChariot")) {
                                 actualTokens.push("shield");
                             }
                             break;
                         case "double sword" :
-                            if (powerList.contains("DoubleSwordIsShield")) {
+                            if (powerList.includes("DoubleSwordIsShield")) {
                                 actualTokens.push("shield");
                             }
                             break;
                         case "catapult" :
-                            if (powerList.contains("ChariotIsCatapult")) {
+                            if (powerList.includes("ChariotIsCatapult")) {
                                 actualTokens.push("chariot");
                             }
-                            if (powerList.contains("CatapultIsTeaches")) {
+                            if (powerList.includes("CatapultIsTeaches")) {
                                 actualTokens.push("teaches");
                             }
                             break;
@@ -638,10 +630,10 @@
                             actualTokens.push("knife");
                             break;
                         case "teaches" :
-                            if (powerList.contains("CatapultIsTeaches")) {
+                            if (powerList.includes("CatapultIsTeaches")) {
                                 actualTokens.push("catapult");
                             }
-                            if (powerList.contains("TeachesIsKnife")) {
+                            if (powerList.includes("TeachesIsKnife")) {
                                 actualTokens.push("knife");
                             }
                             break;
@@ -653,19 +645,21 @@
 
                     //recherche sur la carte
                     let indToken = -1;
-                    listToken.forEach( function (e, i) {
-                        if (actualTokens.contains(e)) {
-                            if (! listControlled[i]) {
-                                indToken = i;
+                    listToken.forEach( function (element, index) {
+                        if (actualTokens.includes(element)) {
+                            if (listControlled[index] == 0) {
+                                indToken = index;
                             }
                         }
                     });
 
                     //si la recherche est ok
                     if (indToken !== -1) {
-                        action.addToken = {};
-                        action.addToken.card = {};
-                        action.addToken.token = {};
+                        if (typeof(action.addToken) == 'undefined') {
+                            action.addToken = {};
+                            action.addToken.card = [];
+                            action.addToken.token = [];
+                        }
                         if (typeof(addAction) != 'undefined' && addAction === 2) {
                             action.addToken.card.push(indCard);
                             action.addToken.token.push(indToken);
@@ -717,7 +711,7 @@
             {# Cas MOVE LEGION #}
             let addAction = {{ me.legionMax - me.legion }};
             let removeAction = addAction;
-            let action = {};
+            action = {};
             let selectedToken = {};
             let selectedCard = {};
             //MOVE LEGION version
@@ -778,7 +772,7 @@
                     //recherche sur la carte
                     let indToken = -1;
                     listToken.forEach( function (e, i) {
-						if (! listControlled[i]) {
+						if (listControlled[i] === 0) {
 							indToken = i;
 						}
                     });
@@ -903,110 +897,23 @@
                 imgElem.draggable = false;
             });
         </script>
-
-
-
-
-
-
-        <!-- TCHAT DIV + SCRIPT -->
-        <div class="tchat">
-            <div class="titleTchat">
-                <img id="flecheTchat" src="{{ asset('bundles/agoragameavecesar/image/fleche_historique_bas.png') }}" alt="x">
-                <i>Chat du lobby</i>
-            </div>
-            <div id="discussion"></div>
-            <textarea id="UserMessage" placeholder="Entrez votre message ici"></textarea>
-        </div>
+        
         <button id="buttAcc" onclick="window.location.href = '{{ app.request.getSchemeAndHttpHost() }}'">Accueil</button>
-        <script>//Script gérant le tchat
-            document.getElementById('UserMessage').addEventListener('keypress', function (event) {
-                let key = event.hasOwnProperty('which') ? event.which : event.keyCode;
-                if (key === 13) { // 13 est la touche entrée
-                    let div = document.createElement("div");
-                    let message = document.getElementById('UserMessage').value;
-                    /*
-                    var clientInformation = {
-                        {#gameId: "{{ game.id }}",#}
-                            {#playerId: "{{ player.id }}",#}
-                            action : {
-                                type: "message",
-                                username: playerUsername,
-                                message: message
-                                },
-                            gameCode : "aug"
-                        };
-                    */
-                    div.textContent = "Moi : " + message;
-                    document.getElementById('UserMessage').value = "";
-                    div.className = "messageMy";
-                    document.getElementById("discussion").appendChild(div);
-                    conn.send(JSON.stringify(clientInformation));
-                }
-            });
-            let flecheTchat = document.getElementById("flecheTchat");
-            flecheTchat.addEventListener("click", tchatOnClick);
-        </script>
     </body>
 
 
     <script>
-            /*
-             * DOMParser HTML extension
-             * 2012-02-02
-             *
-             * By Eli Grey, http://eligrey.com
-             * Public domain.
-             * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
-             */
-
-            /*! @source https://gist.github.com/1129031 */
-            /*global document, DOMParser*/
-
-            (function(DOMParser) {
-                "use strict";
-                var DOMParser_proto = DOMParser.prototype
-                    , real_parseFromString = DOMParser_proto.parseFromString;
-
-                // Firefox/Opera/IE throw errors on unsupported types
-                try {
-                    // WebKit returns null on unsupported types
-                    if ((new DOMParser).parseFromString("", "text/html")) {
-                        // text/html parsing is natively supported
-                        return;
-                    }
-                } catch (ex) {}
-
-                DOMParser_proto.parseFromString = function(markup, type) {
-                    if (/^\s*text\/html\s*(?:;|$)/i.test(type)) {
-                        var doc = document.implementation.createHTMLDocument("")
-                            , doc_elt = doc.documentElement
-                            , first_elt;
-
-                        doc_elt.innerHTML = markup;
-                        first_elt = doc_elt.firstElementChild;
-
-                        if (doc_elt.childElementCount === 1
-                            && first_elt.localName.toLowerCase() === "html") {
-                            doc.replaceChild(first_elt, doc_elt);
-                        }
-
-                        return doc;
-                    } else {
-                        return real_parseFromString.apply(this, arguments);
-                    }
-                };
-            }(DOMParser));
 
         let augustusSocket = null;
-        function sendAction(action) {
+        function sendAction() {
             let message = {
                 gameId: {{game.id}},
                 playerId: {{me.id}},
                 action: action
             };
-
+            action = {};
             return augustusSocket.send(JSON.stringify(message));
+
         }
 
         
@@ -1019,6 +926,7 @@
             //On enlève le port
             urlSock = urlSock.split(":");
             urlSock = urlSock[0];
+            console.log('ws://'+ urlSock +':8088');
             augustusSocket = new WebSocket('ws://'+ urlSock +':8088');
         } catch (e) {
             console.error("error on opening wSocket :\n" + e);
@@ -1032,8 +940,8 @@
         //on envoie un object la socket avec le type connect
         augustusSocket.onopen = function (event) {
             console.info("Connexion étabie.");
-            let action = {type: "connect"};
-            sendAction(action);
+            action = {type: "connect"};
+            sendAction();
 
 
              this.onclose = function (event) {
@@ -1041,12 +949,11 @@
              };
              //recoit un message -> change body according to message
              this.onmessage = function (event) {
-                 let newBody = document.createElement("body");
-                 let receivedMessage = new DOMParser().parseFromString(event.data, "text/html");
-                 let contentOfMessage = receivedMessage.body;
-                 newBody.appendChild(contentOfMessage);
-                 document.body = newBody;
-                 console.log("Message: ", event.data);
+                var lines = event.data.split('\n');
+                lines.splice(0,3);
+                var newBody = lines.join('\n');
+                console.log(newBody);
+                document.body.innerHTML = newBody;
              };
 
         };
@@ -1054,3 +961,5 @@
 
     </script>
 </html>
+
+

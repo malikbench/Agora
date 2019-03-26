@@ -10,3 +10,5 @@ agora_game_index_aug:
   path: /index/{gameId}
   defaults: { _controller: AugustusBundle:Game:index }
 
+  
+

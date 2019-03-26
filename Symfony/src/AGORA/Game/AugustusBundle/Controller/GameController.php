@@ -105,6 +105,22 @@ class GameController extends Controller {
             array(
                 'game'  => $game,
                 'board' => $game->getBoard(),
+                'me'    => $player
+            )
+        );
+    }
+
+    private function renderBody($gameId, $playerId) {
+        $service = $this->container->get('agora_game.augustus');
+
+        $game = $service->getGame($gameId);
+        $player = $service->getPlayerFromId($playerId, $gameId);
+
+        //Envoie Au twig tout les infomartions qu'il doit afficher
+        return $this->render('AugustusBundle:Default:gameBody.html.twig',
+            array(
+                'game'  => $game,
+                'board' => $game->getBoard(),
                 'me'    => $player,
             )
         );
@@ -113,7 +129,7 @@ class GameController extends Controller {
 
     
     public function handleAction($conn, $gameId, $playerId, $action) {
-        $service = $this->get('agora_game.augustus');
+        $service = $this->container->get('agora_game.augustus');
 
         if ($action->type == "connect") {
             $this->connectionStorage->addConnection($gameId, $playerId, $conn);
@@ -121,7 +137,11 @@ class GameController extends Controller {
             foreach ($service->getPlayers($gameId) as $player) {
                 $c = $this->connectionStorage->getConnection($gameId, $player->getId());
 
-                $c->send($this->renderIndex($gameId, $player->getId()));
+                echo "send body to player : ";
+                $id = $player->getId();
+                echo "$id\n";
+
+                $c->send($this->renderBody($gameId, $player->getId()));
                 return;
             }
         }
@@ -187,7 +207,7 @@ class GameController extends Controller {
             foreach ($service->getPlayers($gameId) as $player) {
                 $c = $this->connectionStorage->getConnection($gameId, $player->getId());
 
-                $c->send($this->renderIndex($gameId, $player->getId()));
+                $c->send($this->renderBody($gameId, $player->getId()));
             }
             //return
         }
