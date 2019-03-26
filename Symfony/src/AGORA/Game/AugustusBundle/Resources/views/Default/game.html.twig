@@ -9,13 +9,14 @@
 
     <body>
         <div class="overlay" onclick="removeOverlay(this)">
-            <div class="overlayContent" onclick="event.stopPropagation()">
-            </div>
+            <div class="overlayContent" onclick="event.stopPropagation()"></div>
+            <div class="overlayCaptured" onclick="event.stopPropagation()"></div>
         </div>
 
         <div id="gameContent" class="flexContainer">
             <div id="playersInfo" class="flexContainer flexColumn">
                 <div id="allPlayersInfo" class="flexContainer flexColumn" onload="selectPlayer(0)">
+                    {% set meInd = "" %}
                     {% for player in game.players %}
                         {% if player.getId != me.getId %}
 
@@ -26,6 +27,8 @@
                                 Objectifs sous contrôle : {{ player.ctrlCards.count }}
                             </p>
                         </div>
+                        {% else %}
+                            {% set meInd = loop.index0 %}
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -87,7 +90,7 @@
                         <div class="flex1"></div>
 
                         <div class="flexContainer flexColumn">
-                            <button>Captures</button>
+                            <button onclick="getCapturedOverlay({{ loop.index0 }})">Captures</button>
                             <button>Récompenses</button>
                         </div>
                     </div>
@@ -205,7 +208,7 @@
                     <div class="flex1"></div>
 
                     <div class="flexContainer flexColumn">
-                        <button>Captures</button>
+                        <button onclick="getCapturedOverlay({{ meInd }})">Captures</button>
                         <button>Récompenses</button>
                     </div>
                 </div>
@@ -311,30 +314,55 @@
             };
             {% endif %}
 
+            //get captured overlay
+            function getCapturedOverlay(nbr) {
+                let p = "";
+                switch (nbr){
+                    {% for player in game.players %}
+                    case {{ loop.index0 }}:
+                        {% for card in player.ctrlCards %}
+                        p += "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' ondblclick='getOverlay(cardInfo({{ card.number }}))' />";
+                        {% endfor %}
+                        break;
+                    {% endfor %}
+                }
+
+                document.querySelector(".overlayCaptured").classList.add("visible");
+                document.querySelector(".overlayCaptured").innerHTML = p;
+                document.querySelector(".overlay").classList.add("visible");
+            }
+
             //get infos string from nbr of a card
             function cardInfo(nbr) {
                 switch(nbr) {
-                //TODO for twig pour chaque case:card
                 
                 //for player in players
                 //player.cards
                 {% for player in game.players %}
                     {% for card in player.cards %}
                     case {{ card.number }}:
-                        return "<p>Cette carte de couleur {{ card.color }} rapporte {{ card.points }} points à celui qui la capture."
-                        + "<br>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir." : "Cette carte possède un pouvoir." }}"
+                        return "<p>Cette carte {{ card.color }} rapporte {{ card.points }} points à celui qui la capture."
+                        + "<br>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir." : "Elle a le pouvoir de " ~card.power~ "."}}"
                         + "<br>{{ card.resource == 'noResource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}"
                         + "<br>{{ card.player == null ? "Personne ne possède cette carte." : card.player.userName ~ " possède cette carte." }}</p>"
                         + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' />";
+                    {% endfor %}
+
+                {% for card in player.ctrlCards %}
+                    case {{ card.number }}:
+                        return "<p>Cette carte {{ card.color }} rapporte {{ card.points }} points à celui qui la capture."
+                            + "<br>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir." : "Elle a le pouvoir de " ~card.power~ "."}}"
+                            + "<br>{{ card.resource == 'noResource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}"
+                            + "<br>{{ card.player == null ? "Personne ne possède cette carte." : card.player.userName ~ " possède cette carte." }}</p>"
+                            + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' />";
                     {% endfor %}
                 {% endfor %}
                 
                 //board.objLine
 				{% for card in game.board.objLine %}
-				case {{ card.number }}:
                     case {{ card.number }}:
-                        return "<p>Cette carte de couleur {{ card.color }} rapporte {{ card.points }} points à celui qui la capture."
-                            + "<br>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir." : "Cette carte possède un pouvoir." }}"
+                        return "<p>Cette carte {{ card.color }} rapporte {{ card.points }} points à celui qui la capture."
+                            + "<br>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir." : "Elle a le pouvoir de " ~card.power~ "." }}"
                             + "<br>{{ card.resource == 'noResource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}"
                             + "<br>{{ card.player == null ? "Personne ne possède cette carte." : card.player.userName ~ " possède cette carte." }}</p>"
                             + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' />";
@@ -400,6 +428,7 @@
 
             function getOverlay(infos) {
                 document.querySelector(".overlayContent").innerHTML = infos;
+                document.querySelector(".overlayContent").classList.add("visible");
                 document.querySelector(".overlay").classList.add("visible");
 
             }
@@ -407,17 +436,23 @@
             function removeOverlay(/* element */) {
                 document.querySelector(".overlay").classList.remove("visible");
                 document.querySelector(".overlayContent").innerHTML = "";
+                document.querySelector(".overlayContent").classList.remove("visible");
+                document.querySelector(".overlayCaptured").classList.remove("visible");
+                document.querySelector(".overlayCaptured").innerHTML = "";
             }
 
             function validate() {
+                alert(JSON.stringify(action));
                 if (gottaRemove == 0) {
                     if(JSON.stringify(action) === "{}") {
                         if (confirm("Certain de ne rien vouloir jouer ?")) {
+                            action.type = "{{ game.getState }}";
                             alert("Votre coup a été joué.");
                             sendAction();
                             resetSelected();
                         }
                     } else {
+                        action.type = "{{ game.getState }}";
                         alert("Votre coup a été joué.");
                         sendAction();
                         resetSelected();
@@ -691,9 +726,6 @@
                             "{{ me.userName }}<br>\n" +
                             "Légions :<br>\n" +
                             legion + "/{{ me.legionMax }}<br>\n" +
-                            "Score :<br>\n" +
-                            "{{ me.score }}\n" +
-                            "<br>\n" +
                             "Resssources :<br>\n" +
                             "Blé : {{ me.wheat }}<br>\n" +
                             "Or : {{ me.gold }}<br>\n" +
@@ -753,9 +785,6 @@
                         "{{ me.userName }}<br>\n" +
                         "Légions :<br>\n" +
                         legion + "/{{ me.legionMax }}<br>\n" +
-                        "Score :<br>\n" +
-                        "{{ me.score }}\n" +
-                        "<br>\n" +
                         "Resssources :<br>\n" +
                         "Blé : {{ me.wheat }}<br>\n" +
                         "Or : {{ me.gold }}<br>\n" +
@@ -816,9 +845,6 @@
                             "{{ me.userName }}<br>\n" +
                             "Légions :<br>\n" +
                             legion + "/{{ me.legionMax }}<br>\n" +
-                            "Score :<br>\n" +
-                            "{{ me.score }}\n" +
-                            "<br>\n" +
                             "Resssources :<br>\n" +
                             "Blé : {{ me.wheat }}<br>\n" +
                             "Or : {{ me.gold }}<br>\n" +
