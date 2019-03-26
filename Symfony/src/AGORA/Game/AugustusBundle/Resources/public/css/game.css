@@ -45,6 +45,23 @@ body {
     cursor: pointer; /* Add a pointer on hover */
 }
 
+.overlayCaptured {
+    margin: 5px;
+    cursor: default;
+    height: 70%;
+    width: 55%;
+    top: 10%;
+    left: 35%;
+    position: absolute;
+    padding: 6px;
+    background-color: moccasin;
+    color: #bfaaa0;
+    font-size: 150%;
+    text-align: center;
+    border-radius: 20px;
+    visibility: hidden;
+}
+
 .overlayContent {
     margin: 5px;
     cursor: default;
@@ -61,6 +78,8 @@ body {
     font-size: 150%;
     text-align: center;
     border-radius: 20px;
+
+    visibility: hidden;
 }
 
 .action {

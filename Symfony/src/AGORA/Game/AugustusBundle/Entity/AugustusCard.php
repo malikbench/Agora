@@ -89,6 +89,11 @@ class AugustusCard
      */
     private $player;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusPlayer", cascade={"persist"})
+     */
+    private $playerCtrl;
+
     public function __construct(AugustusBoard $boardId, int $number, string $color, string $resource, int $points, string $power, Array $tokens)
     {
         $this->tokens = $tokens;
