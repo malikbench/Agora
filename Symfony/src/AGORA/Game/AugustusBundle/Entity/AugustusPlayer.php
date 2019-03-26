@@ -83,7 +83,7 @@ class AugustusPlayer
     private $cards;
 
     /**
-     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="player", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="playerCtrl", cascade={"persist"})
      */
     private $ctrlCards;
 
@@ -410,7 +410,7 @@ class AugustusPlayer
     public function addCtrlCard(\AGORA\Game\AugustusBundle\Entity\AugustusCard $ctrlCard)
     {
         $this->ctrlCards[] = $ctrlCard;
-
+        $card->setPlayerCtrl($this);
         return $this;
     }
 
