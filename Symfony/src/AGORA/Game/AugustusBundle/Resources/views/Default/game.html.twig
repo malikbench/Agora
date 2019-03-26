@@ -19,13 +19,16 @@
             <div id="playersInfo" class="flexContainer flexColumn">
                 <div id="allPlayersInfo" class="flexContainer flexColumn" onload="selectPlayer(0)">
                     {% for player in game.players %}
-                        <div class="playerInfo" onclick="selectPlayer(this, {{ loop.index0 }} )">
+                        {% if player.getId != me.getId %}
+
+                            <div class="playerInfo" onclick="selectPlayer(this, {{ loop.index0 }} )">
                             <p class="p">
                                 {{ player.userName ? player.userName : "null" }}<br>
                                 Légions : {{ player.legion }}/{{ player.legionMax }}<br>
                                 Objectifs sous contrôle : {{ player.ctrlCards.count }}
                             </p>
                         </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
 
@@ -64,7 +67,8 @@
                 <div id="playerBar" class="flexContainer flexRow">
 
                     {% for player in game.players %}
-                    <div class="selectedPlayerInfo flexContainer flexRow" style="display: none">
+
+                        <div class="selectedPlayerInfo flexContainer flexRow" style="display: none">
                         
 
                         <div class="flex1"></div>
@@ -438,18 +442,7 @@
                 {% endif %}
 			}
 
-            /*
-            //TODO validate
-            // -> ajouter un champ type à action (voir Slack)
-            // -> verifier toutes les conditions pour chaque pouvoir avant de valider l'envoi d'une requête
 
-            //TODO removeAllLegion
-            // verifier pour validate que
-            // gottaRemoveAllTokenOnCard == false
-
-            //TODO moveLegion
-            // pour validate, addAction == removeAction
-            */
 
             // TODO
             // verifier pour validate que
