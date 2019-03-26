@@ -4,7 +4,7 @@ namespace AGORA\Game\AugustusBundle\Entity;
 
 abstract class AugustusColor
 {
-    const SENATOR    = "senator";
+    const SENATOR  = "senator";
     const GREEN = "green";
     const PINK = "pink";
     const ORANGE  = "orange";
