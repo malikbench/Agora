@@ -128,7 +128,7 @@ class AugustusPlayerModel {
                 $player->setGold($player->getGold() + 1);
                 break;
         }
-        $player->ctrlCards[] = $card;
+        $player->addCtrlCard($card);
         $player->cards->removeElement($card);
         $this->manager->flush();
     }
