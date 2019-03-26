@@ -23,7 +23,7 @@
                             <p class="p">
                                 {{ player.userName ? player.userName : "null" }}<br>
                                 Légions : {{ player.legion }}/{{ player.legionMax }}<br>
-                                Objectifs sous contrôle : {{ player.ctrlCards|length }}
+                                Objectifs sous contrôle : {{ player.ctrlCards.count }}
                             </p>
                         </div>
                     {% endfor %}
@@ -36,9 +36,6 @@
                         {{ me.userName }}<br>
                         Légions :<br>
                         {{ me.legion }}/{{ me.legionMax }}<br>
-                        Score :<br>
-                        {{ me.score }}
-                        <br>
                         Resssources :<br>
                         Blé : {{ me.wheat }}<br>
                         Or : {{ me.gold }}<br>
@@ -214,7 +211,7 @@
                 <div id="buttons" class="flexContainer flexRow">
                     <div class="flex1"></div>
                     <button id="valider" onclick="validate()">Valider</button>
-                    <button id="annuler" onclick="resetSelected()">Annuler</button><!-- onclick : devrait peut-être refresh la page -->
+                    {#<button id="annuler" onclick="resetSelected()">Annuler</button><!-- onclick : devrait peut-être refresh la page -->#}
                     <div class="flex1"></div>
                 </div>
             </div>
@@ -262,6 +259,7 @@
 
         <!-- SCRIPTS -->
         <script>
+            let action = {};
             let gottaRemove = 0;
             let gottaRemoveAllTokenOnCard = false;
             let gotToCompleteCard = false;
@@ -410,29 +408,26 @@
             }
 
             function validate() {
-                //DO VARIOUS THINGS
-                //TODO
                 if (gottaRemove == 0) {
-                    let phase = "{{ game.state ?? null }}";
-
-                    switch (phase) {
-                        case "legion": //Placement Légion
-                            putLegion();
-                            break;
-                        case "aveCesarCard": //Ave Cesar Pouvoir et ressource
-                            getRessource();
-                            break;
-                        case "aveCesarLoot": //Ave Cesar Loot
-                            takeLoot();
-                            break;
-                        default: //
-                            console.log('Sorry, there is a problem of phase (validate function)');
+                    if(JSON.stringify(action) === "{}") {
+                        if (confirm("Certain de ne rien vouloir jouer ?")) {
+                            alert("Votre coup a été joué.");
+                            sendAction();
+                            resetSelected();
+                        }
+                    } else {
+                        alert("Votre coup a été joué.");
+                        sendAction();
+                        resetSelected();
                     }
-                    resetSelected();
+                } else {
+                    alert("Vous devez encore retiré des légions.");
+
                 }
             }
 
-			function putLegion() {
+
+            function putLegion() {
                 {% if me.getLegion == 0 %}
                 document.querySelectorAll(".cardAction").forEach( function (ee) {
                     ee.lastElementChild.innerHTML = "<p>Vous n'avez plus de legion libre, si vous le souhaitez vous pouvez déplacer une légion.</p>";
@@ -440,7 +435,6 @@
 
                 {% else %}
 				//action.from & to
-                sendAction();
                 {% endif %}
 			}
 
@@ -448,11 +442,11 @@
             //TODO validate
             // -> ajouter un champ type à action (voir Slack)
             // -> verifier toutes les conditions pour chaque pouvoir avant de valider l'envoi d'une requête
-            
+
             //TODO removeAllLegion
-            // verifier pour validate que 
+            // verifier pour validate que
             // gottaRemoveAllTokenOnCard == false
-            
+
             //TODO moveLegion
             // pour validate, addAction == removeAction
             */
@@ -470,10 +464,6 @@
                 {% endif %}
             }
 
-			function sendAction(path) {
-                //TODO send via webSocket
-				console.log(action);
-			}
 
             function resetSelected() {
                 let board = document.querySelectorAll(".selectedBoard");
@@ -521,7 +511,7 @@
             let removeAction = 1;
             {% endif %}
             let legion = {{ me.legion ?? 0 }};
-            let action = {};
+            action = {};
             let selectedToken = {};
             let selectedCard = {};
             function selectToken(e, indToken, indCard) {
@@ -733,7 +723,7 @@
             {# Cas MOVE LEGION #}
             let addAction = {{ me.legionMax - me.legion }};
             let removeAction = addAction;
-            let action = {};
+            action = {};
             let selectedToken = {};
             let selectedCard = {};
             //MOVE LEGION version
@@ -973,14 +963,15 @@
             }(DOMParser));
 
         let augustusSocket = null;
-        function sendAction(action) {
+        function sendAction() {
             let message = {
                 gameId: {{game.id}},
                 playerId: {{me.id}},
                 action: action
             };
-
+            action = {};
             return augustusSocket.send(JSON.stringify(message));
+
         }
 
         
@@ -1006,8 +997,8 @@
         //on envoie un object la socket avec le type connect
         augustusSocket.onopen = function (event) {
             console.info("Connexion étabie.");
-            let action = {type: "connect"};
-            sendAction(action);
+            action = {type: "connect"};
+            sendAction();
 
 
              this.onclose = function (event) {
