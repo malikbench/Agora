@@ -110,6 +110,22 @@ class GameController extends Controller {
         );
     }
 
+    private function renderBody($gameId, $playerId) {
+        $service = $this->container->get('agora_game.augustus');
+
+        $game = $service->getGame($gameId);
+        $player = $service->getPlayerFromId($playerId, $gameId);
+
+        //Envoie Au twig tout les infomartions qu'il doit afficher
+        return $this->render('AugustusBundle:Default:gameBody.html.twig',
+            array(
+                'game'  => $game,
+                'board' => $game->getBoard(),
+                'me'    => $player,
+            )
+        );
+    }
+
 
     
     public function handleAction($conn, $gameId, $playerId, $action) {
@@ -121,7 +137,11 @@ class GameController extends Controller {
             foreach ($service->getPlayers($gameId) as $player) {
                 $c = $this->connectionStorage->getConnection($gameId, $player->getId());
 
-                $c->send($this->renderIndex($gameId, $player->getId()));
+                echo "send body to player : ";
+                $id = $player->getId();
+                echo "$id\n";
+
+                $c->send($this->renderBody($gameId, $player->getId()));
                 return;
             }
         }
@@ -187,7 +207,7 @@ class GameController extends Controller {
             foreach ($service->getPlayers($gameId) as $player) {
                 $c = $this->connectionStorage->getConnection($gameId, $player->getId());
 
-                $c->send($this->renderIndex($gameId, $player->getId()));
+                $c->send($this->renderBody($gameId, $player->getId()));
             }
             //return
         }
