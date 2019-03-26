@@ -110,7 +110,10 @@ class GameController extends Controller {
         );
     }
 
-    private function renderBody($gameId, $playerId) {
+
+
+
+    public function bodyAction($gameId, $playerId) {
         $service = $this->container->get('agora_game.augustus');
 
         $game = $service->getGame($gameId);
@@ -125,8 +128,6 @@ class GameController extends Controller {
             )
         );
     }
-
-
     
     public function handleAction($conn, $gameId, $playerId, $action) {
         $service = $this->container->get('agora_game.augustus');
@@ -141,9 +142,10 @@ class GameController extends Controller {
                 $id = $player->getId();
                 echo "$id\n";
 
-                $c->send($this->renderBody($gameId, $player->getId()));
-                return;
+                $c->send($this->bodyAction($gameId, $player->getId()));
             }
+
+            return;
         }
 
         $player = $service->getPlayerFromId($playerid, $gameId);
@@ -207,7 +209,7 @@ class GameController extends Controller {
             foreach ($service->getPlayers($gameId) as $player) {
                 $c = $this->connectionStorage->getConnection($gameId, $player->getId());
 
-                $c->send($this->renderBody($gameId, $player->getId()));
+                $c->send($this->bodyAction($gameId, $player->getId()));
             }
             //return
         }
