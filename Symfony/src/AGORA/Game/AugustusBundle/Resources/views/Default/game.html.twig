@@ -5,8 +5,6 @@
         <title>Augustus - </title>
         <link rel="stylesheet" type="text/css" href="{{ asset('bundles/augustus/css/game.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('bundles/agoragameavecesar/css/tchat.css') }}">
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-        <script> //let playerUsername = "";</script>
     </head>
 
     <body>
@@ -907,52 +905,6 @@
 
 
     <script>
-            /*
-             * DOMParser HTML extension
-             * 2012-02-02
-             *
-             * By Eli Grey, http://eligrey.com
-             * Public domain.
-             * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
-             */
-
-            /*! @source https://gist.github.com/1129031 */
-            /*global document, DOMParser*/
-
-            (function(DOMParser) {
-                "use strict";
-                var DOMParser_proto = DOMParser.prototype
-                    , real_parseFromString = DOMParser_proto.parseFromString;
-
-                // Firefox/Opera/IE throw errors on unsupported types
-                try {
-                    // WebKit returns null on unsupported types
-                    if ((new DOMParser).parseFromString("", "text/html")) {
-                        // text/html parsing is natively supported
-                        return;
-                    }
-                } catch (ex) {}
-
-                DOMParser_proto.parseFromString = function(markup, type) {
-                    if (/^\s*text\/html\s*(?:;|$)/i.test(type)) {
-                        var doc = document.implementation.createHTMLDocument("")
-                            , doc_elt = doc.documentElement
-                            , first_elt;
-
-                        doc_elt.innerHTML = markup;
-                        first_elt = doc_elt.firstElementChild;
-
-                        if (doc_elt.childElementCount === 1
-                            && first_elt.localName.toLowerCase() === "html") {
-                            doc.replaceChild(first_elt, doc_elt);
-                        }
-
-                        return doc;
-                    } else {
-                        return real_parseFromString.apply(this, arguments);
-                    }
-                };
-            }(DOMParser));
 
         let augustusSocket = null;
         function sendAction(action) {
@@ -975,6 +927,7 @@
             //On enlève le port
             urlSock = urlSock.split(":");
             urlSock = urlSock[0];
+            console.log('ws://'+ urlSock +':8088');
             augustusSocket = new WebSocket('ws://'+ urlSock +':8088');
         } catch (e) {
             console.error("error on opening wSocket :\n" + e);
@@ -997,12 +950,11 @@
              };
              //recoit un message -> change body according to message
              this.onmessage = function (event) {
-                 let newBody = document.createElement("body");
-                 let receivedMessage = new DOMParser().parseFromString(event.data, "text/html");
-                 let contentOfMessage = receivedMessage.body;
-                 newBody.appendChild(contentOfMessage);
-                 document.body = newBody;
-                 console.log("Message: ", event.data);
+                var lines = event.data.split('\n');
+                lines.splice(0,3);
+                var newBody = lines.join('\n');
+                console.log(newBody);
+                document.body.innerHTML = newBody;
              };
 
         };
@@ -1010,3 +962,5 @@
 
     </script>
 </html>
+
+
