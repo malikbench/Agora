@@ -95,7 +95,7 @@ class AugustusGameModel {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
         $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
-        $player = $players->findOneById($playerid);
+        $player = $players->findOneById($playerId);
         
         $advantage = count(($player->getCtrlCards()) - 1) * 2;
         foreach ($game->getPlayers() as $gamer) {
@@ -146,7 +146,7 @@ class AugustusGameModel {
                 $players->captureCard($game->getAffectedPlayer(), $card->getId());
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
                 $this->changeWheatOwner($id, $game->getAffectedPlayer());
-                if ($states[0] == "AveCesar") {
+                if ($game->getState()[0] == "AveCesar") {
                     $card->doPower();
                 }
                 if ($players->getNbOfCardColor($card->getPlayer(), $card->getColor()) == 3) {
