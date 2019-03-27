@@ -66,11 +66,10 @@ class AugustusPlayerModel {
 
         $this->cardModel->captureToken($idCard, $token);
         
-        $player->legion = $player->legion - 1;
+        $player->setLegion($player->getLegion()- 1);
         echo "Bonjour1";
 
-        $player->history = [$idCard, $token];
-        
+
         $this->manager->flush();
     }
 
@@ -86,7 +85,7 @@ class AugustusPlayerModel {
 
         $player->legion = $player->legion + 1;
 
-        $player->history = [$idCard, $token];
+//        $player->history = [$idCard, $token];
         
         $this->manager->flush();
     }

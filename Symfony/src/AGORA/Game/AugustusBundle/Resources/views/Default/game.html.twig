@@ -220,7 +220,7 @@
                          onclick="selectHand(this)" ondblclick="getOverlay(cardInfo({{ card.number }}))">
                         {% for token in card.tokens %}
                             {% if card.ctrlTokens[loop.index0] %}
-                                <img src='../../img/Token/legion.png' alt="" class="legion"
+                                <img src='{{ asset('bundles/augustus/img/Token/legion.png') }}' alt="" class="legion"
                                      style="top: {{ 31 * loop.index }}px;">
                             {% endif %}
                         {% endfor %}
