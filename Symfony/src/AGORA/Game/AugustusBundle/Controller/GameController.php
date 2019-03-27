@@ -153,7 +153,7 @@ class GameController extends Controller {
                         $card = $player->getCards()[$action->removeToken->card[$i]];
 
                         $card->getCtrlTokens()[$action->removeToken->token[$i]];
-                        $player->setLegion($player->getLegion() + 1);
+                        $service->playerModel->removeLegionFromCard($player->getId(), $card->getId(), $action->addToken->token[$i]);
                     }
                 }
                 if(isset($action->addToken)) {
@@ -162,7 +162,6 @@ class GameController extends Controller {
 
                         $card->getCtrlTokens()[$action->addToken->token[$i]];
                         $service->playerModel->putLegionOnCard($player->getId(), $card->getId(), $action->addToken->token[$i]);
-                        // $player->setLegion($player->getLegion() - 1);
                     }
                 }
 
