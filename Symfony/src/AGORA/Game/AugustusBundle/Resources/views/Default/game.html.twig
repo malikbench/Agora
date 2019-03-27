@@ -303,6 +303,14 @@
 
     <!-- SCRIPTS -->
     <script>
+
+        let logToken = null;
+        logToken = function () {
+            return "{{ game.getToken }}";
+        }
+
+
+
         let action = {};
         let gottaRemove = 0;
         let gottaRemoveAllTokenOnCard = false;
@@ -1022,6 +1030,10 @@
                     alert('erreur lors du rafraîchissement de l\'affichage');
                   } else {
                     document.body.innerHTML = xhr.response;
+
+                    let scripts = document.body.getElementsByTagName('script')[0].innerHTML;
+                    console.log(scripts);
+                    eval(scripts);
                   }
                 };
 
