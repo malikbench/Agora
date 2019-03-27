@@ -67,8 +67,6 @@ class AugustusPlayerModel {
         $this->cardModel->captureToken($idCard, $token);
         
         $player->setLegion($player->getLegion()- 1);
-        echo "Bonjour1";
-
 
         $this->manager->flush();
     }
@@ -83,9 +81,7 @@ class AugustusPlayerModel {
 
         $this->cardModel->getBackToken($idCard, $token);
 
-        $player->legion = $player->legion + 1;
-
-//        $player->history = [$idCard, $token];
+        $player->setLegion($player->getLegion() + 1);
         
         $this->manager->flush();
     }
@@ -97,11 +93,8 @@ class AugustusPlayerModel {
 
         $player = $players->findOneById($idPlayer);
 
-        echo "Bonjour2";        
         $this->cardModel->getBackToken($idCardSource, $tokenSource);
         $cardModel->captureToken($idCardDest, $tokenDest);
-
-        $player->history = [$idCardDest, $tokenDest];
         
         $this->manager->flush();
     }
