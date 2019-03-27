@@ -161,7 +161,8 @@ class GameController extends Controller {
                         $card = $player->getCards()[$action->addToken->card[$i]];
 
                         $card->getCtrlTokens()[$action->addToken->token[$i]];
-                        $player->setLegion($player->getLegion() - 1);
+                        $service->playerModel->putLegionOnCard($player->getId(), $card->getId(), $action->addToken->token[$i]);
+                        // $player->setLegion($player->getLegion() - 1);
                     }
                 }
 
