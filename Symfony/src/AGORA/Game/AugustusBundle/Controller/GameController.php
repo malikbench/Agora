@@ -144,26 +144,28 @@ class GameController extends Controller {
             return;
         }
 
-        $player = $service->getPlayerFromId($playerid, $gameId);
+        $player = $service->getPlayerFromId($playerId, $gameId);
 
         switch ($action->type) {
             case "legion":
-                for ($i = 0; $i < count($action->removeToken->token); $i++) {
-                    $card = $player->cards[$action->removeToken->card[i]];
+                if(isset($action->removeToken)) {
+                    for ($i = 0; $i < count($action->removeToken->token); $i++) {
+                        $card = $player->getCards()[$action->removeToken->card[$i]];
 
-                    $card->ctrlTokens[$action->removeToken->token[i]];
-                    $player->setLegion($player->getLegion() + 1);
+                        $card->getCtrlTokens()[$action->removeToken->token[$i]];
+                        $player->setLegion($player->getLegion() + 1);
+                    }
+                }
+                if(isset($action->addToken)) {
+                    for ($i = 0; $i < count($action->addToken->token); $i++) {
+                        $card = $player->getCards()[$action->addToken->card[$i]];
+
+                        $card->getCtrlTokens()[$action->addToken->token[$i]];
+                        $player->setLegion($player->getLegion() - 1);
+                    }
                 }
 
-                for ($i = 0; $i < count($action->addToken->token); $i++) {
-                    $card = $player->cards[$action->addToken->card[i]];
-
-                    $card->ctrlTokens[$action->addToken->token[i]];
-                    $player->setLegion($player->getLegion() - 1);
-                }
-
-
-                $this->manager->flush();
+                $service->manager->flush();
                 break;
             case "aveCesar":
                 if ($action->aveCesar->takeLoot) {
@@ -196,7 +198,7 @@ class GameController extends Controller {
         }
 
 
-        $service->getPlayerFromId($playerId)->setIsLock(true);
+        $service->getPlayerFromId($playerId,$gameId)->setIsLock(true);
         if ($service->areAllPlayersReady($gameId)) {
             $players = $service->getPlayers($gameId);
 

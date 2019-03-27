@@ -3,6 +3,7 @@
 namespace AGORA\Game\AugustusBundle\Model;
 
 use Doctrine\ORM\EntityManager;
+use AGORA\Game\AugustusBundle\Entity\AugustusToken;
 
 class AugustusBoardModel {
   

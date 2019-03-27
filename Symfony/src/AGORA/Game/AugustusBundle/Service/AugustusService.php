@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManager;
 
 class AugustusService {
 
-    protected $manager;
+    public $manager;
     public $gameModel;
     public $playerModel;
     public $cardModel;

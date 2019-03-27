@@ -328,7 +328,7 @@ class AugustusPlayer
     public function setIsLock($isLock)
     {
         $this->isLock = $isLock;
-        $this->$history = null;
+        $this->history = null;
         return $this;
     }
 
