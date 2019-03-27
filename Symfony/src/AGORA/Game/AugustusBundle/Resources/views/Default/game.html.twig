@@ -5,6 +5,40 @@
         <title>Augustus - </title>
         <link rel="stylesheet" type="text/css" href="{{ asset('bundles/augustus/css/game.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('bundles/agoragameavecesar/css/tchat.css') }}">
+        <script>
+            {#let logToken = null;#}
+            let getCapturedOverlay = null;
+            let cardInfo = null;
+            let lootInfo = null;
+            let advantageInfo = null;
+            let getOverlay = null;
+            let removeOverlay = null;
+            let validate = null;
+            let doCompleteCard = null;
+            let resetSelected = null;
+            let selectHand = null;
+            let removeAllLegionOnCard = null;
+            let selectToken = null;
+            let removeSelectedLegion = null;
+            let addBestToken = null;
+            let selectBoard = null;
+            let resetSelectedPlayer = null;
+            let takeLoot = null;
+            let selectPlayer = null;
+            let selectObj = null;
+            let takeObj = null;
+
+            let action = {};
+            let gottaRemove = 0;
+            let gottaRemoveAllTokenOnCard = false;
+            let gotToCompleteCard = false;
+            let addAction = 0;
+            let removeAction = 0;
+            let legion = 0;
+            let selectedToken = {};
+            let selectedCard = {};
+            let selectedObj = -1;
+        </script>
     </head>
 
     <body>
@@ -304,17 +338,15 @@
     <!-- SCRIPTS -->
     <script>
 
-        let logToken = null;
-        logToken = function () {
-            return "{{ game.getToken }}";
-        }
 
+        {#logToken = function () {#}
+            {#return "{{ game.getToken }}";#}
+        {#}#}
 
-
-        let action = {};
-        let gottaRemove = 0;
-        let gottaRemoveAllTokenOnCard = false;
-        let gotToCompleteCard = false;
+        action = {};
+        gottaRemove = 0;
+        gottaRemoveAllTokenOnCard = false;
+        gotToCompleteCard = false;
         {% if (game.getState() == "RemoveOneLegion" and (me.legionMax - me.legion >= 1) and game.affectedPlayer() == me.getId() or
             (game.getState() == "RemoveTwoLegion" and me.legionMax - me.legion == 1)) %}
         gottaRemove = 1;
@@ -361,7 +393,7 @@
         {% endif %}
 
         //get captured overlay
-        function getCapturedOverlay(nbr) {
+        getCapturedOverlay = function (nbr) {
             let p = "";
             switch (nbr) {
                     {% for player in game.players %}
@@ -376,10 +408,10 @@
             document.querySelector(".overlayCaptured").classList.add("visible");
             document.querySelector(".overlayCaptured").innerHTML = p;
             document.querySelector(".overlay").classList.add("visible");
-        }
+        };
 
         //get infos string from nbr of a card
-        function cardInfo(nbr) {
+        cardInfo = function (nbr) {
             switch (nbr) {
 
                 //for player in players
@@ -416,10 +448,10 @@
                 default:
                     return "could not find info for card n" + nbr;
             }
-        }
+        };
 
         //get the infos string from nbr of a loot
-        function lootInfo(loot) {
+        lootInfo = function (loot) {
             switch (loot) {
                 case '2':
                     return advantageInfo(2, 2);
@@ -460,34 +492,34 @@
                         "<p>Elle rapportera  5 poins lors du décompte final.</p>" +
                         "<img src=\"{{ asset('bundles/augustus/img/Loot/LootWheat.jpg') }}\" height='100' />";
                 default:
-                    return "could not find info for card n" + nbr;
+                    return "could not find info for card n" + loot;
             }
-        }
+        };
 
-        function advantageInfo(obj, points) {
+        advantageInfo = function (obj, points) {
             return "<p>Il vous faut contrôler " + obj + " objectifs pour saisir cette carte.</p>" +
                 "<p>Elle vous rapportera " + points + " points lors du décompte final.</p>" +
                 "<p>Vous ne pouvez saisir qu'une seule carte récompense lors de la partie.</p>" +
                 "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot" + obj + "Cards.jpg\" height='100' />";
-        }
+        };
 
 
-        function getOverlay(infos) {
+        getOverlay = function (infos) {
             document.querySelector(".overlayContent").innerHTML = infos;
             document.querySelector(".overlayContent").classList.add("visible");
             document.querySelector(".overlay").classList.add("visible");
 
-        }
+        };
 
-        function removeOverlay(/* element */) {
+        removeOverlay = function () {
             document.querySelector(".overlay").classList.remove("visible");
             document.querySelector(".overlayContent").innerHTML = "";
             document.querySelector(".overlayContent").classList.remove("visible");
             document.querySelector(".overlayCaptured").classList.remove("visible");
             document.querySelector(".overlayCaptured").innerHTML = "";
-        }
+        };
 
-        function validate() {
+        validate = function () {
             if (gottaRemove == 0) {
                 if (JSON.stringify(action) === "{}") {
                     if (confirm("Certain de ne rien vouloir jouer ?")) {
@@ -508,36 +540,18 @@
                 alert("Vous devez encore retiré des légions.");
 
             }
-        }
+        };
 
-
-        function putLegion() {
-            {% if me.getLegion == 0 %}
-            document.querySelectorAll(".cardAction").forEach(function (ee) {
-                ee.lastElementChild.innerHTML = "<p>Vous n'avez plus de legion libre, si vous le souhaitez vous pouvez déplacer une légion.</p>";
-            });
-
-            {% else %}
-            //action.from & to
-            {% endif %}
-        }
-
-
-        // TODO
-        // verifier pour validate que
-        // gotToCompleteCard == false
-        // selectionner une carte qui n'est pas celle capturée,
-        // le back la passe de cards à ctrlCards
-        function doCompleteCard(indCard) {
-            {% if game.affectedPlayer() == me.getId() %}
+        doCompleteCard = function (indCard) {
+            {% if game.affectedPlayer() == me.getId() and game.getState() == "completeCard" %}
             action.completeCard = indCard;
             document.querySelector("#valider").disabled = false;
             gotToCompleteCard = false;
             {% endif %}
-        }
+        };
 
 
-        function resetSelected() {
+        resetSelected = function () {
             let board = document.querySelectorAll(".selectedBoard");
             let hand = document.querySelectorAll(".selectedHand");
 
@@ -547,9 +561,9 @@
             hand.forEach(function (element) {
                 element.classList.remove("selectedHand");
             });
-        }
+        };
 
-        function selectHand(e) {
+        selectHand = function (e) {
             resetSelected();
             e.classList.add("selectedHand");
 
@@ -560,34 +574,34 @@
 
             e.querySelector(".cardAction").style.visibility = "visible";
             document.querySelector(".action").appendChild(e.querySelector(".cardAction"));
-        }
+        };
 
         //FONCTION POUR LE POUVOIR "Retirer toutes les légions d'une carte"
-        function removeAllLegionOnCard(indCard) {
+        removeAllLegionOnCard = function (indCard) {
             {% if game.affectedPlayer() == me.getId() %}
             action.removeAllLegion = indCard;
             document.querySelector("#valider").disabled = false;
             gottaRemoveAllTokenOnCard = false;
             {% endif %}
-        }
+        };
 
         {% if game.state != "MoveLegion" %}
 
         {# Cas normal #}
         //FONCTION DE SELECTION DE LA LEGION A RETIRER
         {% if "Two" in game.state and game.getAffectedPlayer() == me.getId() %}
-        let addAction = 2;
-        let removeAction = 2;
+        addAction = 2;
+        removeAction = 2;
         {% elseif game.state == "OneLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
-        let addAction = 1;
-        let removeAction = 1;
+        addAction = 1;
+        removeAction = 1;
         {% endif %}
-        let legion = {{ me.legion ?? 0 }};
+        legion = {{ me.legion ?? 0 }};
         action = {};
-        let selectedToken = {};
-        let selectedCard = {};
+        selectedToken = {};
+        selectedCard = {};
 
-        function selectToken(e, indToken, indCard) {
+        selectToken = function (e, indToken, indCard) {
             document.querySelectorAll(".selectedToken").forEach(function (ee) {
                 ee.classList.remove("selectedToken");
             });
@@ -596,10 +610,10 @@
             selectedToken.ind = indToken;
             selectedToken.elem = e;
             selectedCard.ind = indCard;
-        }
+        };
 
         //FONCTION DE RETIRAGE DE LA LEGION SELECTIONNE
-        function removeSelectedLegion() {
+        removeSelectedLegion = function () {
             if (selectedToken !== {} && selectedCard !== {}) {
                 if (typeof (action.removeToken) != 'undefined') {
                     action.removeToken = {};
@@ -627,23 +641,14 @@
                     document.querySelector("#instructions").firstElementChild.innerHTML = "Vous pouvez valider vos actions";
                 }
 
-                legion += 1;
-                document.querySelector("#myInfo").innerHTML = "<p class=\"p\">\n" +
-                    "{{ me.userName }}<br>\n" +
-                    "Légions :<br>\n" +
-                    legion + "/{{ me.legionMax }}<br>\n" +
-                    "Resssources :<br>\n" +
-                    "Blé : {{ me.wheat }}<br>\n" +
-                    "Or : {{ me.gold }}<br>\n" +
-                    "</p>";
             } else {
                 alert("Aucun emplacement selectionné");
             }
-        }
+        };
 
         // FONCTION DE POSE D'UNE LEGION
         //Vérifie si le joueur peut poser une légion sur la carte et si il le peut propose le token le plus rare
-        function addBestToken(e, listToken, listControlled, indCard) {
+        addBestToken = function (e, listToken, listControlled, indCard) {
             if (legion > 0) {
                 console.log("{{ game.getToken }}");
                 let actualToken = "{{ game.getToken }}";
@@ -767,34 +772,25 @@
                         });
                     }
 
-                    legion -= 1;
-                    document.querySelector("#myInfo").innerHTML = "<p class=\"p\">\n" +
-                        "{{ me.userName }}<br>\n" +
-                        "Légions :<br>\n" +
-                        legion + "/{{ me.legionMax }}<br>\n" +
-                        "Resssources :<br>\n" +
-                        "Blé : {{ me.wheat }}<br>\n" +
-                        "Or : {{ me.gold }}<br>\n" +
-                        "</p>";
                 } else {
                     alert("On ne peut capturer aucun token de cette carte");
                 }
             } else {
                 alert("Vous n'avez plus de légion à poser");
             }
-        }
+        };
 
         {% elseif game.state == "MoveLegion" and game.getAffectedPlayer() == me and me.legion != me.legionMax %}
 
         {# Cas MOVE LEGION #}
-        let addAction = {{ me.legionMax - me.legion }};
-        let removeAction = addAction;
+        addAction = {{ me.legionMax - me.legion }};
+        removeAction = addAction;
         action = {};
-        let selectedToken = {};
-        let selectedCard = {};
+        selectedToken = {};
+        selectedCard = {};
 
         //MOVE LEGION version
-        function selectToken(e, indToken, indCard) {
+        selectToken = function (e, indToken, indCard) {
             document.querySelectorAll(".selectedToken").forEach(function (ee) {
                 ee.classList.remove("selectedToken");
             });
@@ -803,10 +799,10 @@
             selectedToken.ind = indToken;
             selectedToken.elem = e;
             selectedCard.ind = indCard;
-        }
+        };
 
         //MOVE LEGION version
-        function removeSelectedLegion() {
+        removeSelectedLegion = function () {
             if (selectedToken !== {} && selectedCard !== {}) {
                 if (typeof (action.removeToken) == 'undefined') {
                     action.removeToken = {};
@@ -827,22 +823,13 @@
                     });
                 }
 
-                legion += 1;
-                document.querySelector("#myInfo").innerHTML = "<p class=\"p\">\n" +
-                    "{{ me.userName }}<br>\n" +
-                    "Légions :<br>\n" +
-                    legion + "/{{ me.legionMax }}<br>\n" +
-                    "Resssources :<br>\n" +
-                    "Blé : {{ me.wheat }}<br>\n" +
-                    "Or : {{ me.gold }}<br>\n" +
-                    "</p>";
             } else {
                 alert("Aucun emplacement selectionné");
             }
-        }
+        };
 
         //MOVE LEGION version
-        function addBestToken(e, listToken, listControlled, indCard) {
+        addBestToken = function (e, listToken, listControlled, indCard) {
             if (legion > 0) {
 
                 //recherche sur la carte
@@ -885,32 +872,23 @@
                         });
                     }
 
-                    legion -= 1;
-                    document.querySelector("#myInfo").innerHTML = "<p class=\"p\">\n" +
-                        "{{ me.userName }}<br>\n" +
-                        "Légions :<br>\n" +
-                        legion + "/{{ me.legionMax }}<br>\n" +
-                        "Resssources :<br>\n" +
-                        "Blé : {{ me.wheat }}<br>\n" +
-                        "Or : {{ me.gold }}<br>\n" +
-                        "</p>";
                 } else {
                     alert("On ne peut capturer aucun token de cette carte");
                 }
             } else {
                 alert("Vous n'avez plus de légion à poser");
             }
-        }
+        };
         {% endif %}
 
-        function selectBoard(e) {
+        selectBoard = function (e) {
             if ("{{ game.getState }}" === "legion") return;
 
             resetSelected();
             e.classList.add("selectedBoard");
-        }
+        };
 
-        function resetSelectedPlayer() {
+        resetSelectedPlayer = function () {
             let selected = document.querySelectorAll(".selectedPlayer")[0];
             if (selected != undefined) {
                 selected.classList.remove("selectedPlayer");
@@ -921,16 +899,16 @@
             e.forEach(function (element) {
                 element.style.display = "none";
             });
-        }
+        };
 
-        function selectPlayer(elem, i) {
+        selectPlayer = function (elem, i) {
             resetSelectedPlayer();
             elem.classList.add("selectedPlayer");
             document.querySelectorAll(".selectedPlayerInfo")[i].style.display = "flex";
-        }
+        };
 
         //SELECTIONNER LE LOOT DISPO
-        function takeLoot(choice) {
+        takeLoot = function (choice) {
             if (document.querySelectorAll(".choosenLoot").length !== 0) {
                 if (typeof (action.aveCesar) == 'undefined') {
                     action.aveCesar = {};
@@ -940,34 +918,35 @@
             } else {
                 alert("Il n'y a pas de récompenses à récupérer sur le plateau.");
             }
-        }
+        };
 
         //SELECTIONNER UN OBJECTIF DE LA OBJLINE
-        let selectedObj = -1;
+        selectedObj = -1;
 
-        function selectObj(e, indObj) {
+        selectObj = function (e, indObj) {
             document.querySelectorAll(".selectedBoard").forEach(function (ee) {
                 ee.classList.remove("selectedBoard");
             });
 
             e.classList.add("selectedBoard");
             selectedObj = indObj;
-        }
+        };
 
         //PRENDRE L'OBJECTIF SELECTIONNE
-        function takeObj() {
+        takeObj = function () {
             if (selectedObj !== -1) {
                 action.aveCesar.card = selectedObj;
                 document.querySelector(".action").lastElementChild.innerHTML = "<p>Vous avez choisi l'objectif à prendre.</p>"
             } else {
                 alert("Vous n'avez pas selectionné d'objectif.");
             }
-        }
+        };
 
         //disable all drag effect on the images
         document.querySelectorAll("img").forEach(function (imgElem) {
             imgElem.draggable = false;
         });
+
     </script>
 
     <button id="buttAcc" onclick="window.location.href = '{{ app.request.getSchemeAndHttpHost() }}'">Accueil</button>
