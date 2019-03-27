@@ -64,10 +64,10 @@ class AugustusPlayerModel {
         $player = $players->findOneById($idPlayer);
         $card = $cards->findOneById($idCard);
 
-
         $this->cardModel->captureToken($idCard, $token);
-
+        
         $player->legion = $player->legion - 1;
+        echo "Bonjour1";
 
         $player->history = [$idCard, $token];
         
@@ -98,7 +98,7 @@ class AugustusPlayerModel {
 
         $player = $players->findOneById($idPlayer);
 
-        
+        echo "Bonjour2";        
         $this->cardModel->getBackToken($idCardSource, $tokenSource);
         $cardModel->captureToken($idCardDest, $tokenDest);
 
