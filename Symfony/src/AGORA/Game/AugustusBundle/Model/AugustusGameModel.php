@@ -140,13 +140,13 @@ class AugustusGameModel {
                     $game->setNextAffecteds(array_slice($affecteds, 1));
                 }
                 break;
-            case "AveCesar":
+            case "aveCesar":
                 $card = $this->getCapturableCardFromPlayer($game->getAffectedPlayer());
                 $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
                 $players->captureCard($game->getAffectedPlayer(), $card->getId());
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
                 $this->changeWheatOwner($id, $game->getAffectedPlayer());
-                if ($game->getState()[0] == "AveCesar") {
+                if ($game->getState()[0] == "aveCesar") {
                     $card->doPower();
                 }
                 if ($players->getNbOfCardColor($card->getPlayer(), $card->getColor()) == 3) {
