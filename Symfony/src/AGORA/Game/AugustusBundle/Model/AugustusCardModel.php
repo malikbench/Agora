@@ -64,7 +64,7 @@ class AugustusCardModel {
             }
         }
 
-        return res;
+        return $res;
     }
 
     //Effectue le pouvoir lié a son type de pouvoir.

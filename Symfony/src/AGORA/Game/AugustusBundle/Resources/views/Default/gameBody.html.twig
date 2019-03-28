@@ -208,8 +208,11 @@
                                                  onclick="selectToken(this, {{ loop.index0 }}, {{ cardIndex }})">
                                         {% endif %}
                                     {% endfor %}
-
+                                    {% if me.isLock %}
+                                    <button disabled onclick="removeSelectedLegion()">Retirer</button>
+                                    {% else %}
                                     <button onclick="removeSelectedLegion()">Retirer</button>
+                                    {% endif %}
                                 {% else %}
                                     <p>Aucune légion sur cette carte a retiré</p>
 
@@ -220,10 +223,17 @@
                             </div>
                             <div>
                                 <p>Vous pouvez placer une légion sur cette carte :</p>
+                            {% if me.isLock %}
+                                <button disabled>
+                                    Placer
+                                </button>
+
+                            {% else %}
                                 <button onclick="addBestToken(this, [ '{{ card.tokens|join('\',\'') }}' ], [ '{{ card.ctrlTokens|join('\',\'') }}' ], {{ cardIndex }})">
                                     Placer
                                 </button>
-                            </div>
+                            {% endif %}
+                                </div>
                         {% endif %}
                     </div>
                 </div>

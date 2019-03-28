@@ -204,7 +204,7 @@ class GameController extends Controller {
         if ($service->areAllPlayersReady($gameId)) {
             $players = $service->getPlayers($gameId);
 
-            //applyStep
+            $service->gameModel->applyStep($gameId);
 
             foreach ($service->getPlayers($gameId) as $player) {
                 $c = $this->connectionStorage->getConnection($gameId, $player->getId());
