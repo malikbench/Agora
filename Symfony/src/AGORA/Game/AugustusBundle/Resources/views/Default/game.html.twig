@@ -160,15 +160,15 @@
                     <div class="flex1"></div>
 
                     <div id="botLoot" class="flexContainer flexRow">
-                        <img src="{{ asset('bundles/augustus/img/Loot/Lootsenator.jpg') }}" alt="Lootsenator" height="100"
+                        <img src="{{ asset('bundles/augustus/img/Loot/LootSenator.jpg') }}" alt="Lootsenator" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'senator' ))">
-                        <img src="{{ asset('bundles/augustus/img/Loot/Lootgreen.jpg') }}" alt="Lootgreen" height="100"
+                        <img src="{{ asset('bundles/augustus/img/Loot/LootGreen.jpg') }}" alt="Lootgreen" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'green' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Lootall.jpg') }}" alt="Lootall" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'all' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Lootpink.jpg') }}" alt="Lootpink" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'pink' ))">
-                        <img src="{{ asset('bundles/augustus/img/Loot/Lootorange.jpg') }}" alt="Lootorange" height="100"
+                        <img src="{{ asset('bundles/augustus/img/Loot/LootOrange.jpg') }}" alt="Lootorange" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'orange' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/LootWheat.jpg') }}" alt="LootWheat" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'wheat' ))">
@@ -577,7 +577,22 @@
                     alert("Votre coup a été joué.");
                     sendAction();
                     resetSelected();
+
                 }
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', '/game/augustus/body/{{ game.id }}/{{ me.id }}');
+                xhr.send();
+                xhr.onload = function() {
+                    if (xhr.status != 200) {
+                        alert('erreur lors du rafraîchissement de l\'affichage');
+                    } else {
+                        document.body.innerHTML = xhr.response;
+
+                        let scripts = document.body.getElementsByTagName('script')[0].innerHTML;
+                        console.log(scripts);
+                        eval(scripts);
+                    }
+                };
             } else {
                 alert("Vous devez encore retiré des légions.");
 
@@ -1006,7 +1021,7 @@
             };
             action = {};
             alert(JSON.stringify(message));
-            return augustusSocket.send(JSON.stringify(message));
+            augustusSocket.send(JSON.stringify(message));
 
         }
 
