@@ -28,6 +28,7 @@
             let selectPlayer = null;
             let selectObj = null;
             let takeObj = null;
+            let checkValidate = null;
 
             let action = {};
             let gottaRemove = 0;
@@ -88,11 +89,41 @@
             <div id="instructions">
 
                 {% if me.isLock %}
-                    <p class="p">{{ "Veuillez patienter" }}</p>
+                    <p class="p">Veuillez patienter</p>
                 {% elseif game.getState == "legion" %}
-                    <p class="p">{{ "Veuillez placer votre légion" }}</p>
+                    <p class="p">Veuillez placer votre légion</p>
                 {% elseif game.getState == "aveCesar" %}
-                    <p class="p">{{ "Choisissez votre carte" }}</p>
+                    <p class="p">Choisissez votre carte</p>
+                {% elseif game.getAffectedPlayer != me.getId and game.getState == "removeOneLegion" %}
+                    <p class="p">Choississez une Legion à retirer</p>
+                {% elseif game.getAffectedPlayer != me.getId and game.getState =="removeTwoLegion" %}
+                    <p class="p">Choisissez deux Legions à retirer</p>
+                {% elseif game.getAffectedPlayer != me.getId and game.getState == "removeAllLegion" %}
+                    <p class="p">Choississez une carte, toute les légions lui seront retiré</p>
+                {% elseif game.getAffectedPlayer == me.getId and game.getState == "oneCard" %}
+                    <p class="p">Choississez une carte, vous la capturerez</p>
+                {% elseif game.getAffectedPlayer == me.getId and game.getState == "moveLegion" %}
+                    <p class="p">Vous pouvez bouger vos légions comme vous le souhaitez</p>
+                {% elseif game.getAffectedPlayer == me.getId and game.getState == "oneLegionOnAnything" %}
+                    <p class="p">Vous pouvez placer une légion n'importe où</p>
+                {% elseif game.getAffectedPlayer == me.getId and game.getState == "twoLegionOnChariot" %}
+                    <p class="p">Vous pouvez placer deux légions sur des chars</p>
+                {% elseif game.getAffectedPlayer == me.getId and game.getState == "twoLegionOnCatapult" %}
+                    <p class="p">Vous pouvez placer deux légions sur des catapultes</p>
+                {% elseif game.getAffectedPlayer == me.getId and game.getState == "twoLegionOnAnything" %}
+                    <p class="p">Vous pouvez placer deux légions n'importe où</p>
+                {% elseif game.getAffectedPlayer == me.getId and game.getState == "twoLegionOnTeaches" %}
+                    <p class="p">Vous pouvez placer deux légions sur des enseignes</p>
+                {% elseif game.getAffectedPlayer == me.getId and game.getState == "twoLegionOnDoubleSword" %}
+                    <p class="p">Vous pouvez placer deux légions sur des doubles glaives</p>
+                {% elseif game.getAffectedPlayer == me.getId and game.getState == "twoLegionOnKnife" %}
+                    <p class="p">Vous pouvez placer deux légions sur des poignards</p>
+                {% elseif game.getAffectedPlayer == me.getId and game.getState == "twoLegionOnShield" %}
+                    <p class="p">Vous pouvez placer deux légions sur des boucliers</p>
+                {% elseif game.getAffectedPlayer != me.getId and game.getState == "removeOneCard" %}
+                    <p class="p">Vous devez retirer un de vos objectifs capturés</p>
+                {% elseif game.getAffectedPlayer == me.getId and game.getState == "completeCard" %}
+                    <p class="p">Vous pouvez capturer un de vos objectifs</p>
                 {% else %}
                     <p class="p">{{ "En attente des joueurs" }}</p>
                 {% endif %}
@@ -336,7 +367,7 @@
                         <p>Récuperer l'objectif sélectionné ?</p>
                         <button onclick="takeObj()">Prendre</button>
                     </div>
-                {% elseif game.state == "OneCard" and game.affectedPlayer() == me.getId() %}
+                {% elseif game.state == "oneCard" and game.affectedPlayer() == me.getId() %}
                     <div>
                         <p>Vous devez récuperer un des objectifs sur le terrain.</p>
                         <p>Récuperer l'objectif sélectionné ?</p>
@@ -351,11 +382,14 @@
 
     <!-- SCRIPTS -->
     <script>
-
-
-        {#logToken = function () {#}
-        {#return "{{ game.getToken }}";#}
-        {#}#}
+        checkValidate = function() {
+            if (gottaRemove >= 0 || gottaRemoveAllTokenOnCard || gotToCompleteCard || removeAction !== addAction) {
+                document.querySelector("#valider").disabled = true;
+            }
+            else {
+                document.querySelector("#valider").disabled = false;
+            }
+        };
 
         action = {
             type: "",
@@ -578,12 +612,10 @@
         };
 
         validate = function () {
-            if (gottaRemove == 0) {
                 if (JSON.stringify(action) === "{}") {
                     if (confirm("Certain de ne rien vouloir jouer ?")) {
                         action.type = "{{ game.getState }}";
-                        // action.addToken.card = [];
-                        // action.addToken.token = [];
+
                         sendAction();
                         resetSelected();
                     }
@@ -597,20 +629,16 @@
                 xhr.open('GET', '/game/augustus/body/{{ game.id }}/{{ me.id }}');
                 xhr.send();
                 xhr.onload = function() {
-                    if (xhr.status != 200) {
+                    if (xhr.status !== 200) {
                         alert('erreur lors du rafraîchissement de l\'affichage');
                     } else {
                         document.body.innerHTML = xhr.response;
-
                         let scripts = document.body.getElementsByTagName('script')[0].innerHTML;
                         console.log(scripts);
                         eval(scripts);
                     }
                 };
-            } else {
-                alert("Vous devez encore retiré des légions.");
 
-            }
         };
 
         doCompleteCard = function (indCard) {
@@ -618,6 +646,7 @@
             action.completeCard = indCard;
             document.querySelector("#valider").disabled = false;
             gotToCompleteCard = false;
+            checkValidate();
             {% endif %}
         };
 
@@ -653,6 +682,7 @@
             action.removeAllLegion = indCard;
             document.querySelector("#valider").disabled = false;
             gottaRemoveAllTokenOnCard = false;
+            checkValidate();
             {% endif %}
         };
 
@@ -684,14 +714,6 @@
 
         //FONCTION DE RETIRAGE DE LA LEGION SELECTIONNE
         removeSelectedLegion = function () {
-
-            if (action.removeToken.token == undefined) {
-                action.removeToken.token = [];
-            }
-            if (action.removeToken.token == undefined) {
-                action.removeToken.card = [];
-            }
-
             if (selectedToken !== {} && selectedCard !== {}) {
                 if (typeof (action.removeToken) != 'undefined') {
                     action.removeToken = {};
@@ -705,7 +727,6 @@
                     selectedToken.elem = null;
                     removeAction -= 1;
                 } else if (gottaRemove <= 1) {
-
                     action.removeToken.token.push(selectedToken.ind);
                     action.removeToken.card.push(selectedCard.ind);
                     document.querySelectorAll(".cardAction").forEach(function (ee) {
@@ -814,7 +835,7 @@
                 let indToken = -1;
                 listToken.forEach(function (element, index) {
                     if (actualTokens.includes(element)) {
-                        if (listControlled[index] == 0) {
+                        if (listControlled[index] === 0) {
                             indToken = index;
                         }
                     }
@@ -840,12 +861,14 @@
                     } else if (typeof (addAction) != 'undefined' && addAction === 1) {
                         action.addToken.card.push(indCard);
                         action.addToken.token.push(indToken);
+                        checkValidate();
                         document.querySelectorAll(".cardAction").forEach(function (ee) {
                             ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion ce tour, vous ne pouvez plus en poser d avantage.</p>";
                         });
                     } else {
                         action.addToken.card.push(indCard);
                         action.addToken.token.push(indToken);
+                        checkValidate();
                         document.querySelectorAll(".cardAction").forEach(function (ee) {
                             ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion ce tour, vous ne pouvez plus en poser d avantage.</p>";
                         });
@@ -873,7 +896,6 @@
             document.querySelectorAll(".selectedToken").forEach(function (ee) {
                 ee.classList.remove("selectedToken");
             });
-
             e.classList.add("selectedToken");
             selectedToken.ind = indToken;
             selectedToken.elem = e;
@@ -897,6 +919,8 @@
                 } else if (gottaRemove <= 1) {
                     action.removeToken.token.push(selectedToken.ind);
                     action.removeToken.card.push(selectedCard.ind);
+                    checkValidate();
+
                     document.querySelectorAll(".cardAction").forEach(function (ee) {
                         ee.firstElementChild.innerHTML = "<p>Vous avez retiré vos légions, vous devez finir de les repositionner.</p>";
                     });
@@ -940,12 +964,15 @@
                     } else if (typeof (addAction) != 'undefined' && addAction === 1) {
                         action.addToken.card.push(indCard);
                         action.addToken.token.push(indToken);
+                        checkValidate();
                         document.querySelectorAll(".cardAction").forEach(function (ee) {
                             ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion ce tour, vous ne pouvez plus en poser d avantage.</p>";
                         });
                     } else {
                         action.addToken.card.push(indCard);
-                        action.addToken.token.push(indToken);
+                        action.addToken.token.push(indToken)
+                        checkValidate();
+
                         document.querySelectorAll(".cardAction").forEach(function (ee) {
                             ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion ce tour, vous ne pouvez plus en poser d avantage.</p>";
                         });
@@ -962,14 +989,13 @@
 
         selectBoard = function (e) {
             if ("{{ game.getState }}" === "legion") return;
-
             resetSelected();
             e.classList.add("selectedBoard");
         };
 
         resetSelectedPlayer = function () {
             let selected = document.querySelectorAll(".selectedPlayer")[0];
-            if (selected != undefined) {
+            if (selected !== undefined) {
                 selected.classList.remove("selectedPlayer");
             }
 
