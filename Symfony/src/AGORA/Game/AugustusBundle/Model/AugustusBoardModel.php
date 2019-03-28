@@ -81,7 +81,8 @@ class AugustusBoardModel {
     $board = $boards->findOneById($idBoard);
     
     $token = $board->getTokenBag()->last();
-    $board->removeTokenFromBag($board->getTokenBag()->last());
+    
+    $board->setTokenBag($board->getTokenBag()->remove($board->getTokenBag()->count()-1));
     return $token;
   }
   
