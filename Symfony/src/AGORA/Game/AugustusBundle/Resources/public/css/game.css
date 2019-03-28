@@ -1,7 +1,7 @@
 html {
     height: 100%;
     width: 100%;
-    background-image: url('http://2.bp.blogspot.com/-mltCDri2JSY/UqzYPpWAfzI/AAAAAAAAMvQ/DkfDwR1AlI8/s1600/Tileable_stone_wall_Texture.jpg');
+    background-image: url('../img/wall.jpg');
 }
 
 body {
@@ -10,6 +10,11 @@ body {
 
 #gameContent {
     margin: 8px;
+}
+
+.marble {
+    box-shadow: inset -2px -4px 5px rgba(0, 0, 0, 0.4);
+    background-image: url('../img/marble.jpg')
 }
 
 /* FLEXBOX */
@@ -88,6 +93,9 @@ body {
 
     height: 50%;
     width: 15em;
+
+    box-shadow: inset -2px -4px 5px rgba(0, 0, 0, 0.4);
+    background-image: url('../img/marble.jpg')
 }
 
 .visible {
