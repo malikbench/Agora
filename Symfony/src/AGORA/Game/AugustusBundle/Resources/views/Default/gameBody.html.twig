@@ -84,7 +84,7 @@
 
                     <div class="flexContainer flexColumn">
                         <button onclick="getCapturedOverlay({{ loop.index0 }})">Captures</button>
-                        <button>Récompenses</button>
+                        <button onclick="getTreasureOverlay({{ loop.index0 }})">Récompenses</button>
                     </div>
                 </div>
             {% endfor %}
@@ -203,8 +203,7 @@
 
                                     {% for token in card.tokens %}
                                         {% if card.ctrlTokens[loop.index0] %}
-
-                                            <img class="token" src='{{ asset('bundles/augustus/img/Token/Token' ~ token ~'.jpg') }}' alt=""
+                                            <img class="token" src='{{ asset('bundles/augustus/img/Token/Token' ~  token  ~'.jpg') }}' alt="{{ token }}"
                                                  height="32"
                                                  onclick="selectToken(this, {{ loop.index0 }}, {{ cardIndex }})">
                                         {% endif %}
@@ -237,7 +236,7 @@
 
             <div class="flexContainer flexColumn">
                 <button onclick="getCapturedOverlay({{ meInd }})">Captures</button>
-                <button>Récompenses</button>
+                <button onclick="getTreasureOverlay({{ meInd }})">Récompenses</button>
             </div>
         </div>
 
@@ -303,7 +302,17 @@
     {#return "{{ game.getToken }}";#}
     {#}#}
 
-    action = {};
+    action = {
+        type: "",
+        removeToken: {
+            token: [],
+            card: []
+        },
+        addToken: {
+            card: [],
+            token: []
+        }
+    };
     gottaRemove = 0;
     gottaRemoveAllTokenOnCard = false;
     gotToCompleteCard = false;
@@ -370,43 +379,39 @@
         document.querySelector(".overlay").classList.add("visible");
     };
 
-    {#getTreasureOverlay = function (nbr) {#}
-    {#let p = "";#}
-    {#switch (nbr) {#}
-    {#{% for player in game.players %}#}
-    {#case {{ loop.index0 }}:#}
-    {#// advantage/number loot#}
-    {#//advantage = (count($player->getCtrlCards()) - 1) * 2;#}
-    {#{% if player.advantage != 0 %}#}
-    {#p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ (player.advantage / 2) + 1 }}Cards.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ (player.advantage / 2) + 1 }}\"))' />";#}
-    {#{% endif %}#}
+    getTreasureOverlay = function (nbr) {
+        let p = "";
+        switch (nbr) {
+                {% for player in game.players %}
+            case {{ loop.index0 }}:
+                // advantage/number loot
+                //advantage = (count($player->getCtrlCards()) - 1) * 2;
+            {% if player.advantage != 0 %}
+                p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ (player.advantage / 2) + 1 }}Cards.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ (player.advantage / 2) + 1 }}\"))' />";
+            {% endif %}
 
-    {#//color#}
-    {#{% for color, playerValue in game.colorLoot %}#}
-    {#{% if playerValue == player %}#}
-    {#p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ color }}.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ color }}\"))' />";#}
-    {#{% endif %}#}
-    {#{% endfor %}#}
+                //color
+            {% for color, playerValue in game.colorLoot %}
+            {% if playerValue == player.id %}
+                p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ color }}.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ color }}\"))' />";
+            {% endif %}
+            {% endfor %}
 
-    {#// wheat/gold#}
-    {#{% if game.goldOwner == player %}#}
-    {#p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootGold.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"gold\"))' />";#}
-    {#{% endif %}#}
-    {#{% if game.wheatOwner == player %}#}
-    {#p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootWheat.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"wheat\"))' />";#}
-    {#{% endif %}#}
+                // wheat/gold
+            {% if game.goldOwner == player.id %}
+                p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootGold.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"gold\"))' />";
+            {% endif %}
+            {% if game.wheatOwner == player.id %}
+                p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootWheat.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"wheat\"))' />";
+            {% endif %}
+                break;
+                {% endfor %}
+        }
 
-    {#{% for card in player.ctrlCards %}#}
-    {#p += "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' ondblclick='getOverlay(cardInfo({{ card.number }}))' />";#}
-    {#{% endfor %}#}
-    {#break;#}
-    {#{% endfor %}#}
-    {#}#}
-
-    {#document.querySelector(".overlayCaptured").classList.add("visible");#}
-    {#document.querySelector(".overlayCaptured").innerHTML = p;#}
-    {#document.querySelector(".overlay").classList.add("visible");#}
-    {#};#}
+        document.querySelector(".overlayCaptured").classList.add("visible");
+        document.querySelector(".overlayCaptured").innerHTML = p;
+        document.querySelector(".overlay").classList.add("visible");
+    };
 
     //get infos string from nbr of a card
     cardInfo = function (nbr) {
@@ -608,7 +613,6 @@
     removeAction = 1;
     {% endif %}
     legion = {{ me.legion ?? 0 }};
-    action = {};
     selectedToken = {};
     selectedCard = {};
 
@@ -625,6 +629,14 @@
 
     //FONCTION DE RETIRAGE DE LA LEGION SELECTIONNE
     removeSelectedLegion = function () {
+
+        if (action.removeToken.token == undefined) {
+            action.removeToken.token = [];
+        }
+        if (action.removeToken.token == undefined) {
+            action.removeToken.card = [];
+        }
+
         if (selectedToken !== {} && selectedCard !== {}) {
             if (typeof (action.removeToken) != 'undefined') {
                 action.removeToken = {};
@@ -638,6 +650,7 @@
                 selectedToken.elem = null;
                 removeAction -= 1;
             } else if (gottaRemove <= 1) {
+                
                 action.removeToken.token.push(selectedToken.ind);
                 action.removeToken.card.push(selectedCard.ind);
                 document.querySelectorAll(".cardAction").forEach(function (ee) {
