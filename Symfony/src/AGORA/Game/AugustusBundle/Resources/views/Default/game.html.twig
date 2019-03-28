@@ -8,6 +8,7 @@
         <script>
             {#let logToken = null;#}
             let getCapturedOverlay = null;
+            let getTreasureOverlay = null;
             let cardInfo = null;
             let lootInfo = null;
             let advantageInfo = null;
@@ -159,15 +160,15 @@
                     <div class="flex1"></div>
 
                     <div id="botLoot" class="flexContainer flexRow">
-                        <img src="{{ asset('bundles/augustus/img/Loot/LootSenator.jpg') }}" alt="LootSenator" height="100"
+                        <img src="{{ asset('bundles/augustus/img/Loot/Lootsenator.jpg') }}" alt="Lootsenator" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'senator' ))">
-                        <img src="{{ asset('bundles/augustus/img/Loot/LootGreen.jpg') }}" alt="LootGreen" height="100"
+                        <img src="{{ asset('bundles/augustus/img/Loot/Lootgreen.jpg') }}" alt="Lootgreen" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'green' ))">
-                        <img src="{{ asset('bundles/augustus/img/Loot/LootMulti.jpg') }}" alt="LootMulti" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'multi' ))">
-                        <img src="{{ asset('bundles/augustus/img/Loot/LootRose.jpg') }}" alt="LootRose" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'rose' ))">
-                        <img src="{{ asset('bundles/augustus/img/Loot/LootOrange.jpg') }}" alt="LootOrange" height="100"
+                        <img src="{{ asset('bundles/augustus/img/Loot/Lootall.jpg') }}" alt="Lootall" height="100"
+                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'all' ))">
+                        <img src="{{ asset('bundles/augustus/img/Loot/Lootpink.jpg') }}" alt="Lootpink" height="100"
+                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'pink' ))">
+                        <img src="{{ asset('bundles/augustus/img/Loot/Lootorange.jpg') }}" alt="Lootorange" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'orange' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/LootWheat.jpg') }}" alt="LootWheat" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'wheat' ))">
@@ -181,21 +182,21 @@
                         <div>
                             <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[0].number ~ '.jpg') }}"
                                  alt="Card{{ board.objLine[0].number }}" height="100"
-                                 onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayed == me.getId %}selectObj(this, 0);{% endif %}"
+                                 onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayer == me.getId %}selectObj(this, 0);{% endif %}"
                                  ondblclick="getOverlay(cardInfo( {{ game.board.objLine[0].number }} ))">
                             <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[1].number ~ '.jpg') }}"
                                  alt="Card{{ board.objLine[1].number }}" height="100"
-                                 onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayed == me.getId %}selectObj(this, 1);{% endif %}"
+                                 onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayer == me.getId %}selectObj(this, 1);{% endif %}"
                                  ondblclick="getOverlay(cardInfo( {{ game.board.objLine[1].number }} ))">
                         </div>
                         <div>
                             <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[2].number ~ '.jpg') }}"
                                  alt="Card{{ board.objLine[2].number }}" height="100"
-                                 onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayed == me.getId %}selectObj(this, 2);{% endif %}"
+                                 onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayer == me.getId %}selectObj(this, 2);{% endif %}"
                                  ondblclick="getOverlay(cardInfo( {{ game.board.objLine[2].number }} ))">
                             <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[3].number ~ '.jpg') }}"
                                  alt="Card{{ board.objLine[3].number }}" height="100"
-                                 onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayed == me.getId %}selectObj(this, 3);{% endif %}"
+                                 onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayer == me.getId %}selectObj(this, 3);{% endif %}"
                                  ondblclick="getOverlay(cardInfo( {{ game.board.objLine[3].number }} ))">
                         </div>
                     </div>
@@ -203,7 +204,7 @@
                         <div class="flex1"></div>
                         <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[4].number ~ '.jpg') }}"
                              alt="Card{{ board.objLine[4].number }}" height="100"
-                             onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayed == me.getId %}selectObj(this, 4);{% endif %}"
+                             onclick="{% if (game.getState == "aveCesar" or game.getState == "oneCard") and game.getAffectedPlayer == me.getId %}selectObj(this, 4);{% endif %}"
                              ondblclick="getOverlay(cardInfo( {{ game.board.objLine[4].number }} ))">
                         <div class="flex1"></div>
                     </div>
@@ -396,13 +397,51 @@
         getCapturedOverlay = function (nbr) {
             let p = "";
             switch (nbr) {
-                    {% for player in game.players %}
+                {% for player in game.players %}
                 case {{ loop.index0 }}:
                 {% for card in player.ctrlCards %}
                     p += "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' ondblclick='getOverlay(cardInfo({{ card.number }}))' />";
                 {% endfor %}
                     break;
+                {% endfor %}
+            }
+
+            document.querySelector(".overlayCaptured").classList.add("visible");
+            document.querySelector(".overlayCaptured").innerHTML = p;
+            document.querySelector(".overlay").classList.add("visible");
+        };
+
+        getTreasureOverlay = function (nbr) {
+            let p = "";
+            switch (nbr) {
+                {% for player in game.players %}
+                case {{ loop.index0 }}:
+                    // advantage/number loot
+                    //advantage = (count($player->getCtrlCards()) - 1) * 2;
+                    {% if player.advantage != 0 %}
+                    p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ (player.advantage / 2) + 1 }}Cards.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ (player.advantage / 2) + 1 }}\"))' />";
+                    {% endif %}
+
+                    //color
+                    {% for color, playerValue in game.colorLoot %}
+                        {% if playerValue == player %}
+                        p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ color }}.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ color }}\"))' />";
+                        {% endif %}
                     {% endfor %}
+
+                    // wheat/gold
+                    {% if game.goldOwner == player %}
+                    p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootGold.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"gold\"))' />";
+                    {% endif %}
+                    {% if game.wheatOwner == player %}
+                    p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootWheat.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"wheat\"))' />";
+                    {% endif %}
+
+                    {% for card in player.ctrlCards %}
+                    p += "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' ondblclick='getOverlay(cardInfo({{ card.number }}))' />";
+                    {% endfor %}
+                    break;
+                {% endfor %}
             }
 
             document.querySelector(".overlayCaptured").classList.add("visible");
@@ -470,23 +509,23 @@
                 case 'green':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs vertes.</p>" +
                         "<p>Elle rapportera  4 poins lors du décompte final.</p>" +
-                        "<img src=\"{{ asset('bundles/augustus/img/Loot/LootGreen.jpg') }}\" height='100' />";
+                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootgreen.jpg') }}\" height='100' />";
                 case 'orange':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs oranges.</p>" +
                         "<p>Elle rapportera  10 poins lors du décompte final.</p>" +
-                        "<img src=\"{{ asset('bundles/augustus/img/Loot/LootOrange.jpg') }}\" height='100' />";
-                case 'multi':
+                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootorange.jpg') }}\" height='100' />";
+                case 'all':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs de couleurs différentes.</p>" +
                         "<p>Elle rapportera  6 poins lors du décompte final.</p>" +
-                        "<img src=\"{{ asset('bundles/augustus/img/Loot/LootMulti.jpg') }}\" height='100' />";
-                case 'rose':
+                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootall.jpg') }}\" height='100' />";
+                case 'pink':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs roses.</p>" +
                         "<p>Elle rapportera  8 poins lors du décompte final.</p>" +
-                        "<img src=\"{{ asset('bundles/augustus/img/Loot/LootRose.jpg') }}\" height='100' />";
+                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootpink.jpg') }}\" height='100' />";
                 case 'senator':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes sénateurs.</p>" +
                         "<p>Elle rapportera  2 poins lors du décompte final.</p>" +
-                        "<img src=\"{{ asset('bundles/augustus/img/Loot/LootSenator.jpg') }}\" height='100' />";
+                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootsenator.jpg') }}\" height='100' />";
                 case 'wheat':
                     return "<p>Cette carte revient au joueur qui possède le plus de cartes d'blé.</p>" +
                         "<p>Elle rapportera  5 poins lors du décompte final.</p>" +
