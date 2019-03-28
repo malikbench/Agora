@@ -79,7 +79,7 @@ class AugustusGameModel {
 
         $game->setToken($this->boardModel->takeToken($game->getBoard()->getId()));
         if ($game->getToken() == AugustusToken::JOKER) {
-            $this->boardModel->resetBag($game->getBoard());
+            $this->boardModel->resetBag($game->getBoard()->getId());
         }
         $this->manager->flush();
     }
