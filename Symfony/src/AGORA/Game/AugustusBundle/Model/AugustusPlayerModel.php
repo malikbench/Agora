@@ -63,7 +63,6 @@ class AugustusPlayerModel {
 
         $player = $players->findOneById($idPlayer);
         $card = $cards->findOneById($idCard);
-
         $this->cardModel->captureToken($idCard, $token);
         
         $player->setLegion($player->getLegion()- 1);
