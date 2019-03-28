@@ -46,7 +46,7 @@ class AugustusCardModel {
 
         $card = $cards->findOneById($idCard);
 
-        $tokens = $card->getCtrlTokens();
+        $tokens = $card->getTokens();
         $ctrl = $card->getCtrlTokens();
 
         $ind = 0;
