@@ -195,11 +195,12 @@ class GameController extends Controller {
                 break;
             default:
         }
-        $conn->send("refresh");
+
 
 
         $service->getPlayerFromId($playerId,$gameId)->setIsLock(true);
-        $this->manager->flush();
+        $service->manager->flush();
+        $conn->send("refresh");
         if ($service->areAllPlayersReady($gameId)) {
             $players = $service->getPlayers($gameId);
 
