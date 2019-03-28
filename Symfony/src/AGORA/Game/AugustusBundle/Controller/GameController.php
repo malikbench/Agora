@@ -195,6 +195,7 @@ class GameController extends Controller {
                 break;
             default:
         }
+        $conn->send("refresh");
 
 
         $service->getPlayerFromId($playerId,$gameId)->setIsLock(true);
