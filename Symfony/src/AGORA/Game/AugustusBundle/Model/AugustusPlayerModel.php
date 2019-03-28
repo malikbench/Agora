@@ -6,6 +6,8 @@ use AGORA\Game\AugustusBundle\Entity\AugustusGame;
 use AGORA\Game\AugustusBundle\Entity\AugustusPlayer;
 use AGORA\Game\AugustusBundle\Entity\AugustusCard;
 use AGORA\Game\AugustusBundle\Entity\AugustusToken;
+use AGORA\Game\AugustusBundle\Entity\AugustusPower;
+use AGORA\Game\AugustusBundle\Entity\AugustusColor;
 
 use AGORA\Game\GameBundle\Entity\Game;
 use Doctrine\ORM\EntityManager;
