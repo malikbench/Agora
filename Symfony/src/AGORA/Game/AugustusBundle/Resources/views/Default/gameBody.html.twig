@@ -119,9 +119,9 @@
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'senator' ))">
                     <img src="{{ asset('bundles/augustus/img/Loot/LootGreen.jpg') }}" alt="LootGreen" height="100"
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'green' ))">
-                    <img src="{{ asset('bundles/augustus/img/Loot/LootMulti.jpg') }}" alt="LootMulti" height="100"
+                    <img src="{{ asset('bundles/augustus/img/Loot/Lootall.jpg') }}" alt="LootMulti" height="100"
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'multi' ))">
-                    <img src="{{ asset('bundles/augustus/img/Loot/LootRose.jpg') }}" alt="LootRose" height="100"
+                    <img src="{{ asset('bundles/augustus/img/Loot/Lootpink.jpg') }}" alt="LootRose" height="100"
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'rose' ))">
                     <img src="{{ asset('bundles/augustus/img/Loot/LootOrange.jpg') }}" alt="LootOrange" height="100"
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'orange' ))">
@@ -242,7 +242,11 @@
 
         <div id="buttons" class="flexContainer flexRow">
             <div class="flex1"></div>
+            {% if me.isLock %}
+            <button id="valider" disabled onclick="validate()">Valider</button>
+            {% else %}
             <button id="valider" onclick="validate()">Valider</button>
+            {% endif %}
             {#<button id="annuler" onclick="resetSelected()">Annuler</button><!-- onclick : devrait peut-être refresh la page -->#}
             <div class="flex1"></div>
         </div>
@@ -434,11 +438,11 @@
             case 'multi':
                 return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs de couleurs différentes.</p>" +
                     "<p>Elle rapportera  6 poins lors du décompte final.</p>" +
-                    "<img src=\"{{ asset('bundles/augustus/img/Loot/LootMulti.jpg') }}\" height='100' />";
+                    "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootall.jpg') }}\" height='100' />";
             case 'rose':
                 return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs roses.</p>" +
                     "<p>Elle rapportera  8 poins lors du décompte final.</p>" +
-                    "<img src=\"{{ asset('bundles/augustus/img/Loot/LootRose.jpg') }}\" height='100' />";
+                    "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootpink.jpg') }}\" height='100' />";
             case 'senator':
                 return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes sénateurs.</p>" +
                     "<p>Elle rapportera  2 poins lors du décompte final.</p>" +

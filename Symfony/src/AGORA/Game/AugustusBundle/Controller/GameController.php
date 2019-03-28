@@ -136,7 +136,7 @@ class GameController extends Controller {
             $this->connectionStorage->addConnection($gameId, $playerId, $conn);
 
             foreach ($this->connectionStorage->getAllConnections($gameId) as $c) {
-
+                echo "Did something\n";
                 //$c->send($this->bodyAction($gameId, $player->getId()));
                 $c->send("refresh");
             }

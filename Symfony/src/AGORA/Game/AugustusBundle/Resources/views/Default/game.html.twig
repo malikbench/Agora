@@ -87,7 +87,7 @@
         <div id="boardAndHand" class="flexContainer flexColumn">
             <div id="instructions">
 
-                {% if me.isLock == true %}
+                {% if me.isLock %}
                     <p class="p">{{ "Veuillez patienter" }}</p>
                 {% elseif game.getState == "legion" %}
                     <p class="p">{{ "Veuillez placer votre légion" }}</p>
@@ -287,8 +287,11 @@
 
             <div id="buttons" class="flexContainer flexRow">
                 <div class="flex1"></div>
-                <button id="valider" onclick="validate()">Valider</button>
-                {#<button id="annuler" onclick="resetSelected()">Annuler</button><!-- onclick : devrait peut-être refresh la page -->#}
+                {% if me.isLock %}
+                    <button id="valider" disabled onclick="validate()">Valider</button>
+                {% else %}
+                    <button id="valider" onclick="validate()">Valider</button>
+                {% endif %}                {#<button id="annuler" onclick="resetSelected()">Annuler</button><!-- onclick : devrait peut-être refresh la page -->#}
                 <div class="flex1"></div>
             </div>
         </div>
@@ -411,43 +414,43 @@
             document.querySelector(".overlay").classList.add("visible");
         };
 
-        getTreasureOverlay = function (nbr) {
-            let p = "";
-            switch (nbr) {
-                {% for player in game.players %}
-                case {{ loop.index0 }}:
-                    // advantage/number loot
-                    //advantage = (count($player->getCtrlCards()) - 1) * 2;
-                    {% if player.advantage != 0 %}
-                    p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ (player.advantage / 2) + 1 }}Cards.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ (player.advantage / 2) + 1 }}\"))' />";
-                    {% endif %}
+        {#getTreasureOverlay = function (nbr) {#}
+            {#let p = "";#}
+            {#switch (nbr) {#}
+                {#{% for player in game.players %}#}
+                {#case {{ loop.index0 }}:#}
+                    {#// advantage/number loot#}
+                    {#//advantage = (count($player->getCtrlCards()) - 1) * 2;#}
+                    {#{% if player.advantage != 0 %}#}
+                    {#p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ (player.advantage / 2) + 1 }}Cards.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ (player.advantage / 2) + 1 }}\"))' />";#}
+                    {#{% endif %}#}
 
-                    //color
-                    {% for color, playerValue in game.colorLoot %}
-                        {% if playerValue == player %}
-                        p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ color }}.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ color }}\"))' />";
-                        {% endif %}
-                    {% endfor %}
+                    {#//color#}
+                    {#{% for color, playerValue in game.colorLoot %}#}
+                        {#{% if playerValue == player %}#}
+                        {#p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ color }}.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ color }}\"))' />";#}
+                        {#{% endif %}#}
+                    {#{% endfor %}#}
 
-                    // wheat/gold
-                    {% if game.goldOwner == player %}
-                    p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootGold.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"gold\"))' />";
-                    {% endif %}
-                    {% if game.wheatOwner == player %}
-                    p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootWheat.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"wheat\"))' />";
-                    {% endif %}
+                    {#// wheat/gold#}
+                    {#{% if game.goldOwner == player %}#}
+                    {#p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootGold.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"gold\"))' />";#}
+                    {#{% endif %}#}
+                    {#{% if game.wheatOwner == player %}#}
+                    {#p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootWheat.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"wheat\"))' />";#}
+                    {#{% endif %}#}
 
-                    {% for card in player.ctrlCards %}
-                    p += "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' ondblclick='getOverlay(cardInfo({{ card.number }}))' />";
-                    {% endfor %}
-                    break;
-                {% endfor %}
-            }
+                    {#{% for card in player.ctrlCards %}#}
+                    {#p += "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' ondblclick='getOverlay(cardInfo({{ card.number }}))' />";#}
+                    {#{% endfor %}#}
+                    {#break;#}
+                {#{% endfor %}#}
+            {#}#}
 
-            document.querySelector(".overlayCaptured").classList.add("visible");
-            document.querySelector(".overlayCaptured").innerHTML = p;
-            document.querySelector(".overlay").classList.add("visible");
-        };
+            {#document.querySelector(".overlayCaptured").classList.add("visible");#}
+            {#document.querySelector(".overlayCaptured").innerHTML = p;#}
+            {#document.querySelector(".overlay").classList.add("visible");#}
+        {#};#}
 
         //get infos string from nbr of a card
         cardInfo = function (nbr) {
