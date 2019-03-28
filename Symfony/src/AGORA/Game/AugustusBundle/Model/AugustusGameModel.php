@@ -97,7 +97,7 @@ class AugustusGameModel {
         $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
         $player = $players->findOneById($playerId);
         
-        $advantage = count(($player->getCtrlCards()) - 1) * 2;
+        $advantage = (count($player->getCtrlCards()) - 1) * 2;//count(($player->getCtrlCards()) - 1) * 2;
         foreach ($game->getPlayers() as $gamer) {
             if ($gamer->getAdvantage() == $advantage) {
                 $advantage = 0;
@@ -116,14 +116,14 @@ class AugustusGameModel {
         $game = $games->findOneById($id);
         
         foreach ($game->getPlayers() as $player) {
-            if (count($player->getCtrlCards()) > 7) {
+            if (count($player->getCtrlCards()) >= 7) {//(count($player->getCtrlCards()) > 7) {
                 return true;
             }
         }
         return false;
     }
 
-    // passe les parametre au jeu du prchain tour de jeu
+    // passe les parametre au jeu du prochain tour de jeu
     public function applyStep($id) {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
