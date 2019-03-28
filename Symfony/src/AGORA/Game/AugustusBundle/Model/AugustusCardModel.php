@@ -26,7 +26,6 @@ class AugustusCardModel {
         $tokens = $card->getTokens();
 
         $ind = array_search($token, $tokens);
-
         $ctrl = $card->getCtrlTokens();
         $ctrl[$ind] = true;
         $card->setCtrlTokens($ctrl);

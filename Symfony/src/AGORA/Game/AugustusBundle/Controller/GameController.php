@@ -153,15 +153,14 @@ class GameController extends Controller {
                         $card = $player->getCards()[$action->removeToken->card[$i]];
 
                         $card->getCtrlTokens()[$action->removeToken->token[$i]];
-                        $service->playerModel->removeLegionFromCard($player->getId(), $card->getId(), $action->addToken->token[$i]);
+                        $service->playerModel->removeLegionFromCard($player->getId(), $card->getId(), $card->getTokens()[$action->removeToken->token[$i]]);
                     }
                 }
                 if(isset($action->addToken)) {
                     for ($i = 0; $i < count($action->addToken->token); $i++) {
                         $card = $player->getCards()[$action->addToken->card[$i]];
-
                         $card->getCtrlTokens()[$action->addToken->token[$i]];
-                        $service->playerModel->putLegionOnCard($player->getId(), $card->getId(), $action->addToken->token[$i]);
+                        $service->playerModel->putLegionOnCard($player->getId(), $card->getId(), $card->getTokens()[$action->addToken->token[$i]]);
                     }
                 }
 
@@ -197,7 +196,11 @@ class GameController extends Controller {
             default:
         }
 
+
+
         $service->getPlayerFromId($playerId,$gameId)->setIsLock(true);
+        $service->manager->flush();
+        $conn->send("refresh");
         if ($service->areAllPlayersReady($gameId)) {
             $players = $service->getPlayers($gameId);
 
