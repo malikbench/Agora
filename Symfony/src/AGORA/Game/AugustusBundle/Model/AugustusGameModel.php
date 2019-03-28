@@ -7,8 +7,12 @@ use AGORA\Game\AugustusBundle\Entity\AugustusPlayer;
 use AGORA\Game\AugustusBundle\Entity\AugustusBoard;
 use AGORA\Game\AugustusBundle\Entity\AugustusCard;
 use AGORA\Game\AugustusBundle\Entity\AugustusToken;
+use AGORA\Game\AugustusBundle\Entity\AugustusPower;
+use AGORA\Game\AugustusBundle\Entity\AugustusColor;
 
 use AGORA\Game\AugustusBundle\Model\AugustusBoardModel;
+use AGORA\Game\AugustusBundle\Model\AugustusPlayerModel;
+use AGORA\Game\AugustusBundle\Model\AugustusCardModel;
 
 use AGORA\Game\GameBundle\Entity\Game;
 use Doctrine\ORM\EntityManager;
@@ -18,12 +22,14 @@ class AugustusGameModel {
     protected $manager;
     public $boardModel;
     public $playerModel;
+    public $cardModel;
 
     public function __construct(EntityManager $em) {
         $this->manager = $em;
 
         $this->boardModel = new AugustusBoardModel($em);
         $this->playerModel = new AugustusPlayerModel($em);
+        $this->cardModel = new AugustusCardModel($em);
     }
 
     public function createGame($name, $nbPlayers, $isPrivate, $password, $hostId) {
@@ -83,7 +89,7 @@ class AugustusGameModel {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
 
-        $ok = false;
+        $ok = true;
         foreach ($game->getPlayers() as $player) {
             $ok = $ok && $player->getIsLock();
         }
@@ -97,7 +103,7 @@ class AugustusGameModel {
         $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
         $player = $players->findOneById($playerId);
         
-        $advantage = (count($player->getCtrlCards()) - 1) * 2;//count(($player->getCtrlCards()) - 1) * 2;
+        $advantage = (count($player->getCtrlCards()) - 1) * 2;
         foreach ($game->getPlayers() as $gamer) {
             if ($gamer->getAdvantage() == $advantage) {
                 $advantage = 0;
@@ -116,7 +122,7 @@ class AugustusGameModel {
         $game = $games->findOneById($id);
         
         foreach ($game->getPlayers() as $player) {
-            if (count($player->getCtrlCards()) >= 7) {//(count($player->getCtrlCards()) > 7) {
+            if (count($player->getCtrlCards()) >= 7) {
                 return true;
             }
         }
@@ -131,10 +137,11 @@ class AugustusGameModel {
         switch($game->getState()) {
             case "legion":
                 if ($this->allOk($id)) {
+                    $this->drawToken($id);
                     $steps = $this->aveCesarSteps($id);
                     $states = $steps[0];
                     $affecteds = $steps[1];
-                    $game->setState($steps[0]);
+                    $game->setState($states[0]);
                     $game->setAffectedPlayer($affecteds[0]);
                     $game->setNextStates(array_slice($states, 1));
                     $game->setNextAffecteds(array_slice($affecteds, 1));
@@ -224,7 +231,7 @@ class AugustusGameModel {
         $index = array();
         foreach ($game->getPlayers() as $player) {
             foreach ($player->getCards() as $card) {
-                if (count($card->getTokens()) == count($card->getCtrlTokens())) {
+                if ($this->cardModel->isCapturable($card->getId())) {
                     $capturer[$card->getNumber()] = $player->getId();
                     array_push($index, $card->getNumber());
                 }
@@ -234,7 +241,7 @@ class AugustusGameModel {
         foreach ($index as $i) {
             array_push($states, "aveCesar");
             array_push($affecteds, $capturer[$i]);
-            $card = $capturer->getCardByNumber($capturer[$i], $i);
+            $card = $this->playerModel->getCardByNumber($capturer[$i], $i);
             if ($this->isPowerWithAction($card->getId())) {
                     array_push($states, $card->getPower());
                     array_push($affecteds, $capturer[$i]);
@@ -277,7 +284,7 @@ class AugustusGameModel {
         $player = $players->findOneById($idPlayer);
 
         foreach ($player->getCards() as $card) {
-            if (count($card->getTokens()) == count($card->getCtrlTokens())) {
+            if ($this->cardModel->isCapturable($card->getId())) {
                 return $card;
             }
         }

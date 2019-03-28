@@ -228,11 +228,11 @@ class AugustusGame
     /**
      * Set affectedPlayer.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\AugustusPlayer|null $affectedPlayer
+     * @param int $nextAffected
      *
      * @return AugustusGame
      */
-    public function setAffectedPlayer(AugustusPlayer $affectedPlayer = null)
+    public function setAffectedPlayer(int $affectedPlayer)
     {
         $this->affectedPlayer = $affectedPlayer;
 

@@ -126,7 +126,7 @@ class AugustusPlayerModel {
     }
 
     public function deleteCtrlCard($idPlayer) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
 
         $player = $players->findOneById($idPlayer);
 
@@ -153,7 +153,7 @@ class AugustusPlayerModel {
     }
 
     public function getCardByNumber($idPlayer, $number) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
 
         $player = $players->findOneById($idPlayer);
 
@@ -169,7 +169,7 @@ class AugustusPlayerModel {
     }
 
     public function getNbOfCardColor($idPlayer, $color) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
 
         $player = $players->findOneById($idPlayer);
 
@@ -187,7 +187,7 @@ class AugustusPlayerModel {
     }
 
     public function getNbOfToken($idPlayer, $token) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
 
         $player = $players->findOneById($idPlayer);
 
@@ -207,7 +207,7 @@ class AugustusPlayerModel {
     }
 
     public function haveOneCardOfEach($idPlayer) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
 
         $player = $players->findOneById($idPlayer);
 
@@ -242,7 +242,7 @@ class AugustusPlayerModel {
     }
 
     public function getNbOfRedPower($idPlayer) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
 
         $player = $players->findOneById($idPlayer);
 
