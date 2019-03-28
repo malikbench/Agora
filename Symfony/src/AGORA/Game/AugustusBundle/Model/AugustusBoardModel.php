@@ -63,8 +63,8 @@ class AugustusBoardModel {
     for ($i = 0; $i < 50; $i++) {
       $nbAlea1 = rand(0, 22);
       $nbAlea2 = rand(0, 22);
-      $transiToken1 = $board->getTokenBag->get($nbAlea1);
-      $transiToken2 = $board->getTokenBag->get($nbAlea2);
+      $transiToken1 = $board->getTokenBag()->get($nbAlea1);
+      $transiToken2 = $board->getTokenBag()->get($nbAlea2);
       $board->removeTokenFromBagWithIndex($nbAlea1);
       $board->removeTokenFromBagWithIndex($nbAlea1);
       $board->addTokenToBagWithIndex($nbAlea2, $transiToken1);

@@ -198,6 +198,7 @@ class GameController extends Controller {
 
 
         $service->getPlayerFromId($playerId,$gameId)->setIsLock(true);
+        $this->manager->flush();
         if ($service->areAllPlayersReady($gameId)) {
             $players = $service->getPlayers($gameId);
 
