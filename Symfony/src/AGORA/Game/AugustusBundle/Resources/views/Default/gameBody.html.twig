@@ -203,7 +203,7 @@
 
                                     {% for token in card.tokens %}
                                         {% if card.ctrlTokens[loop.index0] %}
-                                            <img class="token" src='{{ asset('bundles/augustus/img/Token/Token' ~  token  ~'.png') }}' alt=""
+                                            <img class="token" src='{{ asset('bundles/augustus/img/Token/Token' ~  token  ~'.jpg') }}' alt="{{ token }}"
                                                  height="32"
                                                  onclick="selectToken(this, {{ loop.index0 }}, {{ cardIndex }})">
                                         {% endif %}
