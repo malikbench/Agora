@@ -1,7 +1,7 @@
 html {
     height: 100%;
     width: 100%;
-    background-color: bisque;
+    background-image: url('http://2.bp.blogspot.com/-mltCDri2JSY/UqzYPpWAfzI/AAAAAAAAMvQ/DkfDwR1AlI8/s1600/Tileable_stone_wall_Texture.jpg');
 }
 
 body {
@@ -94,27 +94,33 @@ body {
     visibility: visible;
 }
 
-/* Specific Infos */
-#allPlayersInfo, #playerBar {
-    background-color: white;
-}
 
 #objLine {
     background-color: deepskyblue;
 }
 
-#myBar, #myInfo, #instructions {
-
+#instructions p {
+    text-align: center;
 }
 
-#allPlayersInfo, #playerBar, #objLine, #myBar, #myInfo, #instructions {
+#allPlayersInfo, #playerBar, #objLine, #myBar, #myInfo, #instructions, .action {
     border-radius: 5px;
 
-    background-color: #abadb2;  /*grey*/
+    background-color: #7e9ebc;  /*blue'*/
     color: #0e110f;
 
     padding: 5px;
     margin: 5px;
+}
+
+#playerBar, #myBar {
+    height: 200px;
+}
+#myBar {
+    background-color: #bcbb7e;
+}
+#playerBar {
+    background-color: #bc7e7f;
 }
 
 #allPlayersInfo {
