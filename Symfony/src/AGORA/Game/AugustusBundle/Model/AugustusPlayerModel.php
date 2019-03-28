@@ -6,6 +6,8 @@ use AGORA\Game\AugustusBundle\Entity\AugustusGame;
 use AGORA\Game\AugustusBundle\Entity\AugustusPlayer;
 use AGORA\Game\AugustusBundle\Entity\AugustusCard;
 use AGORA\Game\AugustusBundle\Entity\AugustusToken;
+use AGORA\Game\AugustusBundle\Entity\AugustusPower;
+use AGORA\Game\AugustusBundle\Entity\AugustusColor;
 
 use AGORA\Game\GameBundle\Entity\Game;
 use Doctrine\ORM\EntityManager;
@@ -125,7 +127,7 @@ class AugustusPlayerModel {
     }
 
     public function deleteCtrlCard($idPlayer) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
 
         $player = $players->findOneById($idPlayer);
 
@@ -152,7 +154,7 @@ class AugustusPlayerModel {
     }
 
     public function getCardByNumber($idPlayer, $number) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
 
         $player = $players->findOneById($idPlayer);
 
@@ -168,7 +170,7 @@ class AugustusPlayerModel {
     }
 
     public function getNbOfCardColor($idPlayer, $color) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
 
         $player = $players->findOneById($idPlayer);
 
@@ -186,7 +188,7 @@ class AugustusPlayerModel {
     }
 
     public function getNbOfToken($idPlayer, $token) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
 
         $player = $players->findOneById($idPlayer);
 
@@ -206,7 +208,7 @@ class AugustusPlayerModel {
     }
 
     public function haveOneCardOfEach($idPlayer) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
 
         $player = $players->findOneById($idPlayer);
 
@@ -241,7 +243,7 @@ class AugustusPlayerModel {
     }
 
     public function getNbOfRedPower($idPlayer) {
-        $players = $manager->getRepository('AugustusBundle:AugustusPlayer');
+        $players = $this->manager->getRepository('AugustusBundle:AugustusPlayer');
 
         $player = $players->findOneById($idPlayer);
 

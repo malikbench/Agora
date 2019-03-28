@@ -82,7 +82,7 @@
 
                     <div class="flexContainer flexColumn">
                         <button onclick="getCapturedOverlay({{ loop.index0 }})">Captures</button>
-                        <button>Récompenses</button>
+                        <button onclick="getTreasureOverlay({{ loop.index0 }})">Récompenses</button>
                     </div>
                 </div>
             {% endfor %}
@@ -201,14 +201,16 @@
 
                                     {% for token in card.tokens %}
                                         {% if card.ctrlTokens[loop.index0] %}
-
-                                            <img class="token" src='{{ asset('bundles/augustus/img/Token/Token' ~ token ~'.jpg') }}' alt=""
+                                            <img class="token" src='{{ asset('bundles/augustus/img/Token/Token' ~  token  ~'.jpg') }}' alt="{{ token }}"
                                                  height="32"
                                                  onclick="selectToken(this, {{ loop.index0 }}, {{ cardIndex }})">
                                         {% endif %}
                                     {% endfor %}
-
+                                    {% if me.isLock %}
+                                    <button disabled onclick="removeSelectedLegion()">Retirer</button>
+                                    {% else %}
                                     <button onclick="removeSelectedLegion()">Retirer</button>
+                                    {% endif %}
                                 {% else %}
                                     <p>Aucune légion sur cette carte a retiré</p>
 
@@ -219,10 +221,17 @@
                             </div>
                             <div>
                                 <p>Vous pouvez placer une légion sur cette carte :</p>
+                            {% if me.isLock %}
+                                <button disabled>
+                                    Placer
+                                </button>
+
+                            {% else %}
                                 <button onclick="addBestToken(this, [ '{{ card.tokens|join('\',\'') }}' ], [ '{{ card.ctrlTokens|join('\',\'') }}' ], {{ cardIndex }})">
                                     Placer
                                 </button>
-                            </div>
+                            {% endif %}
+                                </div>
                         {% endif %}
                     </div>
                 </div>
@@ -235,7 +244,7 @@
 
             <div class="flexContainer flexColumn">
                 <button onclick="getCapturedOverlay({{ meInd }})">Captures</button>
-                <button>Récompenses</button>
+                <button onclick="getTreasureOverlay({{ meInd }})">Récompenses</button>
             </div>
         </div>
 
@@ -378,43 +387,39 @@
         document.querySelector(".overlay").classList.add("visible");
     };
 
-    {#getTreasureOverlay = function (nbr) {#}
-    {#let p = "";#}
-    {#switch (nbr) {#}
-    {#{% for player in game.players %}#}
-    {#case {{ loop.index0 }}:#}
-    {#// advantage/number loot#}
-    {#//advantage = (count($player->getCtrlCards()) - 1) * 2;#}
-    {#{% if player.advantage != 0 %}#}
-    {#p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ (player.advantage / 2) + 1 }}Cards.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ (player.advantage / 2) + 1 }}\"))' />";#}
-    {#{% endif %}#}
+    getTreasureOverlay = function (nbr) {
+        let p = "";
+        switch (nbr) {
+                {% for player in game.players %}
+            case {{ loop.index0 }}:
+                // advantage/number loot
+                //advantage = (count($player->getCtrlCards()) - 1) * 2;
+            {% if player.advantage != 0 %}
+                p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ (player.advantage / 2) + 1 }}Cards.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ (player.advantage / 2) + 1 }}\"))' />";
+            {% endif %}
 
-    {#//color#}
-    {#{% for color, playerValue in game.colorLoot %}#}
-    {#{% if playerValue == player %}#}
-    {#p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ color }}.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ color }}\"))' />";#}
-    {#{% endif %}#}
-    {#{% endfor %}#}
+                //color
+            {% for color, playerValue in game.colorLoot %}
+            {% if playerValue == player.id %}
+                p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot{{ color }}.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"{{ color }}\"))' />";
+            {% endif %}
+            {% endfor %}
 
-    {#// wheat/gold#}
-    {#{% if game.goldOwner == player %}#}
-    {#p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootGold.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"gold\"))' />";#}
-    {#{% endif %}#}
-    {#{% if game.wheatOwner == player %}#}
-    {#p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootWheat.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"wheat\"))' />";#}
-    {#{% endif %}#}
+                // wheat/gold
+            {% if game.goldOwner == player.id %}
+                p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootGold.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"gold\"))' />";
+            {% endif %}
+            {% if game.wheatOwner == player.id %}
+                p += "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/LootWheat.jpg\" height='100' ondblclick='getOverlay(lootInfo(\"wheat\"))' />";
+            {% endif %}
+                break;
+                {% endfor %}
+        }
 
-    {#{% for card in player.ctrlCards %}#}
-    {#p += "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' ondblclick='getOverlay(cardInfo({{ card.number }}))' />";#}
-    {#{% endfor %}#}
-    {#break;#}
-    {#{% endfor %}#}
-    {#}#}
-
-    {#document.querySelector(".overlayCaptured").classList.add("visible");#}
-    {#document.querySelector(".overlayCaptured").innerHTML = p;#}
-    {#document.querySelector(".overlay").classList.add("visible");#}
-    {#};#}
+        document.querySelector(".overlayCaptured").classList.add("visible");
+        document.querySelector(".overlayCaptured").innerHTML = p;
+        document.querySelector(".overlay").classList.add("visible");
+    };
 
     //get infos string from nbr of a card
     cardInfo = function (nbr) {
