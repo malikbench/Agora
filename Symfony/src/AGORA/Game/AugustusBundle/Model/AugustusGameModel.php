@@ -138,6 +138,9 @@ class AugustusGameModel {
                     $game->setAffectedPlayer($affecteds[0]);
                     $game->setNextStates(array_slice($states, 1));
                     $game->setNextAffecteds(array_slice($affecteds, 1));
+                    foreach ($game->getPlayers() as $player) {
+                        $player->setIsLock(false);
+                    }
                 }
                 break;
             case "aveCesar":
