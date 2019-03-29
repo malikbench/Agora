@@ -151,19 +151,17 @@ class AugustusGameModel {
             case "aveCesar":
                 $card = $this->getCapturableCardFromPlayer($game->getAffectedPlayer());
                 $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
-                echo "avant de capturer";
                 $this->playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
-                echo "echo d'adrien: "; echo $game->getAffectedPlayer();
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
                 $this->changeWheatOwner($id, $game->getAffectedPlayer());
                 if ($game->getState()[0] == "aveCesar") {
                     $this->$cardModel->doPower($card->getId());
                 }
-                if ($playerModel->getNbOfCardColor($card->getPlayer()->getId(), $card->getColor()) == 3) {
-                    $this->fillColorLoot($id, $card->getPlayer()->getId(), $card->getColor());
+                if ($this->playerModel->getNbOfCardColor($game->getAffectedPlayer(), $card->getColor()) == 3) {
+                    $this->fillColorLoot($id, $game->getAffectedPlayer(), $card->getColor());
                 }
-                if ($playerModel->haveOneCardOfEach($card->getPlayer()->getId())) {
-                    $this->fillColorLoot($id, $card->getPlayer()->getId(), "all");
+                if ($this->playerModel->haveOneCardOfEach($game->getAffectedPlayer())) {
+                    $this->fillColorLoot($id, $game->getAffectedPlayer(), "all");
                 }
                 $game->setState($game->getNextStates()[0]);
                 $game->setAffectedPlayer($game->getNextAffecteds()[0]);
@@ -364,7 +362,7 @@ class AugustusGameModel {
         foreach ($participants as $player) {
             $score = $this->getScores($id, $player->getId());
             if ($score > $best ||
-                $score == $best && $playerModel->getNbOfCardColor($player->getId(), AugustusColor::SENATOR) > $playerModel->getNbOfCardColor($winner->getId(), AugustusColor::SENATOR)) {
+                $score == $best && $this->playerModel->getNbOfCardColor($player->getId(), AugustusColor::SENATOR) > $this->playerModel->getNbOfCardColor($winner->getId(), AugustusColor::SENATOR)) {
                 $best = $score;
                 $winner = $player;
             }
