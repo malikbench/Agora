@@ -1,11 +1,22 @@
 html {
     height: 100%;
     width: 100%;
-    background-color: bisque;
+    background-image: url('../img/wall.jpg');
 }
 
 body {
     margin: 0;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 20px;
+    font-weight: 500;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
 
 #gameContent {
@@ -87,41 +98,68 @@ body {
     color: #0e110f;
 
     height: 50%;
-    width: 15em;
+    width: 15em;    
+}
+
+.marble {
+    box-shadow: inset -2px -2px 15px 3px rgba(0, 0, 0, 0.7);
+    background-image: url('../img/marble.jpg');
+
+    border-radius: 7px;
+    padding: 4px 15px 14px 14px;
+    background-size: 600px 400px;
+
+    color: black !important;
 }
 
 .visible {
     visibility: visible;
 }
 
-/* Specific Infos */
-#allPlayersInfo, #playerBar {
-    background-color: white;
-}
 
 #objLine {
     background-color: deepskyblue;
 }
 
-#myBar, #myInfo, #instructions {
-
+#instructions p {
+    text-align: center;
+}
+#instructions {
+    background-size: 1000px 666px !important;
 }
 
-#allPlayersInfo, #playerBar, #objLine, #myBar, #myInfo, #instructions {
-    border-radius: 5px;
+#allPlayersInfo, #playerBar, #objLine, #myBar, #myInfo, #instructions, .action {
 
-    background-color: #abadb2;  /*grey*/
+    background-color: #7e9ebc;  /*blue'*/
     color: #0e110f;
 
-    padding: 5px;
     margin: 5px;
+}
+
+#playerBar, #myBar {
+    height: 220px;
+    background-size: 1000px 666px !important;
+
+    padding: 14px 25px 24px 24px;
+}
+#myBar {
+    background-color: #bcbb7e;
+    background-image: linear-gradient(
+      rgba(36, 147, 26, 0.5), 
+      rgba(36, 147, 26, 0.5)
+    ), url('../img/marble.jpg');
+}
+#playerBar {
+    background-color: #bc7e7f;
+    background-image: linear-gradient(
+      rgba(147, 26, 36, 0.5), 
+      rgba(147, 26, 36, 0.5)
+    ), url('../img/marble.jpg');
 }
 
 #allPlayersInfo {
     border: none;
     background-color: rgba(1, 1, 1, 0);
-    padding: 0;
-    margin: 0;
 }
 
 .selectedHand, .selectedBoard, .selectedToken {
@@ -133,20 +171,22 @@ body {
 }
 
 .playerInfo {
-
-    /*border: black 1px solid;*/
-    border-radius: 10px;
-
     cursor: pointer;
     margin: 5px;
-    padding: 3px;
 
-    background-color:  #af4024; /*red-brown*/
+    background-image: linear-gradient(
+      rgba(142, 66, 15, 0.5), 
+      rgba(142, 66, 15, 0.5)
+    ), url('../img/marble.jpg');
+
     color: black;
 }
-
 .selectedPlayer {
     background-color: #e29e0b; /* gold */
+    background-image: linear-gradient(
+      rgba(183, 133, 16, 0.6),
+      rgba(183, 133, 16, 0.6)
+    ), url('../img/marble.jpg');
 }
 
 .p {
@@ -174,4 +214,8 @@ body {
 
     height: 24px;
     width: 24px;
+}
+
+img, .card {
+    border-radius: 12px;
 }
