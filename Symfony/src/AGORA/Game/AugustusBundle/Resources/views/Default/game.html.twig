@@ -60,7 +60,7 @@
                             <p class="p">
                                 {{ player.userName ? player.userName : "null" }}<br>
                                 Légions : {{ player.legion }}/{{ player.legionMax }}<br>
-                                Objectifs sous contrôle : {{ player.ctrlCards.length }}
+                                Objectifs sous contrôle : {{ player.ctrlCards|length }}
                             </p>
                         </div>
                     {% else %}
@@ -351,7 +351,7 @@
 
             <div class="action">
                 {% if game.state == "aveCesar" and game.affectedPlayer() == me.getId() %}
-                    {% if me.advantage == 0 and me.ctrlCards.length >= 2 %}
+                    {% if me.advantage == 0 and me.ctrlCards|length >= 2 %}
                         <div>
                             <p>Vous pouvez prendre la récompense entourée en vert. Vous ne pouvez prendre qu'une seule
                                 récompense de ce type.</p>
