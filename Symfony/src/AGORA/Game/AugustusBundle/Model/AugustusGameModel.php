@@ -154,6 +154,7 @@ class AugustusGameModel {
                 $card = $this->getCapturableCardFromPlayer($game->getAffectedPlayer());
                 $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
                 $playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
+                echo "echo d'adrien: "; $game->getAffectedPlayer();
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
                 $this->changeWheatOwner($id, $game->getAffectedPlayer());
                 if ($game->getState()[0] == "aveCesar") {
