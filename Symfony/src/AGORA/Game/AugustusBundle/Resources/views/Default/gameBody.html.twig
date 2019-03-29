@@ -728,7 +728,7 @@
             let actualTokens = [];
             actualTokens.push(actualToken);
             let powerList = [];
-            powerList = {{ me.equivalences }};
+            {#powerList = {{ me.equivalences }};#}
 
             {% if game.getState() == "TwoLegionOnDoubleSword" and game.getAffectedPlayer() == me.getId() %}
             actualTokens = ["double sword"];
