@@ -279,7 +279,8 @@ class AugustusPlayer
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
     public function removeCard(\AGORA\Game\AugustusBundle\Entity\AugustusCard $card)
-    {
+    {   
+        $card->setPlayer(null);
         return $this->cards->removeElement($card);
     }
 
@@ -410,7 +411,7 @@ class AugustusPlayer
     public function addCtrlCard(\AGORA\Game\AugustusBundle\Entity\AugustusCard $ctrlCard)
     {
         $this->ctrlCards[] = $ctrlCard;
-        $card->setPlayerCtrl($this);
+        $ctrlCard->setPlayerCtrl($this);
         return $this;
     }
 

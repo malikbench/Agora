@@ -50,6 +50,12 @@ class AugustusCard
     private $board;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusBoard", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+    */
+    private $boardLine;
+
+    /**
      * @var array
      *
      * @ORM\Column(name="tokens", type="array")
@@ -109,6 +115,15 @@ class AugustusCard
         $this->points = $points;
         $this->color = $color;
         $this->board = $boardId;
+        $this->equivalences = [];
+        $this->equivalences[AugustusToken::SHIELD] = [];
+        $this->equivalences[AugustusToken::KNIFE] = [];
+        $this->equivalences[AugustusToken::CHARIOT] = [];
+        $this->equivalences[AugustusToken::DOUBLESWORD] = [];
+        $this->equivalences[AugustusToken::CATAPULT] = [];
+        $this->equivalences[AugustusToken::JOKER] = [];
+        $this->equivalences[AugustusToken::TEACHES] = [];
+
     }
 
     /**
@@ -336,5 +351,53 @@ class AugustusCard
     public function getPlayer()
     {
         return $this->player;
+    }
+
+    /**
+     * Set playerCtrl.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusPlayer|null $playerCtrl
+     *
+     * @return AugustusCard
+     */
+    public function setPlayerCtrl(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $playerCtrl = null)
+    {
+        $this->playerCtrl = $playerCtrl;
+
+        return $this;
+    }
+
+    /**
+     * Get playerCtrl.
+     *
+     * @return \AGORA\Game\AugustusBundle\Entity\AugustusPlayer|null
+     */
+    public function getPlayerCtrl()
+    {
+        return $this->playerCtrl;
+    }
+
+    /**
+     * Set boardLine.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusBoard $boardLine
+     *
+     * @return AugustusCard
+     */
+    public function setBoardLine(\AGORA\Game\AugustusBundle\Entity\AugustusBoard $boardLine)
+    {
+        $this->boardLine = $boardLine;
+
+        return $this;
+    }
+
+    /**
+     * Get boardLine.
+     *
+     * @return \AGORA\Game\AugustusBundle\Entity\AugustusBoard
+     */
+    public function getBoardLine()
+    {
+        return $this->boardLine;
     }
 }

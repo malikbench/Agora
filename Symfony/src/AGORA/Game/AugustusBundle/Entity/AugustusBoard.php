@@ -35,7 +35,7 @@ class AugustusBoard {
     private $deck;
 
     /**
-     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="board", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="boardLine", cascade={"persist"})
      */
     private $objLine;
 
@@ -767,6 +767,7 @@ class AugustusBoard {
         // Le deck est déjà mélangé donc il suffit de tirer les 5 cartes du dessus.
         for ($i = 0; $i < 5; $i++) {
           $this->objLine->add($this->deck->last());
+          $this->deck->last()->setBoardLine($this);
           $this->deck->removeElement($this->deck->last());
         }
     }
@@ -824,6 +825,7 @@ class AugustusBoard {
    */
   public function addObjToLine(AugustusCard $card)
   {
+      $card->setObjLine($this);
       return $this->objLine->add($card);
   }
 
@@ -836,6 +838,7 @@ class AugustusBoard {
    */
   public function removeObjFromLine(AugustusCard $card)
   {
+      $card->setObjLine(null);
       return $this->objLine->removeElement($card);
   }
 
@@ -941,7 +944,7 @@ class AugustusBoard {
     public function addDeck(AugustusCard $deck)
     {
         $this->deck[] = $deck;
-
+        $deck->setBoard($this);
         return $this;
     }
 
@@ -954,6 +957,7 @@ class AugustusBoard {
      */
     public function removeDeck(AugustusCard $deck)
     {
+        $deck->setBoard(null);
         return $this->deck->removeElement($deck);
     }
 
