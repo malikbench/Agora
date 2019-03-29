@@ -191,21 +191,20 @@ class AugustusGameModel {
             $game = $games->findOneById($id);
 
             $card = getCapturableCardFromPlayer($game->getAffectedPlayer());
-            if ($card) {                
-                $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
-                $players->captureCard($game->getAffectedPlayer(), $card->getId());
+            if ($card) {
+                $this->playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
                 $this->changeWheatOwner($id, $game->getAffectedPlayer());
-                if ($players->getNbOfCardColor($card->getPlayer(), $card->getColor()) == 3) {
-                    $this->fillColorLoot($id, $card->getPlayer(), $card->getColor());
+                if ($this->playerModel->getNbOfCardColor($game->getAffectedPlayer(), $card->getColor()) == 3) {
+                    $this->fillColorLoot($id, $game->getAffectedPlayer(), $card->getColor());
                 }
-                if ($player->haveOneCardOfEach($card->getPlayer())) {
-                    $this->fillColorLoot($id, $card->getPlayer(), "all");
+                if ($this->playerModel->haveOneCardOfEach($game->getAffectedPlayer())) {
+                    $this->fillColorLoot($id, $game->getAffectedPlayer(), "all");
                 }
                 if ($this->isPowerWithAction($card->getId())) {
                     $game->setState($card->getPower());
                 } else {
-                    $card->doPower();
+                    $this->cardModel->doPower($card->getId());
                 }
             } else {
                 $game->setState($game->getNextStates()[0]);
