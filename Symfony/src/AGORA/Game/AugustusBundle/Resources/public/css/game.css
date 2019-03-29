@@ -10,6 +10,8 @@ body {
     font-size: 20px;
     font-weight: 500;
 
+    text-shadow: 0px 0px 1px white;
+
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
@@ -39,6 +41,10 @@ body {
 
 .flex1 {
     flex: 1;
+}
+.space {
+    min-height: 15px;
+    min-width: 15px;
 }
 
 /* Overlay */
@@ -118,7 +124,11 @@ body {
 
 
 #objLine {
-    background-color: deepskyblue;
+    background-color: #29537a;
+    background-image: linear-gradient(
+      rgba(41, 83, 122, 0.5), 
+      rgba(41, 83, 122, 0.5)
+    ), url('../img/marble.jpg');
 }
 
 #instructions p {

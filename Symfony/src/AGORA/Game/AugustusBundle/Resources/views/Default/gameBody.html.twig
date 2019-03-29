@@ -119,12 +119,13 @@
 
         </div>
 
-        <!-- <div class="flex1"></div> -->
+        <div class="flex1 space"></div>
 
         <div id="boardBar" class="flexContainer flexRow">
-            <div class="flex1"></div>
 
-            <div id="lootBars" class="flexContainer flexColumn">
+            <div id="lootBars" class="flexContainer flexColumn marble">
+                <div class="flex1"></div>
+
                 <div id="topLoot" class="flexContainer flexRow">
                     <img src="{{ asset('bundles/augustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100"
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '2' ))">
@@ -140,7 +141,7 @@
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'gold' ))">
                 </div>
 
-                <div class="flex1"></div>
+                
 
                 <div id="botLoot" class="flexContainer flexRow">
                     <img src="{{ asset('bundles/augustus/img/Loot/LootSenator.jpg') }}" alt="Lootsenator" height="100"
@@ -156,11 +157,13 @@
                     <img src="{{ asset('bundles/augustus/img/Loot/LootWheat.jpg') }}" alt="LootWheat" height="100"
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'wheat' ))">
                 </div>
+
+                <div class="flex1"></div>
             </div>
 
-            <div class="flex1"></div>
+            <div class="flex1 space"></div>
 
-            <div id="objLine" class="flexContainer flexRow">
+            <div id="objLine" class="flexContainer flexRow marble">
                 <div class="flexContainer flexColumn">
                     <div>
                         <img src="{{ asset('bundles/augustus/img/Cards/' ~ game.board.objLine[0].number ~ '.jpg') }}"
@@ -194,7 +197,7 @@
             </div>
         </div>
 
-        <!-- <div class="flex1"></div> -->
+        <div class="flex1 space"></div>
 
         <div id="myBar" class="marble flexContainer flexRow">
             {% for card in me.cards %}
@@ -292,11 +295,13 @@
     <div class="flex1"></div>
 
     <div id="tokenInfo" class="flexContainer flexColumn">
+        <div class="marble">
         <img src="{{ asset('bundles/augustus/img/Token/TokenCount.jpg') }}" alt="TokenHelp" width="150">
         <div class="flexContainer flexRow">
             <p class="p">Jeton du tour : </p>
             <img src="{{ asset('bundles/augustus/img/Token/Token' ~ game.getToken ~ '.jpg') }}"
                  alt="{{ game.getToken }}" height="55">
+        </div>
         </div>
 
         <div class="flex1"></div>
