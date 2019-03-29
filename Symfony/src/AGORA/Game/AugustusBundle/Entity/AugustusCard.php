@@ -70,6 +70,13 @@ class AugustusCard
     private $power;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isInLine", type="boolean")
+     */
+    private $isInLine;
+
+    /**
      * @var enum
      *
      * @ORM\Column(name="color", type="string")
@@ -123,6 +130,7 @@ class AugustusCard
         $this->equivalences[AugustusToken::CATAPULT] = [];
         $this->equivalences[AugustusToken::JOKER] = [];
         $this->equivalences[AugustusToken::TEACHES] = [];
+        $this->isInLine = false;
 
     }
 
@@ -158,6 +166,30 @@ class AugustusCard
     public function getNumber()
     {
         return $this->number;
+    }
+
+    /**
+     * Set isInLine.
+     *
+     * @param boolean $isInLine
+     *
+     * @return AugustusCard
+     */
+    public function setIsInLine($isInLine)
+    {
+        $this->isInLine = $isInLine;
+
+        return $this;
+    }
+
+    /**
+     * Get isInLine.
+     *
+     * @return boolean
+     */
+    public function getIsInLine()
+    {
+        return $this->isInLine;
     }
 
     /**

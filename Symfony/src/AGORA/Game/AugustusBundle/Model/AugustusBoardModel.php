@@ -20,10 +20,13 @@ class AugustusBoardModel {
     // Récupération du board avec son id.
     $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
     $board = $boards->findOneById($idBoard);
-    
-    for ($i = sizeof($board->getObjLine()->toArray()); $i < 5; $i++) {
-      $board->addObjToLine($board->getDeck()->last());
-      $board->removeCardFromDeck($board->getDeck()->last());
+    $deck = $board->getDeck();
+    $j = count($deck) - 1;
+    for ($i = count($board->getObjLine()); $i < 5; $i++) {
+      while ($deck[$j]->getIsInLine()) {
+        $j = $j - 1;
+      }
+      $deck[$j]->setIsInLine(true);
     }
   }
     
