@@ -853,7 +853,7 @@
                 let indToken = -1;
                 listToken.forEach(function (element, index) {
                     if (actualTokens.includes(element)) {
-                        if (listControlled[index] === '0') {
+                        if (listControlled[index] === '0' || listControlled[index] === '') {
                             indToken = index;
                         }
                     }
