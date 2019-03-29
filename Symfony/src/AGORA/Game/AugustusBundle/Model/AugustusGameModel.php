@@ -37,7 +37,7 @@ class AugustusGameModel {
         $augGame->setBoard(new AugustusBoard($augGame));
         $this->manager->persist($augGame);
         $this->manager->flush();
-
+        $this->boardModel->fillLine($augGame->getBoard()->getId());
         $game = new Game();
         $game->setGameId($augGame->getId());
         $gameInfoManager = $this->manager->getRepository('AGORAPlatformBundle:GameInfo');
@@ -66,6 +66,7 @@ class AugustusGameModel {
         foreach ($game->getPlayers() as $player) {
             for ($i = 0; $i < 3; $i++) {
                 $player->addCard($this->boardModel->takeCard($game->getBoard()->getId()));
+                $this->manager->flush();
             }
         }
         $game->setState("legion");

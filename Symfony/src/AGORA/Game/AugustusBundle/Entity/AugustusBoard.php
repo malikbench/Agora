@@ -758,15 +758,6 @@ class AugustusBoard {
         }
         
         // Il y a 5 objectifs sur le terrain en début d'une partie.
-        
-        // Le deck est déjà mélangé donc il suffit de tirer les 5 cartes du dessus.
-        $j = count($this->deck) - 1;
-            for ($i = 0; $i < 5; $i++) {
-                while ($this->deck[$j]->getIsInLine()) {
-                    $j = $j - 1;
-                }
-                $deck[$j]->setIsInLine(true);
-            }
     }
   
   /**
@@ -816,20 +807,22 @@ class AugustusBoard {
   /**
    * Get obj line.
    *
-   * @return \Doctrine\Common\Collections\Collection
+   * @return array
    */
   public function getObjLine()
   {
-    $objLine = new \Doctrine\Common\Collections\ArrayCollection();
+    $objLine = [];
     $deck = $this->getDeck();
     $j = count($deck) - 1;
-    for ($i = count($this->getObjLine()); $i < 5; $i++) {
-        while ($deck[$j]->getIsInLine()) {
-          $j = $j - 1;
+    $i = 0;
+    while ($i < 5 && $j != 0) {
+        if ($deck[$j]->getIsInLine()) {
+            $objLine[] = $deck[$j]; 
+            $i = $i + 1;
         }
-        $objLine->add($deck[$j]);
-      }
-      return $objLine;
+        $j = $j - 1;
+    }
+    return $objLine;
   }
   
   /**
