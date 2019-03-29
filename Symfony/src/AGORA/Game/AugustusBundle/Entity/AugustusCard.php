@@ -50,6 +50,12 @@ class AugustusCard
     private $board;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusBoard", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+    */
+    private $boardLine;
+
+    /**
      * @var array
      *
      * @ORM\Column(name="tokens", type="array")
@@ -369,5 +375,29 @@ class AugustusCard
     public function getPlayerCtrl()
     {
         return $this->playerCtrl;
+    }
+
+    /**
+     * Set boardLine.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusBoard $boardLine
+     *
+     * @return AugustusCard
+     */
+    public function setBoardLine(\AGORA\Game\AugustusBundle\Entity\AugustusBoard $boardLine)
+    {
+        $this->boardLine = $boardLine;
+
+        return $this;
+    }
+
+    /**
+     * Get boardLine.
+     *
+     * @return \AGORA\Game\AugustusBundle\Entity\AugustusBoard
+     */
+    public function getBoardLine()
+    {
+        return $this->boardLine;
     }
 }
