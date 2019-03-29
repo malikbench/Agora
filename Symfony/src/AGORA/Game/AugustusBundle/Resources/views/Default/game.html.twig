@@ -29,8 +29,8 @@
             let selectObj = null;
             let takeObj = null;
             let checkValidate = null;
-
             let action = {};
+            let initialAction = {};
             let gottaRemove = 0;
             let gottaRemoveAllTokenOnCard = false;
             let gotToCompleteCard = false;
@@ -287,7 +287,7 @@
                                         {% if me.isLock %}
                                             <button disabled onclick="removeSelectedLegion()">Retirer</button>
                                         {% else %}
-                                            <button onclick="removeSelectedLegion()">Retirer</button>
+                                            <button disabled class="remove" onclick="removeSelectedLegion()">Retirer</button>
                                         {% endif %}
                                     {% else %}
                                         <p>Aucune légion sur cette carte a retiré</p>
@@ -383,15 +383,28 @@
     <!-- SCRIPTS -->
     <script>
         checkValidate = function() {
-            if (gottaRemove >= 0 || gottaRemoveAllTokenOnCard || gotToCompleteCard || removeAction !== addAction) {
+            if (gottaRemove > 0 || gottaRemoveAllTokenOnCard || gotToCompleteCard || removeAction !== addAction) {
                 document.querySelector("#valider").disabled = true;
-            }
-            else {
+            } else {
                 document.querySelector("#valider").disabled = false;
             }
         };
 
         action = {
+            type: "",
+            removeToken: {
+                token: [],
+                card: []
+            },
+            addToken: {
+                card: [],
+                token: []
+            },
+            aveCesar : {
+                takeLoot: []
+            }
+        };
+        initialAction = {
             type: "",
             removeToken: {
                 token: [],
@@ -615,7 +628,7 @@
         };
 
         validate = function () {
-                if (JSON.stringify(action) === "{}") {
+                if (JSON.stringify(action) === JSON.stringify(initialAction)) {
                     if (confirm("Certain de ne rien vouloir jouer ?")) {
                         action.type = "{{ game.getState }}";
 
@@ -713,6 +726,10 @@
             selectedToken.ind = indToken;
             selectedToken.elem = e;
             selectedCard.ind = indCard;
+            document.querySelectorAll(".remove").forEach(element => {
+                element.disabled = false;
+            });
+
         };
 
         //FONCTION DE RETIRAGE DE LA LEGION SELECTIONNE
@@ -744,8 +761,6 @@
                     document.querySelector("#instructions").firstElementChild.innerHTML = "Vous pouvez valider vos actions";
                 }
 
-            } else {
-                alert("Aucun emplacement selectionné");
             }
         };
 
@@ -838,7 +853,7 @@
                 let indToken = -1;
                 listToken.forEach(function (element, index) {
                     if (actualTokens.includes(element)) {
-                        if (listControlled[index] === 0) {
+                        if (listControlled[index] === '0') {
                             indToken = index;
                         }
                     }
@@ -1072,7 +1087,6 @@
                 action: action
             };
             action = {};
-            alert(JSON.stringify(message));
             augustusSocket.send(JSON.stringify(message));
 
         }
@@ -1114,7 +1128,7 @@
                 xhr.open('GET', '/game/augustus/body/{{ game.id }}/{{ me.id }}');
                 xhr.send();
                 xhr.onload = function() {
-                  if (xhr.status != 200) {
+                  if (xhr.status !== 200) {
                     alert('erreur lors du rafraîchissement de l\'affichage');
                   } else {
                     document.body.innerHTML = xhr.response;
