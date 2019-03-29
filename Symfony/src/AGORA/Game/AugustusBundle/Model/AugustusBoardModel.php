@@ -109,11 +109,7 @@ class AugustusBoardModel {
     $cards = $this->manager->getRepository('AugustusBundle:AugustusCard');
     $card = $cards->findOneById($idCard);
 
-    $ind = $cards->indexOf($card);
-    $cardInLine = $cards->remove($ind);
-
-    $board->removeObjFromLine($cardInLine);
-
-    return $cardInLine;
+    echo $board->removeObjFromLine($card);
+    return $card;
   }
 }
