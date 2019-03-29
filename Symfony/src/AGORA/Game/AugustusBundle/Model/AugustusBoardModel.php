@@ -80,8 +80,11 @@ class AugustusBoardModel {
     $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
     $board = $boards->findOneById($idBoard);
     
-    $token = $board->getTokenBag()->last();
-    $board->removeTokenFromBag($board->getTokenBag()->last());
+    $bag = $board->getTokenBag();
+    $token = $bag[count($bag) - 1];
+    $bag->remove(count($bag)- 1);
+    $board->setTokenBag($bag);
+    $this->manager->flush();
     return $token;
   }
   
@@ -95,6 +98,7 @@ class AugustusBoardModel {
     
     $card = $board->getDeck()->last();
     $board->removeCardFromDeck($board->getDeck()->last());
+    $this->manager->flush();
     return $card;
   }
 

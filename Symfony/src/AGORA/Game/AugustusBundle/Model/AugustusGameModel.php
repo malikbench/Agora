@@ -79,7 +79,7 @@ class AugustusGameModel {
 
         $game->setToken($this->boardModel->takeToken($game->getBoard()->getId()));
         if ($game->getToken() == AugustusToken::JOKER) {
-            $this->boardModel->resetBag($game->getBoard());
+            $this->boardModel->resetBag($game->getBoard()->getId());
         }
         $this->manager->flush();
     }
@@ -153,17 +153,17 @@ class AugustusGameModel {
             case "aveCesar":
                 $card = $this->getCapturableCardFromPlayer($game->getAffectedPlayer());
                 $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
-                $players->captureCard($game->getAffectedPlayer(), $card->getId());
+                $playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
                 $this->changeWheatOwner($id, $game->getAffectedPlayer());
                 if ($game->getState()[0] == "aveCesar") {
-                    $card->doPower();
+                    $cardModel->doPower($card->getId());
                 }
-                if ($players->getNbOfCardColor($card->getPlayer(), $card->getColor()) == 3) {
-                    $this->fillColorLoot($id, $card->getPlayer(), $card->getColor());
+                if ($playerModel->getNbOfCardColor($card->getPlayer()->getId(), $card->getColor()) == 3) {
+                    $this->fillColorLoot($id, $card->getPlayer()->getId(), $card->getColor());
                 }
-                if ($player->haveOneCardOfEach($card->getPlayer())) {
-                    $this->fillColorLoot($id, $card->getPlayer(), "all");
+                if ($playerModel->haveOneCardOfEach($card->getPlayer()->getId())) {
+                    $this->fillColorLoot($id, $card->getPlayer()->getId(), "all");
                 }
                 $game->setState($game->getNextStates()[0]);
                 $game->setAffectedPlayer($game->getNextAffecteds()[0]);
@@ -181,7 +181,7 @@ class AugustusGameModel {
         $this->manager->flush();
     }
 
-    // Utiliser pendant une phase ave cesar (applyStep)
+    // Utilisé pendant une phase ave cesar (applyStep)
     // Si le joueur actuel vient de récupérer une carte grace à un pouvoir
     // dans ce cas on met le pouvoir de celle-ci dans state
     // Sinon on passe au state suivant
@@ -364,7 +364,7 @@ class AugustusGameModel {
         foreach ($participants as $player) {
             $score = $this->getScores($id, $player->getId());
             if ($score > $best ||
-                $score == $best && $players->getNbOfCardColor($player->getId(), AugustusColor::SENATOR) > $players->getNbOfCardColor($winner->getId(), AugustusColor::SENATOR)) {
+                $score == $best && $playerModel->getNbOfCardColor($player->getId(), AugustusColor::SENATOR) > $playerModel->getNbOfCardColor($winner->getId(), AugustusColor::SENATOR)) {
                 $best = $score;
                 $winner = $player;
             }
