@@ -14,7 +14,7 @@
                         <p class="p">
                             {{ player.userName ? player.userName : "null" }}<br>
                             Légions : {{ player.legion }}/{{ player.legionMax }}<br>
-                            Objectifs sous contrôle : {{ player.ctrlCards.count }}
+                            Objectifs sous contrôle : {{ player.ctrlCards.length }}
                         </p>
                     </div>
                 {% else %}
