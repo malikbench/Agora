@@ -145,20 +145,19 @@ class AugustusGameModel {
                     $game->setAffectedPlayer($affecteds[0]);
                     $game->setNextStates(array_slice($states, 1));
                     $game->setNextAffecteds(array_slice($affecteds, 1));
-                    foreach ($game->getPlayers() as $player) {
-                        $player->setIsLock(false);
-                    }
+                    $this->lockThem($id);
                 }
                 break;
             case "aveCesar":
                 $card = $this->getCapturableCardFromPlayer($game->getAffectedPlayer());
                 $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
-                $playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
-                echo "echo d'adrien: "; $game->getAffectedPlayer();
+                echo "avant de capturer";
+                $this->playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
+                echo "echo d'adrien: "; echo $game->getAffectedPlayer();
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
                 $this->changeWheatOwner($id, $game->getAffectedPlayer());
                 if ($game->getState()[0] == "aveCesar") {
-                    $cardModel->doPower($card->getId());
+                    $this->$cardModel->doPower($card->getId());
                 }
                 if ($playerModel->getNbOfCardColor($card->getPlayer()->getId(), $card->getColor()) == 3) {
                     $this->fillColorLoot($id, $card->getPlayer()->getId(), $card->getColor());
@@ -170,6 +169,7 @@ class AugustusGameModel {
                 $game->setAffectedPlayer($game->getNextAffecteds()[0]);
                 $game->setNextStates(array_slice($game->getNextStates(), 1));
                 $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
+                $this->lockThem($id);
                 break;
             case "waiting":
                 $this->initGame($id);
@@ -461,5 +461,24 @@ class AugustusGameModel {
         }
 
         return $rewards + $obj + $power;    
+    }
+
+    private function lockThem($id) {
+        $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
+
+        if ($game->getState() == "aveCesar") {
+            foreach ($game->getPlayers() as $player) {
+                if ($player->getId() != $game->getAffectedPlayer()) {
+                    $player->setIsLock(true);
+                } else {
+                    $player->setIsLock(false);
+                }
+            }
+        } else {
+            foreach ($game->getPlayers() as $player) {
+                $player->setIsLock(false);
+            }
+        }
     }
 }
