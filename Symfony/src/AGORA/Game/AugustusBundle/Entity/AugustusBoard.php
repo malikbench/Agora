@@ -430,14 +430,14 @@ class AugustusBoard {
         $this->deck->add(new AugustusCard($this, 52, AugustusColor::ORANGE, AugustusResource::NORESOURCE, 5, AugustusPower::TWOLEGIONONCHARIOT, $toCapture->toArray()));
         
         $toCapture->clear();
-        $toCapture->add(AugustusToken::DOUBLESWORD);
+        $toCapture->add(AugustusToken::SHIELD);
         $toCapture->add(AugustusToken::CHARIOT);
         $toCapture->add(AugustusToken::CATAPULT);
         $toCapture->add(AugustusToken::TEACHES);
         $this->deck->add(new AugustusCard($this, 53, AugustusColor::SENATOR, AugustusResource::NORESOURCE, 0, AugustusPower::THREEPOINTBYTEACHES, $toCapture->toArray()));
         
         $toCapture->clear();
-        $toCapture->add(AugustusToken::DOUBLESWORD);
+        $toCapture->add(AugustusToken::SHIELD);
         $toCapture->add(AugustusToken::CHARIOT);
         $toCapture->add(AugustusToken::CATAPULT);
         $toCapture->add(AugustusToken::TEACHES);
