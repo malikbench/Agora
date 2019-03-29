@@ -176,7 +176,7 @@ class GameController extends Controller {
                 $card = $board->getObjLine()[$action->aveCesar->card];
                 $player->addCard($service->gameModel->boardModel->takeCardFromCenter($board->getId(), $card->getId()));
 
-                $this->manager->flush();
+                $service->manager->flush();
                 break;
             case "removeAllLegions":
                 $cards = $player->getCards();
@@ -185,13 +185,13 @@ class GameController extends Controller {
                 foreach($tokens as $t) {
                     $service->cardModel->getBackToken($card->getId(), $t);
                 }
-                $this->manager->flush();
+                $service->manager->flush();
                 break;
             case "completeCard":
                 $cards = $player->getCards();
                 $card = $cards[$action->removeAllLegion];
                 $service->playerModel->completeCard($card->getId());
-                $this->manager->flush();
+                $service->manager->flush();
                 break;
             default:
         }

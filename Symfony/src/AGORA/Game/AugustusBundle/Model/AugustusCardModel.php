@@ -24,13 +24,20 @@ class AugustusCardModel {
         $card = $cards->findOneById($idCard);
 
         $tokens = $card->getTokens();
-
-        $ind = array_search($token, $tokens);
         $ctrl = $card->getCtrlTokens();
-        $ctrl[$ind] = true;
-        $card->setCtrlTokens($ctrl);
 
-        $this->manager->flush();
+        $ind = 0;
+        while($ind < count($tokens)) {
+            if ($tokens[$ind] == $token) {
+                if ($ctrl[$ind] == false) {
+                    $ctrl[$ind] = true;
+                    $card->setCtrlTokens($ctrl);
+                    $this->manager->flush();
+                    return;
+                }
+            }
+            $ind = $ind + 1;
+        }
     }
 
     //Passe le token d'id idToken de la liste des Tokens capturés a celle des Tokens.
@@ -39,15 +46,21 @@ class AugustusCardModel {
 
         $card = $cards->findOneById($idCard);
 
-        $tokens = $card->getCtrlTokens();
-
-        $ind = array_search($token, $tokens);
-
+        $tokens = $card->getTokens();
         $ctrl = $card->getCtrlTokens();
-        $ctrl[$ind] = false;
-        $card->setCtrlTokens($ctrl);
 
-        $this->manager->flush();
+        $ind = 0;
+        while($ind < count($tokens)) {
+            if ($tokens[$ind] == $token) {
+                if ($ctrl[$ind] == true) {
+                    $ctrl[$ind] = false;
+                    $card->setCtrlTokens($ctrl);
+                    $this->manager->flush();
+                    return;
+                }
+            }
+            $ind = $ind + 1;
+        }
     }
 
     //La liste des Tokens est elle vide ?

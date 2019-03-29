@@ -65,7 +65,7 @@ class AugustusGameModel {
 
         foreach ($game->getPlayers() as $player) {
             for ($i = 0; $i < 3; $i++) {
-                $player->addCard($this->boardModel->takeCard($game->getBoard()));
+                $player->addCard($this->boardModel->takeCard($game->getBoard()->getId()));
             }
         }
         $game->setState("legion");
@@ -79,7 +79,7 @@ class AugustusGameModel {
 
         $game->setToken($this->boardModel->takeToken($game->getBoard()->getId()));
         if ($game->getToken() == AugustusToken::JOKER) {
-            $this->boardModel->resetBag($game->getBoard());
+            $this->boardModel->resetBag($game->getBoard()->getId());
         }
         $this->manager->flush();
     }
@@ -191,21 +191,20 @@ class AugustusGameModel {
             $game = $games->findOneById($id);
 
             $card = getCapturableCardFromPlayer($game->getAffectedPlayer());
-            if ($card) {                
-                $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
-                $players->captureCard($game->getAffectedPlayer(), $card->getId());
+            if ($card) {
+                $this->playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
                 $this->changeWheatOwner($id, $game->getAffectedPlayer());
-                if ($players->getNbOfCardColor($card->getPlayer(), $card->getColor()) == 3) {
-                    $this->fillColorLoot($id, $card->getPlayer(), $card->getColor());
+                if ($this->playerModel->getNbOfCardColor($game->getAffectedPlayer(), $card->getColor()) == 3) {
+                    $this->fillColorLoot($id, $game->getAffectedPlayer(), $card->getColor());
                 }
-                if ($player->haveOneCardOfEach($card->getPlayer())) {
-                    $this->fillColorLoot($id, $card->getPlayer(), "all");
+                if ($this->playerModel->haveOneCardOfEach($game->getAffectedPlayer())) {
+                    $this->fillColorLoot($id, $game->getAffectedPlayer(), "all");
                 }
                 if ($this->isPowerWithAction($card->getId())) {
                     $game->setState($card->getPower());
                 } else {
-                    $card->doPower();
+                    $this->cardModel->doPower($card->getId());
                 }
             } else {
                 $game->setState($game->getNextStates()[0]);
@@ -298,7 +297,7 @@ class AugustusGameModel {
         $game = $games->findOneById($id);
         $colorLoot = $game->getColorLoot();
 
-        if (array_key_exists($colorLoot, $type) && !$colorLoot[$type]) {
+        if (array_key_exists($type, $colorLoot) && $colorLoot[$type] == -1) {
             $colorLoot[$type] = $idPlayer;
             $game->setColorLoot($colorLoot);
         }
@@ -311,7 +310,7 @@ class AugustusGameModel {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
         $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
-        $actualPlayer = $players->findOneById($id);
+        $actualPlayer = $players->findOneById($idPlayer);
 
         
         if ($actualPlayer->getGold() != 0) {
@@ -334,7 +333,7 @@ class AugustusGameModel {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
         $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
-        $actualPlayer = $players->findOneById($id);
+        $actualPlayer = $players->findOneById($idPlayer);
 
         
         if ($actualPlayer->getWheat() != 0) {
@@ -356,7 +355,6 @@ class AugustusGameModel {
     public function getWinner($id) {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
-        $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
         $participants = $game->getPlayers();
 
         $winner = $participants[0];
