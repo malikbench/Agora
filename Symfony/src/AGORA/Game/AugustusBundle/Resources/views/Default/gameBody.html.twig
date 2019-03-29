@@ -339,6 +339,7 @@
 
 <!-- SCRIPTS -->
 <script>
+
     checkValidate = function() {
         if (gottaRemove > 0 || gottaRemoveAllTokenOnCard || gotToCompleteCard || removeAction !== addAction) {
             document.querySelector("#valider").disabled = true;
@@ -728,10 +729,12 @@
             let actualTokens = [];
             actualTokens.push(actualToken);
             let powerList = [];
-            {#powerList = {{ me.equivalences }};#}
+            {% for key, equiv in me.equivalences %}
+            powerList.{{ key }} = ['{{ equiv|join("\',\'") }}'];
+            {% endfor %}
 
             {% if game.getState() == "TwoLegionOnDoubleSword" and game.getAffectedPlayer() == me.getId() %}
-            actualTokens = ["double sword"];
+            actualTokens = ["doublesword"];
             {% elseif game.getState() == "TwoLegionOnTeaches" and game.getAffectedPlayer() == me.getId() %}
             actualTokens = ["teaches"];
             {% elseif game.getState() == "TwoLegionOnShield" and game.getAffectedPlayer() == me.getId() %}
@@ -739,13 +742,13 @@
             {% elseif game.getState() == "TwoLegionOnKnife" and game.getAffectedPlayer() == me.getId() %}
             actualTokens = ["knife"];
             {% elseif  game.getState() == "OneLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
-            actualTokens = ["double sword", "shield", "chariot", "catapult", "teaches", "knife"];
+            actualTokens = ["doublesword", "shield", "chariot", "catapult", "teaches", "knife"];
             {% elseif game.getState() == "TwoLegionOnChariot" and game.getAffectedPlayer() == me.getId() %}
             actualTokens = ["chariot"];
             {% elseif  game.getState() == "TwoLegionOnCatapult" and game.getAffectedPlayer() ==  me.getId() %}
             actualTokens = ["catapult"];
             {% elseif  game.getState() == "TwoLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
-            actualTokens = ["double sword", "shield", "chariot", "catapult", "teaches", "knife"];
+            actualTokens = ["doublesword", "shield", "chariot", "catapult", "teaches", "knife"];
             {% else %}
             switch (actualToken) {
                 case "shield" :
@@ -779,8 +782,8 @@
                     //     actualTokens.push("shield");
                     // }
                     break;
-                case "double sword" :
-                    powerList["double sword"].forEach(function(element) {
+                case "doublesword" :
+                    powerList["doublesword"].forEach(function(element) {
                         actualTokens.push(element);
                     });
                     // if (powerList.includes("DoubleSwordIsShield")) {
@@ -799,7 +802,7 @@
                     // }
                     break;
                 case "joker" :
-                    actualTokens.push("double sword");
+                    actualTokens.push("doublesword");
                     actualTokens.push("shield");
                     actualTokens.push("chariot");
                     actualTokens.push("catapult");
