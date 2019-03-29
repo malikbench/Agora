@@ -824,7 +824,7 @@
                     addAction = 1;
 
                     // on doit changer le tableau des tokens controlés
-                    listControlled[indToken] = 1;
+                    listControlled[indToken] = "1";
                     e.onclick = function () {
                         addBestToken(this, listToken, listControlled, indCard);
                     };
@@ -908,7 +908,7 @@
             //recherche sur la carte
             let indToken = -1;
             listToken.forEach(function (e, i) {
-                if (listControlled[i] === 0) {
+                if (listControlled[i] === "0") {
                     indToken = i;
                 }
             });
@@ -927,7 +927,7 @@
                     addAction -= 1;
 
                     // on doit changer le tableau des tokens controlés
-                    listControlled[indToken] = 1;
+                    listControlled[indToken] = "1";
                     e.onclick = function () {
                         addBestToken(this, listToken, listControlled, indCard);
                     };
