@@ -346,4 +346,28 @@ class AugustusCard
     {
         return $this->player;
     }
+
+    /**
+     * Set playerCtrl.
+     *
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusPlayer|null $playerCtrl
+     *
+     * @return AugustusCard
+     */
+    public function setPlayerCtrl(\AGORA\Game\AugustusBundle\Entity\AugustusPlayer $playerCtrl = null)
+    {
+        $this->playerCtrl = $playerCtrl;
+
+        return $this;
+    }
+
+    /**
+     * Get playerCtrl.
+     *
+     * @return \AGORA\Game\AugustusBundle\Entity\AugustusPlayer|null
+     */
+    public function getPlayerCtrl()
+    {
+        return $this->playerCtrl;
+    }
 }

@@ -411,7 +411,7 @@ class AugustusPlayer
     public function addCtrlCard(\AGORA\Game\AugustusBundle\Entity\AugustusCard $ctrlCard)
     {
         $this->ctrlCards[] = $ctrlCard;
-        $card->setPlayerCtrl($this);
+        $ctrlCard->setPlayerCtrl($this);
         return $this;
     }
 
