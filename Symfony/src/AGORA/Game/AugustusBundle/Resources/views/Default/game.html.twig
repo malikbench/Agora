@@ -60,7 +60,7 @@
                             <p class="p">
                                 {{ player.userName ? player.userName : "null" }}<br>
                                 Légions : {{ player.legion }}/{{ player.legionMax }}<br>
-                                Objectifs sous contrôle : {{ player.ctrlCards.count }}
+                                Objectifs sous contrôle : {{ player.ctrlCards|length }}
                             </p>
                         </div>
                     {% else %}
@@ -351,7 +351,7 @@
 
             <div class="action">
                 {% if game.state == "aveCesar" and game.affectedPlayer() == me.getId() %}
-                    {% if me.advantage == 0 and me.ctrlCards >= 2 %}
+                    {% if me.advantage == 0 and me.ctrlCards|length >= 2 %}
                         <div>
                             <p>Vous pouvez prendre la récompense entourée en vert. Vous ne pouvez prendre qu'une seule
                                 récompense de ce type.</p>
@@ -853,7 +853,7 @@
                 let indToken = -1;
                 listToken.forEach(function (element, index) {
                     if (actualTokens.includes(element)) {
-                        if (listControlled[index] === '0') {
+                        if (listControlled[index] === '0' || listControlled[index] === '') {
                             indToken = index;
                         }
                     }
@@ -872,7 +872,7 @@
                         addAction = 1;
 
                         // on doit changer le tableau des tokens controlés
-                        listControlled[indToken] = 1;
+                        listControlled[indToken] = "1";
                         e.onclick = function () {
                             addBestToken(this, listToken, listControlled, indCard);
                         };
@@ -956,7 +956,7 @@
                 //recherche sur la carte
                 let indToken = -1;
                 listToken.forEach(function (e, i) {
-                    if (listControlled[i] === 0) {
+                    if (listControlled[i] === "0") {
                         indToken = i;
                     }
                 });
@@ -975,7 +975,7 @@
                         addAction -= 1;
 
                         // on doit changer le tableau des tokens controlés
-                        listControlled[indToken] = 1;
+                        listControlled[indToken] = "1";
                         e.onclick = function () {
                             addBestToken(this, listToken, listControlled, indCard);
                         };
