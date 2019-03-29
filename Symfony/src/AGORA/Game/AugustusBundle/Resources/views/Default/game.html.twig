@@ -56,7 +56,7 @@
                 {% for player in game.players %}
                     {% if player.getId != me.getId %}
 
-                        <div class="playerInfo" onclick="selectPlayer(this, {{ loop.index0 }} )">
+                        <div class="marble playerInfo" onclick="selectPlayer(this, {{ loop.index0 }} )">
                             <p class="p">
                                 {{ player.userName ? player.userName : "null" }}<br>
                                 Légions : {{ player.legion }}/{{ player.legionMax }}<br>
@@ -71,7 +71,7 @@
 
             <div class="flex1"></div>
 
-            <div id="myInfo">
+            <div id="myInfo" class="marble">
                 <p class="p">
                     {{ me.userName }}<br>
                     Légions :<br>
@@ -86,7 +86,7 @@
         <div class="flex1"></div>
 
         <div id="boardAndHand" class="flexContainer flexColumn">
-            <div id="instructions">
+            <div id="instructions" class="marble">
 
                 {% if me.isLock %}
                     <p class="p">Veuillez patienter</p>
@@ -131,7 +131,7 @@
             </div>
 
 
-            <div id="playerBar" class="flexContainer flexRow">
+            <div id="playerBar" class="marble flexContainer flexRow">
 
                 {% for player in game.players %}
 
@@ -151,9 +151,7 @@
                                     {% endif %}
                                 {% endfor %}
                             </div>
-                            <!--
-            <img src="{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}" alt="Card{{ card.number }}" height="200" ondblclick="getOverlay(cardInfo( {{ card.number }} ))">
-            -->
+
                         {% endfor %}
 
                         <div class="flex1"></div>
@@ -244,7 +242,7 @@
 
             <!-- <div class="flex1"></div> -->
 
-            <div id="myBar" class="flexContainer flexRow">
+            <div id="myBar" class="marble flexContainer flexRow">
                 {% for card in me.cards %}
                     {% set cardIndex = loop.index0 %}
                     <div class="card"
@@ -285,7 +283,7 @@
                                             {% endif %}
                                         {% endfor %}
                                         {% if me.isLock %}
-                                            <button disabled onclick="removeSelectedLegion()">Retirer</button>
+                                            <button disabled class="remove" onclick="removeSelectedLegion()">Retirer</button>
                                         {% else %}
                                             <button disabled class="remove" onclick="removeSelectedLegion()">Retirer</button>
                                         {% endif %}
@@ -349,7 +347,7 @@
 
             <div class="flex1"></div>
 
-            <div class="action">
+            <div class="action marble">
                 {% if game.state == "aveCesar" and game.affectedPlayer() == me.getId() %}
                     {% if me.advantage == 0 and me.ctrlCards|length >= 2 %}
                         <div>
@@ -385,7 +383,8 @@
         checkValidate = function() {
             if (gottaRemove > 0 || gottaRemoveAllTokenOnCard || gotToCompleteCard || removeAction !== addAction) {
                 document.querySelector("#valider").disabled = true;
-            } else {
+            }
+            else {
                 document.querySelector("#valider").disabled = false;
             }
         };
@@ -628,32 +627,31 @@
         };
 
         validate = function () {
-                if (JSON.stringify(action) === JSON.stringify(initialAction)) {
-                    if (confirm("Certain de ne rien vouloir jouer ?")) {
-                        action.type = "{{ game.getState }}";
-
-                        sendAction();
-                        resetSelected();
-                    }
-                } else {
+            if (JSON.stringify(action) === JSON.stringify(initialAction)) {
+                if (confirm("Certain de ne rien vouloir jouer ?")) {
                     action.type = "{{ game.getState }}";
                     sendAction();
                     resetSelected();
-
                 }
-                let xhr = new XMLHttpRequest();
-                xhr.open('GET', '/game/augustus/body/{{ game.id }}/{{ me.id }}');
-                xhr.send();
-                xhr.onload = function() {
-                    if (xhr.status !== 200) {
-                        alert('erreur lors du rafraîchissement de l\'affichage');
-                    } else {
-                        document.body.innerHTML = xhr.response;
-                        let scripts = document.body.getElementsByTagName('script')[0].innerHTML;
-                        console.log(scripts);
-                        eval(scripts);
-                    }
-                };
+            } else {
+                action.type = "{{ game.getState }}";
+                sendAction();
+                resetSelected();
+
+            }
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', '/game/augustus/body/{{ game.id }}/{{ me.id }}');
+            xhr.send();
+            xhr.onload = function() {
+                if (xhr.status !== 200) {
+                    alert('erreur lors du rafraîchissement de l\'affichage');
+                } else {
+                    document.body.innerHTML = xhr.response;
+                    let scripts = document.body.getElementsByTagName('script')[0].innerHTML;
+                    console.log(scripts);
+                    eval(scripts);
+                }
+            };
 
         };
 
@@ -728,9 +726,7 @@
             selectedCard.ind = indCard;
             document.querySelectorAll(".remove").forEach(element => {
                 element.disabled = false;
-            });
-
-        };
+            });    };
 
         //FONCTION DE RETIRAGE DE LA LEGION SELECTIONNE
         removeSelectedLegion = function () {
@@ -1073,7 +1069,6 @@
     </script>
 
     <button id="buttAcc" onclick="window.location.href = '{{ path('agora_platform_homepage') }}'">Accueil</button>
-
     </body>
 
 
