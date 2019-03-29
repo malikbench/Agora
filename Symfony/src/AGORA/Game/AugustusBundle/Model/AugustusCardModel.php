@@ -144,7 +144,7 @@ class AugustusCardModel {
         if($equivalences[AugustusToken::DOUBLESWORD]->length == 0) {
             $equivalences[AugustusToken::DOUBLESWORD] = [];
         }
-        $equivalences[AugustusToken::DOUBLESWORD] = array_push(AugustusToken::SHIELD);
+        $equivalences[AugustusToken::DOUBLESWORD]->array_push(AugustusToken::SHIELD);
         $player -> setEquivalences($equivalences);
     }
 
@@ -167,7 +167,7 @@ class AugustusCardModel {
     }
 
     private function doChariotIsCatapult($idCard) {
-        $cards = $manager->getRepository('AugustusBundle:AugustusCard');
+        $cards = $this->manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
 
