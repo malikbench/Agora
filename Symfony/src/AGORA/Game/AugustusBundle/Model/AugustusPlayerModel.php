@@ -122,7 +122,7 @@ class AugustusPlayerModel {
                 break;
         }
         $player->addCtrlCard($card);
-        $player->cards->removeElement($card);
+        $player->removeCard($card);
         $this->manager->flush();
     }
 
