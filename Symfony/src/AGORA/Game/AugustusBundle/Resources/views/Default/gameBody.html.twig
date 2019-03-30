@@ -144,15 +144,15 @@
                 <div class="flex1"></div>
 
                 <div id="botLoot" class="flexContainer flexRow">
-                    <img src="{{ asset('bundles/augustus/img/Loot/LootSenator.jpg') }}" alt="Lootsenator" height="100"
+                    <img src="{{ asset('bundles/augustus/img/Loot/Lootsenator.jpg') }}" alt="Lootsenator" height="100"
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'senator' ))">
-                    <img src="{{ asset('bundles/augustus/img/Loot/LootGreen.jpg') }}" alt="Lootgreen" height="100"
+                    <img src="{{ asset('bundles/augustus/img/Loot/Lootgreen.jpg') }}" alt="Lootgreen" height="100"
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'green' ))">
                     <img src="{{ asset('bundles/augustus/img/Loot/Lootall.jpg') }}" alt="Lootall" height="100"
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'all' ))">
                     <img src="{{ asset('bundles/augustus/img/Loot/Lootpink.jpg') }}" alt="Lootpink" height="100"
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'pink' ))">
-                    <img src="{{ asset('bundles/augustus/img/Loot/LootOrange.jpg') }}" alt="Lootorange" height="100"
+                    <img src="{{ asset('bundles/augustus/img/Loot/Lootorange.jpg') }}" alt="Lootorange" height="100"
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'orange' ))">
                     <img src="{{ asset('bundles/augustus/img/Loot/LootWheat.jpg') }}" alt="LootWheat" height="100"
                          onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'wheat' ))">
@@ -753,9 +753,9 @@
             switch (actualToken) {
                 case "shield" :
 
-                    powerList["shield"].forEach(function(element) {
-                        actualTokens.push(element);
-                    });
+                    // powerList["shield"].forEach(function(element) {
+                    //     actualTokens.push(element);
+                    // });
                     // if (powerList.includes("ShieldIsChariot")) {
                     //     actualTokens.push("chariot");
                     // }
@@ -764,17 +764,17 @@
                     // }
                     break;
                 case "knife" :
-                    powerList["knife"].forEach(function(element) {
-                        actualTokens.push(element);
-                    });
+                    // powerList["knife"].forEach(function(element) {
+                    //     actualTokens.push(element);
+                    // });
                     // if (powerList.includes("TeachesIsKnife")) {
                     //     actualTokens.push("teaches");
                     // }
                     break;
                 case "chariot" :
-                    powerList["chariot"].forEach(function(element) {
-                        actualTokens.push(element);
-                    });
+                    // powerList["chariot"].forEach(function(element) {
+                    //     actualTokens.push(element);
+                    // });
                     // if (powerList.includes("ChariotIsCatapult")) {
                     //     actualTokens.push("catapult");
                     // }
@@ -783,17 +783,17 @@
                     // }
                     break;
                 case "doublesword" :
-                    powerList["doublesword"].forEach(function(element) {
-                        actualTokens.push(element);
-                    });
+                    // powerList["doublesword"].forEach(function(element) {
+                    //     actualTokens.push(element);
+                    // });
                     // if (powerList.includes("DoubleSwordIsShield")) {
                     //     actualTokens.push("shield");
                     // }
                     break;
                 case "catapult" :
-                    powerList["catapult"].forEach(function(element) {
-                        actualTokens.push(element);
-                    });
+                    // powerList["catapult"].forEach(function(element) {
+                    //     actualTokens.push(element);
+                    // });
                     // if (powerList.includes("ChariotIsCatapult")) {
                     //     actualTokens.push("chariot");
                     // }
@@ -810,9 +810,9 @@
                     actualTokens.push("knife");
                     break;
                 case "teaches" :
-                    powerList["teaches"].forEach(function(element) {
-                        actualTokens.push(element);
-                    });
+                    // powerList["teaches"].forEach(function(element) {
+                    //     actualTokens.push(element);
+                    // });
                     // if (powerList.includes("CatapultIsTeaches")) {
                     //     actualTokens.push("catapult");
                     // }
