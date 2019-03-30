@@ -219,3 +219,19 @@ body {
 img, .card {
     border-radius: 12px;
 }
+
+/* endBody CSS */
+
+.scoreTitle {
+    width: 25%;
+    margin: auto;
+}
+
+#scoreBoard {
+    background-image: linear-gradient( rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7) ), url(../img/marble.jpg);
+}
+
+.playerScoreBar{
+    margin: 15px 0;
+    color: gold;
+}
