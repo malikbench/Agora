@@ -747,39 +747,39 @@
             {% else %}
             switch (actualToken) {
                 case "shield" :
-                {#{% if me.getEquivalences()["shield"] is not empty and me.getEquivalences()["shield"].contains("chariot") %}#}
-                    {#actualTokens.push("chariot");#}
-                {#{% endif %}#}
-                {#{% if me.getEquivalences()["shield"] is not empty and me.getEquivalences()["shield"].contains("doublesword") %}#}
-                {#actualTokens.push("double sword");#}
-                {#{% endif %}#}
+                {% if me.getEquivalences()["shield"] is not empty and me.getEquivalences()["shield"].contains("chariot") %}
+                    actualTokens.push("chariot");
+                {% endif %}
+                {% if me.getEquivalences()["shield"] is not empty and me.getEquivalences()["shield"].contains("doublesword") %}
+                actualTokens.push("double sword");
+                {% endif %}
 
                     break;
                 case "knife" :
-                {#{% if me.getEquivalences()["knife"] is not empty and me.getEquivalences()["knife"].contains("teaches") %}#}
-                {#actualTokens.push("teaches");#}
-                {#{% endif %}#}
+                {% if me.getEquivalences()["knife"] is not empty and me.getEquivalences()["knife"].contains("teaches") %}
+                actualTokens.push("teaches");
+                {% endif %}
                     break;
                 case "chariot" :
-                {#{% if me.getEquivalences()["chariot"] is not empty and me.getEquivalences()["chariot"].contains("catapult") %}#}
-                {#actualTokens.push("catapult");#}
-                {#{% endif %}#}
-                {#{% if me.getEquivalences()["chariot"] is not empty and me.getEquivalences()["chariot"].contains("shield") %}#}
-                {#actualTokens.push("shield");#}
-                {#{% endif %}#}
+                {% if me.getEquivalences()["chariot"] is not empty and me.getEquivalences()["chariot"].contains("catapult") %}
+                actualTokens.push("catapult");
+                {% endif %}
+                {% if me.getEquivalences()["chariot"] is not empty and me.getEquivalences()["chariot"].contains("shield") %}
+                actualTokens.push("shield");
+                {% endif %}
                     break;
                 case "doublesword" :
-                {#{% if me.getEquivalences()["doublesword"] is not empty and me.getEquivalences()["doublesword"].contains("shield") %}#}
-                {#actualTokens.push("shield");#}
-                {#{% endif %}#}
+                {% if me.getEquivalences()["doublesword"] is not empty and me.getEquivalences()["doublesword"].contains("shield") %}
+                actualTokens.push("shield");
+                {% endif %}
                     break;
                 case "catapult" :
-                {#{% if me.getEquivalences()["catapult"] is not empty and me.getEquivalences()["catapult"].contains("chariot") %}#}
-                {#actualTokens.push("chariot");#}
-                {#{% endif %}#}
-                {#{% if me.getEquivalences()["catapult"] is not empty and me.getEquivalences()["catapult"].contains("teaches") %}#}
-                {#actualTokens.push("teaches");#}
-                {#{% endif %}#}
+                {% if me.getEquivalences()["catapult"] is not empty and me.getEquivalences()["catapult"].contains("chariot") %}
+                actualTokens.push("chariot");
+                {% endif %}
+                {% if me.getEquivalences()["catapult"] is not empty and me.getEquivalences()["catapult"].contains("teaches") %}
+                actualTokens.push("teaches");
+                {% endif %}
                     break;
                 case "joker" :
                     actualTokens.push("doublesword");
@@ -790,12 +790,12 @@
                     actualTokens.push("knife");
                     break;
                 case "teaches" :
-                {#{% if me.getEquivalences()["teaches"] is not empty and me.getEquivalences()["teaches"].contains("catapult") %}#}
-                {#actualTokens.push("catapult");#}
-                {#{% endif %}#}
-                {#{% if me.getEquivalences()["teaches"] is not empty and me.getEquivalences()["teaches"].contains("knife") %}#}
-                {#actualTokens.push("knife");#}
-                {#{% endif %}#}
+                {% if me.getEquivalences()["teaches"] is not empty and me.getEquivalences()["teaches"].contains("catapult") %}
+                actualTokens.push("catapult");
+                {% endif %}
+                {% if me.getEquivalences()["teaches"] is not empty and me.getEquivalences()["teaches"].contains("knife") %}
+                actualTokens.push("knife");
+                {% endif %}
 
                     break;
                 default:
