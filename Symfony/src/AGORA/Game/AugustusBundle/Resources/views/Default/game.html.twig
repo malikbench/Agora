@@ -190,7 +190,7 @@
                     <div class="flex1"></div>
 
                     <div id="botLoot" class="flexContainer flexRow">
-                        <img src="{{ asset('bundles/augustus/img/Loot/Lootsoenator.jpg') }}" alt="Lootsenator" height="100"
+                        <img src="{{ asset('bundles/augustus/img/Loot/Lootsenator.jpg') }}" alt="Lootsenator" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'senator' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Lootgreen.jpg') }}" alt="Lootgreen" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'green' ))">
@@ -198,7 +198,7 @@
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'all' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Lootpink.jpg') }}" alt="Lootpink" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'pink' ))">
-                        <img src="{{ asset('bundles/augustus/img/Loot/Lootrange.jpg') }}" alt="Lootorange" height="100"
+                        <img src="{{ asset('bundles/augustus/img/Loot/Lootorange.jpg') }}" alt="Lootorange" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'orange' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/LootWheat.jpg') }}" alt="LootWheat" height="100"
                              onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'wheat' ))">
@@ -773,12 +773,6 @@
                 let actualToken = "{{ game.getToken }}";
                 let actualTokens = [];
                 actualTokens.push(actualToken);
-                let powerList = [];
-                {#powerList = {{ me.equivalences }};#}
-
-                {% for key, equiv in me.equivalences %}
-                powerList.{{ key }} = ['{{ equiv|join("\',\'") }}'];
-                {% endfor %}
                 {% if game.getState() == "TwoLegionOnDoubleSword" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["doublesword"];
                 {% elseif game.getState() == "TwoLegionOnTeaches" and game.getAffectedPlayer() == me.getId() %}
@@ -798,54 +792,39 @@
                 {% else %}
                 switch (actualToken) {
                     case "shield" :
+                        {#{% if me.getEquivalences()["shield"] is not empty and me.getEquivalences()["shield"].contains("chariot") %}#}
+                            {#actualTokens.push("chariot");#}
+                        {#{% endif %}#}
+                        {#{% if me.getEquivalences()["shield"] is not empty and me.getEquivalences()["shield"].contains("doublesword") %}#}
+                            {#actualTokens.push("double sword");#}
+                        {#{% endif %}#}
 
-                        // powerList["shield"].forEach(function(element) {
-                        //   actualTokens.push(element);
-                        // });
-                        // if (powerList.includes("ShieldIsChariot")) {
-                        //     actualTokens.push("chariot");
-                        // }
-                        // if (powerList.includes("DoubleSwordIsShield")) {
-                        //     actualTokens.push("double sword");
-                        // }
                         break;
                     case "knife" :
-                        // powerList["knife"].forEach(function(element) {
-                        //     actualTokens.push(element);
-                        // });
-                        // if (powerList.includes("TeachesIsKnife")) {
-                        //     actualTokens.push("teaches");
-                        // }
+                        {#{% if me.getEquivalences()["knife"] is not empty and me.getEquivalences()["knife"].contains("teaches") %}#}
+                            {#actualTokens.push("teaches");#}
+                        {#{% endif %}#}
                         break;
                     case "chariot" :
-                        // powerList["chariot"].forEach(function(element) {
-                        //     actualTokens.push(element);
-                        // });
-                        // if (powerList.includes("ChariotIsCatapult")) {
-                        //     actualTokens.push("catapult");
-                        // }
-                        // if (powerList.includes("ShieldIsChariot")) {
-                        //     actualTokens.push("shield");
-                        // }
+                    {#{% if me.getEquivalences()["chariot"] is not empty and me.getEquivalences()["chariot"].contains("catapult") %}#}
+                        {#actualTokens.push("catapult");#}
+                    {#{% endif %}#}
+                    {#{% if me.getEquivalences()["chariot"] is not empty and me.getEquivalences()["chariot"].contains("shield") %}#}
+                        {#actualTokens.push("shield");#}
+                    {#{% endif %}#}
                         break;
                     case "doublesword" :
-                        // powerList["doublesword"].forEach(function(element) {
-                        //     actualTokens.push(element);
-                        // });
-                        // if (powerList.includes("DoubleSwordIsShield")) {
-                        //     actualTokens.push("shield");
-                        // }
+                    {#{% if me.getEquivalences()["doublesword"] is not empty and me.getEquivalences()["doublesword"].contains("shield") %}#}
+                        {#actualTokens.push("shield");#}
+                    {#{% endif %}#}
                         break;
                     case "catapult" :
-                        // powerList["catapult"].forEach(function(element) {
-                        //     actualTokens.push(element);
-                        // });
-                        // if (powerList.includes("ChariotIsCatapult")) {
-                        //     actualTokens.push("chariot");
-                        // }
-                        // if (powerList.includes("CatapultIsTeaches")) {
-                        //     actualTokens.push("teaches");
-                        // }
+                    {#{% if me.getEquivalences()["catapult"] is not empty and me.getEquivalences()["catapult"].contains("chariot") %}#}
+                        {#actualTokens.push("chariot");#}
+                    {#{% endif %}#}
+                    {#{% if me.getEquivalences()["catapult"] is not empty and me.getEquivalences()["catapult"].contains("teaches") %}#}
+                        {#actualTokens.push("teaches");#}
+                    {#{% endif %}#}
                         break;
                     case "joker" :
                         actualTokens.push("doublesword");
@@ -856,15 +835,13 @@
                         actualTokens.push("knife");
                         break;
                     case "teaches" :
-                        // powerList["teaches"].forEach(function(element) {
-                        //     actualTokens.push(element);
-                        // });
-                        // if (powerList.includes("CatapultIsTeaches")) {
-                        //     actualTokens.push("catapult");
-                        // }
-                        // if (powerList.includes("TeachesIsKnife")) {
-                        //     actualTokens.push("knife");
-                        // }
+                    {#{% if me.getEquivalences()["teaches"] is not empty and me.getEquivalences()["teaches"].contains("catapult") %}#}
+                        {#actualTokens.push("catapult");#}
+                    {#{% endif %}#}
+                    {#{% if me.getEquivalences()["teaches"] is not empty and me.getEquivalences()["teaches"].contains("knife") %}#}
+                        {#actualTokens.push("knife");#}
+                    {#{% endif %}#}
+
                         break;
                     default:
                         console.log("Erreur, pas de token actuel détecté");
