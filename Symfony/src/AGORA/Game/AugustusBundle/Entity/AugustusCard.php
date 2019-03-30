@@ -116,14 +116,6 @@ class AugustusCard
         $this->points = $points;
         $this->color = $color;
         $this->board = $boardId;
-        $this->equivalences = [];
-        $this->equivalences[AugustusToken::SHIELD] = [];
-        $this->equivalences[AugustusToken::KNIFE] = [];
-        $this->equivalences[AugustusToken::CHARIOT] = [];
-        $this->equivalences[AugustusToken::DOUBLESWORD] = [];
-        $this->equivalences[AugustusToken::CATAPULT] = [];
-        $this->equivalences[AugustusToken::JOKER] = [];
-        $this->equivalences[AugustusToken::TEACHES] = [];
         $this->isInLine = false;
 
     }

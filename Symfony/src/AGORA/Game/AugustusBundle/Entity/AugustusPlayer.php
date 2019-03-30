@@ -121,6 +121,14 @@ class AugustusPlayer
         $this->legionMax = 7;
         $this->advantage = 0;
         $this->isLock = false;
+        $this->equivalences = [];
+        $this->equivalences[AugustusToken::SHIELD] = [];
+        $this->equivalences[AugustusToken::KNIFE] = [];
+        $this->equivalences[AugustusToken::CHARIOT] = [];
+        $this->equivalences[AugustusToken::DOUBLESWORD] = [];
+        $this->equivalences[AugustusToken::CATAPULT] = [];
+        $this->equivalences[AugustusToken::JOKER] = [];
+        $this->equivalences[AugustusToken::TEACHES] = [];
     }
 
     /**
