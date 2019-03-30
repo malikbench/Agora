@@ -115,7 +115,10 @@ class AugustusBoardModel {
     $cards = $this->manager->getRepository('AugustusBundle:AugustusCard');
     $card = $cards->findOneById($idCard);
 
-    echo $board->removeObjFromLine($card);
+    $board->removeCardFromDeck($card);
+    $this->manager->flush();
+    $board->fillLine($idBoard);
+    $this->manager->flush();
     return $card;
   }
 }
