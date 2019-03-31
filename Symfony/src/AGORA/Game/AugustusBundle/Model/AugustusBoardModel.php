@@ -96,17 +96,14 @@ class AugustusBoardModel {
     // Récupération du board avec son id.
     $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
     $board = $boards->findOneById($idBoard);
-    $deck = $board->getDeck();
-    $j = count($deck) - 1;
-    echo $j;
-    while ($deck[$j]->getIsInLine()) {
-      $j = $j - 1;
+    $deck = $board->getDeck()->toArray();
+    $j = 0;
+    $card = array_pop($deck);
+    while ($card->getIsInLine()) {
+      $card = array_pop($deck);
     }
-
-    $card = $deck[$j];
-    $board->removeCardFromDeck($deck[$j]);
+    $board->removeCardFromDeck($card);
     $this->manager->flush();
-    echo $card->getNumber();
     return $card;
   }
 
