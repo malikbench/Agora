@@ -174,7 +174,7 @@ class GameController extends Controller {
                 $game = $service->getGame($gameId);
                 $board = $game->getBoard();
                 $card = $board->getObjLine()[$action->aveCesar->card];
-                $player->addCard($service->gameModel->boardModel->takeCard($board->getId(), $card->getId()));
+                $player->addCard($service->gameModel->boardModel->takeCardFromCenter($board->getId(), $card->getId()));
 
                 $service->manager->flush();
                 break;
