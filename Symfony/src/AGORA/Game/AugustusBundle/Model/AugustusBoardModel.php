@@ -20,10 +20,11 @@ class AugustusBoardModel {
     // Récupération du board avec son id.
     $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
     $board = $boards->findOneById($idBoard);
-    
-    for ($i = sizeof($board->getObjLine()->toArray()); $i < 5; $i++) {
-      $board->addObjToLine($board->getDeck()->last());
-      $board->removeCardFromDeck($board->getDeck()->last());
+    $deck = $board->getDeck()->toArray();
+    $j = count($deck) - 1;
+    for ($i = 0; $i < 5; $i++) {
+      $j = $j - 1;
+      $deck[$j]->setIsInLine(true);
     }
   }
     
@@ -95,9 +96,14 @@ class AugustusBoardModel {
     // Récupération du board avec son id.
     $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
     $board = $boards->findOneById($idBoard);
-    
-    $card = $board->getDeck()->last();
-    $board->removeCardFromDeck($board->getDeck()->last());
+    $deck = $board->getDeck()->toArray();
+    $j = count($deck) - 1;
+    while ($deck[$j]->getIsInLine()) {
+      $j = $j - 1;
+    }
+
+    $card = $deck[$j];
+    $board->removeCardFromDeck($deck[$j]);
     $this->manager->flush();
     return $card;
   }
@@ -109,7 +115,10 @@ class AugustusBoardModel {
     $cards = $this->manager->getRepository('AugustusBundle:AugustusCard');
     $card = $cards->findOneById($idCard);
 
-    echo $board->removeObjFromLine($card);
+    $board->removeCardFromDeck($card);
+    $this->manager->flush();
+    $board->fillLine($idBoard);
+    $this->manager->flush();
     return $card;
   }
 }

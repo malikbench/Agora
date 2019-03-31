@@ -7,7 +7,7 @@ abstract class AugustusToken
     const SHIELD    = "shield";
     const KNIFE = "knife";
     const CHARIOT = "chariot";
-    const DOUBLESWORD = "double sword";
+    const DOUBLESWORD = "doublesword";
     const CATAPULT = "catapult";
     const JOKER = "joker";
     const TEACHES = "teaches";

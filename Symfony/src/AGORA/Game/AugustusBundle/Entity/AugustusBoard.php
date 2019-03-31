@@ -34,10 +34,6 @@ class AugustusBoard {
      */
     private $deck;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusCard", mappedBy="boardLine", cascade={"persist"})
-     */
-    private $objLine;
 
     /**
      * @ORM\OneToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusGame", inversedBy="board", cascade={"persist"})
@@ -762,14 +758,6 @@ class AugustusBoard {
         }
         
         // Il y a 5 objectifs sur le terrain en début d'une partie.
-        $this->objLine = new \Doctrine\Common\Collections\ArrayCollection();
-        
-        // Le deck est déjà mélangé donc il suffit de tirer les 5 cartes du dessus.
-        for ($i = 0; $i < 5; $i++) {
-          $this->objLine->add($this->deck->last());
-          $this->deck->last()->setBoardLine($this);
-          $this->deck->removeElement($this->deck->last());
-        }
     }
   
   /**
@@ -817,39 +805,24 @@ class AugustusBoard {
   }
 
   /**
-   * Add obj to line.
-   *
-   * @param \AGORA\Game\AugustusBundle\Entity\Card $card
-   *
-   * @return boolean TRUE if this element is added, FALSE otherwise.
-   */
-  public function addObjToLine(AugustusCard $card)
-  {
-      $card->setObjLine($this);
-      return $this->objLine->add($card);
-  }
-
-  /**
-   * Remove obj from line.
-   *
-   * @param \AGORA\Game\AugustusBundle\Entity\Card $card
-   *
-   * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-   */
-  public function removeObjFromLine(AugustusCard $card)
-  {
-      $card->setObjLine(null);
-      return $this->objLine->removeElement($card);
-  }
-
-  /**
    * Get obj line.
    *
-   * @return \Doctrine\Common\Collections\Collection
+   * @return array
    */
   public function getObjLine()
   {
-      return $this->objLine;
+    $objLine = [];
+    $deck = $this->getDeck();
+    $j = count($deck) - 1;
+    $i = 0;
+    while ($i < 5 && $j != 0) {
+        if ($deck[$j]->getIsInLine()) {
+            $objLine[] = $deck[$j]; 
+            $i = $i + 1;
+        }
+        $j = $j - 1;
+    }
+    return $objLine;
   }
   
   /**
@@ -959,32 +932,6 @@ class AugustusBoard {
     {
         $deck->setBoard(null);
         return $this->deck->removeElement($deck);
-    }
-
-    /**
-     * Add objLine.
-     *
-     * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $objLine
-     *
-     * @return AugustusBoard
-     */
-    public function addObjLine(AugustusCard $objLine)
-    {
-        $this->objLine[] = $objLine;
-
-        return $this;
-    }
-
-    /**
-     * Remove objLine.
-     *
-     * @param \AGORA\Game\AugustusBundle\Entity\AugustusCard $objLine
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
-     */
-    public function removeObjLine(AugustusCard $objLine)
-    {
-        return $this->objLine->removeElement($objLine);
     }
 
     /**

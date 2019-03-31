@@ -50,12 +50,6 @@ class AugustusCard
     private $board;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusBoard", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
-    */
-    private $boardLine;
-
-    /**
      * @var array
      *
      * @ORM\Column(name="tokens", type="array")
@@ -68,6 +62,13 @@ class AugustusCard
      * @ORM\Column(name="power", type="string")
      */
     private $power;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isInLine", type="boolean")
+     */
+    private $isInLine;
 
     /**
      * @var enum
@@ -115,14 +116,7 @@ class AugustusCard
         $this->points = $points;
         $this->color = $color;
         $this->board = $boardId;
-        $this->equivalences = [];
-        $this->equivalences[AugustusToken::SHIELD] = [];
-        $this->equivalences[AugustusToken::KNIFE] = [];
-        $this->equivalences[AugustusToken::CHARIOT] = [];
-        $this->equivalences[AugustusToken::DOUBLESWORD] = [];
-        $this->equivalences[AugustusToken::CATAPULT] = [];
-        $this->equivalences[AugustusToken::JOKER] = [];
-        $this->equivalences[AugustusToken::TEACHES] = [];
+        $this->isInLine = false;
 
     }
 
@@ -158,6 +152,30 @@ class AugustusCard
     public function getNumber()
     {
         return $this->number;
+    }
+
+    /**
+     * Set isInLine.
+     *
+     * @param boolean $isInLine
+     *
+     * @return AugustusCard
+     */
+    public function setIsInLine($isInLine)
+    {
+        $this->isInLine = $isInLine;
+
+        return $this;
+    }
+
+    /**
+     * Get isInLine.
+     *
+     * @return boolean
+     */
+    public function getIsInLine()
+    {
+        return $this->isInLine;
     }
 
     /**
@@ -377,27 +395,4 @@ class AugustusCard
         return $this->playerCtrl;
     }
 
-    /**
-     * Set boardLine.
-     *
-     * @param \AGORA\Game\AugustusBundle\Entity\AugustusBoard $boardLine
-     *
-     * @return AugustusCard
-     */
-    public function setBoardLine(\AGORA\Game\AugustusBundle\Entity\AugustusBoard $boardLine)
-    {
-        $this->boardLine = $boardLine;
-
-        return $this;
-    }
-
-    /**
-     * Get boardLine.
-     *
-     * @return \AGORA\Game\AugustusBundle\Entity\AugustusBoard
-     */
-    public function getBoardLine()
-    {
-        return $this->boardLine;
-    }
 }
