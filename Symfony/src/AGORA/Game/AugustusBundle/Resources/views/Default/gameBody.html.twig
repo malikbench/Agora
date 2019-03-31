@@ -339,7 +339,6 @@
 
 <!-- SCRIPTS -->
 <script>
-
     checkValidate = function() {
         if (gottaRemove > 0 || gottaRemoveAllTokenOnCard || gotToCompleteCard || removeAction !== addAction) {
             document.querySelector("#valider").disabled = true;
@@ -690,6 +689,7 @@
 
     //FONCTION DE RETIRAGE DE LA LEGION SELECTIONNE
     removeSelectedLegion = function () {
+        tokenRemoved += 1;
         if (selectedToken !== {} && selectedCard !== {}) {
             if (typeof (action.removeToken) != 'undefined') {
                 action.removeToken = {};
@@ -723,7 +723,7 @@
     // FONCTION DE POSE D'UNE LEGION
     //Vérifie si le joueur peut poser une légion sur la carte et si il le peut propose le token le plus rare
     addBestToken = function (e, listToken, listControlled, indCard) {
-        if (legion > 0) {
+        if (legion + tokenRemoved > 0) {
             console.log("{{ game.getToken }}");
             let actualToken = "{{ game.getToken }}";
             let actualTokens = [];
@@ -751,34 +751,34 @@
                     actualTokens.push("chariot");
                 {% endif %}
                 {% if me.getEquivalences()["shield"] is not empty and me.getEquivalences()["shield"].contains("doublesword") %}
-                actualTokens.push("double sword");
+                    actualTokens.push("double sword");
                 {% endif %}
 
                     break;
                 case "knife" :
                 {% if me.getEquivalences()["knife"] is not empty and me.getEquivalences()["knife"].contains("teaches") %}
-                actualTokens.push("teaches");
+                    actualTokens.push("teaches");
                 {% endif %}
                     break;
                 case "chariot" :
                 {% if me.getEquivalences()["chariot"] is not empty and me.getEquivalences()["chariot"].contains("catapult") %}
-                actualTokens.push("catapult");
+                    actualTokens.push("catapult");
                 {% endif %}
                 {% if me.getEquivalences()["chariot"] is not empty and me.getEquivalences()["chariot"].contains("shield") %}
-                actualTokens.push("shield");
+                    actualTokens.push("shield");
                 {% endif %}
                     break;
                 case "doublesword" :
                 {% if me.getEquivalences()["doublesword"] is not empty and me.getEquivalences()["doublesword"].contains("shield") %}
-                actualTokens.push("shield");
+                    actualTokens.push("shield");
                 {% endif %}
                     break;
                 case "catapult" :
                 {% if me.getEquivalences()["catapult"] is not empty and me.getEquivalences()["catapult"].contains("chariot") %}
-                actualTokens.push("chariot");
+                    actualTokens.push("chariot");
                 {% endif %}
                 {% if me.getEquivalences()["catapult"] is not empty and me.getEquivalences()["catapult"].contains("teaches") %}
-                actualTokens.push("teaches");
+                    actualTokens.push("teaches");
                 {% endif %}
                     break;
                 case "joker" :
@@ -791,10 +791,10 @@
                     break;
                 case "teaches" :
                 {% if me.getEquivalences()["teaches"] is not empty and me.getEquivalences()["teaches"].contains("catapult") %}
-                actualTokens.push("catapult");
+                    actualTokens.push("catapult");
                 {% endif %}
                 {% if me.getEquivalences()["teaches"] is not empty and me.getEquivalences()["teaches"].contains("knife") %}
-                actualTokens.push("knife");
+                    actualTokens.push("knife");
                 {% endif %}
 
                     break;
@@ -846,7 +846,7 @@
                         ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion ce tour, vous ne pouvez plus en poser d avantage.</p>";
                     });
                 }
-
+                tokenRemoved -= 1;
             } else {
                 alert("On ne peut capturer aucun token de cette carte");
             }
