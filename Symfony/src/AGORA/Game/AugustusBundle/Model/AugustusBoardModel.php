@@ -21,10 +21,19 @@ class AugustusBoardModel {
     $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
     $board = $boards->findOneById($idBoard);
     $deck = $board->getDeck()->toArray();
-    $j = count($deck) - 1;
+    //$j = count($deck) - 1;
+    $card = array_pop($deck);
     for ($i = 0; $i < 5; $i++) {
-      $j = $j - 1;
-      $deck[$j]->setIsInLine(true);
+      //$card = $deck[$j];
+      if (!$card->getPlayer() && !$card->getPlayerCtrl()) {
+        //$j = $j - 1;
+        $card->setIsInLine(true);
+        $this->manager->flush();
+      } else {
+        $card->setIsInLine(false);
+        $this->manager->flush();
+      }
+      $card = array_pop($deck);
     }
   }
     
