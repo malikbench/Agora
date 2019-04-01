@@ -153,7 +153,7 @@ class GameController extends Controller {
                         $cards = $this->cleanArray($player->getCards()->toArray());
                         $card = $cards[$action->removeToken->card[$i]];
 
-                        $card->getCtrlTokens()[$action->removeToken->token[$i]];
+                        // $card->getCtrlTokens()[$action->removeToken->token[$i]];
                         $service->playerModel->removeLegionFromCard($player->getId(), $card->getId(), $card->getTokens()[$action->removeToken->token[$i]]);
                     }
                 }
@@ -165,7 +165,7 @@ class GameController extends Controller {
                         echo "     ";
                         $card = $cards[$action->addToken->card[$i]];
                         echo $card->getNumber();
-                        $card->getCtrlTokens()[$action->addToken->token[$i]];
+                        // $card->getCtrlTokens()[$action->addToken->token[$i]];
                         $service->playerModel->putLegionOnCard($player->getId(), $card->getId(), $card->getTokens()[$action->addToken->token[$i]]);
                     }
                 }

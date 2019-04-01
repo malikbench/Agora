@@ -88,25 +88,25 @@ class AugustusCardModel {
 
         switch($card->getPower()) {
             case AugustusPower::ONELEGION:
-                doOneLegion($idCard);
+                $this->doOneLegion($idCard);
                 break;
             case AugustusPower::TWOLEGION: 
-                doTwoLegion($idCard);
+                $this->doTwoLegion($idCard);
                 break;
             case AugustusPower::DOUBLESWORDISSHIELD: 
-                doDoubleSwordIsShield($idCard);
+                $this->doDoubleSwordIsShield($idCard);
                 break;
             case AugustusPower::SHIELDISCHARIOT: 
-                doShieldIsChariot($idCard);
+                $this->doShieldIsChariot($idCard);
                 break;
             case AugustusPower::CHARIOTISCATAPULT: 
-                doChariotIsCatapult($idCard);
+                $this->doChariotIsCatapult($idCard);
                 break;
             case AugustusPower::CATAPULTISTEACHES: 
-                doCatapultIsTeaches($idCard);
+                $this->doCatapultIsTeaches($idCard);
                 break;
             case AugustusPower::TEACHESISKNIFE: 
-                doTeachesIsKnife($idCard);
+                $this->doTeachesIsKnife($idCard);
                 break;
         }
         $this->manager->flush();
