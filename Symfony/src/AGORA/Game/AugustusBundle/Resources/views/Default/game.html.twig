@@ -815,37 +815,37 @@
                 {% else %}
                 switch (actualToken) {
                     case "shield" :
-                    {% if me.getEquivalences()["shield"] is not empty and me.getEquivalences()["shield"].contains("chariot") %}
+                    {% if me.getEquivalences()["shield"] is not empty and "chariot" in me.getEquivalences()["shield"] %}
                         actualTokens.push("chariot");
                     {% endif %}
-                    {% if me.getEquivalences()["shield"] is not empty and me.getEquivalences()["shield"].contains("doublesword") %}
+                    {% if me.getEquivalences()["shield"] is not empty and "doublesword" in me.getEquivalences()["shield"] %}
                         actualTokens.push("double sword");
                     {% endif %}
 
                         break;
                     case "knife" :
-                    {% if me.getEquivalences()["knife"] is not empty and me.getEquivalences()["knife"].contains("teaches") %}
+                    {% if me.getEquivalences()["knife"] is not empty and "teaches" in me.getEquivalences()["knife"] %}
                         actualTokens.push("teaches");
                     {% endif %}
                         break;
                     case "chariot" :
-                    {% if me.getEquivalences()["chariot"] is not empty and me.getEquivalences()["chariot"].contains("catapult") %}
+                    {% if me.getEquivalences()["chariot"] is not empty and "catapult" in me.getEquivalences()["chariot"] %}
                         actualTokens.push("catapult");
                     {% endif %}
-                    {% if me.getEquivalences()["chariot"] is not empty and me.getEquivalences()["chariot"].contains("shield") %}
+                    {% if me.getEquivalences()["chariot"] is not empty and "shield" in me.getEquivalences()["chariot"] %}
                         actualTokens.push("shield");
                     {% endif %}
                         break;
                     case "doublesword" :
-                    {% if me.getEquivalences()["doublesword"] is not empty and me.getEquivalences()["doublesword"].contains("shield") %}
+                    {% if me.getEquivalences()["doublesword"] is not empty and "shield" in me.getEquivalences()["doublesword"] %}
                         actualTokens.push("shield");
                     {% endif %}
                         break;
                     case "catapult" :
-                    {% if me.getEquivalences()["catapult"] is not empty and me.getEquivalences()["catapult"].contains("chariot") %}
+                    {% if me.getEquivalences()["catapult"] is not empty and "chariot" in me.getEquivalences()["catapult"] %}
                         actualTokens.push("chariot");
                     {% endif %}
-                    {% if me.getEquivalences()["catapult"] is not empty and me.getEquivalences()["catapult"].contains("teaches") %}
+                    {% if me.getEquivalences()["catapult"] is not empty and "teaches" in me.getEquivalences()["catapult"] %}
                         actualTokens.push("teaches");
                     {% endif %}
                         break;
@@ -858,10 +858,10 @@
                         actualTokens.push("knife");
                         break;
                     case "teaches" :
-                    {% if me.getEquivalences()["teaches"] is not empty and me.getEquivalences()["teaches"].contains("catapult") %}
+                    {% if me.getEquivalences()["teaches"] is not empty and "catapult" in me.getEquivalences()["teaches"] %}
                         actualTokens.push("catapult");
                     {% endif %}
-                    {% if me.getEquivalences()["teaches"] is not empty and me.getEquivalences()["teaches"].contains("knife") %}
+                    {% if me.getEquivalences()["teaches"] is not empty and "knife" in me.getEquivalences()["teaches"] %}
                         actualTokens.push("knife");
                     {% endif %}
 
@@ -1091,8 +1091,7 @@
 
     </script>
 
-    <button id="buttAcc" onclick="window.location.href = '{{ path('agora_platform_homepage') }}'">Accueil</button>
-    </body>
+    <button id="buttAcc" onclick="window.location.href = '{{ path('agora_platform_homepage') }}'">Accueil</button>    </body>
 
 
     <script>
