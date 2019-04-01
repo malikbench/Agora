@@ -50,6 +50,9 @@ LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` VALUES (0,'admin','admin','agora.dev.test@gmail.com','agora.dev.test@gmail.com',1,'ZNQ47xY9i69QrnOR8XjqaLDt/U2ggZPEOsY7QIo6uSE','tzCv7nPocweDKNY+17zPVL1QFf77F/2PIYW1w7v0xiMiKUfkAbdK7wxaBIboAsB1+oIBzwATwARlIbsWca3cSg==','2018-05-31 11:46:05',NULL,NULL,'a:1:{i:0;s:10:\"ROLE_ADMIN\";}'),
 (25, 'Paul', 'paul', 'paul@gmail.com', 'paul@gmail.com', 1, 'j2hUA3.wFiJJN10rj9hxmxs.InsLsJF9yQsalAxJEDE', 'qDm01Xx32Ac1UrXbowD1SnwpLO+jKR1HEDUUJzaAX+Fjt4bA5bxm9zzg5GKXLS8rFq3npPmwf77XBT81XFtywg==', NULL, 'cBSCXXnivdq9VEdLXFxkaoYzIUf2kNeCK_aQZlBT-to', NULL, 'a:0:{}');
+INSERT INTO `user` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`) VALUES (NULL, 'Roxanne', 'roxanne', 'roxanne@gmail.com', 'roxanne@gmail.com', '1', 'B0pnW3lUH5d5EZO4ShfIb3tLTFj6Ul3rZmddFm9MPa8', 'VW5uJnmC2z6mNkICEYeRIAzQukX7aMY0phLkmQ7x8YjoMkrDSM6l8T9JzI/+v01q0/IPZmm+9yze36KwDWTzhw==', NULL, 'TjHYwrKhclx413epNYcj64_sM16L2RQeavtl1Rp91YM', NULL, 'a:0:{}');
+INSERT INTO `user` (`id`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`) VALUES (NULL, 'Abdel', 'abdel', 'abdel@gmail.com', 'abdel@gmail.com', '1', 'JWh9MaadmnI.gSMfgL9GaUvcoC7fJJsfYbO8rmwgS9U', 'NTYCcL4KkBQhdIYBqEczKV+iaCrJNecsASoJ7+6wWkAJa47Dv2QzAlkAeyHkNUnddowUkF7XiL1yzHGKT34orQ==', NULL, 'jQR21PWeeBVW21OxNeILk0XDT-KTOTiEkdJc-ajR1zw', NULL, 'a:0:{}');
+
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
