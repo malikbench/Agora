@@ -462,11 +462,13 @@ class AugustusGameModel {
         return $rewards + $obj + $power;    
     }
 
+    // met isLock a true ou false pour les joueurs
+    // utile pour les phases legion et aveCesar
     private function lockThem($id) {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
 
-        if ($game->getState() == "aveCesar") {
+        if ($game->getState() == "aveCesar" || $game->getState() == "takeLoot") {
             foreach ($game->getPlayers() as $player) {
                 if ($player->getId() != $game->getAffectedPlayer()) {
                     $player->setIsLock(true);
@@ -479,5 +481,24 @@ class AugustusGameModel {
                 $player->setIsLock(false);
             }
         }
+    }
+
+    // retourne si le joueur à le droit de réclamer sa récompense de capture
+    public function canClaimReward($id, $idPlayer) {
+        $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
+        $game = $games->findOneById($id);
+        $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
+        $player = $players->findOneById($playerId);
+           
+        if ($player->getAdvantage() != 0) {
+            return false;
+        }
+        $advantage = (count($player->getCtrlCards()) - 1) * 2;
+        foreach ($game->getPlayers() as $gamer) {
+            if ($gamer->getAdvantage() == $advantage) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -812,16 +812,26 @@ class AugustusBoard {
   public function getObjLine()
   {
     $objLine = [];
-    $deck = $this->getDeck();
-    $j = count($deck) - 1;
-    $i = 0;
-    while ($i < 5 && $j != 0) {
-        if ($deck[$j]->getIsInLine()) {
-            $objLine[] = $deck[$j]; 
-            $i = $i + 1;
-        }
-        $j = $j - 1;
+    $deck = $this->getDeck()->toArray();
+
+    $card = array_pop($deck);
+
+    while (count($objLine) != 5 && $card) {
+      if ($card->getIsInLine()) {
+        array_push($objLine, $card);
+      }
+      $card = array_pop($deck);
     }
+
+    // $j = count($deck) - 1;
+    // $i = 0;
+    // while ($i < 5 && $j != 0) {
+    //   if ($deck[$j]->getIsInLine()) {
+    //       $objLine[] = $deck[$j]; 
+    //       $i = $i + 1;
+    //   }
+    //   $j = $j - 1;
+    // }
     return $objLine;
   }
   

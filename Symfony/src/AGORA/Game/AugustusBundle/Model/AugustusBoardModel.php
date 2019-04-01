@@ -21,11 +21,18 @@ class AugustusBoardModel {
     $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
     $board = $boards->findOneById($idBoard);
     $deck = $board->getDeck()->toArray();
-    $j = count($deck) - 1;
-    for ($i = 0; $i < 5; $i++) {
-      $j = $j - 1;
-      $deck[$j]->setIsInLine(true);
+    $card = array_pop($deck);
+    $i = count($board->getObjLine());
+    while ($i < 5) {
+      if (!$card->getIsInLine()) {
+        $card->setIsInLine(true);
+        $this->manager->flush();
+        $i = $i + 1;
+      }
+      $card = array_pop($deck);
+      echo $card->getIsInLine();
     }
+    $this->manager->flush();
   }
     
   // resetBag : supprime les tokens du sac, puis ajoute tous les tokens dans le sac.
@@ -97,13 +104,16 @@ class AugustusBoardModel {
     $boards = $this->manager->getRepository('AugustusBundle:AugustusBoard');
     $board = $boards->findOneById($idBoard);
     $deck = $board->getDeck()->toArray();
-    $j = count($deck) - 1;
-    while ($deck[$j]->getIsInLine()) {
-      $j = $j - 1;
+    $j = 0;
+    $card = array_pop($deck);
+    while ($card->getIsInLine()) {
+      $card = array_pop($deck);
     }
-
-    $card = $deck[$j];
-    $board->removeCardFromDeck($deck[$j]);
+    $board->removeCardFromDeck($card);
+    $card->setBoard(null);
+    $this->manager->persist($card);
+    $this->manager->flush();
+    $this->fillLine($idBoard);
     $this->manager->flush();
     return $card;
   }
@@ -116,8 +126,9 @@ class AugustusBoardModel {
     $card = $cards->findOneById($idCard);
 
     $board->removeCardFromDeck($card);
+    $card->setBoard(null);
     $this->manager->flush();
-    $board->fillLine($idBoard);
+    $this->fillLine($idBoard);
     $this->manager->flush();
     return $card;
   }
