@@ -150,7 +150,8 @@ class GameController extends Controller {
             case "legion":
                 if(isset($action->removeToken)) {
                     for ($i = 0; $i < count($action->removeToken->token); $i++) {
-                        $card = $player->getCards()[$action->removeToken->card[$i]];
+                        $cards = $this->cleanArray($player->getCards()->toArray());
+                        $card = $cards[$action->removeToken->card[$i]];
 
                         $card->getCtrlTokens()[$action->removeToken->token[$i]];
                         $service->playerModel->removeLegionFromCard($player->getId(), $card->getId(), $card->getTokens()[$action->removeToken->token[$i]]);
@@ -158,12 +159,7 @@ class GameController extends Controller {
                 }
                 if(isset($action->addToken)) {
                     for ($i = 0; $i < count($action->addToken->token); $i++) {
-                        $cards = array();
-                        foreach ($player->getCards()->toArray() as $c) {
-                            if ($c != null) {
-                                array_push($cards, $c);
-                            }
-                        }
+                        $cards = $this->cleanArray($player->getCards()->toArray());
                         $card = $cards[$action->addToken->card[$i]];
                         $card->getCtrlTokens()[$action->addToken->token[$i]];
                         $service->playerModel->putLegionOnCard($player->getId(), $card->getId(), $card->getTokens()[$action->addToken->token[$i]]);
@@ -185,7 +181,7 @@ class GameController extends Controller {
                 $service->manager->flush();
                 break;
             case "removeAllLegions":
-                $cards = $player->getCards();
+                $cards = $this->cleanArray($player->getCards()->toArray());
                 $card = $cards[$action->removeAllLegion];
                 $tokens = $card->getTokens();
                 foreach($tokens as $t) {
@@ -194,7 +190,7 @@ class GameController extends Controller {
                 $service->manager->flush();
                 break;
             case "completeCard":
-                $cards = $player->getCards();
+                $cards = $this->cleanArray($player->getCards()->toArray());
                 $card = $cards[$action->removeAllLegion];
                 $service->playerModel->completeCard($card->getId());
                 $service->manager->flush();
@@ -272,4 +268,13 @@ class GameController extends Controller {
 
     }
 
+    private function cleanArray($tab) {
+        $units = array();
+        foreach ($tab as $u) {
+            if ($u != null) {
+                array_push($units, $u);
+            }
+        }
+        return $units;
+    }
 }
