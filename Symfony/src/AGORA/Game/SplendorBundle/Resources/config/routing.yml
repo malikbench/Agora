@@ -1,0 +1,7 @@
+agora_game_splendor_homepage:
+    path:     /splendor
+    defaults: { _controller: AGORAGameSplendorBundle:Default:index }
+
+agora_game_create_spldr:
+    path: /game/create/sqp
+    defaults: { _controller: AGORAGameSplendorBundle:Default:create }
