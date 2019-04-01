@@ -203,7 +203,7 @@
             {% for card in me.cards %}
                 {% set cardIndex = loop.index0 %}
                 <div class="card" style="background-image: url('{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}');"
-                        {% if me.isLock() or (game.getState == 'aveCesar' and me.getId != game.getAffectedPlayer) %}
+                        {% if me.isLock or (game.getState == 'aveCesar' and me.getId != game.getAffectedPlayer) %}
                             onclick=""
                         {% else %}
                             onclick="selectHand(this)"
