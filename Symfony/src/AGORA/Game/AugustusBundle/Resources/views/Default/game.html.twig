@@ -250,7 +250,7 @@
                 {% for card in me.cards %}
                     {% set cardIndex = loop.index0 %}
                     <div class="card" style="background-image: url('{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}');"
-                            {% if game.getState == 'aveCesar' and me.getId != game.getAffectedPlayer %}
+                            {% if me.isLock() or (game.getState == 'aveCesar' and me.getId != game.getAffectedPlayer) %}
                                 onclick=""
                             {% else %}
                                 onclick="selectHand(this)"
@@ -904,6 +904,7 @@
                     } else if (typeof (addAction) != 'undefined' && addAction === 1) {
                         action.addToken.card.push(indCard);
                         action.addToken.token.push(indToken);
+                        addAction = 0;
                         checkValidate();
                         document.querySelectorAll(".cardAction").forEach(function (ee) {
                             ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion ce tour, vous ne pouvez plus en poser d avantage.</p>";
