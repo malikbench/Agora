@@ -95,7 +95,7 @@ class AugustusPlayerModel {
         $player = $players->findOneById($idPlayer);
 
         $this->cardModel->getBackToken($idCardSource, $tokenSource);
-        $cardModel->captureToken($idCardDest, $tokenDest);
+        $this->cardModel->captureToken($idCardDest, $tokenDest);
         
         $this->manager->flush();
     }

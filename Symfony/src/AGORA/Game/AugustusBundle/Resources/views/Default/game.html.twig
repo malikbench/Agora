@@ -175,34 +175,34 @@
                 <div id="lootBars" class="flexContainer flexColumn">
                     <div id="topLoot" class="flexContainer flexRow">
                         <img src="{{ asset('bundles/augustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '2' ))">
+                              ondblclick="getOverlay(lootInfo( '2' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Loot3Cards.jpg') }}" alt="Loot3Cards" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '3' ))">
+                             ondblclick="getOverlay(lootInfo( '3' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Loot4Cards.jpg') }}" alt="Loot4Cards" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '4' ))">
+                             ondblclick="getOverlay(lootInfo( '4' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Loot5Cards.jpg') }}" alt="Loot5Cards" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '5' ))">
+                              ondblclick="getOverlay(lootInfo( '5' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Loot6Cards.jpg') }}" alt="Loot6Cards" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( '6' ))">
+                             ondblclick="getOverlay(lootInfo( '6' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/LootGold.jpg') }}" alt="LootGold" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'gold' ))">
+                             ondblclick="getOverlay(lootInfo( 'gold' ))">
                     </div>
 
                     <div class="flex1"></div>
 
                     <div id="botLoot" class="flexContainer flexRow">
                         <img src="{{ asset('bundles/augustus/img/Loot/Lootsenator.jpg') }}" alt="Lootsenator" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'senator' ))">
+                              ondblclick="getOverlay(lootInfo( 'senator' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Lootgreen.jpg') }}" alt="Lootgreen" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'green' ))">
+                             ondblclick="getOverlay(lootInfo( 'green' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Lootall.jpg') }}" alt="Lootall" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'all' ))">
+                             ondblclick="getOverlay(lootInfo( 'all' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Lootpink.jpg') }}" alt="Lootpink" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'pink' ))">
+                              ondblclick="getOverlay(lootInfo( 'pink' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Lootorange.jpg') }}" alt="Lootorange" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'orange' ))">
+                             ondblclick="getOverlay(lootInfo( 'orange' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/LootWheat.jpg') }}" alt="LootWheat" height="100"
-                             onclick="selectBoard(this)" ondblclick="getOverlay(lootInfo( 'wheat' ))">
+                             ondblclick="getOverlay(lootInfo( 'wheat' ))">
                     </div>
                 </div>
 
@@ -280,14 +280,22 @@
                                 <div>
                                     {% if 1 in card.ctrlTokens %}
                                         <p>Vous pouvez retirer une légion d'un de ces emplacements en le sélectionnant:</p>
-
-                                        {% for token in card.tokens %}
+                                        {% if me.isLock %}
+                                            {% for token in card.tokens %}
                                             {% if card.ctrlTokens[loop.index0] %}
                                                 <img class="token" src='{{ asset('bundles/augustus/img/Token/Token' ~  token  ~'.jpg') }}' alt="{{ token }}"
-                                                     height="32"
-                                                     onclick="selectToken(this, {{ loop.index0 }}, {{ cardIndex }})">
+                                                     height="32">
                                             {% endif %}
-                                        {% endfor %}
+                                            {% endfor %}
+                                            {% else %}
+                                                {% for token in card.tokens %}
+                                                    {% if card.ctrlTokens[loop.index0] %}
+                                                        <img class="token" src='{{ asset('bundles/augustus/img/Token/Token' ~  token  ~'.jpg') }}' alt="{{ token }}"
+                                                             height="32"
+                                                             onclick="selectToken(this, {{ loop.index0 }}, {{ cardIndex }})">
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% endif %}
                                         {% if me.isLock %}
                                             <button disabled class="remove" onclick="removeSelectedLegion()">Retirer</button>
                                         {% else %}
@@ -336,7 +344,8 @@
                     <button id="valider" disabled onclick="validate()">Valider</button>
                 {% else %}
                     <button id="valider" onclick="validate()">Valider</button>
-                {% endif %}                {#<button id="annuler" onclick="resetSelected()">Annuler</button><!-- onclick : devrait peut-être refresh la page -->#}
+                {% endif %}
+                <button id="annuler" onclick="location.reload()">Annuler</button>
                 <div class="flex1"></div>
             </div>
         </div>
