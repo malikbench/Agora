@@ -272,7 +272,7 @@ class AugustusPlayerModel {
                 }
             }
         }
-        return $pink && $green && $senator && $orange;
+        return $res;
     }
 }
 

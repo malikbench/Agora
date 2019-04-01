@@ -468,7 +468,7 @@ class AugustusGameModel {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
 
-        if ($game->getState() == "aveCesar") {
+        if ($game->getState() == "aveCesar" || $game->getState() == "takeLoot") {
             foreach ($game->getPlayers() as $player) {
                 if ($player->getId() != $game->getAffectedPlayer()) {
                     $player->setIsLock(true);
@@ -483,6 +483,7 @@ class AugustusGameModel {
         }
     }
 
+    // retourne si le joueur à le droit de réclamer sa récompense de capture
     public function canClaimReward($id, $idPlayer) {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
