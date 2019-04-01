@@ -250,7 +250,7 @@
                 {% for card in me.cards %}
                     {% set cardIndex = loop.index0 %}
                     <div class="card" style="background-image: url('{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}');"
-                            {% if game.getState == 'aveCesar' and me.getId != game.getAffectedPlayer %}
+                            {% if me.isLock() or (game.getState == 'aveCesar' and me.getId != game.getAffectedPlayer) %}
                                 onclick=""
                             {% else %}
                                 onclick="selectHand(this)"
@@ -263,7 +263,7 @@
                             {% endif %}
                         {% endfor %}
                         <div class="cardAction{{ loop.index0 }} cardAction" style="visibility: hidden;">
-                            {% if game.getState() == "RemoveAllLegion" and me.legionMax != me.legion %}
+                            {% if game.getState() == "removeAllLegion" and me.legionMax != me.legion %}
                                 <div>
                                     <p>Vous pouvez retirer toutes les légions de cette carte.</p>
                                     <button onclick="removeAllLegionOnCard({{ cardIndex }})">Retirer</button>
@@ -273,7 +273,7 @@
                                     <p>Vous pouvez capturer cet objectif.</p>
                                     <button onclick="doCompleteCard({{ cardIndex }})">Capturer</button>
                                 </div>
-                            {% elseif (game.getState() == "RemoveAllLegion" and game.getAffectedPlayer() == me.getId())
+                            {% elseif (game.getState() == "removeAllLegion" and game.getAffectedPlayer() == me.getId())
                                 or (game.state == "doCompleteCard" and game.getAffectedPlayer() != me.getId()) %}
                                 <div>
                                     <p>Veuillez attendre que les autres joueurs aient fini leurs actions.</p>
@@ -397,11 +397,22 @@
     <!-- SCRIPTS -->
     <script>
         checkValidate = function() {
+            {% if game.getState == "moveLegion" %}
             if (gottaRemove > 0 || gottaRemoveAllTokenOnCard || gotToCompleteCard || removeAction !== addAction) {
+                alert("Il vous reste des choses a faire");
                 document.querySelector("#valider").disabled = true;
+                return false;
             }
+            {% else %}
+            if (gottaRemove > 0 || gottaRemoveAllTokenOnCard || gotToCompleteCard) {
+                alert("Il vous reste des choses a faire");
+                document.querySelector("#valider").disabled = true;
+                return false;
+            }
+                    {% endif %}
             else {
                 document.querySelector("#valider").disabled = false;
+                return true;
             }
         };
 
@@ -436,8 +447,8 @@
         gottaRemove = 0;
         gottaRemoveAllTokenOnCard = false;
         gotToCompleteCard = false;
-        {% if (game.getState() == "RemoveOneLegion" and (me.legionMax - me.legion >= 1) and game.affectedPlayer() == me.getId() or
-            (game.getState() == "RemoveTwoLegion" and me.legionMax - me.legion == 1)) %}
+        {% if (game.getState() == "removeOneLegion" and (me.legionMax - me.legion >= 1) and game.affectedPlayer() == me.getId() or
+            (game.getState() == "removeTwoLegion" and me.legionMax - me.legion == 1)) %}
         gottaRemove = 1;
         (function () {
             document.querySelector("#valider").disabled = true;
@@ -446,7 +457,7 @@
             });
             document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez retirer 1 légion";
         })();
-        {% elseif game.getState() == "RemoveTwoLegion" and me.legionMax - me.legion >= 2 and game.affectedPlayer() == me.getId() %}
+        {% elseif game.getState() == "removeTwoLegion" and me.legionMax - me.legion >= 2 and game.affectedPlayer() == me.getId() %}
         gottaRemove = 2;
         (function () {
             document.querySelector("#valider").disabled = true;
@@ -455,27 +466,27 @@
             });
             document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez retirer 2 légions";
         })();
-        {% elseif game.getState() == "RemoveAllLegion" and me.legionMax != me.legion and game.affectedPlayer() == me.getId() %}
+        {% elseif game.getState() == "removeAllLegion" and me.legionMax != me.legion and game.affectedPlayer() == me.getId() %}
         gottaRemoveAllTokenOnCard = true;
         (function () {
             document.querySelector("#valider").disabled = true;
             document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez choisir une carte. Toutes les légions se retireront de la carte.";
         })();
-        {% elseif game.getState() == "CompleteCard" and game.affectedPlayer() == me.getId() %}
+        {% elseif game.getState() == "completeCard" and game.affectedPlayer() == me.getId() %}
         gotToCompleteCard = true;
         (function () {
             document.querySelector("#valider").disabled = true;
             document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez choisir une carte. Toutes les légions se retireront de la carte.";
         })();
-        {% elseif (game.getState() == "RemoveAllLegion" and game.getAffectedPlayer() == me.getId()) or
-            ( game.getState() == "RemoveTwoLegion" and game.getAffectedPlayer() == me.getId()) or
-            (game.getState() == "RemoveOneLegion" and game.getAffectedPlayer() == me.getId()) or
-            (game.getState() == "CompleteCard" and game.getAffectedPlayer() != me.getId()) %}
+        {% elseif (game.getState() == "removeAllLegion" and game.getAffectedPlayer() == me.getId()) or
+            ( game.getState() == "removeTwoLegion" and game.getAffectedPlayer() == me.getId()) or
+            (game.getState() == "removeOneLegion" and game.getAffectedPlayer() == me.getId()) or
+            (game.getState() == "rompleteCard" and game.getAffectedPlayer() != me.getId()) %}
         (function () {
             document.querySelector("#valider").disabled = true;
             document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez attendre les autres joueurs.";
         })();
-        {% elseif (game.getState() == "RemoveAllLegion" or game.state == "MoveLegion") and me.legionMax == me.legion %}
+        {% elseif (game.getState() == "removeAllLegion" or game.state == "moveLegion") and me.legionMax == me.legion %}
         window.onload = function () {
             validate();
         };
@@ -643,33 +654,34 @@
         };
 
         validate = function () {
-            if (JSON.stringify(action) === JSON.stringify(initialAction)) {
-                if (confirm("Certain de ne rien vouloir jouer ?")) {
+            if (checkValidate) {
+                if (JSON.stringify(action) === JSON.stringify(initialAction)) {
+                    if (confirm("Certain de ne rien vouloir jouer ?")) {
+                        action.type = "{{ game.getState }}";
+                        sendAction();
+                        resetSelected();
+                    }
+                } else {
                     action.type = "{{ game.getState }}";
                     sendAction();
                     resetSelected();
-                }
-            } else {
-                action.type = "{{ game.getState }}";
-                sendAction();
-                resetSelected();
 
+                }
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', '/game/augustus/body/{{ game.id }}/{{ me.id }}');
+                xhr.send();
+                xhr.onload = function () {
+                    if (xhr.status !== 200) {
+                        alert('erreur lors du rafraîchissement de l\'affichage');
+                    } else {
+                        document.body.innerHTML = xhr.response;
+                        let scripts = document.body.getElementsByTagName('script')[0].innerHTML;
+                        console.log(scripts);
+                        eval(scripts);
+                    }
+                };
+                tokenRemoved = 0;
             }
-            let xhr = new XMLHttpRequest();
-            xhr.open('GET', '/game/augustus/body/{{ game.id }}/{{ me.id }}');
-            xhr.send();
-            xhr.onload = function() {
-                if (xhr.status !== 200) {
-                    alert('erreur lors du rafraîchissement de l\'affichage');
-                } else {
-                    document.body.innerHTML = xhr.response;
-                    let scripts = document.body.getElementsByTagName('script')[0].innerHTML;
-                    console.log(scripts);
-                    eval(scripts);
-                }
-            };
-            tokenRemoved = 0;
-
         };
 
         doCompleteCard = function (indCard) {
@@ -717,14 +729,14 @@
             {% endif %}
         };
 
-        {% if game.state != "MoveLegion" %}
+        {% if game.state != "moveLegion" %}
 
         {# Cas normal #}
         //FONCTION DE SELECTION DE LA LEGION A RETIRER
-        {% if "Two" in game.state and game.getAffectedPlayer() == me.getId() %}
+        {% if game.state starts with "two" and game.getAffectedPlayer() == me.getId() %}
         addAction = 2;
         removeAction = 2;
-        {% elseif game.state == "OneLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
+        {% elseif game.state == "oneLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
         addAction = 1;
         removeAction = 1;
         {% endif %}
@@ -786,21 +798,21 @@
                 let actualToken = "{{ game.getToken }}";
                 let actualTokens = [];
                 actualTokens.push(actualToken);
-                {% if game.getState() == "TwoLegionOnDoubleSword" and game.getAffectedPlayer() == me.getId() %}
+                {% if game.getState() == "twoLegionOnDoubleSword" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["doublesword"];
-                {% elseif game.getState() == "TwoLegionOnTeaches" and game.getAffectedPlayer() == me.getId() %}
+                {% elseif game.getState() == "twoLegionOnTeaches" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["teaches"];
-                {% elseif game.getState() == "TwoLegionOnShield" and game.getAffectedPlayer() == me.getId() %}
+                {% elseif game.getState() == "twoLegionOnShield" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["shield"];
-                {% elseif game.getState() == "TwoLegionOnKnife" and game.getAffectedPlayer() == me.getId() %}
+                {% elseif game.getState() == "twoLegionOnKnife" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["knife"];
-                {% elseif  game.getState() == "OneLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
+                {% elseif  game.getState() == "oneLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["doublesword", "shield", "chariot", "catapult", "teaches", "knife"];
-                {% elseif game.getState() == "TwoLegionOnChariot" and game.getAffectedPlayer() == me.getId() %}
+                {% elseif game.getState() == "twoLegionOnChariot" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["chariot"];
-                {% elseif  game.getState() == "TwoLegionOnCatapult" and game.getAffectedPlayer() ==  me.getId() %}
+                {% elseif  game.getState() == "twoLegionOnCatapult" and game.getAffectedPlayer() ==  me.getId() %}
                 actualTokens = ["catapult"];
-                {% elseif  game.getState() == "TwoLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
+                {% elseif  game.getState() == "twoLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["doublesword", "shield", "chariot", "catapult", "teaches", "knife"];
                 {% else %}
                 switch (actualToken) {
@@ -892,6 +904,7 @@
                     } else if (typeof (addAction) != 'undefined' && addAction === 1) {
                         action.addToken.card.push(indCard);
                         action.addToken.token.push(indToken);
+                        addAction = 0;
                         checkValidate();
                         document.querySelectorAll(".cardAction").forEach(function (ee) {
                             ee.lastElementChild.innerHTML = "<p>Vous avez posé une légion ce tour, vous ne pouvez plus en poser d avantage.</p>";
@@ -913,7 +926,7 @@
             }
         };
 
-        {% elseif game.state == "MoveLegion" and game.getAffectedPlayer() == me and me.legion != me.legionMax %}
+        {% elseif game.state == "moveLegion" and game.getAffectedPlayer() == me and me.legion != me.legionMax %}
 
         {# Cas MOVE LEGION #}
         addAction = {{ me.legionMax - me.legion }};
