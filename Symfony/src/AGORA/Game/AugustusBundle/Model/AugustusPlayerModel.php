@@ -95,7 +95,7 @@ class AugustusPlayerModel {
         $player = $players->findOneById($idPlayer);
 
         $this->cardModel->getBackToken($idCardSource, $tokenSource);
-        $cardModel->captureToken($idCardDest, $tokenDest);
+        $this->cardModel->captureToken($idCardDest, $tokenDest);
         
         $this->manager->flush();
     }
@@ -121,7 +121,7 @@ class AugustusPlayerModel {
                 $player->setGold($player->getGold() + 1);
                 break;
         }
-        $player->setLegion($player->getLegion() + count($card->getCtrlTokens()));
+        $player->setLegion($player->getLegion() + count($card->getTokens()));
         $player->addCtrlCard($card);
         $player->removeCard($card);
         $this->manager->flush();
