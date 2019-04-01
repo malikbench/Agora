@@ -120,7 +120,6 @@ class AugustusCardModel {
         $player = $card->getPlayerCtrl();
         $player->setLegionMax($player->getLegionMax() + 1);
         $player->setLegion($player->getLegion() + 1);
-        $this->manager->flush();
     }
 
     private function doTwoLegion($idCard) {
@@ -131,7 +130,6 @@ class AugustusCardModel {
         $player = $card->getPlayerCtrl();
         $player->setLegionMax($player->getLegionMax() + 2);
         $player->setLegion($player->getLegion() + 2);
-        $this->manager->flush();
     }
 
     private function  doDoubleSwordIsShield($idCard) {
@@ -140,16 +138,16 @@ class AugustusCardModel {
         $card = $cards->findOneById($idCard);
 
         $player = $card->getPlayerCtrl();
-        $equivalences = $player -> getEquivalences();
-        if($equivalences[AugustusToken::SHIELD]->length == 0) {
+        $equivalences = $player->getEquivalences();
+        if(count($equivalences[AugustusToken::SHIELD]) == 0) {
             $equivalences[AugustusToken::SHIELD] = [];
         }
-        $equivalences[AugustusToken::SHIELD]->array_push(AugustusToken::DOUBLESWORD);
-        if($equivalences[AugustusToken::DOUBLESWORD]->length == 0) {
+        array_push($equivalences[AugustusToken::SHIELD], AugustusToken::DOUBLESWORD);
+        if(count($equivalences[AugustusToken::DOUBLESWORD]) == 0) {
             $equivalences[AugustusToken::DOUBLESWORD] = [];
         }
-        $equivalences[AugustusToken::DOUBLESWORD]->array_push(AugustusToken::SHIELD);
-        $player -> setEquivalences($equivalences);
+        array_push($equivalences[AugustusToken::DOUBLESWORD], AugustusToken::SHIELD);
+        $player->setEquivalences($equivalences);
     }
 
     private function  doShieldIsChariot($idCard) {
@@ -158,16 +156,16 @@ class AugustusCardModel {
         $card = $cards->findOneById($idCard);
 
         $player = $card->getPlayerCtrl();
-        $equivalences = $player -> getEquivalences();
-        if($equivalences[AugustusToken::SHIELD]->length == 0) {
+        $equivalences = $player->getEquivalences();
+        if(count($equivalences[AugustusToken::SHIELD]) == 0) {
             $equivalences[AugustusToken::SHIELD] = [];
         }
-        $equivalences[AugustusToken::SHIELD]->array_push(AugustusToken::CHARIOT);
-        if($equivalences[AugustusToken::CHARIOT]->length == 0) {
+        array_push($equivalences[AugustusToken::SHIELD], AugustusToken::CHARIOT);
+        if(count($equivalences[AugustusToken::CHARIOT]) == 0) {
             $equivalences[AugustusToken::CHARIOT] = [];
         }
-        $equivalences[AugustusToken::CHARIOT]->array_push(AugustusToken::SHIELD);
-        $player -> setEquivalences($equivalences);
+        array_push($equivalences[AugustusToken::CHARIOT], AugustusToken::SHIELD);
+        $player->setEquivalences($equivalences);
     }
 
     private function doChariotIsCatapult($idCard) {
@@ -176,16 +174,16 @@ class AugustusCardModel {
         $card = $cards->findOneById($idCard);
 
         $player = $card->getPlayerCtrl();
-        $equivalences = $player -> getEquivalences();
-        if($equivalences[AugustusToken::CHARIOT]->length == 0) {
+        $equivalences = $player->getEquivalences();
+        if(count($equivalences[AugustusToken::CHARIOT]) == 0) {
             $equivalences[AugustusToken::CHARIOT] = [];
         }
-        $equivalences[AugustusToken::CHARIOT]->array_push(AugustusToken::CATAPULT);
-        if($equivalences[AugustusToken::CATAPULT]->length == 0) {
+        array_push($equivalences[AugustusToken::CHARIOT], AugustusToken::CATAPULT);
+        if(count($equivalences[AugustusToken::CATAPULT]) == 0) {
             $equivalences[AugustusToken::CATAPULT] = [];
         }
-        $equivalences[AugustusToken::CATAPULT]->array_push(AugustusToken::CHARIOT);
-        $player -> setEquivalences($equivalences);
+        array_push($equivalences[AugustusToken::CATAPULT], AugustusToken::CHARIOT);
+        $player->setEquivalences($equivalences);
     }
 
     private function doCatapultIsTeaches($idCard) {
@@ -194,16 +192,16 @@ class AugustusCardModel {
         $card = $cards->findOneById($idCard);
 
         $player = $card->getPlayerCtrl();
-        $equivalences = $player -> getEquivalences();
-        if($equivalences[AugustusToken::CATAPULT]->length == 0) {
+        $equivalences = $player->getEquivalences();
+        if(count($equivalences[AugustusToken::CATAPULT]) == 0) {
             $equivalences[AugustusToken::CATAPULT] = [];
         }
-        $equivalences[AugustusToken::CATAPULT]->array_push(AugustusToken::TEACHES);
-        if($equivalences[AugustusToken::TEACHES]->length == 0) {
+        array_push($equivalences[AugustusToken::CATAPULT], AugustusToken::TEACHES);
+        if(count($equivalences[AugustusToken::TEACHES]) == 0) {
             $equivalences[AugustusToken::TEACHES] = [];
         }
-        $equivalences[AugustusToken::TEACHES]->array_push(AugustusToken::CATAPULT);
-        $player -> setEquivalences($equivalences);
+        array_push($equivalences[AugustusToken::TEACHES], AugustusToken::CATAPULT);
+        $player->setEquivalences($equivalences);
     }
 
     private function doTeachesIsKnife($idCard) {
@@ -212,16 +210,16 @@ class AugustusCardModel {
         $card = $cards->findOneById($idCard);
 
         $player = $card->getPlayerCtrl();
-        $equivalences = $player -> getEquivalences();
-        if($equivalences[AugustusToken::TEACHES]->length == 0) {
+        $equivalences = $player->getEquivalences();
+        if(count($equivalences[AugustusToken::TEACHES]) == 0) {
             $equivalences[AugustusToken::TEACHES] = [];
         }
-        $equivalences[AugustusToken::TEACHES]->array_push(AugustusToken::KNIFE);
-        if($equivalences[AugustusToken::KNIFE]->length == 0) {
+        array_push($equivalences[AugustusToken::TEACHES], AugustusToken::KNIFE);
+        if(count($equivalences[AugustusToken::KNIFE]) == 0) {
             $equivalences[AugustusToken::KNIFE] = [];
         }
-        $equivalences[AugustusToken::KNIFE]->array_push(AugustusToken::TEACHES);
-        $player -> setEquivalences($equivalences);
+        array_push($equivalences[AugustusToken::KNIFE], AugustusToken::TEACHES);
+        $player->setEquivalences($equivalences);
     }
 
 }
