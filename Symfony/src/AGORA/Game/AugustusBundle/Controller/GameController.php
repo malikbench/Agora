@@ -160,7 +160,11 @@ class GameController extends Controller {
                 if(isset($action->addToken)) {
                     for ($i = 0; $i < count($action->addToken->token); $i++) {
                         $cards = $this->cleanArray($player->getCards()->toArray());
+                        echo "     ";
+                        echo $action->addToken->card[$i];
+                        echo "     ";
                         $card = $cards[$action->addToken->card[$i]];
+                        echo $card->getNumber();
                         $card->getCtrlTokens()[$action->addToken->token[$i]];
                         $service->playerModel->putLegionOnCard($player->getId(), $card->getId(), $card->getTokens()[$action->addToken->token[$i]]);
                     }
