@@ -190,7 +190,7 @@ class AugustusGameModel {
             $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
             $game = $games->findOneById($id);
 
-            $card = getCapturableCardFromPlayer($game->getAffectedPlayer());
+            $card = $this->getCapturableCardFromPlayer($game->getAffectedPlayer());
             if ($card) {
                 $this->playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
