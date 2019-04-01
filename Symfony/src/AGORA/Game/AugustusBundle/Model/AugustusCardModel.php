@@ -117,8 +117,9 @@ class AugustusCardModel {
 
         $card = $cards->findOneById($idCard);
 
-        $player = $card->getPlayer();
+        $player = $card->getCtrlPlayer();
         $player->setLegionMax($player->getLegionMax() + 1);
+        $player->setLegionMax($player->getLegion() + 1);
     }
 
     private function doTwoLegion($idCard) {
@@ -126,8 +127,9 @@ class AugustusCardModel {
 
         $card = $cards->findOneById($idCard);
 
-        $player = $card->getPlayer();
+        $player = $card->getCtrlPlayer();
         $player->setLegionMax($player->getLegionMax() + 2);
+        $player->setLegionMax($player->getLegion() + 2);
     }
 
     private function  doDoubleSwordIsShield($idCard) {
@@ -135,7 +137,7 @@ class AugustusCardModel {
 
         $card = $cards->findOneById($idCard);
 
-        $player = $card->getPlayer();
+        $player = $card->getCtrlPlayer();
         $equivalences = $player -> getEquivalences();
         if($equivalences[AugustusToken::SHIELD]->length == 0) {
             $equivalences[AugustusToken::SHIELD] = [];
@@ -153,7 +155,7 @@ class AugustusCardModel {
 
         $card = $cards->findOneById($idCard);
 
-        $player = $card->getPlayer();
+        $player = $card->getCtrlPlayer();
         $equivalences = $player -> getEquivalences();
         if($equivalences[AugustusToken::SHIELD]->length == 0) {
             $equivalences[AugustusToken::SHIELD] = [];
@@ -171,7 +173,7 @@ class AugustusCardModel {
 
         $card = $cards->findOneById($idCard);
 
-        $player = $card->getPlayer();
+        $player = $card->getCtrlPlayer();
         $equivalences = $player -> getEquivalences();
         if($equivalences[AugustusToken::CHARIOT]->length == 0) {
             $equivalences[AugustusToken::CHARIOT] = [];
@@ -189,7 +191,7 @@ class AugustusCardModel {
 
         $card = $cards->findOneById($idCard);
 
-        $player = $card->getPlayer();
+        $player = $card->getCtrlPlayer();
         $equivalences = $player -> getEquivalences();
         if($equivalences[AugustusToken::CATAPULT]->length == 0) {
             $equivalences[AugustusToken::CATAPULT] = [];
@@ -207,7 +209,7 @@ class AugustusCardModel {
 
         $card = $cards->findOneById($idCard);
 
-        $player = $card->getPlayer();
+        $player = $card->getCtrlPlayer();
         $equivalences = $player -> getEquivalences();
         if($equivalences[AugustusToken::TEACHES]->length == 0) {
             $equivalences[AugustusToken::TEACHES] = [];
