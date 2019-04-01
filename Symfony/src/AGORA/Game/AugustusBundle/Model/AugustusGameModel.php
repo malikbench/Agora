@@ -155,8 +155,8 @@ class AugustusGameModel {
                 $this->playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
                 $this->changeWheatOwner($id, $game->getAffectedPlayer());
-                if ($game->getState()[0] == "aveCesar") {
-                    $this->$cardModel->doPower($card->getId());
+                if ($game->getState() == "aveCesar") {
+                    $this->cardModel->doPower($card->getId());
                 }
                 if ($this->playerModel->getNbOfCardColor($game->getAffectedPlayer(), $card->getColor()) == 3) {
                     $this->fillColorLoot($id, $game->getAffectedPlayer(), $card->getColor());
