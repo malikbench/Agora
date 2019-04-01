@@ -121,7 +121,7 @@ class AugustusPlayerModel {
                 $player->setGold($player->getGold() + 1);
                 break;
         }
-        $player->setLegion($player->getLegion() + count($card->getCtrlTokens()));
+        $player->setLegion($player->getLegion() + count($card->getTokens()));
         $player->addCtrlCard($card);
         $player->removeCard($card);
         $this->manager->flush();

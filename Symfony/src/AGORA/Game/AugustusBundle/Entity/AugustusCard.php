@@ -45,7 +45,6 @@ class AugustusCard
 
     /**
      * @ORM\ManyToOne(targetEntity="AGORA\Game\AugustusBundle\Entity\AugustusBoard", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
     */
     private $board;
 
@@ -254,11 +253,11 @@ class AugustusCard
     /**
      * Set board.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\AugustusBoard $board
+     * @param \AGORA\Game\AugustusBundle\Entity\AugustusBoard|null $board
      *
      * @return AugustusCard
      */
-    public function setBoard(AugustusBoard $board)
+    public function setBoard(AugustusBoard $board = null)
     {
         $this->board = $board;
 
@@ -268,7 +267,7 @@ class AugustusCard
     /**
      * Get board.
      *
-     * @return \AGORA\Game\AugustusBundle\Entity\AugustusBoard
+     * @return \AGORA\Game\AugustusBundle\Entity\AugustusBoard|null
      */
     public function getBoard()
     {
