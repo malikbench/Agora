@@ -607,34 +607,31 @@
     };
 
     validate = function () {
-        if (checkValidate) {
-            if (JSON.stringify(action) === JSON.stringify(initialAction)) {
-                if (confirm("Certain de ne rien vouloir jouer ?")) {
-                    action.type = "{{ game.getState }}";
-                    sendAction();
-                    resetSelected();
-                }
-            } else {
+        if (JSON.stringify(action) === JSON.stringify(initialAction)) {
+            if (confirm("Certain de ne rien vouloir jouer ?")) {
                 action.type = "{{ game.getState }}";
                 sendAction();
                 resetSelected();
-
             }
-            let xhr = new XMLHttpRequest();
-            xhr.open('GET', '/game/augustus/body/{{ game.id }}/{{ me.id }}');
-            xhr.send();
-            xhr.onload = function () {
-                if (xhr.status !== 200) {
-                    alert('erreur lors du rafraîchissement de l\'affichage');
-                } else {
-                    document.body.innerHTML = xhr.response;
-                    let scripts = document.body.getElementsByTagName('script')[0].innerHTML;
-                    console.log(scripts);
-                    eval(scripts);
-                }
-            };
-            tokenRemoved = 0;
+        } else {
+            action.type = "{{ game.getState }}";
+            sendAction();
+            resetSelected();
+
         }
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', '/game/augustus/body/{{ game.id }}/{{ me.id }}');
+        xhr.send();
+        xhr.onload = function () {
+            if (xhr.status !== 200) {
+                alert('erreur lors du rafraîchissement de l\'affichage');
+            } else {
+                document.body.innerHTML = xhr.response;
+                let scripts = document.body.getElementsByTagName('script')[0].innerHTML;
+                console.log(scripts);
+                eval(scripts);
+            }
+        };
     };
 
     doCompleteCard = function (indCard) {
