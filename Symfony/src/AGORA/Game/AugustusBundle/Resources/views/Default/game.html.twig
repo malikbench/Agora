@@ -786,21 +786,21 @@
                 let actualToken = "{{ game.getToken }}";
                 let actualTokens = [];
                 actualTokens.push(actualToken);
-                {% if game.getState() == "TwoLegionOnDoubleSword" and game.getAffectedPlayer() == me.getId() %}
+                {% if game.getState() == "twoLegionOnDoubleSword" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["doublesword"];
-                {% elseif game.getState() == "TwoLegionOnTeaches" and game.getAffectedPlayer() == me.getId() %}
+                {% elseif game.getState() == "twoLegionOnTeaches" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["teaches"];
-                {% elseif game.getState() == "TwoLegionOnShield" and game.getAffectedPlayer() == me.getId() %}
+                {% elseif game.getState() == "twoLegionOnShield" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["shield"];
-                {% elseif game.getState() == "TwoLegionOnKnife" and game.getAffectedPlayer() == me.getId() %}
+                {% elseif game.getState() == "twoLegionOnKnife" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["knife"];
-                {% elseif  game.getState() == "OneLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
+                {% elseif  game.getState() == "oneLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["doublesword", "shield", "chariot", "catapult", "teaches", "knife"];
-                {% elseif game.getState() == "TwoLegionOnChariot" and game.getAffectedPlayer() == me.getId() %}
+                {% elseif game.getState() == "twoLegionOnChariot" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["chariot"];
-                {% elseif  game.getState() == "TwoLegionOnCatapult" and game.getAffectedPlayer() ==  me.getId() %}
+                {% elseif  game.getState() == "twoLegionOnCatapult" and game.getAffectedPlayer() ==  me.getId() %}
                 actualTokens = ["catapult"];
-                {% elseif  game.getState() == "TwoLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
+                {% elseif  game.getState() == "twoLegionOnAnything" and game.getAffectedPlayer() == me.getId() %}
                 actualTokens = ["doublesword", "shield", "chariot", "catapult", "teaches", "knife"];
                 {% else %}
                 switch (actualToken) {
