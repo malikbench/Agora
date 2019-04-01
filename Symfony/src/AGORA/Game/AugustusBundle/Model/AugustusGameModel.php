@@ -229,7 +229,7 @@ class AugustusGameModel {
         $capturer = array();
         $index = array();
         foreach ($game->getPlayers() as $player) {
-            foreach ($player->getCards() as $card) {
+            foreach ($this->cleanArray($player->getCards()->toArray()) as $card) {
                 if ($this->cardModel->isCapturable($card->getId())) {
                     $capturer[$card->getNumber()] = $player->getId();
                     array_push($index, $card->getNumber());
@@ -282,7 +282,7 @@ class AugustusGameModel {
         $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
         $player = $players->findOneById($idPlayer);
 
-        foreach ($player->getCards() as $card) {
+        foreach ($this->cleanArray($player->getCards()->toArray()) as $card) {
             if ($this->cardModel->isCapturable($card->getId())) {
                 return $card;
             }
@@ -500,5 +500,15 @@ class AugustusGameModel {
             }
         }
         return true;
+    }
+
+    private function cleanArray($tab) {
+        $units = array();
+        foreach ($tab as $u) {
+            if ($u != null) {
+                array_push($units, $u);
+            }
+        }
+        return $units;
     }
 }

@@ -162,7 +162,7 @@ class AugustusPlayerModel {
         $cards = $player->getCards();
 
         foreach($cards as $c) {
-            if ($c->getNumber() == $number) {
+            if ($c != null && $c->getNumber() == $number) {
                 return $c;
             }
         }
