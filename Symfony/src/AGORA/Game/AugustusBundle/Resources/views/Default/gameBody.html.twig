@@ -362,7 +362,7 @@
             document.querySelector("#valider").disabled = true;
             return false;
         }
-        {% endif %}
+                {% endif %}
         else {
             document.querySelector("#valider").disabled = false;
             return true;
@@ -716,6 +716,7 @@
                 action.removeToken.token = [];
                 action.removeToken.card = [];
             }
+
             if ((typeof (removeAction) != 'undefined' && removeAction === 2) || gottaRemove === 2) {
                 action.removeToken.token.push(selectedToken.ind);
                 action.removeToken.card.push(selectedCard.ind);
@@ -725,6 +726,7 @@
             } else if (gottaRemove <= 1) {
                 action.removeToken.token.push(selectedToken.ind);
                 action.removeToken.card.push(selectedCard.ind);
+                gottaRemove -= 1;
                 document.querySelectorAll(".cardAction").forEach(function (ee) {
                     ee.firstElementChild.innerHTML = "<p>Vous avez retiré une légion, vous ne pouvez plus en retirer d'avantage ce tour.</p>";
                 });
@@ -904,7 +906,7 @@
                 action.removeToken.token = [];
                 action.removeToken.card = [];
             }
-            if (typeof (removeAction) != 'undefined' && removeAction >= 1) {
+            if (typeof (removeAction) != 'undefined' && removeAction >= 2) {
                 action.removeToken.token.push(selectedToken.ind);
                 action.removeToken.card.push(selectedCard.ind);
                 selectedToken.elem.style.visibility = "hidden";
@@ -913,8 +915,9 @@
             } else {
                 action.removeToken.token.push(selectedToken.ind);
                 action.removeToken.card.push(selectedCard.ind);
-                checkValidate();
+                removeAction -= 1;
 
+                checkValidate();
                 document.querySelectorAll(".cardAction").forEach(function (ee) {
                     ee.firstElementChild.innerHTML = "<p>Vous avez retiré vos légions, vous devez finir de les repositionner.</p>";
                 });
