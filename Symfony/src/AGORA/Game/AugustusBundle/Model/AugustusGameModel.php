@@ -155,8 +155,8 @@ class AugustusGameModel {
                 $this->playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
                 $this->changeWheatOwner($id, $game->getAffectedPlayer());
-                if ($game->getState()[0] == "aveCesar") {
-                    $this->$cardModel->doPower($card->getId());
+                if ($game->getState() == "aveCesar") {
+                    $this->cardModel->doPower($card->getId());
                 }
                 if ($this->playerModel->getNbOfCardColor($game->getAffectedPlayer(), $card->getColor()) == 3) {
                     $this->fillColorLoot($id, $game->getAffectedPlayer(), $card->getColor());
@@ -190,7 +190,7 @@ class AugustusGameModel {
             $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
             $game = $games->findOneById($id);
 
-            $card = getCapturableCardFromPlayer($game->getAffectedPlayer());
+            $card = $this->getCapturableCardFromPlayer($game->getAffectedPlayer());
             if ($card) {
                 $this->playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
@@ -229,7 +229,7 @@ class AugustusGameModel {
         $capturer = array();
         $index = array();
         foreach ($game->getPlayers() as $player) {
-            foreach ($player->getCards() as $card) {
+            foreach ($this->cleanArray($player->getCards()->toArray()) as $card) {
                 if ($this->cardModel->isCapturable($card->getId())) {
                     $capturer[$card->getNumber()] = $player->getId();
                     array_push($index, $card->getNumber());
@@ -282,7 +282,7 @@ class AugustusGameModel {
         $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
         $player = $players->findOneById($idPlayer);
 
-        foreach ($player->getCards() as $card) {
+        foreach ($this->cleanArray($player->getCards()->toArray()) as $card) {
             if ($this->cardModel->isCapturable($card->getId())) {
                 return $card;
             }
@@ -500,5 +500,15 @@ class AugustusGameModel {
             }
         }
         return true;
+    }
+
+    private function cleanArray($tab) {
+        $units = array();
+        foreach ($tab as $u) {
+            if ($u != null) {
+                array_push($units, $u);
+            }
+        }
+        return $units;
     }
 }
