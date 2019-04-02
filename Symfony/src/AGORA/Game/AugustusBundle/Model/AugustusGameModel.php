@@ -476,7 +476,7 @@ class AugustusGameModel {
             $state == "twoLegionOnShield" || $state == "twoLegionOnKnife" ||
             $state == "twoLegionOnChariot" || $state == "twoLegionOnCatapult" ||
             $state == "oneLegionOnAnything" || $state == "twoLegionOnAnything"
-            || $state = "oneCard" || $state == "moveLegion" || $state = "completeCard") {
+            || $state == "oneCard" || $state == "moveLegion" || $state == "completeCard") {
             foreach ($game->getPlayers() as $player) {
                 if ($player->getId() != $game->getAffectedPlayer()) {
                     $player->setIsLock(true);
