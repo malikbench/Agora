@@ -543,7 +543,6 @@
             document.querySelector(".overlay").classList.add("visible");
         };
 
-
         //get infos string from nbr of a card
         cardInfo = function (nbr) {
             switch (nbr) {
@@ -600,31 +599,42 @@
                 case 'gold':
                     return "<p>Cette carte revient au joueur qui possède le plus de cartes d'or.</p>" +
                         "<p>Elle rapportera  5 poins lors du décompte final.</p>" +
-                        "<img src=\"{{ asset('bundles/augustus/img/Loot/LootGold.jpg') }}\" height='100' />";
+                        "<img src=\"{{ asset('bundles/augustus/img/Loot/LootGold.jpg') }}\" height='100' />"
+                        +"<p>Elle appartient actuellement à " + "</p>";
+
                 case 'green':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs vertes.</p>" +
                         "<p>Elle rapportera  4 poins lors du décompte final.</p>" +
-                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootgreen.jpg') }}\" height='100' />";
+                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootgreen.jpg') }}\" height='100' />"
+                        +"<p>Elle appartient actuellement à " + "</p>";
                 case 'orange':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs oranges.</p>" +
                         "<p>Elle rapportera  10 poins lors du décompte final.</p>" +
-                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootorange.jpg') }}\" height='100' />";
+                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootorange.jpg') }}\" height='100' />"
+                        +"<p>Elle appartient actuellement à " + "</p>";
                 case 'all':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs de couleurs différentes.</p>" +
                         "<p>Elle rapportera  6 poins lors du décompte final.</p>" +
-                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootall.jpg') }}\" height='100' />";
+                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootall.jpg') }}\" height='100' />"
+                        +"<p>Elle appartient actuellement à " + "</p>";
                 case 'pink':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs roses.</p>" +
                         "<p>Elle rapportera  8 poins lors du décompte final.</p>" +
-                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootpink.jpg') }}\" height='100' />";
+                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootpink.jpg') }}\" height='100' />"
+                        +"<p>Elle appartient actuellement à " + "</p>";
+
                 case 'senator':
                     return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes sénateurs.</p>" +
                         "<p>Elle rapportera  2 poins lors du décompte final.</p>" +
-                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootsenator.jpg') }}\" height='100' />";
+                        "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootsenator.jpg') }}\" height='100' />"
+                        +"<p>Elle appartient actuellement à " + "</p>";
+
                 case 'wheat':
                     return "<p>Cette carte revient au joueur qui possède le plus de cartes d'blé.</p>" +
                         "<p>Elle rapportera  5 poins lors du décompte final.</p>" +
-                        "<img src=\"{{ asset('bundles/augustus/img/Loot/LootWheat.jpg') }}\" height='100' />";
+                        "<img src=\"{{ asset('bundles/augustus/img/Loot/LootWheat.jpg') }}\" height='100' />"
+                        +"<p>Elle appartient actuellement à " + "</p>";
+
                 default:
                     return "could not find info for card n" + loot;
             }
@@ -634,7 +644,8 @@
             return "<p>Il vous faut contrôler " + obj + " objectifs pour saisir cette carte.</p>" +
                 "<p>Elle vous rapportera " + points + " points lors du décompte final.</p>" +
                 "<p>Vous ne pouvez saisir qu'une seule carte récompense lors de la partie.</p>" +
-                "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot" + obj + "Cards.jpg\" height='100' />";
+                "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot" + obj + "Cards.jpg\" height='100' />"+
+                "<p>Elle appartient actuellement à " +  "</p>";
         };
 
 
@@ -1092,9 +1103,8 @@
 
     </script>
 
-    <button id="buttAcc" onclick="window.location.href = '{{ path('agora_platform_homepage') }}'">Accueil</button>    </body>
-
-
+    <button id="buttAcc" onclick="window.location.href = '{{ path('agora_platform_homepage') }}'">Accueil</button>
+    </body>
     <script>
 
         let augustusSocket = null;
