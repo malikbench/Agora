@@ -299,9 +299,17 @@ class AugustusPlayer
      */
     public function getCards()
     {
-        return $this->cards;
+       $cmp = function ($a, $b) {
+            if ($a->getNumber() == $b->getNumber()) {
+                return 0;
+            }
+            return ($a->getNumber() < $b->getNumber()) ? -1 : 1;
+        };
+        $cards = $this->cards->toArray();
+        uasort($cards, $cmp);
+        $res = new \Doctrine\Common\Collections\ArrayCollection($cards);
+        return $res;
     }
-
 
     /**
      * Set game.
