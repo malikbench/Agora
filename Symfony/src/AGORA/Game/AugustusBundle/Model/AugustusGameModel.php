@@ -203,6 +203,7 @@ class AugustusGameModel {
                 }
                 if ($this->isPowerWithAction($card->getId())) {
                     $game->setState($card->getPower());
+                    $this->lockThem($id);
                 } else {
                     $this->cardModel->doPower($card->getId());
                 }
@@ -211,6 +212,7 @@ class AugustusGameModel {
                 $game->setAffectedPlayer($game->getNextAffecteds()[0]);
                 $game->setNextStates(array_slice($game->getNextStates(), 1));
                 $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
+                $this->lockThem($id);
             }
         }
         $this->manager->flush();
@@ -463,17 +465,32 @@ class AugustusGameModel {
     }
 
     // met isLock a true ou false pour les joueurs
-    // utile pour les phases legion et aveCesar
     private function lockThem($id) {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
 
-        if ($game->getState() == "aveCesar" || $game->getState() == "takeLoot") {
+        $state = $game->getState();
+        
+        if ($state == "aveCesar" || $state == "takeLoot"
+            || $state == "twoLegionOnDoubleSword" || $state == "twoLegionOnTeaches" ||
+            $state == "twoLegionOnShield" || $state == "twoLegionOnKnife" ||
+            $state == "twoLegionOnChariot" || $state == "twoLegionOnCatapult" ||
+            $state == "oneLegionOnAnything" || $state == "twoLegionOnAnything"
+            || $state = "oneCard" || $state == "moveLegion" || $state = "completeCard") {
             foreach ($game->getPlayers() as $player) {
                 if ($player->getId() != $game->getAffectedPlayer()) {
                     $player->setIsLock(true);
                 } else {
                     $player->setIsLock(false);
+                }
+            }
+        } else if ($state == "removeOneLegion" || $state == "removeTwoLegion" ||
+                    $state == "removeAllLegion") {
+            foreach ($game->getPlayers() as $player) {
+                if ($player->getId() != $game->getAffectedPlayer()) {
+                    $player->setIsLock(false);
+                } else {
+                    $player->setIsLock(true);
                 }
             }
         } else {
