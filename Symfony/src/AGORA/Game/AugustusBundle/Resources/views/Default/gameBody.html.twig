@@ -539,67 +539,116 @@
 
     //get the infos string from nbr of a loot
     lootInfo = function (loot) {
+        let goldOwnerName = "personne";
+        let greenOwnerName = "personne";
+        let orangeOwnerName = "personne";
+        let pinkOwnerName = "personne";
+        let allOwnerName = "personne";
+        let senatorOwnerName = "personne";
+        let wheatOwnerName = "personne";
+        let twoOwnerName = "peronne";
+        let threeOwnerName = "peronne";
+        let fourOwnerName = "peronne";
+        let fiveOwnerName = "peronne";
+        let sixOwnerName = "peronne";
+
+        {% for player in game.players %}
+        {% if player.id == game.getGoldOwner  %}
+        goldOwnerName = "{{ player.getName }}";
+        {% endif %}
+        {% if player.id == game.getColorLoot["green"] %}
+        greenOwnerName = "{{ player.getName }}";
+        {% endif %}
+        {% if player.id == game.getColorLoot["orange"] %}
+        orangeOwnerName = "{{ player.getName }}";
+        {% endif %}
+        {% if player.id == game.getColorLoot["pink"] %}
+        pinkOwnerName = "{{ player.getName }}";
+        {% endif %}
+        {% if player.id == game.getColorLoot["all"] %}
+        allOwnerName = "{{ player.getName }}";
+        {% endif %}
+        {% if player.id == game.getColorLoot["senator"] %}
+        senatorOwnerName = "{{ player.getName }}";
+        {% endif %}
+        {% if player.advantage == 2 %}
+        twoOwnerName = "{{ player.getName }}";
+        {% endif %}
+        {% if player.advantage == 3 %}
+        threeOwnerName = "{{ player.getName }}";
+        {% endif %}
+        {% if player.advantage == 4 %}
+        fourOwnerName = "{{ player.getName }}";
+        {% endif %}
+        {% if player.advantage == 5 %}
+        fiveOwnerName = "{{ player.getName }}";
+        {% endif %}
+        {% if player.advantage == 6 %}
+        sixOwnerName = "{{ player.getName }}";
+        {% endif %}
+
+        {% endfor %}
         switch (loot) {
             case '2':
-                return advantageInfo(2, 2);
+                return advantageInfo(2, 2, twoOwnerName);
             case '3':
-                return advantageInfo(3, 4);
+                return advantageInfo(3, 4, threeOwnerName);
             case '4':
-                return advantageInfo(4, 6);
+                return advantageInfo(4, 6, fourOwnerName);
             case '5':
-                return advantageInfo(5, 8);
+                return advantageInfo(5, 8, fiveOwnerName);
             case '6':
-                return advantageInfo(6, 10);
+                return advantageInfo(6, 10, sixOwnerName);
             case 'gold':
                 return "<p>Cette carte revient au joueur qui possède le plus de cartes d'or.</p>" +
                     "<p>Elle rapportera  5 poins lors du décompte final.</p>" +
                     "<img src=\"{{ asset('bundles/augustus/img/Loot/LootGold.jpg') }}\" height='100' />"
-                    +"<p>Elle appartient actuellement à " + "</p>";
+                    +"<p>Elle appartient actuellement à " + goldOwnerName + "</p>";
 
             case 'green':
                 return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs vertes.</p>" +
                     "<p>Elle rapportera  4 poins lors du décompte final.</p>" +
                     "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootgreen.jpg') }}\" height='100' />"
-                    +"<p>Elle appartient actuellement à " + "</p>";
+                    +"<p>Elle appartient actuellement à " + greenOwnerName + "</p>";
             case 'orange':
                 return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs oranges.</p>" +
                     "<p>Elle rapportera  10 poins lors du décompte final.</p>" +
                     "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootorange.jpg') }}\" height='100' />"
-                    +"<p>Elle appartient actuellement à " + "</p>";
+                    +"<p>Elle appartient actuellement à " + orangeOwnerName + "</p>";
             case 'all':
                 return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs de couleurs différentes.</p>" +
                     "<p>Elle rapportera  6 poins lors du décompte final.</p>" +
                     "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootall.jpg') }}\" height='100' />"
-                    +"<p>Elle appartient actuellement à " + "</p>";
+                    +"<p>Elle appartient actuellement à " + allOwnerName + "</p>";
             case 'pink':
                 return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes objectifs roses.</p>" +
                     "<p>Elle rapportera  8 poins lors du décompte final.</p>" +
                     "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootpink.jpg') }}\" height='100' />"
-                    +"<p>Elle appartient actuellement à " + "</p>";
+                    +"<p>Elle appartient actuellement à " + pinkOwnerName +"</p>";
 
             case 'senator':
                 return "<p>Cette carte revient automatiquement aux joueurs qui contrôlent 3 cartes sénateurs.</p>" +
                     "<p>Elle rapportera  2 poins lors du décompte final.</p>" +
                     "<img src=\"{{ asset('bundles/augustus/img/Loot/Lootsenator.jpg') }}\" height='100' />"
-                    +"<p>Elle appartient actuellement à " + "</p>";
+                    +"<p>Elle appartient actuellement à " + senatorOwnerName +"</p>";
 
             case 'wheat':
                 return "<p>Cette carte revient au joueur qui possède le plus de cartes d'blé.</p>" +
                     "<p>Elle rapportera  5 poins lors du décompte final.</p>" +
                     "<img src=\"{{ asset('bundles/augustus/img/Loot/LootWheat.jpg') }}\" height='100' />"
-                    +"<p>Elle appartient actuellement à " + "</p>";
+                    +"<p>Elle appartient actuellement à " + wheatOwnerName +"</p>";
 
             default:
                 return "could not find info for card n" + loot;
         }
     };
 
-    advantageInfo = function (obj, points) {
+    advantageInfo = function (obj, points, name) {
         return "<p>Il vous faut contrôler " + obj + " objectifs pour saisir cette carte.</p>" +
             "<p>Elle vous rapportera " + points + " points lors du décompte final.</p>" +
             "<p>Vous ne pouvez saisir qu'une seule carte récompense lors de la partie.</p>" +
             "<img src=\"{{ asset('bundles/augustus/img/Loot') }}/Loot" + obj + "Cards.jpg\" height='100' />"+
-            "<p>Elle appartient actuellement à " +  "</p>";
+            "<p>Elle appartient actuellement à " + name  + "</p>";
     };
 
 
