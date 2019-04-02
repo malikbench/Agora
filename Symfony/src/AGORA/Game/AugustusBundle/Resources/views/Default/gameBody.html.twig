@@ -203,7 +203,7 @@
             {% for card in me.cards %}
                 {% set cardIndex = loop.index0 %}
                 <div class="card" style="background-image: url('{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}');"
-                        {% if me.isLock or (game.getState == 'aveCesar' and me.getId != game.getAffectedPlayer) %}
+                        {% if me.isLock or game.getState == 'aveCesar' %}
                             onclick=""
                         {% else %}
                             onclick="selectHand(this)"
@@ -509,7 +509,7 @@
                 return "<p>Cette carte {{ card.color }} rapporte {{ card.points }} points à celui qui la capture."
                     + "<br>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir." : "Elle a le pouvoir de " ~card.power~ "." }}"
                     + "<br>{{ card.resource == 'noResource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}"
-                    + "<br>{{ card.player == null ? "Personne ne possède cette carte." : card.player.userName ~ " possède cette carte." }}</p>"
+                    + "<br>{{ card.player == null ? (card.playerCtrl == null ? "Personne ne possède cette carte." : card.playerCtrl.userName ~ " possède cette carte.") : card.player.userName ~ " possède cette carte." }}</p>"
                     + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' />";
                 {% endfor %}
 
@@ -518,7 +518,7 @@
                 return "<p>Cette carte {{ card.color }} rapporte {{ card.points }} points à celui qui la capture."
                     + "<br>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir." : "Elle a le pouvoir de " ~card.power~ "." }}"
                     + "<br>{{ card.resource == 'noResource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}"
-                    + "<br>{{ card.player == null ? "Personne ne possède cette carte." : card.player.userName ~ " possède cette carte." }}</p>"
+                    + "<br>{{ card.player == null ? (card.playerCtrl == null ? "Personne ne possède cette carte." : card.playerCtrl.userName ~ " possède cette carte.") : card.player.userName ~ " possède cette carte." }}</p>"
                     + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' />";
                 {% endfor %}
                 {% endfor %}
@@ -529,7 +529,7 @@
                 return "<p>Cette carte {{ card.color }} rapporte {{ card.points }} points à celui qui la capture."
                     + "<br>{{ card.power == 'noPower' ? "Cette carte ne possède pas de pouvoir." : "Elle a le pouvoir de " ~card.power~ "." }}"
                     + "<br>{{ card.resource == 'noResource' ? "" : (card.resource == 'wheat' ? "Cette carte possède du blé." : (card.resource == 'gold' ? "Cette carte possède de l'or." : "Cette carte possède de l'or et du blé.") ) }}"
-                    + "<br>{{ card.player == null ? "Personne ne possède cette carte." : card.player.userName ~ " possède cette carte." }}</p>"
+                    + "<br>{{ card.player == null ? (card.playerCtrl == null ? "Personne ne possède cette carte." : card.playerCtrl.userName ~ " possède cette carte.") : card.player.userName ~ " possède cette carte." }}</p>"
                     + "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' />";
                 {% endfor %}
             default:
