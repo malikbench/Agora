@@ -28,6 +28,9 @@ class Game
      */
     private $gameId;
 
+
+    // ATTENTION ceci n'est pas un int, mais un objet de type GameInfo (et pas juste l'id)
+    // Bravo agora7...
     /**
      * @var int
      *

@@ -63,6 +63,7 @@ class AugustusService {
         return $this->getGame($gameId)->getPlayers();
     }
 
+
     public function areAllPlayersReady($gameId) {
         return $this->gameModel->allOk($gameId);
     }
@@ -84,6 +85,7 @@ class AugustusService {
 
             if (count($game->getPlayers()) == $room->getNbPlayers()) {
                 $this->gameModel->initGame($gameId);
+                $room->setState("started");
             }
 
             return $retId;
