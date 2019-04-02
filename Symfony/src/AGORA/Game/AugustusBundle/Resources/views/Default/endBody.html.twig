@@ -51,7 +51,7 @@
         players.push({
             nom: "{{ player.userName }}",
             ctrlCards: "{{ player.ctrlCards|length }}",
-            score: "{# TODO score #}"
+            score: "{{ player.score }}"
         });
         {% endfor %}
 

@@ -128,7 +128,24 @@ class GameController extends Controller {
             )
         );
     }
-    
+    public function endBodyAction($gameId, $playerId) {
+        $service = $this->container->get('agora_game.augustus');
+
+        $game = $service->getGame($gameId);
+        $player = $service->getPlayerFromId($playerId, $gameId);
+
+        //Envoie Au twig tout les infomartions qu'il doit afficher
+        return $this->render('AugustusBundle:Default:endBody.html.twig',
+            array(
+                'game'  => $game,
+                'board' => $game->getBoard(),
+                'me'    => $player,
+            )
+        );
+    }
+
+
+
     public function handleAction($conn, $gameId, $playerId, $action) {
         $service = $this->container->get('agora_game.augustus');
 
@@ -207,17 +224,29 @@ class GameController extends Controller {
         $service->getPlayerFromId($playerId,$gameId)->setIsLock(true);
         $service->manager->flush();
         $conn->send("refresh");
-        if ($service->areAllPlayersReady($gameId)) {
+        //Add case is finished
+        if($service ->getGame($gameId)->getState() == "endGame") {
             $players = $service->getPlayers($gameId);
 
-            $service->gameModel->applyStep($gameId);
 
             foreach ($service->getPlayers($gameId) as $player) {
                 $c = $this->connectionStorage->getConnection($gameId, $player->getId());
 
-                $c->send($this->bodyAction($gameId, $player->getId()));
+                $c->send($this->endBodyAction($gameId, $player->getId()));
             }
-            //return
+        } else {
+            if ($service->areAllPlayersReady($gameId)) {
+                $players = $service->getPlayers($gameId);
+
+                $service->gameModel->applyStep($gameId);
+
+                foreach ($service->getPlayers($gameId) as $player) {
+                    $c = $this->connectionStorage->getConnection($gameId, $player->getId());
+
+                    $c->send($this->bodyAction($gameId, $player->getId()));
+                }
+                //return
+            }
         }
 
     }
