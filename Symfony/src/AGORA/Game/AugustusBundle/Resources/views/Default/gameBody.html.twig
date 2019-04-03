@@ -554,37 +554,37 @@
 
         {% for player in game.players %}
         {% if player.id == game.getGoldOwner  %}
-        goldOwnerName = "{{ player.getName }}";
+        goldOwnerName = "{{ player.getUserName }}";
         {% endif %}
         {% if player.id == game.getColorLoot["green"] %}
-        greenOwnerName = "{{ player.getName }}";
+        greenOwnerName = "{{ player.getUserName }}";
         {% endif %}
         {% if player.id == game.getColorLoot["orange"] %}
-        orangeOwnerName = "{{ player.getName }}";
+        orangeOwnerName = "{{ player.getUserName }}";
         {% endif %}
         {% if player.id == game.getColorLoot["pink"] %}
-        pinkOwnerName = "{{ player.getName }}";
+        pinkOwnerName = "{{ player.getUserName }}";
         {% endif %}
         {% if player.id == game.getColorLoot["all"] %}
-        allOwnerName = "{{ player.getName }}";
+        allOwnerName = "{{ player.getUserName }}";
         {% endif %}
         {% if player.id == game.getColorLoot["senator"] %}
-        senatorOwnerName = "{{ player.getName }}";
+        senatorOwnerName = "{{ player.getUserName }}";
         {% endif %}
         {% if player.advantage == 2 %}
-        twoOwnerName = "{{ player.getName }}";
+        twoOwnerName = "{{ player.getUserName }}";
         {% endif %}
         {% if player.advantage == 3 %}
-        threeOwnerName = "{{ player.getName }}";
+        threeOwnerName = "{{ player.getUserName }}";
         {% endif %}
         {% if player.advantage == 4 %}
-        fourOwnerName = "{{ player.getName }}";
+        fourOwnerName = "{{ player.getUserName }}";
         {% endif %}
         {% if player.advantage == 5 %}
-        fiveOwnerName = "{{ player.getName }}";
+        fiveOwnerName = "{{ player.getUserName }}";
         {% endif %}
         {% if player.advantage == 6 %}
-        sixOwnerName = "{{ player.getName }}";
+        sixOwnerName = "{{ player.getUserName }}";
         {% endif %}
 
         {% endfor %}
