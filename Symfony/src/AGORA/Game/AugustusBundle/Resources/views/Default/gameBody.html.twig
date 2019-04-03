@@ -943,7 +943,7 @@
         }
     };
 
-    {% elseif game.state == "moveLegion" and game.getAffectedPlayer() == me and me.legion != me.legionMax %}
+    {% elseif game.state == "moveLegion" and game.getAffectedPlayer() == me.getId and me.legion != me.legionMax %}
 
     {# Cas MOVE LEGION #}
     addAction = {{ me.legionMax - me.legion }};
