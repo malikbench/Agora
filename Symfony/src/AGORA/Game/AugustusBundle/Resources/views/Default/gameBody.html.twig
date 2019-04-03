@@ -675,7 +675,10 @@
                 resetSelected();
             }
         } else {
-            action.type = "{{ game.getState }}";
+            {% if game.state starts with "twoLegion" or game.state starts with "oneLegion" or game.state starts with "moveLegion"  %}
+                action.type = "legion";
+            {% endif %}
+                action.type = "{{ game.getState }}";
             sendAction();
             resetSelected();
 
