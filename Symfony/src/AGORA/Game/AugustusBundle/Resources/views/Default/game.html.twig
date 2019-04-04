@@ -494,7 +494,7 @@
                     {% for player in game.players %}
                 case {{ loop.index0 }}:
                 {% for card in player.ctrlCards %}
-                    p += "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' ondblclick='getOverlay(cardInfo({{ card.number }}))' />";
+                    p += "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='200' ondblclick='getOverlay(cardInfo({{ card.number }}))' />";
                 {% endfor %}
                     break;
                     {% endfor %}
