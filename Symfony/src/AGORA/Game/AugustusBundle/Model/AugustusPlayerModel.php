@@ -134,8 +134,8 @@ class AugustusPlayerModel {
 
         $ctrlCards = $player->getCtrlCards();
         shuffle($ctrlCards);
-        array_pop($ctrlCards);
-        $player->setCtrlCards($ctrlCards);
+        $card = array_pop($ctrlCards);
+        $card->setPlayerCtrl(null);
 
         $this->manager->flush();
     }
