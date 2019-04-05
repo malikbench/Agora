@@ -138,10 +138,7 @@
 
                 {% for player in game.players %}
 
-                    <div class="selectedPlayerInfo flexContainer flexRow" style="display: none">
-
-
-                        <div class="flex1"></div>
+                    <div class="selectedPlayerInfo flexContainer flexRow" style="display: none; width: 100%;">
 
                         {% for card in player.cards %}
                             <div class="card"
@@ -154,7 +151,6 @@
                                     {% endif %}
                                 {% endfor %}
                             </div>
-
                         {% endfor %}
 
                         <div class="flex1"></div>
@@ -176,15 +172,15 @@
                 <div id="lootBars" class="flexContainer flexColumn">
                     <div id="topLoot" class="flexContainer flexRow">
                         <img src="{{ asset('bundles/augustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100"
-                             class="{{ me.ctrlCards|length == 2 ? 'chosenLoot' : ''  }}" ondblclick="getOverlay(lootInfo( '2' ))">
+                             class="{{ me.ctrlCards|length == 2 and game.getState == "aveCesar" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '2' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Loot3Cards.jpg') }}" alt="Loot3Cards" height="100"
-                             class="{{ me.ctrlCards|length == 3 ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '3' ))">
+                             class="{{ me.ctrlCards|length == 3 and game.getState == "aveCesar" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '3' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Loot4Cards.jpg') }}" alt="Loot4Cards" height="100"
-                             class="{{ me.ctrlCards|length == 4 ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '4' ))">
+                             class="{{ me.ctrlCards|length == 4 and game.getState == "aveCesar" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '4' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Loot5Cards.jpg') }}" alt="Loot5Cards" height="100"
-                             class="{{ me.ctrlCards|length == 5 ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '5' ))">
+                             class="{{ me.ctrlCards|length == 5 and game.getState == "aveCesar" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '5' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/Loot6Cards.jpg') }}" alt="Loot6Cards" height="100"
-                             class="{{ me.ctrlCards|length == 6 ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '6' ))">
+                             class="{{ me.ctrlCards|length == 6 and game.getState == "aveCesar" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '6' ))">
                         <img src="{{ asset('bundles/augustus/img/Loot/LootGold.jpg') }}" alt="LootGold" height="100"
                              ondblclick="getOverlay(lootInfo( 'gold' ))">
                     </div>
@@ -264,7 +260,7 @@
                         <div class="cardAction{{ loop.index0 }} cardAction" style="visibility: hidden;">
                             {% if game.getState() == "removeAllLegion" and me.legionMax != me.legion %}
                                 <div>
-                                    <p>Vous pouvez retirer toutes les légions de cette carte.</p>
+                                    <p>Vous devez retirer toutes les légions de cette carte si vous la choisissez.</p>
                                     <button onclick="removeAllLegionOnCard({{ cardIndex }})">Retirer</button>
                                 </div>
                             {% elseif game.state == "doCompleteCard" and game.getAffectedPlayer() == me.getId() %}
@@ -469,7 +465,7 @@
         gottaRemoveAllTokenOnCard = true;
         (function () {
             document.querySelector("#valider").disabled = true;
-            document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez choisir une carte. Toutes les légions se retireront de la carte.";
+            document.querySelector("#instructions").firstElementChild.innerHTML = "Veuillez patienter";
         })();
         {% elseif game.getState() == "completeCard" and game.affectedPlayer() == me.getId() %}
         gotToCompleteCard = true;
@@ -498,7 +494,7 @@
                     {% for player in game.players %}
                 case {{ loop.index0 }}:
                 {% for card in player.ctrlCards %}
-                    p += "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='100' ondblclick='getOverlay(cardInfo({{ card.number }}))' />";
+                    p += "<img src=\"{{ asset('bundles/augustus/img/Cards') }}/{{ card.number }}.jpg\" height='200' ondblclick='getOverlay(cardInfo({{ card.number }}))' />";
                 {% endfor %}
                     break;
                     {% endfor %}
@@ -592,11 +588,11 @@
             let allOwnerName = "personne";
             let senatorOwnerName = "personne";
             let wheatOwnerName = "personne";
-            let twoOwnerName = "peronne";
-            let threeOwnerName = "peronne";
-            let fourOwnerName = "peronne";
-            let fiveOwnerName = "peronne";
-            let sixOwnerName = "peronne";
+            let twoOwnerName = "personne";
+            let threeOwnerName = "personne";
+            let fourOwnerName = "personne";
+            let fiveOwnerName = "personne";
+            let sixOwnerName = "personne";
 
             {% for player in game.players %}
                 {% if player.id == game.getGoldOwner  %}
@@ -778,7 +774,7 @@
 
         //FONCTION POUR LE POUVOIR "Retirer toutes les légions d'une carte"
         removeAllLegionOnCard = function (indCard) {
-            {% if game.affectedPlayer() == me.getId() %}
+            {% if game.affectedPlayer() != me.getId() %}
             action.removeAllLegion = indCard;
             document.querySelector("#valider").disabled = false;
             gottaRemoveAllTokenOnCard = false;
@@ -812,7 +808,8 @@
             selectedCard.ind = indCard;
             document.querySelectorAll(".remove").forEach(element => {
                 element.disabled = false;
-            });    };
+            });
+        };
 
         //FONCTION DE RETIRAGE DE LA LEGION SELECTIONNE
         removeSelectedLegion = function () {
@@ -985,7 +982,7 @@
             }
         };
 
-        {% elseif game.state == "moveLegion" and game.getAffectedPlayer() == me and me.legion != me.legionMax %}
+        {% elseif game.state == "moveLegion" and game.affectedPlayer == me.id and me.legion != me.legionMax %}
 
         {# Cas MOVE LEGION #}
         addAction = {{ me.legionMax - me.legion }};
@@ -999,10 +996,14 @@
             document.querySelectorAll(".selectedToken").forEach(function (ee) {
                 ee.classList.remove("selectedToken");
             });
+
             e.classList.add("selectedToken");
             selectedToken.ind = indToken;
             selectedToken.elem = e;
             selectedCard.ind = indCard;
+            document.querySelectorAll(".remove").forEach(element => {
+                element.disabled = false;
+            });
         };
 
         //MOVE LEGION version
@@ -1037,7 +1038,7 @@
 
         //MOVE LEGION version
         addBestToken = function (e, listToken, listControlled, indCard) {
-            if (legion > 0) {
+            if (addAction > 0) {
 
                 //recherche sur la carte
                 let indToken = -1;
@@ -1171,7 +1172,7 @@
         
         try {
             //Connextion vers le serveur
-            var urlSock = "{{ app.request.getSchemeAndHttpHost() }}";
+            let urlSock = "{{ app.request.getSchemeAndHttpHost() }}";
             //On enlève le http (ou https)
             urlSock = urlSock.split("/");
             urlSock = urlSock[2];
