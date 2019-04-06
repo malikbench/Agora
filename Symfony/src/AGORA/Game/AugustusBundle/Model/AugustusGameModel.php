@@ -151,7 +151,6 @@ class AugustusGameModel {
                 break;
             case "aveCesar":
                 $card = $this->getCapturableCardFromPlayer($game->getAffectedPlayer());
-                $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
                 $this->playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
                 $this->changeGoldOwner($id, $game->getAffectedPlayer());
                 $this->changeWheatOwner($id, $game->getAffectedPlayer());
@@ -176,6 +175,21 @@ class AugustusGameModel {
             default:
                 $this->nextStep($id);
                 break;
+        }
+
+        
+        if ($game->getState() == "removeOneCard") {
+            foreach ($game->getPlayers() as $player) {
+                $idp = $player->getId();
+                if ($idp != $game->getAffectedPlayer()) {
+                    $this->playerModel->deleteCtrlCard($idp);
+                }
+            }
+            $game->setState($game->getNextStates()[0]);
+            $game->setAffectedPlayer($game->getNextAffecteds()[0]);
+            $game->setNextStates(array_slice($game->getNextStates(), 1));
+            $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
+            $this->lockThem($id);
         }
 
         $this->manager->flush();

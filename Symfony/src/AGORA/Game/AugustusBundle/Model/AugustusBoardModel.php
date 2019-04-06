@@ -30,7 +30,6 @@ class AugustusBoardModel {
         $i = $i + 1;
       }
       $card = array_pop($deck);
-      echo $card->getIsInLine();
     }
     $this->manager->flush();
   }

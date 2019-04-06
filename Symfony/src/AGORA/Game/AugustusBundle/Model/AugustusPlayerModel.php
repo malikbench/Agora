@@ -132,10 +132,12 @@ class AugustusPlayerModel {
 
         $player = $players->findOneById($idPlayer);
 
-        $ctrlCards = $player->getCtrlCards();
+        $ctrlCards = $player->getCtrlCards()->toArray();
         shuffle($ctrlCards);
         $card = array_pop($ctrlCards);
-        $card->setPlayerCtrl(null);
+        if ($card) {
+            $card->setPlayerCtrl(null);
+        }
 
         $this->manager->flush();
     }
