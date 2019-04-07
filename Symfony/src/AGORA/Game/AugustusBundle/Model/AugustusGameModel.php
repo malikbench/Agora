@@ -190,6 +190,19 @@ class AugustusGameModel {
             $game->setNextStates(array_slice($game->getNextStates(), 1));
             $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
             $this->lockThem($id);
+        } else if ($game->getState() == "endAveCesar") {
+            /*foreach ($game->getPlayers() as $player) {
+                $player->setScore($this->getScores($id, $player->getId()));
+            }*/
+            echo "endAveCesar";
+            if ($this->isGameOver($id)) {
+                $game->setAffectedPlayer($this->getWinner($id)->getId());
+                $game->setState("endGame");
+            } else {
+                $game->setState("legion");
+                $game->setAffectedPlayer(-1);
+                $this->lockThem($id);
+            }
         }
 
         $this->manager->flush();
@@ -262,7 +275,11 @@ class AugustusGameModel {
                     array_push($affecteds, $capturer[$i]);
             }
         }
-        array_push($states, "legion");
+        if (empty($states)) {
+            array_push($states, "legion");
+        } else {
+            array_push($states, "endAveCesar");
+        }
         array_push($affecteds, -1);
 
         return array($states, $affecteds);

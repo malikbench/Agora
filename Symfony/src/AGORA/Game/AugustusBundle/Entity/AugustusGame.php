@@ -266,11 +266,11 @@ class AugustusGame
     /**
      * set colorLoot.
      *
-     * @param \AGORA\Game\AugustusBundle\Entity\AugustusPlayer $colorLoot
+     * @param array
      *
      * @return AugustusGame
      */
-    public function setColorLoot(AugustusPlayer $colorLoot)
+    public function setColorLoot($colorLoot)
     {
         $this->colorLoot = $colorLoot;
 
