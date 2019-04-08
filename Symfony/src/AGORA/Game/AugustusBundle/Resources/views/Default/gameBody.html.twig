@@ -535,52 +535,40 @@
 
     //get the infos string from nbr of a loot
     lootInfo = function (loot) {
-        let goldOwnerName = "personne";
-        let greenOwnerName = "personne";
-        let orangeOwnerName = "personne";
-        let pinkOwnerName = "personne";
-        let allOwnerName = "personne";
-        let senatorOwnerName = "personne";
-        let wheatOwnerName = "personne";
-        let twoOwnerName = "personne";
-        let threeOwnerName = "personne";
-        let fourOwnerName = "personne";
-        let fiveOwnerName = "personne";
-        let sixOwnerName = "personne";
 
         {% for player in game.players %}
-        {% if player.id == game.getGoldOwner  %}
-        goldOwnerName = "{{ player.getName }}";
+        {% if player.id == game.getGoldOwner and (goldOwnerName == "personne" or goldOwnerName != player.getUserName)  %}
+        goldOwnerName = "{{ player.getUserName }}";
         {% endif %}
-        {% if player.id == game.getColorLoot["green"] %}
-        greenOwnerName = "{{ player.getName }}";
+        {% if player.id == game.getColorLoot["green"] and (greenOwnerName == "personne" or greenOwnerName != player.getUserName) %}
+        greenOwnerName = "{{ player.getUserName }}";
         {% endif %}
-        {% if player.id == game.getColorLoot["orange"] %}
-        orangeOwnerName = "{{ player.getName }}";
+        {% if player.id == game.getColorLoot["orange"] and (orangeOwnerName == "personne" or orangeOwnerName != player.getUserName) %}
+        orangeOwnerName = "{{ player.getUserName }}";
         {% endif %}
-        {% if player.id == game.getColorLoot["pink"] %}
-        pinkOwnerName = "{{ player.getName }}";
+        {% if player.id == game.getColorLoot["pink"] and (pinkOwnerName == "personne" or pinkOwnerName != player.getUserName) %}
+        pinkOwnerName = "{{ player.getUserName }}";
         {% endif %}
-        {% if player.id == game.getColorLoot["all"] %}
-        allOwnerName = "{{ player.getName }}";
+        {% if player.id == game.getColorLoot["all"] and (allOwnerName == "personne" or allOwnerName != player.getUserName) %}
+        allOwnerName = "{{ player.getUserName }}";
         {% endif %}
-        {% if player.id == game.getColorLoot["senator"] %}
-        senatorOwnerName = "{{ player.getName }}";
+        {% if player.id == game.getColorLoot["senator"] and (senatorOwnerName == "personne" or senatorOwnerName != player.getUserName) %}
+        senatorOwnerName = "{{ player.getUserName }}";
         {% endif %}
-        {% if player.advantage == 2 %}
-        twoOwnerName = "{{ player.getName }}";
+        {% if player.advantage == 2 and (twoOwnerName == "personne" or twoOwnerName != player.getUserName) %}
+        twoOwnerName = "{{ player.getUserName }}";
         {% endif %}
-        {% if player.advantage == 3 %}
-        threeOwnerName = "{{ player.getName }}";
+        {% if player.advantage == 3 and (threeOwnerName == "personne" or threeOwnerName != player.getUserName) %}
+        threeOwnerName = "{{ player.getUserName }}";
         {% endif %}
-        {% if player.advantage == 4 %}
-        fourOwnerName = "{{ player.getName }}";
+        {% if player.advantage == 4 and (fourOwnerName == "personne" or fourOwnerName != player.getUserName) %}
+        fourOwnerName = "{{ player.getUserName }}";
         {% endif %}
-        {% if player.advantage == 5 %}
-        fiveOwnerName = "{{ player.getName }}";
+        {% if player.advantage == 5 and (fiveOwnerName == "personne" or fiveOwnerName != player.getUserName) %}
+        fiveOwnerName = "{{ player.getUserName }}";
         {% endif %}
-        {% if player.advantage == 6 %}
-        sixOwnerName = "{{ player.getName }}";
+        {% if player.advantage == 6 and (sixOwnerName == "personne" or sixOwnerName != player.getUserName) %}
+        sixOwnerName = "{{ player.getUserName }}";
         {% endif %}
 
         {% endfor %}
