@@ -199,7 +199,7 @@
             {% for card in me.cards %}
                 {% set cardIndex = loop.index0 %}
                 <div class="card" style="background-image: url('{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}');"
-                        {% if me.isLock or game.getState == 'aveCesar' %}
+                        {% if me.isLock or game.getState == 'aveCesar' or game.getState =='oneCard' %}
                             onclick=""
                         {% else %}
                             onclick="selectHand(this)"
@@ -314,7 +314,7 @@
         <div class="flex1"></div>
 
         <div class="action marble">
-            {% if game.state == "aveCesar" and game.affectedPlayer() == me.getId() %}
+            {% if game.state == "aveCesar"  and game.affectedPlayer() == me.getId() %}
                 <div>
                     <p>Vous devez récuperer un des objectifs sur le terrain.</p>
                     <p>Récuperer l'objectif sélectionné ?</p>
