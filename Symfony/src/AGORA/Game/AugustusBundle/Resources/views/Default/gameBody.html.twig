@@ -661,7 +661,13 @@
                 resetSelected();
             }
         } else {
+            {% if game.state starts with "twoLegion" or game.state starts with "oneLegion" or game.state starts with "moveLegion" or game.state starts with "remove"  %}
+                action.type = "legion";
+            {% elseif game.state == "oneCard" %}
+                action.type = "aveCesar";
+            {% else %}
             action.type = "{{ game.getState }}";
+            {% endif %}
             sendAction();
             resetSelected();
 
