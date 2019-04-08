@@ -570,6 +570,9 @@
         {% if player.advantage == 6 and (sixOwnerName == "personne" or sixOwnerName != player.getUserName) %}
         sixOwnerName = "{{ player.getUserName }}";
         {% endif %}
+        {% if player.id == game.getWheatOwner and (wheatOwnerName == "personne" or wheatOwnerName != player.getUserName) %}
+        wheatOwnerName = "{{ player.getUserName }}";
+        {% endif %}
 
         {% endfor %}
         switch (loot) {
