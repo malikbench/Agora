@@ -291,7 +291,7 @@
 
         <div id="buttons" class="flexContainer flexRow">
             <div class="flex1"></div>
-            {% if me.isLock or (game.affectedPlayer != me.getId and game.getState == "aveCesar") %}
+            {% if me.isLock or game.getState == "aveCesar" or (game.affectedPlayer != me.getId and game.getState == "aveCesar") %}
                 <button id="valider" disabled onclick="validate()">Valider</button>
             {% else %}
                 <button id="valider" onclick="validate()">Valider</button>
@@ -341,7 +341,6 @@
     </div>
 </div>
 
-<!-- THERE WAS LINE 151 to 388 FROM AVE CESAR GAME TWIG -->
 
 <!-- SCRIPTS -->
 <script>
@@ -1085,6 +1084,7 @@
     takeObj = function () {
         if (selectedObj !== -1) {
             action.aveCesar.card = selectedObj;
+            document.querySelector("#valider").disabled = false;
             document.querySelector(".action").lastElementChild.innerHTML = "<p>Vous avez choisi l'objectif à prendre.</p>"
         } else {
             alert("Vous n'avez pas selectionné d'objectif.");
