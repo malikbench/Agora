@@ -1092,6 +1092,7 @@
             }
             action.aveCesar.takeLoot = choice;
             document.querySelector(".action").firstElementChild.innerHTML = "<p>Vous avez choisi de " + (choice === 1 ? "prendre" : "laisser") + " la récompense</p><br><br>"
+            checkValidate();
         } else {
             alert("Il n'y a pas de récompenses à récupérer sur le plateau.");
         }
