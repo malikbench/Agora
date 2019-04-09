@@ -320,7 +320,7 @@
                     <p>Récuperer l'objectif sélectionné ?</p>
                     <button onclick="takeObj()">Prendre</button>
                 </div>
-            {% elseif game.state == "takeLoot" %}
+            {% elseif game.state == "takeLoot" and game.affectedPlayer == me.id %}
                 <div>
                     <p>Vous pouvez prendre la récompense entourée en vert. Vous ne pouvez prendre qu'une seule
                         récompense de ce type.</p>
