@@ -217,13 +217,13 @@
                                 <p>Vous devez retirer toutes les légions de cette carte si vous la choisissez.</p>
                                 <button onclick="removeAllLegionOnCard({{ cardIndex }})">Retirer</button>
                             </div>
-                        {% elseif game.state == "doCompleteCard" and game.getAffectedPlayer() == me.getId() %}
+                        {% elseif game.state == "completeCard" and game.getAffectedPlayer() == me.getId() %}
                             <div>
                                 <p>Vous pouvez capturer cet objectif.</p>
                                 <button onclick="doCompleteCard({{ cardIndex }})">Capturer</button>
                             </div>
                         {% elseif (game.getState() == "removeAllLegion" and game.getAffectedPlayer() == me.getId())
-                            or (game.state == "doCompleteCard" and game.getAffectedPlayer() != me.getId()) %}
+                            or (game.state == "completeCard" and game.getAffectedPlayer() != me.getId()) %}
                             <div>
                                 <p>Veuillez attendre que les autres joueurs aient fini leurs actions.</p>
                             </div>
@@ -418,7 +418,7 @@
     gotToCompleteCard = true;
     (function () {
         document.querySelector("#valider").disabled = true;
-        document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez choisir une carte. Toutes les légions se retireront de la carte.";
+        document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez choisir une carte. Cette carte sera complétée.";
     })();
     {% elseif (game.getState() == "removeAllLegion" and game.getAffectedPlayer() == me.getId()) or
         ( game.getState() == "removeTwoLegion" and game.getAffectedPlayer() == me.getId()) or
@@ -715,6 +715,9 @@
         action.completeCard = indCard;
         document.querySelector("#valider").disabled = false;
         gotToCompleteCard = false;
+        document.querySelectorAll(".cardAction").forEach(function (ee) {
+            ee.lastElementChild.innerHTML = "<p>Vous avez choisi votre carte. Veuillez valider ou annuler vos actions</p>";
+        });
         checkValidate();
         {% endif %}
     };
