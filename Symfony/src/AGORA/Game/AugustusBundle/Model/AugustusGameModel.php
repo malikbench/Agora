@@ -139,6 +139,7 @@ class AugustusGameModel {
             case "legion":
                 if ($this->allOk($id)) {
                     $this->drawToken($id);
+                    $game->setToken(AugustusToken::JOKER);
                     $steps = $this->aveCesarSteps($id);
                     $states = $steps[0];
                     $affecteds = $steps[1];
@@ -163,6 +164,18 @@ class AugustusGameModel {
                 if ($this->playerModel->haveOneCardOfEach($game->getAffectedPlayer())) {
                     $this->fillColorLoot($id, $game->getAffectedPlayer(), "all");
                 }
+                if ($this->canClaimReward($id, $game->getAffectedPlayer())) {
+                    $game->setState("takeLoot");
+                    $this->lockThem($id);
+                } else {
+                    $game->setState($game->getNextStates()[0]);
+                    $game->setAffectedPlayer($game->getNextAffecteds()[0]);
+                    $game->setNextStates(array_slice($game->getNextStates(), 1));
+                    $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
+                    $this->lockThem($id);
+                }
+                break;
+            case "takeLoot":
                 $game->setState($game->getNextStates()[0]);
                 $game->setAffectedPlayer($game->getNextAffecteds()[0]);
                 $game->setNextStates(array_slice($game->getNextStates(), 1));
@@ -536,7 +549,7 @@ class AugustusGameModel {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
         $players = $this->manager->getRepository("AugustusBundle:AugustusPlayer");
-        $player = $players->findOneById($playerId);
+        $player = $players->findOneById($idPlayer);
            
         if ($player->getAdvantage() != 0) {
             return false;
