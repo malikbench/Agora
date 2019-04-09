@@ -186,10 +186,6 @@ class GameController extends Controller {
                 $service->manager->flush();
                 break;
             case "aveCesar":
-                // if ($action->aveCesar->takeLoot) {
-                //     $service->gameModel->claimReward($gameId, $playerId);
-                // }
-
                 $game = $service->getGame($gameId);
                 $board = $game->getBoard();
                 $card = $board->getObjLine()[$action->aveCesar->card];
@@ -214,7 +210,6 @@ class GameController extends Controller {
                 $service->manager->flush();
                 break;
             case "takeLoot":
-                echo " handleActiontakeLoot ";
                 if ($action->aveCesar->takeLoot) {
                     $service->gameModel->claimReward($gameId, $playerId);
                 }
