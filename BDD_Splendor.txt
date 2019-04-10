@@ -9,7 +9,7 @@ bunus -> String vallant une des valeur suivante : "Green", "Blue", "Red", "White
 
 Chez les joueurs(Player) les nobles ne sont pas stocké mais la valeur des points de prestige sont directement augmentés.
 
-Noble = Card où (prestige = 3 et bonus = Noble)
+Noble = Card où (prestige = 3 et bonus = Noble et level = 0)
 
 
 

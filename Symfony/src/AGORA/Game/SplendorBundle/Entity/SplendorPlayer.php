@@ -30,8 +30,8 @@ class SplendorPlayer
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="id_user", type="integer")
+     * @ORM\ManyToOne(targetEntity="AGORA\UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\JoinColumn(name="id_user", referencedColumnName="id")
      */
     private $idUser;
 

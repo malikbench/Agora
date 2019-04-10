@@ -148,9 +148,14 @@ class GameController extends Controller
         $players = array();
         /** @var AveCesarService $service */
         $service = $this->container->get('agora_game.ave_cesar');
+        $serviceSpldr = $this->container->get('agora_game.splendor');
+
         foreach ($games as $game) {
             if ($game->getGameInfoId()->getGameCode() == "avc") {
                 $players['avc'][''.$game->getId()] = $service->getAllPlayers($game->getId());
+            }
+            if ($game->getGameInfoId()->getGameCode() == "spldr") {
+                $players['spldr'][''.$game->getId()] = $serviceSpldr->getAllPlayers($game->getGameId());
             }
         }
 
