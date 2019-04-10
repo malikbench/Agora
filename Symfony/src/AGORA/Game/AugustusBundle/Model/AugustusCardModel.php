@@ -222,4 +222,17 @@ class AugustusCardModel {
         $player->setEquivalences($equivalences);
     }
 
+    public function ctrlTokenNb($idCard) {
+        $cards = $this->manager->getRepository('AugustusBundle:AugustusCard');
+        $card = $cards->findOneById($idCard);
+
+        $cpt = 0;
+        foreach($card->getCtrlTokens() as $c) {
+            if ($c == true) {
+                $cpt += 1;
+            }
+        }
+
+        return $cpt;
+    }
 }

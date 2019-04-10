@@ -203,10 +203,12 @@ class GameController extends Controller {
                 $service->manager->flush();
                 break;
             case "completeCard":
-                echo " handleAction ";
                 $cards = $this->cleanArray($player->getCards()->toArray());
                 $card = $cards[$action->completeCard];
+                $legions = $service->cardModel->ctrlTokenNb($card->getId());
                 $service->playerModel->completeCard($card->getId());
+                $player = $card->getPlayer();
+                $player->setLegion($player->getLegion() - count($card->getTokens()) + $legions);
                 $service->manager->flush();
                 break;
             case "takeLoot":
