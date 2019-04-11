@@ -415,7 +415,6 @@
     gottaRemoveAllTokenOnCard = true;
     (function () {
         document.querySelector("#valider").disabled = true;
-        document.querySelector("#instructions").firstElementChild.innerHTML = "Veuillez patienter";
     })();
     {% elseif game.getState() == "completeCard" and game.affectedPlayer() == me.getId() %}
     gotToCompleteCard = true;
@@ -689,7 +688,7 @@
                 }
             {% endif %}
         } else {
-            {% if game.state starts with "twoLegion" or game.state starts with "oneLegion" or game.state starts with "moveLegion" or game.state starts with "remove"  %}
+            {% if game.state starts with "twoLegion" or game.state starts with "oneLegion" or game.state starts with "moveLegion" or game.state starts with "removeOne" or game.state starts with "removeTwo"  %}
                 action.type = "legion";
             {% elseif game.state == "oneCard" %}
                 action.type = "aveCesar";
@@ -759,6 +758,7 @@
         action.removeAllLegion = indCard;
         document.querySelector("#valider").disabled = false;
         gottaRemoveAllTokenOnCard = false;
+        document.querySelector(".action").firstElementChild.innerHTML = "<p>Vous avez choisi de retirer toutes les légion d'une carte</p><br><br>"
         checkValidate();
         {% endif %}
     };
