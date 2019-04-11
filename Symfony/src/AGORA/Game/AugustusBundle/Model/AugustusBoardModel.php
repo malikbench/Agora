@@ -90,6 +90,8 @@ class AugustusBoardModel {
     $bag = $board->getTokenBag();
     $token = $bag[count($bag) - 1];
     $bag->remove(count($bag)- 1);
+    echo count($bag);
+    echo "          ,";
     $board->setTokenBag($bag);
     $this->manager->flush();
     return $token;

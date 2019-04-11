@@ -162,7 +162,7 @@ class GameController extends Controller {
         }
 
         $player = $service->getPlayerFromId($playerId, $gameId);
-
+         echo $action->type;
         switch ($action->type) {
             case "legion":
                 if(isset($action->removeToken)) {
@@ -198,8 +198,12 @@ class GameController extends Controller {
                 $service->manager->flush();
                 break;
             case "removeAllLegions":
+                echo $action->removeAllLegion;
+                echo "            ,";
                 $cards = $this->cleanArray($player->getCards()->toArray());
                 $card = $cards[$action->removeAllLegion];
+                echo $card->getNumber();
+                echo "            ,";
                 $tokens = $card->getTokens();
                 foreach($tokens as $t) {
                     $service->cardModel->getBackToken($card->getId(), $t);
