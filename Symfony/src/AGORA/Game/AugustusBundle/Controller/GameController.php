@@ -166,6 +166,7 @@ class GameController extends Controller {
         switch ($action->type) {
             case "legion":
                 if(isset($action->removeToken)) {
+                    echo count($action->removeToken->token);
                     for ($i = 0; $i < count($action->removeToken->token); $i++) {
                         $cards = $this->cleanArray($player->getCards()->toArray());
                         $card = $cards[$action->removeToken->card[$i]];
@@ -193,7 +194,7 @@ class GameController extends Controller {
 
                 $service->manager->flush();
                 break;
-            case "removeAllLegions":
+            case "removeAllLegion":
                 echo $action->removeAllLegion;
                 echo "            ,";
                 $cards = $this->cleanArray($player->getCards()->toArray());
@@ -201,6 +202,7 @@ class GameController extends Controller {
                 echo $card->getNumber();
                 echo "            ,";
                 $tokens = $card->getTokens();
+                echo count($tokens);
                 foreach($tokens as $t) {
                     $service->cardModel->getBackToken($card->getId(), $t);
                 }
