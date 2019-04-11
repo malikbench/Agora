@@ -254,7 +254,6 @@
                                     {% endif %}
                                 {% else %}
                                     <p>Aucune légion sur cette carte a retiré</p>
-
                                 {% endif %}
 
                                 <br>
@@ -389,8 +388,12 @@
     gottaRemove = 0;
     gottaRemoveAllTokenOnCard = false;
     gotToCompleteCard = false;
-    {% if (game.getState() == "removeOneLegion" and (me.legionMax - me.legion >= 1) and game.affectedPlayer() == me.getId() or
-        (game.getState() == "removeTwoLegion" and me.legionMax - me.legion == 1)) %}
+    {% if (game.getState() == "removeAllLegion" or game.state == "moveLegion") and me.legionMax == me.legion and me.affectedPlayer != me.getId() %}
+    window.onload = function () {
+        validate();
+    };
+    {% elseif ((game.getState() == "removeOneLegion" and (me.legionMax - me.legion >= 1) and game.affectedPlayer() != me.getId()) or
+        (game.getState() == "removeTwoLegion" and me.legionMax - me.legion == 1 and game.affectedPlayer() != me.getId())) %}
     gottaRemove = 1;
     (function () {
         document.querySelector("#valider").disabled = true;
@@ -399,7 +402,7 @@
         });
         document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez retirer 1 légion";
     })();
-    {% elseif game.getState() == "removeTwoLegion" and me.legionMax - me.legion >= 2 and game.affectedPlayer() == me.getId() %}
+    {% elseif game.getState() == "removeTwoLegion" and me.legionMax - me.legion >= 2 and game.affectedPlayer() != me.getId() %}
     gottaRemove = 2;
     (function () {
         document.querySelector("#valider").disabled = true;
@@ -408,7 +411,7 @@
         });
         document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez retirer 2 légions";
     })();
-    {% elseif game.getState() == "removeAllLegion" and me.legionMax != me.legion and game.affectedPlayer() == me.getId() %}
+    {% elseif game.getState() == "removeAllLegion" and me.legionMax != me.legion and game.affectedPlayer() != me.getId() %}
     gottaRemoveAllTokenOnCard = true;
     (function () {
         document.querySelector("#valider").disabled = true;
@@ -423,15 +426,11 @@
     {% elseif (game.getState() == "removeAllLegion" and game.getAffectedPlayer() == me.getId()) or
         ( game.getState() == "removeTwoLegion" and game.getAffectedPlayer() == me.getId()) or
         (game.getState() == "removeOneLegion" and game.getAffectedPlayer() == me.getId()) or
-        (game.getState() == "rompleteCard" and game.getAffectedPlayer() != me.getId()) %}
+        (game.getState() == "completeCard" and game.getAffectedPlayer() != me.getId()) %}
     (function () {
         document.querySelector("#valider").disabled = true;
         document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez attendre les autres joueurs.";
     })();
-    {% elseif (game.getState() == "removeAllLegion" or game.state == "moveLegion") and me.legionMax == me.legion %}
-    window.onload = function () {
-        validate();
-    };
     {% endif %}
 
     //get captured overlay
@@ -678,11 +677,17 @@
 
     validate = function () {
         if (JSON.stringify(action) === JSON.stringify(initialAction)) {
-            if (confirm("Certain de ne rien vouloir jouer ?")) {
+            {%if game.state == "moveLegion"  %}
                 action.type = "{{ game.getState }}";
                 sendAction();
                 resetSelected();
-            }
+            {% else %}
+                if (confirm("Certain de ne rien vouloir jouer ?")) {
+                    action.type = "{{ game.getState }}";
+                    sendAction();
+                    resetSelected();
+                }
+            {% endif %}
         } else {
             {% if game.state starts with "twoLegion" or game.state starts with "oneLegion" or game.state starts with "moveLegion" or game.state starts with "remove"  %}
                 action.type = "legion";
