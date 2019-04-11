@@ -67,7 +67,7 @@ class AugustusPlayerModel {
         $card = $cards->findOneById($idCard);
         $this->cardModel->captureToken($idCard, $token);
         
-        $player->setLegion($player->getLegion()- 1);
+        $player->setLegion($player->getLegion() - 1);
 
         $this->manager->flush();
     }
@@ -141,17 +141,15 @@ class AugustusPlayerModel {
 
         $this->manager->flush();
     }
-
+    
     public function completeCard($idCard) {
         $cards = $this->manager->getRepository('AugustusBundle:AugustusCard');
 
         $card = $cards->findOneById($idCard);
-
-        $ctrl = $card->getCtrlTokens();
-        foreach($ctrl as &$c) {
-            $c == true;
+        $tok = $card->getTokens();
+        foreach($tok as $t) {
+            $this->cardModel->captureToken($idCard, $t);
         }
-        $card->setCtrlTokens($ctrl);
 
         $this->manager->flush();
     }

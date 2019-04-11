@@ -126,15 +126,15 @@
             <div id="lootBars" class="flexContainer flexColumn">
                 <div id="topLoot" class="flexContainer flexRow">
                     <img src="{{ asset('bundles/augustus/img/Loot/Loot2Cards.jpg') }}" alt="Loot2Cards" height="100"
-                         class="{{ me.ctrlCards|length == 2 and game.getState == "aveCesar" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '2' ))">
+                         class="{{ me.ctrlCards|length == 2 and game.getState == "takeLoot" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '2' ))">
                     <img src="{{ asset('bundles/augustus/img/Loot/Loot3Cards.jpg') }}" alt="Loot3Cards" height="100"
-                         class="{{ me.ctrlCards|length == 3 and game.getState == "aveCesar" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '3' ))">
+                         class="{{ me.ctrlCards|length == 3 and game.getState == "takeLoot" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '3' ))">
                     <img src="{{ asset('bundles/augustus/img/Loot/Loot4Cards.jpg') }}" alt="Loot4Cards" height="100"
-                         class="{{ me.ctrlCards|length == 4 and game.getState == "aveCesar" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '4' ))">
+                         class="{{ me.ctrlCards|length == 4 and game.getState == "takeLoot" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '4' ))">
                     <img src="{{ asset('bundles/augustus/img/Loot/Loot5Cards.jpg') }}" alt="Loot5Cards" height="100"
-                         class="{{ me.ctrlCards|length == 5 and game.getState == "aveCesar" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '5' ))">
+                         class="{{ me.ctrlCards|length == 5 and game.getState == "takeLoot" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '5' ))">
                     <img src="{{ asset('bundles/augustus/img/Loot/Loot6Cards.jpg') }}" alt="Loot6Cards" height="100"
-                         class="{{ me.ctrlCards|length == 6 and game.getState == "aveCesar" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '6' ))">
+                         class="{{ me.ctrlCards|length == 6 and game.getState == "takeLoot" ? 'chosenLoot' : '' }}" ondblclick="getOverlay(lootInfo( '6' ))">
                     <img src="{{ asset('bundles/augustus/img/Loot/LootGold.jpg') }}" alt="LootGold" height="100"
                          ondblclick="getOverlay(lootInfo( 'gold' ))">
                 </div>
@@ -217,13 +217,13 @@
                                 <p>Vous devez retirer toutes les légions de cette carte si vous la choisissez.</p>
                                 <button onclick="removeAllLegionOnCard({{ cardIndex }})">Retirer</button>
                             </div>
-                        {% elseif game.state == "doCompleteCard" and game.getAffectedPlayer() == me.getId() %}
+                        {% elseif game.state == "completeCard" and game.getAffectedPlayer() == me.getId() %}
                             <div>
                                 <p>Vous pouvez capturer cet objectif.</p>
                                 <button onclick="doCompleteCard({{ cardIndex }})">Capturer</button>
                             </div>
                         {% elseif (game.getState() == "removeAllLegion" and game.getAffectedPlayer() == me.getId())
-                            or (game.state == "doCompleteCard" and game.getAffectedPlayer() != me.getId()) %}
+                            or (game.state == "completeCard" and game.getAffectedPlayer() != me.getId()) %}
                             <div>
                                 <p>Veuillez attendre que les autres joueurs aient fini leurs actions.</p>
                             </div>
@@ -291,7 +291,7 @@
 
         <div id="buttons" class="flexContainer flexRow">
             <div class="flex1"></div>
-            {% if me.isLock or game.getState == "aveCesar" or (game.affectedPlayer != me.getId and game.getState == "aveCesar") %}
+            {% if me.isLock or game.getState != "legion" or (game.affectedPlayer != me.getId and game.getState != "legion") %}
                 <button id="valider" disabled onclick="validate()">Valider</button>
             {% else %}
                 <button id="valider" onclick="validate()">Valider</button>
@@ -314,19 +314,13 @@
         <div class="flex1"></div>
 
         <div class="action marble">
-            {% if game.state == "aveCesar"  and game.affectedPlayer() == me.getId() %}
+            {% if (game.state == "aveCesar" or game.state == "oneCard")  and game.affectedPlayer() == me.getId() %}
                 <div>
                     <p>Vous devez récuperer un des objectifs sur le terrain.</p>
                     <p>Récuperer l'objectif sélectionné ?</p>
                     <button onclick="takeObj()">Prendre</button>
                 </div>
-            {% elseif game.state == "oneCard" and game.affectedPlayer() == me.getId() %}
-                <div>
-                    <p>Vous devez récuperer un des objectifs sur le terrain.</p>
-                    <p>Récuperer l'objectif sélectionné ?</p>
-                    <button onclick="takeObj()">Prendre</button>
-                </div>
-            {% elseif game.state == "takeLoot" %}
+            {% elseif game.state == "takeLoot" and game.affectedPlayer == me.id %}
                 <div>
                     <p>Vous pouvez prendre la récompense entourée en vert. Vous ne pouvez prendre qu'une seule
                         récompense de ce type.</p>
@@ -424,7 +418,7 @@
     gotToCompleteCard = true;
     (function () {
         document.querySelector("#valider").disabled = true;
-        document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez choisir une carte. Toutes les légions se retireront de la carte.";
+        document.querySelector("#instructions").firstElementChild.innerHTML = "Vous devez choisir une carte. Cette carte sera complétée.";
     })();
     {% elseif (game.getState() == "removeAllLegion" and game.getAffectedPlayer() == me.getId()) or
         ( game.getState() == "removeTwoLegion" and game.getAffectedPlayer() == me.getId()) or
@@ -721,6 +715,9 @@
         action.completeCard = indCard;
         document.querySelector("#valider").disabled = false;
         gotToCompleteCard = false;
+        document.querySelectorAll(".cardAction").forEach(function (ee) {
+            ee.lastElementChild.innerHTML = "<p>Vous avez choisi votre carte. Veuillez valider ou annuler vos actions</p>";
+        });
         checkValidate();
         {% endif %}
     };
@@ -1098,6 +1095,7 @@
             }
             action.aveCesar.takeLoot = choice;
             document.querySelector(".action").firstElementChild.innerHTML = "<p>Vous avez choisi de " + (choice === 1 ? "prendre" : "laisser") + " la récompense</p><br><br>"
+            checkValidate();
         } else {
             alert("Il n'y a pas de récompenses à récupérer sur le plateau.");
         }

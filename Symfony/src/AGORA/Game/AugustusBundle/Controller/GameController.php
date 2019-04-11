@@ -186,10 +186,6 @@ class GameController extends Controller {
                 $service->manager->flush();
                 break;
             case "aveCesar":
-                if ($action->aveCesar->takeLoot) {
-                    $service->gameModel->claimReward($gameId, $playerId);
-                }
-
                 $game = $service->getGame($gameId);
                 $board = $game->getBoard();
                 $card = $board->getObjLine()[$action->aveCesar->card];
@@ -212,12 +208,19 @@ class GameController extends Controller {
                 break;
             case "completeCard":
                 $cards = $this->cleanArray($player->getCards()->toArray());
-                $card = $cards[$action->removeAllLegion];
+                $card = $cards[$action->completeCard];
+                $legions = $service->cardModel->ctrlTokenNb($card->getId());
                 $service->playerModel->completeCard($card->getId());
+                $player = $card->getPlayer();
+                $player->setLegion($player->getLegion() - count($card->getTokens()) + $legions);
                 $service->manager->flush();
                 break;
+            case "takeLoot":
+                if ($action->aveCesar->takeLoot) {
+                    $service->gameModel->claimReward($gameId, $playerId);
+                }
+                break;
             default: 
-                echo " autre        ";
                 break;
         }
 
