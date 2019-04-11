@@ -45,6 +45,13 @@ class AugustusPlayer
     /**
      * @var int
      *
+     * @ORM\Column(name="score", type="integer")
+     */
+    private $score;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="wheat", type="integer")
      */
     private $wheat;
@@ -62,6 +69,13 @@ class AugustusPlayer
      * @ORM\Column(name="isLock", type="boolean")
      */
     private $isLock;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isWinner", type="boolean")
+     */
+    private $isWinner;
 
     /**
      * @var array
@@ -120,7 +134,9 @@ class AugustusPlayer
         $this->legion = 7;
         $this->legionMax = 7;
         $this->advantage = 0;
+        $this->score = 0;
         $this->isLock = false;
+        $this->isWinner = false;
         $this->equivalences = [];
         $this->equivalences[AugustusToken::SHIELD] = [];
         $this->equivalences[AugustusToken::KNIFE] = [];
@@ -142,27 +158,27 @@ class AugustusPlayer
     }
 
     /**
-     * Set advantage.
+     * Set score.
      *
-     * @param int $advantage
+     * @param int $score
      *
      * @return AugustusPlayer
      */
-    public function setScore($advantage)
+    public function setScore($score)
     {
-        $this->advantage = $advantage;
+        $this->score = $score;
 
         return $this;
     }
 
     /**
-     * Get advantage.
+     * Get score.
      *
      * @return int
      */
     public function getScore()
     {
-        return $this->advantage;
+        return $this->score;
     }
 
     /**
@@ -513,5 +529,29 @@ class AugustusPlayer
     public function getUserName()
     {
         return $this->userName;
+    }
+
+    /**
+     * Set isWinner.
+     *
+     * @param bool $isWinner
+     *
+     * @return AugustusPlayer
+     */
+    public function setIsWinner($isWinner)
+    {
+        $this->isWinner = $isWinner;
+
+        return $this;
+    }
+
+    /**
+     * Get isWinner.
+     *
+     * @return bool
+     */
+    public function getIsWinner()
+    {
+        return $this->isWinner;
     }
 }
