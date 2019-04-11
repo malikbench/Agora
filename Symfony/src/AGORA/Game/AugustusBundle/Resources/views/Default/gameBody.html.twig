@@ -14,7 +14,11 @@
                         <p class="p">
                             {{ player.userName ? player.userName : "null" }}<br>
                             Légions : {{ player.legion }}/{{ player.legionMax }}<br>
-                            Objectifs sous contrôle : {{ player.ctrlCards|length }}
+                            Objectifs sous contrôle : {{ player.ctrlCards|length }} <br>
+                            Resssources :<br>
+                            Blé : {{ player.wheat }}<br>
+                            Or : {{ player.gold }}<br>
+                            Score : {{ player.score }}<br>
                         </p>
                     </div>
                 {% else %}
@@ -30,9 +34,11 @@
                 {{ me.userName }}<br>
                 Légions :<br>
                 {{ me.legion }}/{{ me.legionMax }}<br>
+                Objectifs sous contrôle : {{ me.ctrlCards|length }}
                 Resssources :<br>
                 Blé : {{ me.wheat }}<br>
                 Or : {{ me.gold }}<br>
+                Score : {{ me.score }}<br>
             </p>
         </div>
     </div>
@@ -803,7 +809,6 @@
             }
 
             if ((typeof (removeAction) != 'undefined' && removeAction !== 0) || gottaRemove !== 0) {
-                alert("here");
                 action.removeToken.token.push(selectedToken.ind);
                 action.removeToken.card.push(selectedCard.ind);
                 selectedToken.elem.style.visibility = "hidden";
