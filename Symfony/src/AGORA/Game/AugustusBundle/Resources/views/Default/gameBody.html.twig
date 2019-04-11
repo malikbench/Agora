@@ -807,11 +807,11 @@
                 action.removeToken.card.push(selectedCard.ind);
                 selectedToken.elem.style.visibility = "hidden";
                 selectedToken.elem = null;
-                removeAction -= 1;
+                removeAction += 1;
             } else if (gottaRemove <= 1) {
                 action.removeToken.token.push(selectedToken.ind);
                 action.removeToken.card.push(selectedCard.ind);
-                gottaRemove -= 1;
+                removeAction += 1;
                 document.querySelectorAll(".cardAction").forEach(function (ee) {
                     ee.firstElementChild.innerHTML = "<p>Vous avez retiré une légion, vous ne pouvez plus en retirer d'avantage ce tour.</p>";
                 });
@@ -822,6 +822,7 @@
             } else if (gottaRemove === 1) {
                 gottaRemove = 0;
                 document.querySelector("#instructions").firstElementChild.innerHTML = "Vous pouvez valider vos actions";
+                checkValidate();
             }
 
         }
