@@ -232,11 +232,9 @@ class GameController extends Controller {
         $service->manager->flush();
         $conn->send("refresh");
         //Add case is finished
-        if($service ->getGame($gameId)->getState() == "endGame") {
+        if($service->getGame($gameId)->getState() == "endGame") {
             $players = $service->getPlayers($gameId);
-
-
-            foreach ($service->getPlayers($gameId) as $player) {
+            foreach ($players as $player) {
                 $c = $this->connectionStorage->getConnection($gameId, $player->getId());
 
                 $c->send($this->endBodyAction($gameId, $player->getId()));
@@ -247,7 +245,7 @@ class GameController extends Controller {
 
                 $service->gameModel->applyStep($gameId);
 
-                foreach ($service->getPlayers($gameId) as $player) {
+                foreach ($players as $player) {
                     $c = $this->connectionStorage->getConnection($gameId, $player->getId());
 
                     $c->send($this->bodyAction($gameId, $player->getId()));
