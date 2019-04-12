@@ -296,7 +296,7 @@
 
         <div id="buttons" class="flexContainer flexRow">
             <div class="flex1"></div>
-            {% if me.isLock or game.getState != "legion" or game.getState start with "twoLegion" or game.getState start with "oneLegion" or (game.affectedPlayer != me.getId and game.getState != "legion") %}
+            {% if me.isLock or game.getState != "legion" or (game.affectedPlayer != me.getId and game.getState != "legion") %}
                 <button id="valider" disabled onclick="validate()">Valider</button>
             {% else %}
                 <button id="valider" onclick="validate()">Valider</button>
