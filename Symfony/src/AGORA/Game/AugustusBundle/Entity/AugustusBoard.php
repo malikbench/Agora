@@ -722,41 +722,42 @@ class AugustusBoard {
         }
         
         // Il y a 23 jetons (tokens) dans le sac de token au début d'une partie.
-        $this->tokenBag = new \Doctrine\Common\Collections\ArrayCollection();
+        $tokenBag = new \Doctrine\Common\Collections\ArrayCollection();
         
         // Ajout des tokens dans le sac.
         for ($i = 0; $i < 6; $i++) {
-          $this->tokenBag->add(AugustusToken::DOUBLESWORD);
+          $tokenBag->add(AugustusToken::DOUBLESWORD);
         }
         for ($i = 0; $i < 5; $i++) {
-          $this->tokenBag->add(AugustusToken::SHIELD);
+          $tokenBag->add(AugustusToken::SHIELD);
         }
         for ($i = 0; $i < 4; $i++) {
-          $this->tokenBag->add(AugustusToken::CHARIOT);
+          $tokenBag->add(AugustusToken::CHARIOT);
         }
         for ($i = 0; $i < 3; $i++) {
-          $this->tokenBag->add(AugustusToken::CATAPULT);
+          $tokenBag->add(AugustusToken::CATAPULT);
         }
         for ($i = 0; $i < 2; $i++) {
-          $this->tokenBag->add(AugustusToken::TEACHES);
+          $tokenBag->add(AugustusToken::TEACHES);
         }
         for ($i = 0; $i < 2; $i++) {
-          $this->tokenBag->add(AugustusToken::JOKER);
+          $tokenBag->add(AugustusToken::JOKER);
         }
-        $this->tokenBag->add(AugustusToken::KNIFE);
+        $tokenBag->add(AugustusToken::KNIFE);
         
         // Ensuite on mélnge le sac de jeton, il y a 23 jeton donc un swap de 50 paires semble correct pour un mélange.
         for ($i = 0; $i < 50; $i++) {
           $nbAlea1 = rand(0, 22);
           $nbAlea2 = rand(0, 22);
-          $transiToken1 = $this->tokenBag->get($nbAlea1);
-          $transiToken2 = $this->tokenBag->get($nbAlea2);
-          $this->tokenBag->remove($nbAlea1);
-          $this->tokenBag->remove($nbAlea1);
-          $this->tokenBag->set($nbAlea2, $transiToken1);
-          $this->tokenBag->set($nbAlea1, $transiToken2);
+          $transiToken1 = $tokenBag->get($nbAlea1);
+          $transiToken2 = $tokenBag->get($nbAlea2);
+          $tokenBag->remove($nbAlea1);
+          $tokenBag->remove($nbAlea1);
+          $tokenBag->set($nbAlea2, $transiToken1);
+          $tokenBag->set($nbAlea1, $transiToken2);
         }
         
+        $this->tokenBag = $tokenBag->toArray();
         // Il y a 5 objectifs sur le terrain en début d'une partie.
     }
   
@@ -886,7 +887,7 @@ class AugustusBoard {
   /**
    * Get token bag.
    *
-   * @return \Doctrine\Common\Collections\Collection
+   * @return array
    */
   public function getTokenBag()
   {
@@ -896,11 +897,12 @@ class AugustusBoard {
   /**
    * Clear token bag.
    *
-   * @return \Doctrine\Common\Collections\Collection
+   * @return array
    */
   public function clearTokenBag()
   {
-      return $this->tokenBag->clear();
+      $this->tokenBag = array();
+      return $this->tokenBag;
   }
 
     /**

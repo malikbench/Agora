@@ -139,7 +139,7 @@ class AugustusGameModel {
             case "legion":
                 if ($this->allOk($id)) {
                     $this->drawToken($id);
-                    $game->setToken(AugustusToken::JOKER);
+                    //$game->setToken(AugustusToken::JOKER);
                     $steps = $this->aveCesarSteps($id);
                     $states = $steps[0];
                     $affecteds = $steps[1];
@@ -236,22 +236,6 @@ class AugustusGameModel {
                     $game->setNextStates(array_merge(array($card->getPower()), $game->getNextStates()));
                     $game->setNextAffecteds(array_merge(array($game->getAffectedPlayer()), $game->getNextAffecteds()));
                 }
-
-                /*$this->playerModel->captureCard($game->getAffectedPlayer(), $card->getId());
-                $this->changeGoldOwner($id, $game->getAffectedPlayer());
-                $this->changeWheatOwner($id, $game->getAffectedPlayer());
-                if ($this->playerModel->getNbOfCardColor($game->getAffectedPlayer(), $card->getColor()) == 3) {
-                    $this->fillColorLoot($id, $game->getAffectedPlayer(), $card->getColor());
-                }
-                if ($this->playerModel->haveOneCardOfEach($game->getAffectedPlayer())) {
-                    $this->fillColorLoot($id, $game->getAffectedPlayer(), "all");
-                }
-                if ($this->isPowerWithAction($card->getId())) {
-                    $game->setState($card->getPower());
-                    $this->lockThem($id);
-                } else {
-                    $this->cardModel->doPower($card->getId());
-                }*/
             } else {
                 $game->setState($game->getNextStates()[0]);
                 $game->setAffectedPlayer($game->getNextAffecteds()[0]);
