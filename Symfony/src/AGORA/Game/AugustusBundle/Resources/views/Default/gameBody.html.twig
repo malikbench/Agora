@@ -343,7 +343,7 @@
 
 <!-- SCRIPTS -->
 <script>
-    {% if game.getState start with "twoLegion" or game.getState strat with "oneLegion" %}
+    {% if game.affectedPlayer == me.getId and (game.getState starts with "twoLegion" or game.getState starts with "oneLegion") %}
      document.querySelector("#valider").disabled = false;
     {% endif %}
     checkValidate = function() {
