@@ -18,6 +18,8 @@
 
 <div class="label_I"> I </div>
 
+
+
 <!--1 div pour chaque joueur*/-->
 {% for player in players %}
 <div class="player">
@@ -46,7 +48,7 @@
 <div class="cards">
     {% for card in game.idCards %}
         <div class="box"><img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}">
-            <button>reserve</button><button>buy</button></div>
+            <button id="reserveButton">Reserve</button><button id="buyButton">Buy</button></div>
     {% endfor %}
 {#    <div class="box"><button>buy</button></div>#}
 {#    <div class="box"><button>buy</button></div>#}
