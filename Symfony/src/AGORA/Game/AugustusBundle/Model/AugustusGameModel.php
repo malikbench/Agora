@@ -186,7 +186,6 @@ class AugustusGameModel {
                 $this->initGame($id);
                 break;
             default:
-                echo " applyStep ";
                 $this->nextStep($id);
                 break;
         }
@@ -205,10 +204,9 @@ class AugustusGameModel {
             $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
             $this->lockThem($id);
         } else if ($game->getState() == "endAveCesar") {
-            /*foreach ($game->getPlayers() as $player) {
+            foreach ($game->getPlayers() as $player) {
                 $player->setScore($this->getScores($id, $player->getId()));
-            }*/
-            echo "endAveCesar";
+            }
             if ($this->isGameOver($id)) {
                 $game->setAffectedPlayer($this->getWinner($id)->getId());
                 $game->setState("endGame");
@@ -408,10 +406,10 @@ class AugustusGameModel {
     public function getWinner($id) {
         $games = $this->manager->getRepository("AugustusBundle:AugustusGame");
         $game = $games->findOneById($id);
-        $participants = $game->getPlayers();
+        $participants = $game->getPlayers()->toArray();
 
         $winner = $participants[0];
-        $best = $this->getScores($id, $participants[0]->getId());
+        $best = $this->getScores($id, $winner->getId());
         array_shift($participants);
         foreach ($participants as $player) {
             $score = $this->getScores($id, $player->getId());
@@ -461,7 +459,7 @@ class AugustusGameModel {
         $cardPower = array();
         foreach ($player->getCtrlCards() as $card) {
             $obj += $card->getPoints();
-            if ($card->getPoints() != 0) {
+            if ($card->getPoints() == 0) {
                 array_push($cardPower, $card);
             }
         }
