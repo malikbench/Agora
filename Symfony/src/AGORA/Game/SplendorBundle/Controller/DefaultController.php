@@ -77,8 +77,10 @@ class DefaultController extends Controller
         $nbPlayers = $em->getRepository('AGORAGameGameBundle:Game')->findOneBy(array('gameId' => $gameId, 'gameInfoId' => 3))->getNbPlayers();
         $players = $em->getRepository('AGORAGameSplendorBundle:SplendorPlayer')->findBy(array('gameId' => $gameId));
         $service = $this->container->get('agora_game.splendor');
+        $plr = $em->getRepository('AGORAGameSplendorBundle:SplendorPlayer')->findBy(array('gameId' => $gameId, 'idUser' => $user->getId()));
 
-        if (count($players) < $nbPlayers) {
+
+        if (count($players) < $nbPlayers && $user && $plr == null) {
             $service->createPlayer($gameId, $user);
             if(count($players) + 1 == $nbPlayers) {
                 $game = $em->getRepository('AGORAGameGameBundle:Game')->findOneBy(array('gameId' => $gameId, 'gameInfoId' => 3));

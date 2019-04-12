@@ -42,12 +42,18 @@
     {% endfor %}
 </div>
 {% endfor %}
+
+<div class="nobles">
+    {% for noble in game.idNobles %}
+        <div class="box"><img class="noble" src="{{ asset('bundles/agoragamesplendor/images/' ~ noble ~ '.jpg') }}" alt="NO"></div>
+    {% endfor %}
+</div>
 <!--
     cards : Vue component for visible cards
 <cards class="cards"></cards>-->
 <div class="cards">
     {% for card in game.idCards %}
-        <div class="box"><img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}">
+    <div class="box"><img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
             <button id="reserveButton">Reserve</button><button id="buyButton">Buy</button></div>
     {% endfor %}
 {#    <div class="box"><button>buy</button></div>#}
