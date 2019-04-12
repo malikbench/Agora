@@ -343,6 +343,9 @@
 
 <!-- SCRIPTS -->
 <script>
+    {% if game.getState start with "twoLegion" or game.getState strat with "oneLegion" %}
+     document.querySelector("#valider").disabled = false;
+    {% endif %}
     checkValidate = function() {
         {% if game.getState == "moveLegion" %}
         if (gottaRemove > 0 || gottaRemoveAllTokenOnCard || gotToCompleteCard || removeAction !== addAction) {
