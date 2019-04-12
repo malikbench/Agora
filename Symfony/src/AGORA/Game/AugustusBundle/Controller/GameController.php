@@ -232,7 +232,7 @@ class GameController extends Controller {
         $service->manager->flush();
         $conn->send("refresh");
         //Add case is finished
-        if($service ->getGame($gameId)->getState() == "endGame") {
+        if($service->getGame($gameId)->getState() == "endGame") {
             $players = $service->getPlayers($gameId);
 
 

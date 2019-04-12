@@ -15,7 +15,7 @@
                             {{ player.userName ? player.userName : "null" }}<br>
                             Légions : {{ player.legion }}/{{ player.legionMax }}<br>
                             Objectifs sous contrôle : {{ player.ctrlCards|length }} <br>
-                            Resssources :<br>
+                            Ressources :<br>
                             Blé : {{ player.wheat }}<br>
                             Or : {{ player.gold }}<br>
                             Score : {{ player.score }}<br>
@@ -34,8 +34,8 @@
                 {{ me.userName }}<br>
                 Légions :<br>
                 {{ me.legion }}/{{ me.legionMax }}<br>
-                Objectifs sous contrôle : {{ me.ctrlCards|length }}
-                Resssources :<br>
+                Objectifs sous contrôle : {{ me.ctrlCards|length }} <br>
+                Ressources :<br>
                 Blé : {{ me.wheat }}<br>
                 Or : {{ me.gold }}<br>
                 Score : {{ me.score }}<br>
@@ -343,6 +343,9 @@
 
 <!-- SCRIPTS -->
 <script>
+    {% if game.getState start with "twoLegion" or game.getState strat with "oneLegion" %}
+     document.querySelector("#valider").disabled = false;
+    {% endif %}
     checkValidate = function() {
         {% if game.getState == "moveLegion" %}
         if (gottaRemove > 0 || gottaRemoveAllTokenOnCard || gotToCompleteCard || removeAction !== addAction) {
