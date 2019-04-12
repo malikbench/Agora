@@ -1,1 +1,78 @@
-Hello World!
+<!DOCTYPE html>
+<html>
+<head>
+    <title>splendor</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/agoragamesplendor/css/index_style.css') }}">
+
+</head>
+
+<body>
+
+<script src="{{ asset('bundles/agoragamesplendor/script/vue.min.js') }}"></script>
+<script src="{{ asset('bundles/agoragamesplendor/script/components.js') }}"></script>
+
+<div class="label_III"> III </div>
+
+<div class="label_II"> II </div>
+
+<div class="label_I"> I </div>
+
+<!--1 div pour chaque joueur*/-->
+{% for player in players %}
+<div class="player">
+    <span> {{ player.idUser.username }}</span><br>
+    E, S, R, D, O, J <br>
+    {% for token in player.listTokens %}
+        {{ token }},
+    {% endfor %}
+    <br>Buyed Cards : <br>
+    {% for card in player.buyedCards %}
+        {% if card != 0 %}
+        <img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
+        {% endif %}
+    {% endfor %}
+    <br>Reserved Cards : <br>
+    {% for card in player.reservedCards %}
+        {% if card != 0 %}
+            <img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
+        {% endif %}
+    {% endfor %}
+</div>
+{% endfor %}
+<!--
+    cards : Vue component for visible cards
+<cards class="cards"></cards>-->
+<div class="cards">
+    {% for card in game.idCards %}
+        <div class="box"><img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}">
+            <button>reserve</button><button>buy</button></div>
+    {% endfor %}
+{#    <div class="box"><button>buy</button></div>#}
+{#    <div class="box"><button>buy</button></div>#}
+{#    <div class="box"><button>buy</button></div>#}
+{#    <div class="box"><button>buy</button></div>#}
+{#    <div class="box"><button>buy</button></div>#}
+{#    <div class="box"><button>buy</button></div>#}
+{#    <div class="box"><button>buy</button></div>#}
+{#    <div class="box"><button>buy</button></div>#}
+{#    <div class="box"><button>buy</button></div>#}
+{#    <div class="box"><button>buy</button></div>#}
+{#    <div class="box"><button>buy</button></div>#}
+{#    <div class="box"><button>buy</button></div>#}
+</div>
+<!--<div id="cards">
+    <cards-component></cards-component>
+</div>-->
+
+<div class="tokens">
+    <div id="emerald" class="token"> {{ game.listTokens[0] }}</div>
+    <div id="saphire" class="token"> {{ game.listTokens[1] }}</div>
+    <div id="ruby" class="token"> {{ game.listTokens[2] }}</div>
+    <div id="diamond" class="token"> {{ game.listTokens[3] }}</div>
+    <div id="onyx" class="token"> {{ game.listTokens[4] }}</div>
+    <div id="gold" class="token"> {{ game.listTokens[5] }}</div>
+</div>
+
+</body>
+</html>

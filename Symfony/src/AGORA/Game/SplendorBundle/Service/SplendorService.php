@@ -127,11 +127,11 @@ class SplendorService
 
     }
 
-    public function getSixteenRandomCards() {
+    public function getTwelveRandomCards() {
         $cards = [];
-        for ($k = 0; $k < 16; $k++) {
+        for ($k = 0; $k < 12; $k++) {
             do {
-                $id = rand(0, 89);
+                $id = rand(1, 90);
             } while (in_array($id, $cards));
             array_push($cards, $id);
         }
@@ -142,7 +142,7 @@ class SplendorService
         $ids = [];
         for ($k = 0; $k < $nb; $k++) {
             do {
-                $id = rand(90, 99);
+                $id = rand(91, 100);
             } while (in_array($id, $ids));
             array_push($ids, $id);
         }
@@ -151,7 +151,7 @@ class SplendorService
 
     public function createGame($name, $playersNb, $private, $password = "", $userId) {
         $spldrGame = new SplendorGame();
-        $cardsId = $this->getSixteenRandomCards();
+        $cardsId = $this->getTwelveRandomCards();
         $spldrGame->setIdCards(implode(",", $cardsId));
         $nobles = $this->getRandomNobles($playersNb + 1);
         $spldrGame->setIdNobles(implode(",", $nobles));
@@ -210,6 +210,12 @@ class SplendorService
             ->findBy(array('gameId' => $gameId));
         return $players;
 
+    }
+
+    public function getGame($gameId) {
+        $this->manager->flush();
+        $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
+        return $game;
     }
 
 

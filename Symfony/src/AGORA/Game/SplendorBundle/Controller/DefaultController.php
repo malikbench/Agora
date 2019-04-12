@@ -13,9 +13,17 @@ use FOS\UserBundle\Model\UserInterface;
 
 class DefaultController extends Controller
 {
-    public function indexAction()
+    public function indexAction($gameId)
     {
-        return $this->render('AGORAGameSplendorBundle:Default:index.html.twig');
+
+        $service = $this->container->get('agora_game.splendor');
+        $game = $service->getGame($gameId);
+        $players = $service->getAllPlayers($gameId);
+
+        return $this->render('AGORAGameSplendorBundle:Default:index.html.twig', array(
+            'game' => $game,
+            'players' => $players
+        ));
     }
 
     public function createAction() {
@@ -77,7 +85,7 @@ class DefaultController extends Controller
                 $game->setState("started");
                 $em->persist($game);
                 $em->flush();
-                return $this->redirect($this->generateUrl('agora_game_splendor_homepage', array('gaemId' => $gameId)));
+                return $this->redirect($this->generateUrl('agora_game_splendor_homepage', array('gameId' => $gameId)));
             }
             return $this->redirect($this->generateUrl('agora_platform_joingame'));
         }
