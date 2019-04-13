@@ -12,11 +12,14 @@
 <script src="{{ asset('bundles/agoragamesplendor/script/vue.min.js') }}"></script>
 <script src="{{ asset('bundles/agoragamesplendor/script/components.js') }}"></script>
 
-<div class="label_III"> III </div>
+<div class="label_III"> III<img class="card" src="{{ asset('bundles/agoragamesplendor/images/cardLevel3.jpg') }}">
+    <button id="reserveButton">Reserve</button> </div>
 
-<div class="label_II"> II </div>
+<div class="label_II"> II<img class="card" src="{{ asset('bundles/agoragamesplendor/images/cardLevel2.jpg') }}">
+    <button id="reserveButton">Reserve</button> </div>
 
-<div class="label_I"> I </div>
+<div class="label_I"> I<img class="card" src="{{ asset('bundles/agoragamesplendor/images/cardLevel1.jpg') }}">
+    <button id="reserveButton">Reserve</button> </div>
 
 
 
@@ -38,6 +41,7 @@
     {% for card in player.reservedCards %}
         {% if card != 0 %}
             <img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
+            <button id="buyButton">Buy</button>
         {% endif %}
     {% endfor %}
 </div>

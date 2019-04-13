@@ -107,8 +107,16 @@ class SplendorService
 
     }
 
-    public function getRandomCard($gameId) {
-        $id = rand(0, 89);
+    public function getRandomCard($gameId, $level) {
+        $x = 1; $y = 40;
+        switch ($level) {
+            case 2: $x = 41; $y = 70;
+            break;
+            case 3: $x = 71; $y = 90;
+            break;
+            default: break;
+        }
+        $id = rand($x, $y);
         if ($gameId >= 0 && $gameId != null) {
             $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame');
             $boardCards = $game->find($gameId)->getIdCards();
@@ -120,7 +128,7 @@ class SplendorService
             }
             $cards = array_merge($playersCards, $boardCards);
             while (in_array($id, $cards)) {
-                $id = rand(0, 89);
+                $id = rand($x, $y);
             }
         }
         return $id;
@@ -217,6 +225,90 @@ class SplendorService
         $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
         return $game;
     }
+
+    public function reserveCard($gameId, $userId, $cardId) {
+        $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
+        $cards = $game->getIdCards();
+        $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
+            ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
+        $i = array_search($cardId, $cards);
+        $playerCard = $player->getReservedCards();
+        //Si la carte est sur le plateau et que le joueur a moins de 3 cartes deja reservées
+        if ($i != false && sizeof($playerCard) < 3) {
+            //On calcul le niveau de la carte à piocher
+            $level = (3 - intval($i / 4));
+            //On pioche la carte qui va remplacer la carte reservée
+            $newCard = $this->getRandomCard($gameId, $level);
+            //On met la carte piochée à la place de celle réservée
+            $cards[$i] = $newCard;
+            $game->setIdCards($cards);
+            $this->manager->persist($game);
+            $this->manager->flush();
+            //On ajoute la carte réservée dans la main du joueur
+            array_push($playerCard, $cardId);
+            $player->setReservedCards(implode(",", $playerCard));
+            $this->manager->persist($player);
+            $this->manager->flush();
+
+        }
+    }
+
+    public function buyCard($gameId, $userId, $cardId) {
+        $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
+        $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
+            ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
+        $cardsGame = $game->getIdCards();
+        $cardsReserved = $player->getReservedCards();
+        $i = array_search($cardId, $cardsGame);
+        $j = array_search($cardId, $cardsReserved);
+        $playerCard = $player->getBuyedCards();
+        $cardTable = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorCard')->find($cardId);
+        $playerTokens = $player->getListTokens();
+        $jokerNeed = 0;
+        //On verifie si le joueur a les ressources necessaires
+        for ($k = 0; $k < 5; $k++) {
+            $tok = $cardTable->getTokens($k);
+            if ($tok > $playerTokens[$k]) {
+                $jokerNeed += ($tok - $playerTokens[$k]);
+            } else {
+                //On en profite pour mettre à jour les ressources du joueur
+                $playerTokens[$k] = $playerTokens[$k] - $tok;
+            }
+        }
+        //Si la carte est sur le plateau ou dans les carte réservé du joueur
+        // et que le joueur a les ressources necessaires
+        if (($i != false || $j != false) && $jokerNeed <= $playerTokens[5]) {
+            //Si la carte est sur le plateau
+            if ($i != false) {
+                //On calcul le niveau de la carte à piocher
+                $level = (3 - intval($i / 4));
+                //On pioche la carte qui va remplacer la carte achetée
+                $newCard = $this->getRandomCard($gameId, $level);
+                //On met la carte piochée à la place de celle achetée
+                $cards[$i] = $newCard;
+                $game->setIdCards($cards);
+                $this->manager->persist($game);
+                $this->manager->flush();
+            } else {
+                //Si la carte est dans les cartes réservées du joueur
+                //On la retire des cartes réservées
+                array_splice($cardsReserved, $j, 1);
+                $player->setReservedCards(implode(",", $cardsReserved));
+            }
+
+            //On ajoute la carte achetée dans la main du joueur
+            array_push($playerCard, $cardId);
+            $player->setBuyedCards(implode(",", $playerCard));
+            //On retire les ressources joker necessaire pour l'achat
+            $playerTokens[5] = $playerTokens[5] - $jokerNeed;
+            $player->setListTokens(implode(",", $playerTokens));
+            //On ajoute le prestige de la carte au joueur
+            $player->setPrestige($player->getPrestige() + $cardTable->getPrestige());
+            $this->manager->persist($player);
+            $this->manager->flush();
+        }
+    }
+
 
 
 }

@@ -310,4 +310,14 @@ class SplendorCard
     {
         return $this->bonus;
     }
+
+    public function getTokens($i) {
+        switch ($i) {
+            case 0: return $this->getEmeraldTokens();
+            case 1: return $this->getSapphireTokens();
+            case 2: return $this->getRubyTokens();
+            case 3: return $this->getDiamondTokens();
+            case 4: return $this->getOnyxTokens();
+        }
+    }
 }
