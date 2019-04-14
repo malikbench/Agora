@@ -44,6 +44,13 @@ class SplendorGame
      */
     private $idNobles;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="idUserTurn", type="integer")
+     */
+    private $idUserTurn;
+
 
     /**
      * Get id.
@@ -127,5 +134,25 @@ class SplendorGame
     public function getIdNobles()
     {
         return array_map('intval', explode(',', $this->idNobles));
+    }
+
+    /**
+     * Set idUserTurn
+     * @param int $idUserTurn
+     * @return SplendorGame
+     */
+    public function setIdUserTurn($idUserTurn)
+    {
+        $this->idUserTurn = $idUserTurn;
+        return $this;
+    }
+
+    /**
+     * Get idUserTurn
+     * @return int
+     */
+    public function getIdUserTurn()
+    {
+        return $this->idUserTurn;
     }
 }

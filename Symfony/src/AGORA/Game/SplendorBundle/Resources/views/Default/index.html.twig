@@ -11,6 +11,8 @@
 
 <script src="{{ asset('bundles/agoragamesplendor/script/vue.min.js') }}"></script>
 <script src="{{ asset('bundles/agoragamesplendor/script/components.js') }}"></script>
+{#<script src="{{ asset('bundles/agoragamesplendor/script/util.js') }}"></script>#}
+
 
 <div class="label_III"> III<img class="card" src="{{ asset('bundles/agoragamesplendor/images/cardLevel3.jpg') }}">
     <button id="reserveButton">Reserve</button> </div>
@@ -79,12 +81,270 @@
 
 <div class="tokens">
     <div id="emerald" class="token"> {{ game.listTokens[0] }}</div>
+    <input id="nbEmerald" type="number" onkeydown="return false" min="0" max="{{ game.listTokens[0] }}" oninput="tokens();" value="0">
     <div id="saphire" class="token"> {{ game.listTokens[1] }}</div>
+    <input id="nbSaphire" type="number" onkeydown="return false" min="0" max="{{ game.listTokens[1] }}" oninput="tokens();" value="0">
     <div id="ruby" class="token"> {{ game.listTokens[2] }}</div>
+    <input id="nbRuby" type="number" onkeydown="return false" min="0" max="{{ game.listTokens[2] }}" oninput="tokens();" value="0">
     <div id="diamond" class="token"> {{ game.listTokens[3] }}</div>
+    <input id="nbDiamond" type="number" onkeydown="return false" min="0" max="{{ game.listTokens[3] }}" oninput="tokens();" value="0">
     <div id="onyx" class="token"> {{ game.listTokens[4] }}</div>
+    <input id="nbOnyx" type="number" onkeydown="return false" min="0" max="{{ game.listTokens[4] }}" oninput="tokens();" value="0">
     <div id="gold" class="token"> {{ game.listTokens[5] }}</div>
+
+    <button id="getTokens" disabled="true">Prendre</button>
 </div>
 
 </body>
 </html>
+
+<script>
+    function tokens() {
+        let tok = [];
+        tok[0] = {{ game.listTokens[0] }};
+        tok[1] = {{ game.listTokens[1] }};
+        tok[2] = {{ game.listTokens[2] }};
+        tok[3] = {{ game.listTokens[3] }};
+        tok[4] = {{ game.listTokens[4] }};
+        let emerald = document.getElementById('nbEmerald');
+        let saphire = document.getElementById('nbSaphire');
+        let ruby = document.getElementById('nbRuby');
+        let diamond = document.getElementById('nbDiamond');
+        let onyx = document.getElementById('nbOnyx');
+        let take = document.getElementById('getTokens');
+        let sum = parseInt(emerald.value) + parseInt(saphire.value) + parseInt(ruby.value)
+            + parseInt(diamond.value) + parseInt(onyx.value);
+        if (emerald.value == 1 && sum - parseInt(emerald.value) > 0) {
+            if (sum == 3) {
+                if (saphire.value == 0) {
+                    saphire.disabled = true;
+                }
+                if (ruby.value == 0) {
+                    ruby.disabled = true;
+                }
+                if (diamond.value == 0) {
+                    diamond.disabled = true;
+                }
+                if (onyx.value == 0) {
+                    onyx.disabled = true;
+                }
+                take.disabled = false;
+            } else {
+                saphire.disabled = false;
+                ruby.disabled = false;
+                diamond.disabled = false;
+                emerald.disabled = false;
+                onyx.disabled = false;
+                take.disabled = true;
+            }
+            (tok[1] >= 1) ? saphire.max = 1 : saphire.max = tok;
+            (tok[2] >= 1) ? ruby.max = 1 : ruby.max = tok;
+            (tok[0] >= 1) ? emerald.max = 1 : emerald.max = tok;
+            (tok[3] >= 1) ? diamond.max = 1 : diamond.max = tok;
+            (tok[4] >= 1) ? onyx.max = 1 : onyx.max = tok;
+            return;
+        }
+        if (saphire.value == 1 && sum - parseInt(saphire.value) > 0) {
+            if (sum == 3) {
+                if (emerald.value == 0) {
+                    emerald.disabled = true;
+                }
+                if (ruby.value == 0) {
+                    ruby.disabled = true;
+                }
+                if (diamond.value == 0) {
+                    diamond.disabled = true;
+                }
+                if (onyx.value == 0) {
+                    onyx.disabled = true;
+                }
+                take.disabled = false;
+            } else {
+                saphire.disabled = false;
+                ruby.disabled = false;
+                diamond.disabled = false;
+                emerald.disabled = false;
+                onyx.disabled = false;
+                take.disabled = true;
+            }
+            (tok[1] >= 1) ? saphire.max = 1 : saphire.max = tok;
+            (tok[2] >= 1) ? ruby.max = 1 : ruby.max = tok;
+            (tok[0] >= 1) ? emerald.max = 1 : emerald.max = tok;
+            (tok[3] >= 1) ? diamond.max = 1 : diamond.max = tok;
+            (tok[4] >= 1) ? onyx.max = 1 : onyx.max = tok;
+            return;
+        }
+        if (ruby.value == 1 && sum - parseInt(ruby.value) > 0) {
+            if (sum == 3) {
+                if (saphire.value == 0) {
+                    saphire.disabled = true;
+                }
+                if (emerald.value == 0) {
+                    emerald.disabled = true;
+                }
+                if (diamond.value == 0) {
+                    diamond.disabled = true;
+                }
+                if (onyx.value == 0) {
+                    onyx.disabled = true;
+                }
+                take.disabled = false;
+            } else {
+                saphire.disabled = false;
+                ruby.disabled = false;
+                diamond.disabled = false;
+                emerald.disabled = false;
+                onyx.disabled = false;
+                take.disabled = true;
+            }
+            (tok[1] >= 1) ? saphire.max = 1 : saphire.max = tok;
+            (tok[2] >= 1) ? ruby.max = 1 : ruby.max = tok;
+            (tok[0] >= 1) ? emerald.max = 1 : emerald.max = tok;
+            (tok[3] >= 1) ? diamond.max = 1 : diamond.max = tok;
+            (tok[4] >= 1) ? onyx.max = 1 : onyx.max = tok;
+            return;
+        }
+        if (diamond.value == 1 && sum - parseInt(diamond.value) > 0) {
+            if (sum == 3) {
+                if (saphire.value == 0) {
+                    saphire.disabled = true;
+                }
+                if (ruby.value == 0) {
+                    ruby.disabled = true;
+                }
+                if (emerald.value == 0) {
+                    emerald.disabled = true;
+                }
+                if (onyx.value == 0) {
+                    onyx.disabled = true;
+                }
+                take.disabled = false;
+            } else {
+                saphire.disabled = false;
+                ruby.disabled = false;
+                diamond.disabled = false;
+                emerald.disabled = false;
+                onyx.disabled = false;
+                take.disabled = true;
+            }
+            (tok[1] >= 1) ? saphire.max = 1 : saphire.max = tok;
+            (tok[2] >= 1) ? ruby.max = 1 : ruby.max = tok;
+            (tok[0] >= 1) ? emerald.max = 1 : emerald.max = tok;
+            (tok[3] >= 1) ? diamond.max = 1 : diamond.max = tok;
+            (tok[4] >= 1) ? onyx.max = 1 : onyx.max = tok;
+            return;
+        }
+        if (onyx.value == 1 && sum - parseInt(onyx.value) > 0) {
+            if (sum == 3) {
+                if (saphire.value == 0) {
+                    saphire.disabled = true;
+                }
+                if (ruby.value == 0) {
+                    ruby.disabled = true;
+                }
+                if (diamond.value == 0) {
+                    diamond.disabled = true;
+                }
+                if (emerald.value == 0) {
+                    emerald.disabled = true;
+                }
+                take.disabled = false;
+            } else {
+                saphire.disabled = false;
+                ruby.disabled = false;
+                diamond.disabled = false;
+                emerald.disabled = false;
+                onyx.disabled = false;
+                take.disabled = true;
+            }
+            (tok[1] >= 1) ? saphire.max = 1 : saphire.max = tok;
+            (tok[2] >= 1) ? ruby.max = 1 : ruby.max = tok;
+            (tok[0] >= 1) ? emerald.max = 1 : emerald.max = tok;
+            (tok[3] >= 1) ? diamond.max = 1 : diamond.max = tok;
+            (tok[4] >= 1) ? onyx.max = 1 : onyx.max = tok;
+            return;
+        }
+        if (emerald.value == 2) {
+            if (tok[0] < 4)  {
+                emerald.value = 1;
+                emerald.max = 1;
+            } else {
+                saphire.disabled = true;
+                ruby.disabled = true;
+                diamond.disabled = true;
+                onyx.disabled = true;
+                emerald.max = 2;
+                take.disabled = false;
+            }
+            return;
+        }
+        if (saphire.value == 2) {
+            if (tok[1] < 4)  {
+                saphire.value = 1;
+                saphire.max = 1;
+            } else {
+                emerald.disabled = true;
+                ruby.disabled = true;
+                diamond.disabled = true;
+                onyx.disabled = true;
+                saphire.max = 2;
+                take.disabled = false;
+            }
+            return;
+        }
+        if (ruby.value == 2) {
+            if (tok[2] < 4)  {
+                ruby.value = 1;
+                ruby.max = 1;
+            } else {
+                saphire.disabled = true;
+                emerald.disabled = true;
+                diamond.disabled = true;
+                onyx.disabled = true;
+                take.disabled = false;
+                ruby.max = 2;
+            }
+            return;
+        }
+        if (diamond.value == 2) {
+            if (tok[3] < 4)  {
+                diamond.value = 1;
+                diamond.max = 1;
+            } else {
+                saphire.disabled = true;
+                ruby.disabled = true;
+                emerald.disabled = true;
+                onyx.disabled = true;
+                take.disabled = false;
+                diamond.max = 2;
+            }
+            return;
+        }
+        if (onyx.value == 2) {
+            if (tok[4] < 4)  {
+                onyx.value = 1;
+                onyx.max = 1;
+            } else {
+                saphire.disabled = true;
+                ruby.disabled = true;
+                diamond.disabled = true;
+                emerald.disabled = true;
+                take.disabled = false;
+                onyx.max = 2;
+            }
+            return;
+        }
+        saphire.disabled = false;
+        ruby.disabled = false;
+        diamond.disabled = false;
+        emerald.disabled = false;
+        onyx.disabled = false;
+        take.disabled = true;
+        emerald.max = {{ game.listTokens[0] }};
+        saphire.max = {{ game.listTokens[1] }};
+        ruby.max = {{ game.listTokens[2] }};
+        diamond.max = {{ game.listTokens[3] }};
+        onyx.max = {{ game.listTokens[4] }};
+
+    }
+</script>

@@ -228,6 +228,9 @@ class SplendorService
 
     public function reserveCard($gameId, $userId, $cardId) {
         $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
+        if ($game->getIdUserTurn() != $userId) {
+            return;
+        }
         $cards = $game->getIdCards();
         $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
             ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
@@ -242,11 +245,23 @@ class SplendorService
             //On met la carte piochée à la place de celle réservée
             $cards[$i] = $newCard;
             $game->setIdCards($cards);
+
+            $gameTokens = $game->getListTokens();
+            //Si il reste des jetons or(joker) sur le plateau
+            if ($gameTokens[5] > 0) {
+                //Le joueur en prend un
+                $tokens = $player->getListTokens();
+                $tokens[5] += 1;
+                $gameTokens[5] -= 1;
+                $game->setListTokens(implode(",", $gameTokens));
+                $player->setListTokens(implode(",", $tokens));
+            }
             $this->manager->persist($game);
             $this->manager->flush();
             //On ajoute la carte réservée dans la main du joueur
             array_push($playerCard, $cardId);
             $player->setReservedCards(implode(",", $playerCard));
+
             $this->manager->persist($player);
             $this->manager->flush();
 
@@ -255,6 +270,9 @@ class SplendorService
 
     public function buyCard($gameId, $userId, $cardId) {
         $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
+        if ($game->getIdUserTurn() != $userId) {
+            return;
+        }
         $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
             ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
         $cardsGame = $game->getIdCards();
@@ -307,6 +325,46 @@ class SplendorService
             $this->manager->persist($player);
             $this->manager->flush();
         }
+    }
+
+    public function getTokens($gameId, $userId, $tokens) {
+        $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
+        if ($game->getIdUserTurn() != $userId) {
+            return;
+        }
+        $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
+            ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
+        $gameTokens = $game->getListTokens();
+        $playerTokens = $player->getListTokens();
+        $nbOne = 0;
+        $nbTwo = 0;
+        //On verifie que le joueur a le droit de prendre ces jetons
+        for ($k = 0; $k < 5; $k++) {
+            //Si il n'a pas le droit on return
+            if ($tokens[$k] > $gameTokens[$k] || $tokens[$k] > 2 || ($tokens[$k] == 2 && $gameTokens[$k] < 4)
+                || ($tokens[$k] == 2 && ($nbTwo + $nbOne) != 0) || ($tokens[$k] == 1 && ($nbTwo != 0 || $nbOne > 2))) {
+                return;
+            }
+            if ($tokens[$k] == 1) {
+                $nbOne++;
+            }
+            if ($tokens[$k] == 2) {
+                $nbTwo++;
+            }
+            //Sinon on lui donne les jetons
+            $playerTokens[$k] += $tokens[$k];
+            //Et on les retire du plateau
+            $gameTokens[$k] -= $tokens[$k];
+        }
+
+        $game->setListTokens(implode(",", $gameTokens));
+        $this->manager->persist($game);
+        $this->manager->flush();
+
+        $player->setListTokens(implode(",", $playerTokens));
+        $this->manager->persist($player);
+        $this->manager->flush();
+
     }
 
 
