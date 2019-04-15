@@ -62,9 +62,9 @@
             {% elseif game.getAffectedPlayer != me.getId and game.getState =="removeTwoLegion" %}
                 <p class="p">Choisissez deux Legions à retirer</p>
             {% elseif game.getAffectedPlayer != me.getId and game.getState == "removeAllLegion" %}
-                <p class="p">Choississez une carte, toute les légions lui seront retiré</p>
+                <p class="p">Choisissez une carte, toute les légions lui seront retiré</p>
             {% elseif game.getAffectedPlayer == me.getId and game.getState == "oneCard" %}
-                <p class="p">Choississez une carte, vous la capturerez</p>
+                <p class="p">Choisissez une carte, vous la récupererez</p>
             {% elseif game.getAffectedPlayer == me.getId and game.getState == "moveLegion" %}
                 <p class="p">Vous pouvez bouger vos légions comme vous le souhaitez</p>
             {% elseif game.getAffectedPlayer == me.getId and game.getState == "oneLegionOnAnything" %}

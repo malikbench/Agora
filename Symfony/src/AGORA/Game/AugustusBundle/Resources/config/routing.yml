@@ -15,4 +15,3 @@ agora_game_index_aug:
 agora_game_body_aug:
   path: /body/{gameId}/{playerId}
   defaults: { _controller: AugustusBundle:Game:body }
-
