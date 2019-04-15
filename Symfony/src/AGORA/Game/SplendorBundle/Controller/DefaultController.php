@@ -45,7 +45,7 @@ class DefaultController extends Controller
         //Creation de la partie à partir du service
         $service = $this->container->get('agora_game.splendor');
         $gameId = $service->createGame($_POST['lobbyName'], $_POST['nbPlayers'], $private, $password, $user->getId());
-        $service->createCards($gameId);
+//        $service->createCards($gameId);
 
         return $this->redirect($this->generateUrl('agora_game_join_spldr', array('gameId' => $gameId)));
 
@@ -106,11 +106,11 @@ class DefaultController extends Controller
             $em->flush($player);
         }
 
-        $cards = $em->getRepository('AGORAGameSplendorBundle:SplendorCard')->findBy(array('gameId' => $gameId));
-        foreach ($cards as $card) {
-            $em->remove($card);
-            $em->flush($card);
-        }
+//        $cards = $em->getRepository('AGORAGameSplendorBundle:SplendorCard')->findBy(array('gameId' => $gameId));
+//        foreach ($cards as $card) {
+//            $em->remove($card);
+//            $em->flush($card);
+//        }
 
         $g = $em->getRepository('AGORAGameGameBundle:Game')->findOneBy(array('gameId' => $gameId, 'gameInfoId' => 3));
         $em->remove($g);
