@@ -120,28 +120,23 @@ class GameController extends Controller {
         $player = $service->getPlayerFromId($playerId, $gameId);
 
         //Envoie Au twig tout les infomartions qu'il doit afficher
-        return $this->render('AugustusBundle:Default:gameBody.html.twig',
-            array(
-                'game'  => $game,
-                'board' => $game->getBoard(),
-                'me'    => $player,
-            )
-        );
-    }
-    public function endBodyAction($gameId, $playerId) {
-        $service = $this->container->get('agora_game.augustus');
-
-        $game = $service->getGame($gameId);
-        $player = $service->getPlayerFromId($playerId, $gameId);
-
-        //Envoie Au twig tout les infomartions qu'il doit afficher
-        return $this->render('AugustusBundle:Default:endBody.html.twig',
-            array(
-                'game'  => $game,
-                'board' => $game->getBoard(),
-                'me'    => $player,
-            )
-        );
+        if($game->getState() == "endGame") {
+            return $this->render('AugustusBundle:Default:endBody.html.twig',
+                array(
+                    'game'  => $game,
+                    'board' => $game->getBoard(),
+                    'me'    => $player,
+                )
+            );
+        } else {
+            return $this->render('AugustusBundle:Default:gameBody.html.twig',
+                array(
+                    'game'  => $game,
+                    'board' => $game->getBoard(),
+                    'me'    => $player,
+                )
+            );
+        }
     }
 
 
@@ -237,20 +232,11 @@ class GameController extends Controller {
 
             $service->gameModel->applyStep($gameId);
 
-            if($service->getGame($gameId)->getState() == "endGame") {
-                echo "enGame";
-                foreach ($service->getPlayers($gameId) as $player) {
-                    $c = $this->connectionStorage->getConnection($gameId, $player->getId());
-                    
-                    $c->send($this->endBodyAction($gameId, $player->getId()));
-                }
-            } else {
-                foreach ($service->getPlayers($gameId) as $player) {
-                    $c = $this->connectionStorage->getConnection($gameId, $player->getId());
-
-                    $c->send($this->bodyAction($gameId, $player->getId()));
-                }
+            foreach ($service->getPlayers($gameId) as $player) {
+                $c = $this->connectionStorage->getConnection($gameId, $player->getId());
+                $c->send($this->bodyAction($gameId, $player->getId()));
             }
+
             //return
         }
     }
