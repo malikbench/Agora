@@ -399,6 +399,7 @@
     gottaRemoveAllTokenOnCard = false;
     gotToCompleteCard = false;
     {% if (game.state == "removeAllLegion" or game.state == "moveLegion") and me.legionMax == me.legion and game.affectedPlayer != me.id %}
+    {# Do nothing #}
     {% elseif ((game.getState() == "removeOneLegion" and (me.legionMax - me.legion >= 1) and game.affectedPlayer() != me.getId()) or
         (game.getState() == "removeTwoLegion" and me.legionMax - me.legion == 1 and game.affectedPlayer() != me.getId())) %}
     gottaRemove = 1;
@@ -721,9 +722,31 @@
         };
     };
 
+    {# Case "remove...Legion if no legion on board" #}
     {% if (game.state == "removeAllLegion" or game.state == "moveLegion") and me.legionMax == me.legion and game.affectedPlayer != me.id %}
     validate = function () {
         action.type = "{{ game.getState }}";
+        sendAction();
+        resetSelected();
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', '/game/augustus/body/{{ game.id }}/{{ me.id }}');
+        xhr.send();
+        xhr.onload = function () {
+            if (xhr.status !== 200) {
+                alert('erreur lors du rafraîchissement de l\'affichage');
+            } else {
+                document.body.innerHTML = xhr.response;
+                let scripts = document.body.getElementsByTagName('script')[0].innerHTML;
+                console.log(scripts);
+                eval(scripts);
+            }
+        };
+    };
+    validate();
+    {% elseif (game.state == "removeOneLegion" or game.state == "removeTwoLegion") and me.legionMax == me.legion and game.affectedPlayer != me.id %}
+    validate = function () {
+        action.type = "legion";
         sendAction();
         resetSelected();
 
