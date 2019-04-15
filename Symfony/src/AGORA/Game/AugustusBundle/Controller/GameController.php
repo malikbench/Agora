@@ -190,16 +190,18 @@ class GameController extends Controller {
                 $service->manager->flush();
                 break;
             case "removeAllLegion":
-                echo $action->removeAllLegion;
-                echo "            ,";
-                $cards = $this->cleanArray($player->getCards()->toArray());
-                $card = $cards[$action->removeAllLegion];
-                echo $card->getNumber();
-                echo "            ,";
-                $tokens = $card->getTokens();
-                echo count($tokens);
-                foreach($tokens as $t) {
-                    $service->cardModel->getBackToken($card->getId(), $t);
+                if (isset($action->removeAllLegion)) {
+                    echo $action->removeAllLegion;
+                    echo "            ,";
+                    $cards = $this->cleanArray($player->getCards()->toArray());
+                    $card = $cards[$action->removeAllLegion];
+                    echo $card->getNumber();
+                    echo "            ,";
+                    $tokens = $card->getTokens();
+                    echo count($tokens);
+                    foreach($tokens as $t) {
+                        $service->cardModel->getBackToken($card->getId(), $t);
+                    }
                 }
                 $service->manager->flush();
                 break;
