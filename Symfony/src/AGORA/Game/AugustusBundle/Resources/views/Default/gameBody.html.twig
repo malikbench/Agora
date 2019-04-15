@@ -205,7 +205,8 @@
             {% for card in me.cards %}
                 {% set cardIndex = loop.index0 %}
                 <div class="card" style="background-image: url('{{ asset('bundles/augustus/img/Cards/' ~ card.number ~ '.jpg') }}');"
-                        {% if me.isLock or game.getState == 'aveCesar' or game.getState =='oneCard' or game.getState == 'takeLoot' %}
+                        {% set isCaptured = not(0 in card.ctrlTokens) %}
+                        {% if me.isLock or game.getState == 'aveCesar' or game.getState =='oneCard' or game.getState == 'takeLoot' or isCaptured %}
                             onclick=""
                         {% else %}
                             onclick="selectHand(this)"
@@ -397,10 +398,7 @@
     gottaRemove = 0;
     gottaRemoveAllTokenOnCard = false;
     gotToCompleteCard = false;
-    {% if (game.getState() == "removeAllLegion" or game.state == "moveLegion") and me.legionMax == me.legion and game.affectedPlayer != me.getId() %}
-    window.onload = function () {
-        validate();
-    };
+    {% if (game.state == "removeAllLegion" or game.state == "moveLegion") and me.legionMax == me.legion and game.affectedPlayer != me.id %}
     {% elseif ((game.getState() == "removeOneLegion" and (me.legionMax - me.legion >= 1) and game.affectedPlayer() != me.getId()) or
         (game.getState() == "removeTwoLegion" and me.legionMax - me.legion == 1 and game.affectedPlayer() != me.getId())) %}
     gottaRemove = 1;
@@ -722,6 +720,29 @@
             }
         };
     };
+
+    {% if (game.state == "removeAllLegion" or game.state == "moveLegion") and me.legionMax == me.legion and game.affectedPlayer != me.id %}
+    validate = function () {
+        action.type = "{{ game.getState }}";
+        sendAction();
+        resetSelected();
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', '/game/augustus/body/{{ game.id }}/{{ me.id }}');
+        xhr.send();
+        xhr.onload = function () {
+            if (xhr.status !== 200) {
+                alert('erreur lors du rafraîchissement de l\'affichage');
+            } else {
+                document.body.innerHTML = xhr.response;
+                let scripts = document.body.getElementsByTagName('script')[0].innerHTML;
+                console.log(scripts);
+                eval(scripts);
+            }
+        };
+    };
+    validate();
+    {% endif %}
 
     doCompleteCard = function (indCard) {
         {% if game.affectedPlayer() == me.getId() and game.getState() == "completeCard" %}
