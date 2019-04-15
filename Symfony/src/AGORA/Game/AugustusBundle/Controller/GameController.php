@@ -232,30 +232,27 @@ class GameController extends Controller {
         $service->manager->flush();
         $conn->send("refresh");
         //Add case is finished
-        if($service->getGame($gameId)->getState() == "endGame") {
+        if ($service->areAllPlayersReady($gameId)) {
             $players = $service->getPlayers($gameId);
 
+            $service->gameModel->applyStep($gameId);
 
-            foreach ($service->getPlayers($gameId) as $player) {
-                $c = $this->connectionStorage->getConnection($gameId, $player->getId());
-
-                $c->send($this->endBodyAction($gameId, $player->getId()));
-            }
-        } else {
-            if ($service->areAllPlayersReady($gameId)) {
-                $players = $service->getPlayers($gameId);
-
-                $service->gameModel->applyStep($gameId);
-
+            if($service->getGame($gameId)->getState() == "endGame") {
+                echo "enGame";
+                foreach ($service->getPlayers($gameId) as $player) {
+                    $c = $this->connectionStorage->getConnection($gameId, $player->getId());
+                    
+                    $c->send($this->endBodyAction($gameId, $player->getId()));
+                }
+            } else {
                 foreach ($service->getPlayers($gameId) as $player) {
                     $c = $this->connectionStorage->getConnection($gameId, $player->getId());
 
                     $c->send($this->bodyAction($gameId, $player->getId()));
                 }
-                //return
             }
+            //return
         }
-
     }
 
     

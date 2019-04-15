@@ -139,7 +139,7 @@ class AugustusGameModel {
             case "legion":
                 if ($this->allOk($id)) {
                     $this->drawToken($id);
-                    //$game->setToken(AugustusToken::JOKER);
+                    $game->setToken(AugustusToken::JOKER);
                     $steps = $this->aveCesarSteps($id);
                     $states = $steps[0];
                     $affecteds = $steps[1];
@@ -237,10 +237,12 @@ class AugustusGameModel {
                     $game->setNextAffecteds(array_merge(array($game->getAffectedPlayer()), $game->getNextAffecteds()));
                 }
             } else {
-                $game->setState($game->getNextStates()[0]);
-                $game->setAffectedPlayer($game->getNextAffecteds()[0]);
-                $game->setNextStates(array_slice($game->getNextStates(), 1));
-                $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
+                if ($game->getState() != "endGame") {
+                    $game->setState($game->getNextStates()[0]);
+                    $game->setAffectedPlayer($game->getNextAffecteds()[0]);
+                    $game->setNextStates(array_slice($game->getNextStates(), 1));
+                    $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
+                }
             }
             $this->lockThem($id);
         }
