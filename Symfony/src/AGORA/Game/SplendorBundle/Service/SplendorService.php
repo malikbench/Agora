@@ -14,6 +14,7 @@ class SplendorService
 {
 
     protected $manager;
+    private $nbTurn;
 
 //    private $cardsValues = [[0, 1, 1, 1, 1], [0, 1, 1, 1, 2], [0, 1, 2, 0, 2], [1, 3, 0, 1, 0], [0, 1, 0, 2, 0],
 //        [0, 2, 2, 0, 0], [0, 0, 3, 0, 0], [0, 0, 0, 0, 4],/**/ [1, 0, 1, 1, 1], [1, 0, 2, 1, 1], [2, 0, 2, 1, 0],
@@ -38,6 +39,7 @@ class SplendorService
     public function __construct(EntityManager $em)
     {
         $this->manager = $em;
+        $this->nbTurn = 1;
     }
 
 
@@ -136,9 +138,16 @@ class SplendorService
 
     public function getTwelveRandomCards() {
         $cards = [];
+        $x = 1; $y = 40;
         for ($k = 0; $k < 12; $k++) {
+            if ($k >= 4) {
+                $x = 41; $y = 70;
+            }
+            if ($k >= 8) {
+                $x = 71; $y = 90;
+            }
             do {
-                $id = rand(1, 90);
+                $id = rand($x, $y);
             } while (in_array($id, $cards));
             array_push($cards, $id);
         }
@@ -330,7 +339,7 @@ class SplendorService
     public function getTokens($gameId, $userId, $tokens) {
         $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
         if ($game->getIdUserTurn() != $userId) {
-            return;
+            return null;
         }
         $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
             ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
@@ -343,7 +352,7 @@ class SplendorService
             //Si il n'a pas le droit on return
             if ($tokens[$k] > $gameTokens[$k] || $tokens[$k] > 2 || ($tokens[$k] == 2 && $gameTokens[$k] < 4)
                 || ($tokens[$k] == 2 && ($nbTwo + $nbOne) != 0) || ($tokens[$k] == 1 && ($nbTwo != 0 || $nbOne > 2))) {
-                return;
+                return null;
             }
             if ($tokens[$k] == 1) {
                 $nbOne++;
@@ -365,7 +374,112 @@ class SplendorService
         $this->manager->persist($player);
         $this->manager->flush();
 
+        return array(implode(",", $playerTokens), implode(",", $gameTokens));
     }
+
+
+    //Retourne les ids des cartes nobles qui peuvent visiter le joueur sous forme de tableau
+    public function canVisitNoble($gameId, $userId) {
+        $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
+        if ($game->getIdUserTurn() != $userId) {
+            return null;
+        }
+        $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
+            ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
+        $nobles = $game->getIdNobles();
+        $bonus = [0,0,0,0,0];
+        //On calcul les bonus du joueur
+        foreach ($player->getBuyedCards() as $id) {
+            $buyedCard = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorCard')->find($id);
+            switch ($buyedCard->getBonus()) {
+                case "Green":
+                    $bonus[0] += 1;
+                    break;
+                case "Blue":
+                    $bonus[1] += 1;
+                    break;
+                case "Red":
+                    $bonus[2] += 1;
+                    break;
+                case "White":
+                    $bonus[3] += 1;
+                    break;
+                case "Black":
+                    $bonus[4] += 1;
+                    break;
+            }
+        }
+        $result = [];
+        //Pour chaque noble sur le plateau
+        foreach ($nobles as $id) {
+            $cardNoble = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorCard')->find($id);
+            //Si le joueur a les bonus necessaires alors on ajoute le noble dans le tableau retourné
+            if ($bonus[0] >= $cardNoble->getEmeraldTokens() && $bonus[1] >= $cardNoble->getSapphireTokens()
+                && $bonus[2] >= $cardNoble->getRubyTokens() && $bonus[3] >= $cardNoble->getDiamondTokens()
+                && $bonus[4] >= $cardNoble->getOnyxTokens()) {
+                array_push($result, $id);
+            }
+        }
+
+        return $result;
+    }
+
+    public function visitNoble($gameId, $userId, $idNoble) {
+        $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
+        if ($game->getIdUserTurn() != $userId) {
+            return;
+        }
+        $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
+            ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
+        $gameNobles = $game->getIdNobles();
+        //On retire la carte noble du plateau
+        $k = array_search($idNoble, $gameNobles);
+        array_splice($gameNobles, $k, 1);
+        $game->setIdNobles($gameNobles);
+        $this->manager->persist($game);
+        $this->manager->flush();
+        //On recupere la carte Noble correspondant à l'id
+        $cardNoble = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorCard')->find($idNoble);
+        //On ajoute le prestige de la carde Noble au prestige du joueur
+        $player->setPrestige($player->getPrestige() + $cardNoble->getPrestige());
+        $this->manager->persist($player);
+        $this->manager->flush();
+    }
+
+    public function endTurn($gameId, $userId) {
+        $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
+        if ($game->getIdUserTurn() != $userId) {
+            return null;
+        }
+        $players = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
+            ->findBy(array('gameId' => $gameId));
+        $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
+            ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
+        //On calcul la somme des jetons du joueur
+        $total = 0;
+        foreach ($player->getListTokens() as $token) {
+            $total += intval($token);
+        }
+        //Si le joueur a plus de 10 jetons on retourne False
+        if ($total > 10) {
+            return false;
+        }
+
+        //Sinon on cherche quel est le prochain joueur
+        for ($k = 0; $k < count($players); $k++) {
+            if ($players[$k]->getIdUser() == $userId) {
+                break;
+            }
+        }
+        $newPlayer = (($k + 1) % count($players) == 0 ? $players[($k - (count($players) - 1))] : $players[$k + 1]);
+        //Et on change le tour du joueur
+        $game->setIdUserTurn($newPlayer->getIdUser());
+        $this->manager->persist($game);
+        $this->manager->flush();
+
+        $this->nbTurn += 1;
+    }
+
 
 
 

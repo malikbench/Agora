@@ -29,10 +29,12 @@
 {% for player in players %}
 <div class="player">
     <span> {{ player.idUser.username }}</span><br>
-    E, S, R, D, O, J <br>
+    <p>E, S, R, D, O, J</p> <br>
+    <p id="tokens{{ player.idUser.id }}">
     {% for token in player.listTokens %}
         {{ token }},
     {% endfor %}
+    </p>
     <br>Buyed Cards : <br>
     {% for card in player.buyedCards %}
         {% if card != 0 %}
@@ -92,13 +94,92 @@
     <input id="nbOnyx" type="number" onkeydown="return false" min="0" max="{{ game.listTokens[4] }}" oninput="tokens();" value="0">
     <div id="gold" class="token"> {{ game.listTokens[5] }}</div>
 
-    <button id="getTokens" disabled="true">Prendre</button>
+    <button id="getTokens" disabled="true" onclick="takeTokens();">Prendre</button>
 </div>
 
 </body>
 </html>
 
 <script>
+    //On retrouve l'url de base du serveur à la barbare
+    var urlSock = "{{ app.request.getSchemeAndHttpHost() }}";
+    //On enlève le http (ou https)
+    urlSock = urlSock.split("/");
+    urlSock = urlSock[2];
+    //On enlève le port
+    urlSock = urlSock.split(":");
+    urlSock = urlSock[0];
+
+    var connection = new WebSocket('ws://'+ urlSock +':8088');
+
+    connection.onopen = function(e) {
+
+    };
+
+    connection.onclose = function(e) {
+
+    };
+
+    connection.onmessage = function(e) {
+        console.log("splendor test : " + e.data);
+        let content = JSON.parse(e.data);
+        switch (content.type) {
+            case "takeTokens":
+                let printedPlayerTokens = document.getElementById('tokens' + content.userId);
+                let printedEmerald = document.getElementById('emerald');
+                let printedSaphire = document.getElementById('saphire');
+                let printedRuby = document.getElementById('ruby');
+                let printedDiamond = document.getElementById('diamond');
+                let printedOnyx = document.getElementById('onyx');
+                printedPlayerTokens.innerHTML = content.tokensPlayer;
+                let tabTokens = content.tokensGame.split(",");
+                printedEmerald.innerHTML = tabTokens[0];
+                printedSaphire.innerHTML = tabTokens[1];
+                printedRuby.innerHTML = tabTokens[2];
+                printedDiamond.innerHTML = tabTokens[3];
+                printedOnyx.innerHTML = tabTokens[4];
+                resetTokensNbValues();
+                break;
+        }
+
+    };
+
+
+    function takeTokens() {
+        let toks = document.getElementById('nbEmerald').value + ","
+        + document.getElementById('nbSaphire').value + ","
+        + document.getElementById('nbRuby').value + ","
+        + document.getElementById('nbDiamond').value + ","
+        + document.getElementById('nbOnyx').value;
+
+        var content = {
+            type: "takeTokens",
+            gameId: {{ game.id }},
+            userId: {{ user.id }},
+            tokens: toks
+        };
+        console.log("splendor send : " + content);
+        connection.send(JSON.stringify(content));
+    }
+
+    function resetTokensNbValues() {
+        let emerald = document.getElementById('nbEmerald');
+        let saphire = document.getElementById('nbSaphire');
+        let ruby = document.getElementById('nbRuby');
+        let diamond = document.getElementById('nbDiamond');
+        let onyx = document.getElementById('nbOnyx');
+        emerald.value = 0;
+        saphire.value = 0;
+        ruby.value = 0;
+        diamond.value = 0;
+        onyx.value = 0;
+        emerald.disabled = false;
+        saphire.disabled = false;
+        ruby.disabled = false;
+        diamond.disabled = false;
+        onyx.disabled = false;
+    }
+
     function tokens() {
         let tok = [];
         tok[0] = {{ game.listTokens[0] }};
@@ -347,4 +428,6 @@
         onyx.max = {{ game.listTokens[4] }};
 
     }
+
+    resetTokensNbValues();
 </script>

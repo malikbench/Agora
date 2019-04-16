@@ -15,12 +15,18 @@ class DefaultController extends Controller
 {
     public function indexAction($gameId)
     {
+        $user = $this->getUser();
+
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('Accès refusé, l\'utilisateur n\'est pas connecté.');
+        }
 
         $service = $this->container->get('agora_game.splendor');
         $game = $service->getGame($gameId);
         $players = $service->getAllPlayers($gameId);
 
         return $this->render('AGORAGameSplendorBundle:Default:index.html.twig', array(
+            'user' => $user,
             'game' => $game,
             'players' => $players
         ));

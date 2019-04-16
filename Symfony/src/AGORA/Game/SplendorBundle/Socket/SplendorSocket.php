@@ -11,10 +11,12 @@ use Ratchet\MessageComponentInterface;
 class SplendorSocket implements MessageComponentInterface {
 
     protected $service;
+    protected $clients;
 
 
     public function __construct(SplendorService $srvc) {
         $this->service = $srvc;
+        $this->clients = [];
     }
 
     /**
@@ -22,9 +24,10 @@ class SplendorSocket implements MessageComponentInterface {
      * @param ConnectionInterface $conn The socket/connection that just connected to your application
      * @throws \Exception
      */
-    function onOpen(ConnectionInterface $conn)
-    {
-        // TODO: Implement onOpen() method.
+    function onOpen(ConnectionInterface $conn) {
+        if (!in_array($conn, $this->clients)) {
+            array_push($this->clients, $conn);
+        }
     }
 
     /**
@@ -32,9 +35,9 @@ class SplendorSocket implements MessageComponentInterface {
      * @param ConnectionInterface $conn The socket/connection that is closing/closed
      * @throws \Exception
      */
-    function onClose(ConnectionInterface $conn)
-    {
-        // TODO: Implement onClose() method.
+    function onClose(ConnectionInterface $conn) {
+        $k = array_search($conn, $this->clients);
+        array_splice($this->clients, $k, 1);
     }
 
     /**
@@ -55,8 +58,25 @@ class SplendorSocket implements MessageComponentInterface {
      * @param string $msg The message received
      * @throws \Exception
      */
-    function onMessage(ConnectionInterface $from, $msg)
-    {
-        // TODO: Implement onMessage() method.
+    function onMessage(ConnectionInterface $from, $msg) {
+        $content = json_decode($msg);
+        switch ($content->type) {
+            case "takeTokens":
+                $tokens = $this->service->getTokens(intval($content->gameId), intval($content->userId)
+                    , explode(",", $content->tokens));
+                if ($tokens != null) {
+                    $tokensPlayer = $tokens[0]; $tokensGame = $tokens[1];
+                    $data = array("type" => $content->type, "userId" => $content->userId, "tokensPlayer" => $tokensPlayer
+                    , "tokensGame" => $tokensGame);
+                    $data = json_encode($data);
+                    foreach ($this->clients as $client) {
+                        $client->send($data);
+                    }
+                }
+                break;
+            case "":
+                break;
+        }
+
     }
 }
