@@ -3,35 +3,49 @@ body {
     background-size: 100%;
 }
 
-.label_III {
-    position: relative;
-    left: 100px;
-    top: 170px;
-    font-size: 50px;
-    color: white;
+#logo {
+    height: 80px;
+    width: 300px;
+    margin-top: 0px;
 }
 
-.label_II {
+.nobles {
+    display: inline-block;
+    height: 140px;
+    width: 590px;
     position: relative;
-    left: 100px;
-    top: 320px;
-    font-size: 50px;
-    color: white;
+    /*left: 38%; 463px sans logo*/
+    left: 280px;
 }
 
-.label_I {
+.nobles div {
+    display: inline-block;
+}
+
+.noble {
+    width: 110px;
+    height: 110px;
+    margin-left: 5px;
+    border-radius: 10px;
+}
+
+.level {
     position: relative;
-    left: 100px;
-    top: 470px;
-    font-size: 50px;
-    color: white;
+    /*left: 21%;*/
+    left: 335px;
+    top: -14px;
+    width: 110px;
+    display: grid;
+    grid-row-gap: 36px;
+    grid-template-columns: repeat(1, 110px);
+    grid-template-rows: repeat(3, 150px);
 }
 
 .player{
     position: relative;
     /*Position relative, donc left indique le décalage vers la droite de l'objet*/
     /*left: 1200px;*/
-    top: -200px;
+    top: -500px;
     left: 88%;
     width: 150px;
     height: 230px;
@@ -48,14 +62,15 @@ body {
 
 .cards {
     position: relative;
-    left: 30%;
-    top: -1600px;
-    width: 590px;
+    /*left: 30%;*/
+    left: 465px;
+    top: -1040px;
+    width: 470px;
     display: grid;
     grid-gap: 10px;
-    grid-row-gap: 40px;
-    grid-template-columns: repeat(3, 140px);
-    grid-template-rows: repeat(3, 180px);
+    grid-row-gap: 36px;
+    grid-template-columns: repeat(3, 110px);
+    grid-template-rows: repeat(3, 150px);
     grid-auto-flow: column;
 }
 
@@ -67,16 +82,16 @@ body {
 
 .cardLevel {
     position: relative;
-    width: 120px;
+    width: 110px;
     height: 150px;
     border-radius: 5px;
 }
 
 .tokens{
     position: relative;
-    top: -2220px;
-    /*left: 850px;*/
-    left: 80%;
+    top: -1667px;
+    /*left: 65%;*/
+    left: 950px;
 }
 
 .token{
@@ -91,20 +106,20 @@ body {
 }
 
 button {
-    font-size: 14px;
+    font-size: 13px;
     border-radius: 7px;
     border: none;
-    margin-right: 5px;
     background-color: #dd6666;
 }
 
 .reserveButton {
-    width: 70px;
+    width: 65px;
     height: 25px;
+    margin-right: 1px;
 }
 
 .buyButton {
-    width: 40px;
+    width: 37px;
     height: 25px;
 }
 

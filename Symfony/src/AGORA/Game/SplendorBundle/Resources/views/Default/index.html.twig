@@ -4,7 +4,6 @@
     <title>splendor</title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/agoragamesplendor/css/index_style.css') }}">
-
 </head>
 
 <body>
@@ -13,16 +12,30 @@
 <script src="{{ asset('bundles/agoragamesplendor/script/components.js') }}"></script>
 {#<script src="{{ asset('bundles/agoragamesplendor/script/util.js') }}"></script>#}
 
+<img id="logo" src="{{ asset('bundles/agoragamesplendor/images/splendor.png') }}">
 
-<div class="label_III"> III<img class="cardLevel" src="{{ asset('bundles/agoragamesplendor/images/cardLevel3.jpg') }}">
-    <button class="reserveButton">Reserve</button> </div>
+<div class="nobles">
+    {% for noble in game.idNobles %}
+        <div id="box{{ noble }}"><img class="noble" src="{{ asset('bundles/agoragamesplendor/images/' ~ noble ~ '.jpg') }}" alt="NO"></div>
+    {% endfor %}
+</div>
 
-<div class="label_II"> II<img class="cardLevel" src="{{ asset('bundles/agoragamesplendor/images/cardLevel2.jpg') }}">
-    <button class="reserveButton">Reserve</button> </div>
+<div class="level">
+    <div class="label_III">
+        <img class="cardLevel" src="{{ asset('bundles/agoragamesplendor/images/cardLevel3.png') }}">
+        <button class="reserveButton">Reserve</button>
+    </div>
 
-<div class="label_I"> I<img class="cardLevel" src="{{ asset('bundles/agoragamesplendor/images/cardLevel1.jpg') }}">
-    <button class="reserveButton">Reserve</button> </div>
+    <div class="label_II">
+        <img class="cardLevel" src="{{ asset('bundles/agoragamesplendor/images/cardLevel2.png') }}">
+        <button class="reserveButton">Reserve</button>
+    </div>
 
+    <div class="label_I">
+        <img class="cardLevel" src="{{ asset('bundles/agoragamesplendor/images/cardLevel1.png') }}">
+        <button class="reserveButton">Reserve</button>
+    </div>
+</div>
 
 
 <!--1 div pour chaque joueur*/-->
@@ -52,12 +65,6 @@
     </div>
 </div>
 {% endfor %}
-
-<div class="nobles">
-    {% for noble in game.idNobles %}
-        <div id="box{{ noble }}"><img class="noble" src="{{ asset('bundles/agoragamesplendor/images/' ~ noble ~ '.jpg') }}" alt="NO"></div>
-    {% endfor %}
-</div>
 <!--
     cards : Vue component for visible cards
 <cards class="cards"></cards>-->
@@ -97,7 +104,7 @@
     <input id="nbOnyx" type="number" onkeydown="return false" min="0" max="{{ game.listTokens[4] }}" oninput="tokens();" value="0">
     <div id="gold" class="token"> {{ game.listTokens[5] }}</div>
 
-    <button id="getTokens" disabled="true" onclick="takeTokens();">Prendre</button>
+    <button id="getTokens" disabled="true" onclick="takeTokens();">Take</button>
 </div>
 
 </body>
