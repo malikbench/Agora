@@ -29,9 +29,12 @@ body {
 
 .player{
     position: relative;
-    left: 1000px;
+    /*Position relative, donc left indique le décalage vers la droite de l'objet*/
+    /*left: 1200px;*/
+    top: -200px;
+    left: 88%;
     width: 150px;
-    height: 140px;
+    height: 230px;
     padding: 5px;
     border: solid white 1px;
     border-radius: 10px;
@@ -40,14 +43,13 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 .box {
-    /*padding: 5px;*/
     font-size: 150%;
 }
 
 .cards {
     position: relative;
-    left: 170px;
-    top: -400px;
+    left: 30%;
+    top: -1600px;
     width: 590px;
     display: grid;
     grid-gap: 10px;
@@ -63,37 +65,20 @@ body {
     border-radius: 5px;
 }
 
-button {
-    font-size: 14px;
-    border-radius: 7px;
-    border: none;
-    margin-right: 5px;
-    background-color: #dd6666;
-}
-
-button:hover {
-    background-color: #444444;
-    box-shadow: 0 8px 16px 0;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-}
-
-#reserveButton {
-    width: 70px;
-    height: 25px;
-}
-
-#buyButton {
-    width: 40px;
-    height: 25px;
+.cardLevel {
+    position: relative;
+    width: 120px;
+    height: 150px;
+    border-radius: 5px;
 }
 
 .tokens{
     position: relative;
-    top: -1000px;
-    left: 850px;
+    top: -2220px;
+    /*left: 850px;*/
+    left: 80%;
 }
+
 .token{
     height: 75px;
     width: 75px;
@@ -105,12 +90,48 @@ button:hover {
     /*display: inline-block;*/
 }
 
+button {
+    font-size: 14px;
+    border-radius: 7px;
+    border: none;
+    margin-right: 5px;
+    background-color: #dd6666;
+}
+
+.reserveButton {
+    width: 70px;
+    height: 25px;
+}
+
+.buyButton {
+    width: 40px;
+    height: 25px;
+}
+
+#getTokens {
+    width: 70px;
+    height: 25px;
+    color: black;
+}
+
+button:hover {
+    background-color: #444444;
+    box-shadow: 2px 2px 12px 0;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+#getTokens:hover {
+    color: white;
+}
+
 #ruby {background-color: red;}
 
-#onyx { background-color: black;}
+#onyx {background-color: black;}
 
-#emerald { background-color: green;}
+#emerald {background-color: green;}
 
-#saphire { background-color: blue}
+#saphire {background-color: blue;}
 
-#gold { background-color: yellow}
+#gold {background-color: yellow;}
