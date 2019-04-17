@@ -60,6 +60,7 @@ class SplendorSocket implements MessageComponentInterface {
      */
     function onMessage(ConnectionInterface $from, $msg) {
         $content = json_decode($msg);
+        echo "test : " . $msg;
         switch ($content->type) {
             case "takeTokens":
                 $tokens = $this->service->getTokens(intval($content->gameId), intval($content->userId)
@@ -74,7 +75,16 @@ class SplendorSocket implements MessageComponentInterface {
                     }
                 }
                 break;
-            case "":
+            case "reserveCard":
+                $tab = $this->service->reserveCard(intval($content->gameId), intval($content->userId), intval($content->cardId));
+                if ($tab != null) {
+                    $data = array("type" => $content->type, "userId" => $content->userId, "oldCard" => $content->cardId
+                        ,"newCard" => $tab[0], "joker" => $tab[1]);
+                    $data = json_encode($data);
+                    foreach ($this->clients as $client) {
+                        $client->send($data);
+                    }
+                }
                 break;
         }
 

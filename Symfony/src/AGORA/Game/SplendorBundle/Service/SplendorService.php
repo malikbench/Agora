@@ -238,7 +238,7 @@ class SplendorService
     public function reserveCard($gameId, $userId, $cardId) {
         $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
         if ($game->getIdUserTurn() != $userId) {
-            return;
+            return null;
         }
         $cards = $game->getIdCards();
         $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
@@ -246,16 +246,16 @@ class SplendorService
         $i = array_search($cardId, $cards);
         $playerCard = $player->getReservedCards();
         //Si la carte est sur le plateau et que le joueur a moins de 3 cartes deja reservées
-        if ($i != false && sizeof($playerCard) < 3) {
+        if ($i != false && count($playerCard) < 4) {
             //On calcul le niveau de la carte à piocher
-            $level = (3 - intval($i / 4));
+            $level = (1 + intval($i / 4));
             //On pioche la carte qui va remplacer la carte reservée
             $newCard = $this->getRandomCard($gameId, $level);
             //On met la carte piochée à la place de celle réservée
             $cards[$i] = $newCard;
-            $game->setIdCards($cards);
-
+            $game->setIdCards(implode(",", $cards));
             $gameTokens = $game->getListTokens();
+            $gold = 0;
             //Si il reste des jetons or(joker) sur le plateau
             if ($gameTokens[5] > 0) {
                 //Le joueur en prend un
@@ -264,9 +264,12 @@ class SplendorService
                 $gameTokens[5] -= 1;
                 $game->setListTokens(implode(",", $gameTokens));
                 $player->setListTokens(implode(",", $tokens));
+                $gold = 1;
             }
+
             $this->manager->persist($game);
             $this->manager->flush();
+
             //On ajoute la carte réservée dans la main du joueur
             array_push($playerCard, $cardId);
             $player->setReservedCards(implode(",", $playerCard));
@@ -274,7 +277,9 @@ class SplendorService
             $this->manager->persist($player);
             $this->manager->flush();
 
+            return array($newCard, $gold);
         }
+        return null;
     }
 
     public function buyCard($gameId, $userId, $cardId) {
