@@ -13,6 +13,7 @@
 {#<script src="{{ asset('bundles/agoragamesplendor/script/util.js') }}"></script>#}
 
 <img id="logo" src="{{ asset('bundles/agoragamesplendor/images/splendor.png') }}">
+<button id="quitButton" onclick="window.location.href = '{{ app.request.getSchemeAndHttpHost() }}'">Quit</button>
 
 <div class="nobles">
     {% for noble in game.idNobles %}
@@ -38,17 +39,24 @@
 </div>
 
 <div class="players">
-<!--1 div pour chaque joueur*/-->
+<!--1 div pour chaque joueur-->
 {% for player in players %}
 <div class="player">
     <span> {{ player.idUser.username }}</span><br>
-    <p>E, S, R, D, O, J</p> <br>
+    <!--<p>E, S, R, D, O, J</p>-->
+    <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/emerald.png') }}">
+    <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/saphire.png') }}">
+    <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/ruby.png') }}">
+    <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/diamond.png') }}">
+    <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/onyx.png') }}">
+    <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/gold.png') }}">
+    <br>
     <p id="tokens{{ player.idUser.id }}">
     {% for token in player.listTokens %}
-        {{ token }},
+        {{ token }} &emsp;
     {% endfor %}
     </p>
-    <br>Buyed Cards : <br>
+    Buyed Cards: <br>
     <div id="buyedCard{{ player.idUser.id }}">
     {% for card in player.buyedCards %}
         {% if card != 0 %}
@@ -56,7 +64,7 @@
         {% endif %}
     {% endfor %}
     </div>
-    <br>Reserved Cards : <br>
+    <br>Reserved Cards: <br>
     <div id="reservedCard{{ player.idUser.id }}">
     {% for card in player.reservedCards %}
         {% if card != 0 %}
@@ -108,7 +116,6 @@
     <div id="onyx" class="token"> {{ game.listTokens[4] }}</div>
     <input id="nbOnyx" type="number" onkeydown="return false" min="0" max="{{ game.listTokens[4] }}" oninput="tokens();" value="0">
     <div id="gold" class="token"> {{ game.listTokens[5] }}</div>
-
     <button id="getTokens" disabled="true" onclick="takeTokens();">Take</button>
 </div>
 

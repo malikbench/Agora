@@ -16,7 +16,7 @@ body {
     grid-template-rows: repeat(1, 110px);
     position: relative;
     top: -20px;
-    left: 344px;
+    left: 320px;
 }
 
 .noble {
@@ -28,7 +28,7 @@ body {
 .level {
     position: relative;
     /*left: 21%;*/
-    left: 343px;
+    left: 320px;
     top: -14px;
     width: 110px;
     display: grid;
@@ -39,10 +39,10 @@ body {
 
 .players {
     display: grid;
-    grid-gap: 10px;
-    grid-template-columns: repeat(2, 150px);
+    grid-gap: 5px;
     grid-template-rows: repeat(2, 210px);
-    grid-auto-flow: column;
+    grid-template-columns: repeat(2, 165px);
+    grid-auto-flow: row;
 }
 
 .player{
@@ -52,7 +52,7 @@ body {
     /*left: 88%;*/
     /*width: 150px;
     height: 200px;*/
-    left: 1090px;
+    left: 1045px;
     top: -600px;
     padding: 5px;
     border: solid black 1px;
@@ -60,21 +60,26 @@ body {
     color: black;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 80%;
+    font-weight: bold;
+}
 
+.tokensImages {
+    width: 22px;
+    height: 22px;
 }
 
 .cards {
     position: relative;
     /*left: 30%;*/
-    left: 465px;
-    top: -968px;
+    left: 442px;
+    top: -960px;
     width: 470px;
     display: grid;
     grid-gap: 10px;
     grid-row-gap: 36px;
-    grid-template-columns: repeat(3, 110px);
     grid-template-rows: repeat(3, 150px);
-    grid-auto-flow: column;
+    grid-template-columns: repeat(4, 110px);
+    /*grid-auto-flow: row;*/
 }
 
 .card {
@@ -92,9 +97,9 @@ body {
 
 .tokens{
     position: relative;
-    top: -1570px;
+    top: -1600px;
     /*left: 65%;*/
-    left: 950px;
+    left: 927px;
 }
 
 .token{
@@ -116,7 +121,11 @@ body {
 input {
     border-radius: 5px;
     border: none;
-
+    background-color: black;
+    color: white;
+    font-size: medium;
+    margin-top: 0px;
+    margin-bottom: 10px;
 }
 
 button {
@@ -124,6 +133,14 @@ button {
     border-radius: 7px;
     border: none;
     background-color: #dd6666;
+}
+
+button:hover {
+    background-color: #444444;
+    box-shadow: 2px 2px 12px 0;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
 }
 
 .reserveButton {
@@ -143,24 +160,65 @@ button {
     color: black;
 }
 
-button:hover {
-    background-color: #444444;
-    box-shadow: 2px 2px 12px 0;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-}
-
 #getTokens:hover {
     color: white;
 }
 
-#ruby {background-color: red;}
+#quitButton {
+    float:right;
+    font-size: 20px;
+    background-color: white;
+    color: #313131;
+    font-weight: bold;
+    width: 80px;
+    height: 30px;
+}
 
-#onyx {background-color: black;}
+#quitButton:hover {
+    background-color: #444444;
+    box-shadow: 2px 2px 12px 0;
+    color: white;
+    cursor: pointer;
+}
 
-#emerald {background-color: green;}
+#ruby {
+    background-image: url("../images/ruby.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+}
 
-#saphire {background-color: blue;}
+#onyx {
+    background-image: url("../images/onyx.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+}
 
-#gold {background-color: yellow;}
+#emerald {
+    background-image: url("../images/emerald.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+}
+
+#saphire {
+    background-image: url("../images/saphire.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+}
+
+#gold {
+    background-image: url("../images/gold.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+}
+
+#diamond {
+    background-image: url("../images/diamond.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+}
