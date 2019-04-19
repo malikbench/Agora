@@ -86,6 +86,18 @@ class SplendorSocket implements MessageComponentInterface {
                     }
                 }
                 break;
+            case "buyCard":
+                $tab = $this->service->buyCard(intval($content->gameId), intval($content->userId), intval($content->cardId));
+                if ($tab != null) {
+                    $data = array("type" => $content->type, "userId" => $content->userId, "oldCard" => $content->cardId
+                        ,"newCard" => $tab[0], "tokens" => $tab[1]);
+                    $data = json_encode($data);
+                    echo count($this->clients);
+                    foreach ($this->clients as $client) {
+                        $client->send($data);
+                    }
+                }
+                break;
         }
 
     }

@@ -195,6 +195,9 @@ class SplendorPlayer
      */
     public function getReservedCards()
     {
+//        if ($this->reservedCards == "") {
+//            return [];
+//        }
         return array_map('intval', explode(',', $this->reservedCards));
 
     }
@@ -220,6 +223,9 @@ class SplendorPlayer
      */
     public function getBuyedCards()
     {
+//        if ($this->getBuyedCards() == "") {
+//            return [];
+//        }
         return array_map('intval', explode(',', $this->buyedCards));
     }
 }

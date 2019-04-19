@@ -24,13 +24,6 @@ class SplendorCard
     /**
      * @var int
      *
-     * @ORM\Column(name="gameId", type="integer")
-     */
-    private $gameId;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="prestige", type="integer")
      */
     private $prestige;
@@ -93,30 +86,6 @@ class SplendorCard
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set gameId.
-     *
-     * @param int $gameId
-     *
-     * @return SplendorCard
-     */
-    public function setGameId($gameId)
-    {
-        $this->gameId = $gameId;
-
-        return $this;
-    }
-
-    /**
-     * Get gameId.
-     *
-     * @return int
-     */
-    public function getGameId()
-    {
-        return $this->gameId;
     }
 
     /**

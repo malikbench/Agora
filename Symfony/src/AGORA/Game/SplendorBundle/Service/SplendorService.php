@@ -15,6 +15,8 @@ class SplendorService
 
     protected $manager;
     private $nbTurn;
+    private $end;
+    private $winner;
 
 //    private $cardsValues = [[0, 1, 1, 1, 1], [0, 1, 1, 1, 2], [0, 1, 2, 0, 2], [1, 3, 0, 1, 0], [0, 1, 0, 2, 0],
 //        [0, 2, 2, 0, 0], [0, 0, 3, 0, 0], [0, 0, 0, 0, 4],/**/ [1, 0, 1, 1, 1], [1, 0, 2, 1, 1], [2, 0, 2, 1, 0],
@@ -40,6 +42,8 @@ class SplendorService
     {
         $this->manager = $em;
         $this->nbTurn = 1;
+        $this->end = false;
+        $this->winner = null;
     }
 
 
@@ -285,7 +289,7 @@ class SplendorService
     public function buyCard($gameId, $userId, $cardId) {
         $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
         if ($game->getIdUserTurn() != $userId) {
-            return;
+            return null;
         }
         $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
             ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
@@ -297,6 +301,7 @@ class SplendorService
         $cardTable = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorCard')->find($cardId);
         $playerTokens = $player->getListTokens();
         $jokerNeed = 0;
+
         //On verifie si le joueur a les ressources necessaires
         for ($k = 0; $k < 5; $k++) {
             $tok = $cardTable->getTokens($k);
@@ -307,18 +312,20 @@ class SplendorService
                 $playerTokens[$k] = $playerTokens[$k] - $tok;
             }
         }
+
         //Si la carte est sur le plateau ou dans les carte réservé du joueur
         // et que le joueur a les ressources necessaires
-        if (($i != false || $j != false) && $jokerNeed <= $playerTokens[5]) {
+        if ((is_numeric($i) || is_numeric($j)) && $jokerNeed <= $playerTokens[5]) {
+            $newCard = null;
             //Si la carte est sur le plateau
-            if ($i != false) {
+            if (is_numeric($i)) {
                 //On calcul le niveau de la carte à piocher
-                $level = (3 - intval($i / 4));
+                $level = (1 + intval($i / 4));
                 //On pioche la carte qui va remplacer la carte achetée
                 $newCard = $this->getRandomCard($gameId, $level);
                 //On met la carte piochée à la place de celle achetée
-                $cards[$i] = $newCard;
-                $game->setIdCards($cards);
+                $cardsGame[$i] = $newCard;
+                $game->setIdCards(implode(",", $cardsGame));
                 $this->manager->persist($game);
                 $this->manager->flush();
             } else {
@@ -338,7 +345,11 @@ class SplendorService
             $player->setPrestige($player->getPrestige() + $cardTable->getPrestige());
             $this->manager->persist($player);
             $this->manager->flush();
+
+            return array($newCard, implode(",", $playerTokens));
         }
+
+        return null;
     }
 
     public function getTokens($gameId, $userId, $tokens) {
@@ -482,7 +493,32 @@ class SplendorService
         $this->manager->persist($game);
         $this->manager->flush();
 
+        if ($player->getPrestige() >= 15) {
+            $this->end = true;
+            $this->winner = $userId;
+        }
+
+        if ($this->end && ($this->nbTurn % count($players)) == 0) {
+            //FIN DE LA PARTIE
+            $players = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
+                ->findBy(array('gameId' => $gameId));
+            foreach ($players as $player) {
+                $this->manager->remove($player);
+                $this->manager->flush($player);
+            }
+            $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
+            $this->manager->remove($game);
+            $this->manager->flush($game);
+            $g = $this->manager->getRepository('AGORAGameGameBundle:Game')
+                ->findOneBy(array('gameId' => $gameId, 'gameInfoId' => 3));
+            $this->manager->remove($g);
+            $this->manager->flush($g);
+
+            return $this->winner;
+        }
+
         $this->nbTurn += 1;
+        return true;
     }
 
 
