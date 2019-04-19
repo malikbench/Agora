@@ -685,7 +685,7 @@
     validate = function () {
         if (JSON.stringify(action) === JSON.stringify(initialAction)) {
             {%if game.state == "moveLegion"  %}
-                action.type = "{{ game.getState }}";
+                action.type = "legion";
                 sendAction();
                 resetSelected();
             {% else %}
@@ -723,9 +723,9 @@
     };
 
     {# Case "remove...Legion if no legion on board" #}
-    {% if (game.state == "removeAllLegion" or game.state == "moveLegion") and me.legionMax == me.legion and game.affectedPlayer != me.id %}
+    {% if game.state == "removeAllLegion" and me.legionMax == me.legion and game.affectedPlayer != me.id %}
     validate = function () {
-        action.type = "{{ game.getState }}";
+        action.type = "{{ game.state }}";
         sendAction();
         resetSelected();
 
@@ -744,7 +744,8 @@
         };
     };
     validate();
-    {% elseif (game.state == "removeOneLegion" or game.state == "removeTwoLegion") and me.legionMax == me.legion and game.affectedPlayer != me.id %}
+    {# Case "remove/move" if no legion on board #}
+    {% elseif (((game.state == "removeOneLegion" or game.state == "removeTwoLegion") and game.affectedPlayer != me.id) or (game.state == "moveLegion" and game.affectedPlayer == me.id)) and me.legionMax == me.legion %}
     validate = function () {
         action.type = "legion";
         sendAction();
