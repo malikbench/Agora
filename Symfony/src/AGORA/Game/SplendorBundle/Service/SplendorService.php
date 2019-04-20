@@ -184,6 +184,7 @@ class SplendorService
             case 2: $spldrGame->setListTokens("4,4,4,4,4,5");
             break;
         }
+//        $user = $this->manager->getRepository('AGORAUserBundle:User')->find($userId);
         $spldrGame->setIdUserTurn($userId);
         $this->manager->persist($spldrGame);
         $this->manager->flush();
@@ -250,7 +251,7 @@ class SplendorService
         $i = array_search($cardId, $cards);
         $playerCard = $player->getReservedCards();
         //Si la carte est sur le plateau et que le joueur a moins de 3 cartes deja reservées
-        if ($i != false && count($playerCard) < 4) {
+        if (is_numeric($i) && count($playerCard) < 4) {
             //On calcul le niveau de la carte à piocher
             $level = (1 + intval($i / 4));
             //On pioche la carte qui va remplacer la carte reservée
@@ -283,6 +284,31 @@ class SplendorService
 
             return array($newCard, $gold);
         }
+
+        if (count($playerCard) < 4) {
+            $gold = 0;
+            $gameTokens = $game->getListTokens();
+            //Si il reste des jetons or(joker) sur le plateau
+            if ($gameTokens[5] > 0) {
+                //Le joueur en prend un
+                $tokens = $player->getListTokens();
+                $tokens[5] += 1;
+                $gameTokens[5] -= 1;
+                $game->setListTokens(implode(",", $gameTokens));
+                $player->setListTokens(implode(",", $tokens));
+                $gold = 1;
+                $this->manager->persist($game);
+                $this->manager->flush();
+            }
+            //On ajoute la carte réservée dans la main du joueur
+            array_push($playerCard, $cardId);
+            $player->setReservedCards(implode(",", $playerCard));
+            $this->manager->persist($player);
+            $this->manager->flush();
+            $newCard = 0;
+            return array($newCard, $gold);
+        }
+
         return null;
     }
 
@@ -342,11 +368,12 @@ class SplendorService
             $playerTokens[5] = $playerTokens[5] - $jokerNeed;
             $player->setListTokens(implode(",", $playerTokens));
             //On ajoute le prestige de la carte au joueur
-            $player->setPrestige($player->getPrestige() + $cardTable->getPrestige());
+            $prestige = $player->getPrestige() + $cardTable->getPrestige();
+            $player->setPrestige($prestige);
             $this->manager->persist($player);
             $this->manager->flush();
 
-            return array($newCard, implode(",", $playerTokens));
+            return array($newCard, implode(",", $playerTokens), $prestige);
         }
 
         return null;
@@ -406,23 +433,25 @@ class SplendorService
         $bonus = [0,0,0,0,0];
         //On calcul les bonus du joueur
         foreach ($player->getBuyedCards() as $id) {
-            $buyedCard = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorCard')->find($id);
-            switch ($buyedCard->getBonus()) {
-                case "Green":
-                    $bonus[0] += 1;
-                    break;
-                case "Blue":
-                    $bonus[1] += 1;
-                    break;
-                case "Red":
-                    $bonus[2] += 1;
-                    break;
-                case "White":
-                    $bonus[3] += 1;
-                    break;
-                case "Black":
-                    $bonus[4] += 1;
-                    break;
+            if ($id != 0) {
+                $buyedCard = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorCard')->find($id);
+                switch ($buyedCard->getBonus()) {
+                    case "Green":
+                        $bonus[0] += 1;
+                        break;
+                    case "Blue":
+                        $bonus[1] += 1;
+                        break;
+                    case "Red":
+                        $bonus[2] += 1;
+                        break;
+                    case "White":
+                        $bonus[3] += 1;
+                        break;
+                    case "Black":
+                        $bonus[4] += 1;
+                        break;
+                }
             }
         }
         $result = [];
@@ -443,7 +472,7 @@ class SplendorService
     public function visitNoble($gameId, $userId, $idNoble) {
         $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
         if ($game->getIdUserTurn() != $userId) {
-            return;
+            return null;
         }
         $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
             ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
@@ -451,15 +480,17 @@ class SplendorService
         //On retire la carte noble du plateau
         $k = array_search($idNoble, $gameNobles);
         array_splice($gameNobles, $k, 1);
-        $game->setIdNobles($gameNobles);
+        $game->setIdNobles(implode(",", $gameNobles));
         $this->manager->persist($game);
         $this->manager->flush();
         //On recupere la carte Noble correspondant à l'id
         $cardNoble = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorCard')->find($idNoble);
-        //On ajoute le prestige de la carde Noble au prestige du joueur
-        $player->setPrestige($player->getPrestige() + $cardNoble->getPrestige());
+        //On ajoute le prestige de la carte Noble au prestige du joueur
+        $prestige = $player->getPrestige() + $cardNoble->getPrestige();
+        $player->setPrestige($prestige);
         $this->manager->persist($player);
         $this->manager->flush();
+        return $prestige;
     }
 
     public function endTurn($gameId, $userId) {
@@ -514,11 +545,11 @@ class SplendorService
             $this->manager->remove($g);
             $this->manager->flush($g);
 
-            return $this->winner;
+            return array(true, $this->winner);
         }
 
         $this->nbTurn += 1;
-        return true;
+        return array(false, $newPlayer->getIdUser());
     }
 
 

@@ -65,7 +65,7 @@ class SplendorSocket implements MessageComponentInterface {
             case "takeTokens":
                 $tokens = $this->service->getTokens(intval($content->gameId), intval($content->userId)
                     , explode(",", $content->tokens));
-                if ($tokens != null) {
+                if ($tokens !== null) {
                     $tokensPlayer = $tokens[0]; $tokensGame = $tokens[1];
                     $data = array("type" => $content->type, "userId" => $content->userId, "tokensPlayer" => $tokensPlayer
                     , "tokensGame" => $tokensGame);
@@ -77,7 +77,7 @@ class SplendorSocket implements MessageComponentInterface {
                 break;
             case "reserveCard":
                 $tab = $this->service->reserveCard(intval($content->gameId), intval($content->userId), intval($content->cardId));
-                if ($tab != null) {
+                if ($tab !== null) {
                     $data = array("type" => $content->type, "userId" => $content->userId, "oldCard" => $content->cardId
                         ,"newCard" => $tab[0], "joker" => $tab[1]);
                     $data = json_encode($data);
@@ -88,9 +88,9 @@ class SplendorSocket implements MessageComponentInterface {
                 break;
             case "buyCard":
                 $tab = $this->service->buyCard(intval($content->gameId), intval($content->userId), intval($content->cardId));
-                if ($tab != null) {
+                if ($tab !== null) {
                     $data = array("type" => $content->type, "userId" => $content->userId, "oldCard" => $content->cardId
-                        ,"newCard" => $tab[0], "tokens" => $tab[1]);
+                        ,"newCard" => $tab[0], "tokens" => $tab[1], "prestige" => $tab[2]);
                     $data = json_encode($data);
                     echo count($this->clients);
                     foreach ($this->clients as $client) {
@@ -98,7 +98,69 @@ class SplendorSocket implements MessageComponentInterface {
                     }
                 }
                 break;
+            case "reserveRandomCard":
+                $card = $this->service->getRandomCard(intval($content->gameId), intval($content->level));
+                $tab = $this->service->reserveCard(intval($content->gameId), intval($content->userId), intval($card));
+                if ($tab !== null) {
+                    $data = array("type" => $content->type, "userId" => $content->userId, "oldCard" => $card
+                    , "joker" => $tab[1]);
+                    $data = json_encode($data);
+                    foreach ($this->clients as $client) {
+                        $client->send($data);
+                    }
+                }
+                break;
+            case "canVisitNoble":
+                $nobles = $this->service->canVisitNoble(intval($content->gameId), intval($content->userId));
+                if ($nobles !== null) {
+                    if (count($nobles) == 1) {
+                        $prestige = $this->service->visitNoble($content->gameId, $content->userId, $nobles[0]);
+                        if ($prestige != null) {
+                            $data = array("type" => "visitNoble", "userId" => $content->userId
+                            , "nobleId" => $nobles[0], "prestige" => $prestige);
+                            $data = json_encode($data);
+                            foreach ($this->clients as $client) {
+                                $client->send($data);
+                            }
+                        }
+                    } else if (count($nobles) > 1) {
+                        $data = array("type" => $content->type, "nobles" => implode(",", $nobles));
+                        $data = json_encode($data);
+                        $from->send($data);
+                    } else {
+
+                    }
+                }
+                break;
+            case "visitNoble":
+                $prestige = $this->service->visitNoble($content->gameId, $content->userId, $content->nobleId);
+                if ($prestige !== null) {
+                    $data = array("type" => "visitNoble", "userId" => $content->userId
+                        , "nobleId" => $content->nobleId, "prestige" => $prestige);
+                    $data = json_encode($data);
+                    foreach ($this->clients as $client) {
+                        $client->send($data);
+                    }
+                }
+                break;
+            case "endTurn":
+                $end = $this->service->endTurn($content->gameId, $content->userId);
+                if ($end !== null) {
+                    if ($end === false) {
+
+                    } else if ($end[0] === false) {
+                        $data = array("type" => "endTurn", "userId" => $content->userId, "next" => $end[1]);
+                        $data = json_encode($data);
+                        foreach ($this->clients as $client) {
+                            $client->send($data);
+                        }
+                    } else {
+
+                    }
+                }
+                break;
         }
 
     }
+
 }
