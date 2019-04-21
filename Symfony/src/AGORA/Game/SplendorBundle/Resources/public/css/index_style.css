@@ -40,7 +40,7 @@ body {
 .players {
     display: grid;
     grid-gap: 5px;
-    grid-template-rows: repeat(2, 210px);
+    grid-template-rows: repeat(2, 250px);
     grid-template-columns: repeat(2, 165px);
     grid-auto-flow: row;
 }
@@ -53,7 +53,7 @@ body {
     /*width: 150px;
     height: 200px;*/
     left: 1045px;
-    top: -600px;
+    top: -1830px;
     padding: 5px;
     border: solid black 1px;
     border-radius: 10px;
@@ -61,6 +61,21 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 80%;
     font-weight: bold;
+    font-variant: small-caps;
+}
+
+#turn {
+    margin: 0px;
+    color: darkred;
+}
+
+.prestige {
+    margin: 0px;
+    color: #0000F0;
+}
+
+.nbTokens {
+    margin: 0px;
 }
 
 .tokensImages {
@@ -71,8 +86,8 @@ body {
 .cards {
     position: relative;
     /*left: 30%;*/
-    left: 442px;
-    top: -960px;
+    left: 441px;
+    top: -535px;
     width: 470px;
     display: grid;
     grid-gap: 10px;
@@ -97,7 +112,7 @@ body {
 
 .tokens{
     position: relative;
-    top: -1600px;
+    top: -1173px;
     /*left: 65%;*/
     left: 927px;
 }
@@ -222,3 +237,4 @@ button:hover {
     background-position: center;
     background-size: 100%;
 }
+

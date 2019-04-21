@@ -38,50 +38,6 @@
     </div>
 </div>
 
-<div class="players">
-<!--1 div pour chaque joueur-->
-{% for player in players %}
-<div id="player{{ player.idUser.id }}" class="player">
-    {% if player.idUser.id == game.idUserTurn %}
-        <p id="turn">Tour de ce joueur</p>
-    {% endif %}
-    <span> {{ player.idUser.username }}</span>
-    <p id="prestige{{ player.idUser.id }}">Prestige : {{ player.prestige }}</p><br>
-    <!--<p>E, S, R, D, O, J</p>-->
-    <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/emerald.png') }}">
-    <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/saphire.png') }}">
-    <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/ruby.png') }}">
-    <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/diamond.png') }}">
-    <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/onyx.png') }}">
-    <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/gold.png') }}">
-    <br>
-    <p id="tokens{{ player.idUser.id }}">
-    {% for token in player.listTokens %}
-        {{ token }} &emsp;
-    {% endfor %}
-    </p>
-    Buyed Cards: <br>
-    <div id="buyedCard{{ player.idUser.id }}">
-    {% for card in player.buyedCards %}
-        {% if card != 0 %}
-        <img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
-        {% endif %}
-    {% endfor %}
-    </div>
-    <br>Reserved Cards: <br>
-    <div id="reservedCard{{ player.idUser.id }}">
-    {% for card in player.reservedCards %}
-        {% if card != 0 %}
-        <div id="reserv{{ card }}">
-            <img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
-            <button class="buyButton" onclick="buyCard({{ card }});">Buy</button>
-        </div>
-        {% endif %}
-    {% endfor %}
-    </div>
-</div>
-{% endfor %}
-</div>
 <!--
     cards : Vue component for visible cards
 <cards class="cards"></cards>-->
@@ -123,6 +79,53 @@
     <button id="getTokens" disabled="true" onclick="takeTokens();">Take</button>
 </div>
 
+<div class="players">
+    <!--1 div pour chaque joueur-->
+    {% for player in players %}
+
+        <div id="player{{ player.idUser.id }}" class="player">
+
+            <span> {{ player.idUser.username }}</span>
+            {% if player.idUser.id == game.idUserTurn %}
+                <p id="turn">À vous de jouer</p>
+            {% endif %}
+            <p id="prestige{{ player.idUser.id }}" class="prestige">Prestige: {{ player.prestige }}</p><br>
+            <!--<p>E, S, R, D, O, J</p>-->
+            <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/emerald.png') }}">
+            <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/saphire.png') }}">
+            <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/ruby.png') }}">
+            <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/diamond.png') }}">
+            <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/onyx.png') }}">
+            <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/gold.png') }}">
+
+            <p id="tokens{{ player.idUser.id }}" class="nbTokens">
+                {% for token in player.listTokens %}
+                    {{ token }} &emsp;
+                {% endfor %}
+            </p>
+            Buyed Cards: <br/>
+            <div id="buyedCard{{ player.idUser.id }}">
+                {% for card in player.buyedCards %}
+                    {% if card != 0 %}
+                        <img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <br>Reserved Cards: <br>
+            <div id="reservedCard{{ player.idUser.id }}">
+                {% for card in player.reservedCards %}
+                    {% if card != 0 %}
+                        <div id="reserv{{ card }}">
+                            <img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
+                            <button class="buyButton" onclick="buyCard({{ card }});">Buy</button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
 </body>
 </html>
 
@@ -158,7 +161,7 @@
                 let printedDiamond = document.getElementById('diamond');
                 let printedOnyx = document.getElementById('onyx');
                 printedPlayerTokens.innerHTML = content.tokensPlayer;
-                let tabTokens = content.tokensGame.split(",");
+                let tabTokens = content.tokensGame.split("   ");
                 printedEmerald.innerHTML = tabTokens[0];
                 printedSaphire.innerHTML = tabTokens[1];
                 printedRuby.innerHTML = tabTokens[2];
