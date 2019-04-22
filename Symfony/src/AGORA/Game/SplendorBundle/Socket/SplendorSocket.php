@@ -128,7 +128,27 @@ class SplendorSocket implements MessageComponentInterface {
                         $data = json_encode($data);
                         $from->send($data);
                     } else {
-
+                        $end = $this->service->endTurn($content->gameId, $content->userId);
+                        if ($end !== null) {
+                            if (count($end) > 2) {
+                                $data = array("type" => "moreTenToken", "userId" => $content->userId, "tokens" => $end[1]
+                                , "total" => $end[2]);
+                                $data = json_encode($data);
+                                $from->send($data);
+                            } else if ($end[0] === false) {
+                                $data = array("type" => "endTurn", "userId" => $content->userId, "next" => $end[1]);
+                                $data = json_encode($data);
+                                foreach ($this->clients as $client) {
+                                    $client->send($data);
+                                }
+                            } else {
+                                $data = array("type" => "gameWin", "userId" => $content->userId, "winner" => $end[1]);
+                                $data = json_encode($data);
+                                foreach ($this->clients as $client) {
+                                    $client->send($data);
+                                }
+                            }
+                        }
                     }
                 }
                 break;
@@ -146,8 +166,11 @@ class SplendorSocket implements MessageComponentInterface {
             case "endTurn":
                 $end = $this->service->endTurn($content->gameId, $content->userId);
                 if ($end !== null) {
-                    if ($end === false) {
-
+                    if (count($end) > 2) {
+                        $data = array("type" => "moreTenToken", "userId" => $content->userId, "tokens" => $end[1]
+                            , "total" => $end[2]);
+                        $data = json_encode($data);
+                        $from->send($data);
                     } else if ($end[0] === false) {
                         $data = array("type" => "endTurn", "userId" => $content->userId, "next" => $end[1]);
                         $data = json_encode($data);
@@ -155,7 +178,21 @@ class SplendorSocket implements MessageComponentInterface {
                             $client->send($data);
                         }
                     } else {
-
+                        $data = array("type" => "gameWin", "userId" => $content->userId, "winner" => $end[1]);
+                        $data = json_encode($data);
+                        foreach ($this->clients as $client) {
+                            $client->send($data);
+                        }
+                    }
+                }
+                break;
+            case "removeTokens":
+                $tokens = $this->service->removeTokens($content->gameId, $content->userId, explode(",", $content->tokens));
+                if ($tokens != null) {
+                    $data = array("type" => $content->type, "userId" => $content->userId, "tokens" => $tokens);
+                    $data = json_encode($data);
+                    foreach ($this->clients as $client) {
+                        $client->send($data);
                     }
                 }
                 break;

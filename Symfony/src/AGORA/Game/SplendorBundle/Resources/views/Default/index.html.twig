@@ -78,7 +78,6 @@
     <div id="gold" class="token"> {{ game.listTokens[5] }}</div>
     <button id="getTokens" disabled="true" onclick="takeTokens();">Take</button>
 </div>
-
 <div class="players">
     <!--1 div pour chaque joueur-->
     {% for player in players %}
@@ -86,9 +85,11 @@
         <div id="player{{ player.idUser.id }}" class="player">
 
             <span> {{ player.idUser.username }}</span>
+            <span id="turn{{ player.idUser.id }}">
             {% if player.idUser.id == game.idUserTurn %}
                 <p id="turn">À vous de jouer</p>
             {% endif %}
+            </span>
             <p id="prestige{{ player.idUser.id }}" class="prestige">Prestige: {{ player.prestige }}</p><br>
             <!--<p>E, S, R, D, O, J</p>-->
             <img class="tokensImages" src="{{ asset('bundles/agoragamesplendor/images/emerald.png') }}">
@@ -160,15 +161,18 @@
                 let printedRuby = document.getElementById('ruby');
                 let printedDiamond = document.getElementById('diamond');
                 let printedOnyx = document.getElementById('onyx');
-                printedPlayerTokens.innerHTML = content.tokensPlayer;
-                let tabTokens = content.tokensGame.split("   ");
+                let str = content.tokensPlayer;
+                printedPlayerTokens.innerHTML = str.replace(/,/g, "   ");
+                let tabTokens = content.tokensGame.split(",");
                 printedEmerald.innerHTML = tabTokens[0];
                 printedSaphire.innerHTML = tabTokens[1];
                 printedRuby.innerHTML = tabTokens[2];
                 printedDiamond.innerHTML = tabTokens[3];
                 printedOnyx.innerHTML = tabTokens[4];
                 resetTokensNbValues();
-                canVisitNoble();
+                if (content.userId == {{ user.id }}) {
+                    canVisitNoble();
+                }
                 break;
             case "reserveCard":
                 let printedPlayerReservedCards = document.getElementById('reservedCard' + content.userId);
@@ -188,11 +192,13 @@
                     let nb = parseInt(printedGold.innerHTML);
                     printedGold.innerHTML = (nb - 1);
                     let printedPlayerTokens = document.getElementById('tokens' + content.userId);
-                    let values = printedPlayerTokens.innerHTML.split(",");
-                    values[5] = (parseInt(values[5]) + 1);
-                    printedPlayerTokens.innerHTML = values.join(",");
+                    let values = printedPlayerTokens.innerText.split("   ");
+                    values[5] = ""+(parseInt(values[5]) + 1);
+                    printedPlayerTokens.innerHTML = values.join("   ");
                 }
-                canVisitNoble();
+                if (content.userId == {{ user.id }}) {
+                    canVisitNoble();
+                }
                 break;
             case "buyCard":
                 let printedPlayerBuyedCards = document.getElementById('buyedCard' + content.userId);
@@ -214,8 +220,10 @@
                         + "<button class=\"buyButton\" onclick=\"buyCard("+ content.newCard +");\">Buy</button>";
                 }
                 let playerTokens = document.getElementById('tokens' + content.userId);
-                playerTokens.innerHTML = content.tokens;
-                canVisitNoble();
+                playerTokens.innerHTML = content.tokens.replace(/,/g, "   ");
+                if (content.userId == {{ user.id }}) {
+                    canVisitNoble();
+                }
                 break;
             case "reserveRandomCard":
                 let printedReservedPlayerCards = document.getElementById('reservedCard' + content.userId);
@@ -228,11 +236,13 @@
                     let nb = parseInt(printedGold.innerHTML);
                     printedGold.innerHTML = (nb - 1);
                     let printedPlayerTokens = document.getElementById('tokens' + content.userId);
-                    let values = printedPlayerTokens.innerHTML.split(",");
-                    values[5] = (parseInt(values[5]) + 1);
-                    printedPlayerTokens.innerHTML = values.join(",");
+                    let values = printedPlayerTokens.innerText.split("   ");
+                    values[5] = ""+(parseInt(values[5]) + 1);
+                    printedPlayerTokens.innerHTML = values.join("   ");
                 }
-                canVisitNoble();
+                if (content.userId == {{ user.id }}) {
+                    canVisitNoble();
+                }
                 break;
             case "canVisitNoble":
                 let nobles = content.nobles.split(",");
@@ -264,9 +274,94 @@
                 break;
             case "endTurn":
                 let turn = document.getElementById('turn');
-                let player = document.getElementById('player' + content.next);
+                let playerTurn = document.getElementById('turn' + content.next);
                 turn.parentNode.removeChild(turn);
-                player.prepend(turn);
+                playerTurn.appendChild(turn);
+                break;
+            case "moreTenToken":
+                let toks = content.tokens.split(",");
+                let sum = content.total;
+                let popup = open("",'popup','width=400,height=500,toolbar=no,scrollbars=no,resizable=yes');
+                popup.document.write("<p> Vous avez plus de 10 jetons !</p>");
+                popup.document.write("<img src=\"{{ asset('bundles/agoragamesplendor/images/emerald.png') }}\" width=\"50\" height=\"50\"> <span id=\"emerald\">"
+                    + toks[0] + "</span> <button id=\"moinsE\">-</button> <button id=\"plusE\">+</button><br>");
+                popup.document.write("<img src=\"{{ asset('bundles/agoragamesplendor/images/saphire.png') }}\" width=\"50\" height=\"50\"> <span id=\"saphire\">"
+                    + toks[1] + "</span> <button id=\"moinsS\">-</button> <button id=\"plusS\">+</button><br>");
+                popup.document.write("<img src=\"{{ asset('bundles/agoragamesplendor/images/ruby.png') }}\" width=\"50\" height=\"50\"> <span id=\"ruby\">"
+                    + toks[2] + "</span> <button id=\"moinsR\">-</button> <button id=\"plusR\">+</button><br>");
+                popup.document.write("<img src=\"{{ asset('bundles/agoragamesplendor/images/diamond.png') }}\" width=\"50\" height=\"50\"> <span id=\"diamond\">"
+                    + toks[3] + "</span> <button id=\"moinsD\">-</button> <button id=\"plusD\">+</button><br>");
+                popup.document.write("<img src=\"{{ asset('bundles/agoragamesplendor/images/onyx.png') }}\" width=\"50\" height=\"50\"> <span id=\"onyx\">"
+                    + toks[4] + "</span> <button id=\"moinsO\">-</button> <button id=\"plusO\">+</button><br>");
+                popup.document.write("<img src=\"{{ asset('bundles/agoragamesplendor/images/gold.png') }}\" width=\"50\" height=\"50\"> <span id=\"gold\">"
+                    + toks[5] + "</span> <button id=\"moinsG\">-</button> <button id=\"plusG\">+</button><br>");
+                popup.document.write("<p id='sum'>Nombre de jetons : " + sum + "</p><button disabled id=\"submit\">Valider</button>");
+                popup.document.write("<script> let nbE = " + toks[0] + "; let nbS = " + toks[1] + ";");
+                popup.document.write("let nbR = " + toks[2] + "; let nbD = " + toks[3] + ";");
+                popup.document.write("let nbO = " + toks[4] + "; let nbG = " + toks[5] + "; let sum = " + sum + ";");
+                popup.document.write("let maxE = " + toks[0] + "; let maxS = " + toks[1] + ";");
+                popup.document.write("let maxR = " + toks[2] + "; let maxD = " + toks[3] + ";");
+                popup.document.write("let maxO = " + toks[4] + "; let maxG = " + toks[5] + ";");
+                popup.document.write("let btmE = document.getElementById('moinsE'); let btpE = document.getElementById('plusE');");
+                popup.document.write("let btmS = document.getElementById('moinsS'); let btpS = document.getElementById('plusS');");
+                popup.document.write("let btmR = document.getElementById('moinsR'); let btpR = document.getElementById('plusR');");
+                popup.document.write("let btmD = document.getElementById('moinsD'); let btpD = document.getElementById('plusD');");
+                popup.document.write("let btmO = document.getElementById('moinsO'); let btpO = document.getElementById('plusO');");
+                popup.document.write("let btmG = document.getElementById('moinsG'); let btpG = document.getElementById('plusG');");
+                popup.document.write("let submit = document.getElementById('submit');");
+                popup.document.write("btmE.onclick = function() { if (sum > 10 && nbE > 0) { sum--; nbE--; document.getElementById('emerald').innerHTML = ''+nbE;" +
+                    "document.getElementById('sum').innerHTML = 'Nombre de jetons : '+sum; } if (sum == 10) { submit.disabled = false; } else { submit.disabled = true; } };");
+                popup.document.write("btpE.onclick = function() { if (nbE < maxE) { sum++; nbE++; document.getElementById('emerald').innerHTML = ''+nbE;" +
+                    "document.getElementById('sum').innerHTML = 'Nombre de jetons : '+sum; } if (sum == 10) { submit.disabled = false; } else { submit.disabled = true; } };");
+                popup.document.write("btmS.onclick = function() { if (sum > 10 && nbS > 0) { sum--; nbS--; document.getElementById('saphire').innerHTML = ''+nbS;" +
+                    "document.getElementById('sum').innerHTML = 'Nombre de jetons : '+sum; } if (sum == 10) { submit.disabled = false; } else { submit.disabled = true; } };");
+                popup.document.write("btpS.onclick = function() { if (nbS < maxS) { sum++; nbS++; document.getElementById('saphire').innerHTML = ''+nbS;" +
+                    "document.getElementById('sum').innerHTML = 'Nombre de jetons : '+sum; } if (sum == 10) { submit.disabled = false; } else { submit.disabled = true; } };");
+                popup.document.write("btmR.onclick = function() { if (sum > 10 && nbR > 0) { sum--; nbR--; document.getElementById('ruby').innerHTML = ''+nbR;" +
+                    "document.getElementById('sum').innerHTML = 'Nombre de jetons : '+sum; } if (sum == 10) { submit.disabled = false; } else { submit.disabled = true; } };");
+                popup.document.write("btpR.onclick = function() { if (nbR < maxR) { sum++; nbR++; document.getElementById('ruby').innerHTML = ''+nbR;" +
+                    "document.getElementById('sum').innerHTML = 'Nombre de jetons : '+sum; } if (sum == 10) { submit.disabled = false; } else { submit.disabled = true; } };");
+                popup.document.write("btmD.onclick = function() { if (sum > 10 && nbD > 0) { sum--; nbD--; document.getElementById('diamond').innerHTML = ''+nbD;" +
+                    "document.getElementById('sum').innerHTML = 'Nombre de jetons : '+sum; } if (sum == 10) { submit.disabled = false; } else { submit.disabled = true; } };");
+                popup.document.write("btpD.onclick = function() { if (nbD < maxD) { sum++; nbD++; document.getElementById('diamond').innerHTML = ''+nbD; " +
+                    "document.getElementById('sum').innerHTML = 'Nombre de jetons : '+sum; } if (sum == 10) { submit.disabled = false; } else { submit.disabled = true; } };");
+                popup.document.write("btmO.onclick = function() { if (sum > 10 && nbO > 0) { sum--; nbO--; document.getElementById('onyx').innerHTML = ''+nbO; " +
+                    "document.getElementById('sum').innerHTML = 'Nombre de jetons : '+sum; } if (sum == 10) { submit.disabled = false; } else { submit.disabled = true; } };");
+                popup.document.write("btpO.onclick = function() { if (nbO < maxO) { sum++; nbO++; document.getElementById('onyx').innerHTML = ''+nbO; " +
+                    "document.getElementById('sum').innerHTML = 'Nombre de jetons : '+sum; } if (sum == 10) { submit.disabled = false; } else { submit.disabled = true; } };");
+                popup.document.write("btmG.onclick = function() { if (sum > 10 && nbG > 0) { sum--; nbG--; document.getElementById('gold').innerHTML = ''+nbG;" +
+                    "document.getElementById('sum').innerHTML = 'Nombre de jetons : '+sum; } if (sum == 10) { submit.disabled = false; } else { submit.disabled = true; } };");
+                popup.document.write("btpG.onclick = function() { if (nbG < maxG) { sum++; nbG++; document.getElementById('gold').innerHTML = ''+nbG;" +
+                    " document.getElementById('sum').innerHTML = 'Nombre de jetons : '+sum; } if (sum == 10) { submit.disabled = false; } else { submit.disabled = true; } };");
+                popup.document.write("submit.onclick = function() { close(); } <\/script>");
+                popup.onbeforeunload = function() {
+                    let t = [];
+                    t[0] = parseInt(popup.document.getElementById('emerald').innerHTML);
+                    t[1] = parseInt(popup.document.getElementById('saphire').innerHTML);
+                    t[2] = parseInt(popup.document.getElementById('ruby').innerHTML);
+                    t[3] = parseInt(popup.document.getElementById('diamond').innerHTML);
+                    t[4] = parseInt(popup.document.getElementById('onyx').innerHTML);
+                    t[5] = parseInt(popup.document.getElementById('gold').innerHTML);
+                    var content = {
+                        type: 'removeTokens',
+                        gameId: {{ game.id }},
+                        userId: {{ user.id }} ,
+                        tokens: t.join(",")
+                    };
+                    console.log("splendor send : " + JSON.stringify(content));
+                    connection.send(JSON.stringify(content));
+                };
+                break;
+            case "removeTokens":
+                let printedPlayerTok = document.getElementById('tokens' + content.userId);
+                printedPlayerTok.innerHTML = content.tokens.replace(/,/g, "   ");
+                if (content.userId == {{ user.id }}) {
+                    endTurn();
+                }
+                break;
+            case "gameWin":
+                //PARTIE GAGNEE
+                alert(content.winner + "a gagné la partie !");
                 break;
         }
 

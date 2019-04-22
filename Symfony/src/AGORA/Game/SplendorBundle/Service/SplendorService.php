@@ -509,18 +509,18 @@ class SplendorService
         }
         //Si le joueur a plus de 10 jetons on retourne False
         if ($total > 10) {
-            return false;
+            return array(false, implode(",", $player->getListTokens()), $total);
         }
 
         //Sinon on cherche quel est le prochain joueur
         for ($k = 0; $k < count($players); $k++) {
-            if ($players[$k]->getIdUser() == $userId) {
+            if ($players[$k]->getIdUser()->getId() == $userId) {
                 break;
             }
         }
         $newPlayer = (($k + 1) % count($players) == 0 ? $players[($k - (count($players) - 1))] : $players[$k + 1]);
         //Et on change le tour du joueur
-        $game->setIdUserTurn($newPlayer->getIdUser());
+        $game->setIdUserTurn($newPlayer->getIdUser()->getId());
         $this->manager->persist($game);
         $this->manager->flush();
 
@@ -549,7 +549,25 @@ class SplendorService
         }
 
         $this->nbTurn += 1;
-        return array(false, $newPlayer->getIdUser());
+        return array(false, $newPlayer->getIdUser()->getId());
+    }
+
+    public function removeTokens($gameId, $userId, $tokens) {
+        $game = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorGame')->find($gameId);
+        if ($game->getIdUserTurn() != $userId) {
+            return null;
+        }
+        $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
+            ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
+        $tokensPlayer = $player->getListTokens();
+        for ($k = 0; $k < count($tokensPlayer); $k++) {
+            $tokensPlayer[$k] = $tokens[$k];
+        }
+        $player->setListTokens(implode(",", $tokensPlayer));
+        $this->manager->persist($player);
+        $this->manager->flush();
+
+        return implode(",", $tokensPlayer);
     }
 
 
