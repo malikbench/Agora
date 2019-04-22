@@ -203,7 +203,8 @@ class AugustusGameModel {
             $game->setNextStates(array_slice($game->getNextStates(), 1));
             $game->setNextAffecteds(array_slice($game->getNextAffecteds(), 1));
             $this->lockThem($id);
-        } else if ($game->getState() == "endAveCesar") {
+        } 
+        if ($game->getState() == "endAveCesar") {
             foreach ($game->getPlayers() as $player) {
                 $player->setScore($this->getScores($id, $player->getId()));
             }
