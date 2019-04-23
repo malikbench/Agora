@@ -245,20 +245,22 @@ button:hover {
     left: 1000px;
 }
 
-.divReservedCards div {
+.divReservedCards div, .divBuyedCards div {
     display: inline-block;
     /*vertical-align: middle;*/
 }
 
 .divReservedCards, .divBuyedCards {
     overflow: scroll;
-    height: 66px;
+    height: 68px;
 }
 
-.buyedCard, .reservedCards {
+.buyedCards, .reservedCards {
     width: 30%;
     height: 30%;
     position: relative;
+    vertical-align: middle;
+    border-radius: 5px;
 }
 
 .player:hover .reservedCards:hover {
@@ -267,6 +269,15 @@ button:hover {
     position: fixed;
     border-radius: 5px;
     top: 170px;
+    z-index: 2;
+}
+
+.player:hover .buyedCards:hover {
+    width: 110px;
+    height: 150px;
+    position: fixed;
+    border-radius: 5px;
+    top: 120px;
     z-index: 2;
 }
 

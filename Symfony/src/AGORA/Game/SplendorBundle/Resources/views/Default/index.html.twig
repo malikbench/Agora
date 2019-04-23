@@ -89,7 +89,7 @@
             <span> {{ player.idUser.username }}</span>
             <span id="turn{{ player.idUser.id }}">
             {% if player.idUser.id == game.idUserTurn %}
-                <p id="turn">À vous de jouer</p>
+                <p id="turn">Your turn !</p>
             {% endif %}
             </span>
             <p id="prestige{{ player.idUser.id }}" class="prestige">Prestige: {{ player.prestige }}</p><br>
@@ -106,11 +106,13 @@
                     {{ token }} &emsp;
                 {% endfor %}
             </p>
-            Buyed Cards: <br/>
+            Bought Cards: <br/>
             <div id="buyedCard{{ player.idUser.id }}" class="divBuyedCards">
                 {% for card in player.buyedCards %}
                     {% if card != 0 %}
+                        <div>
                         <img class="buyedCards" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
+                        </div>
                     {% endif %}
                 {% endfor %}
             </div>
