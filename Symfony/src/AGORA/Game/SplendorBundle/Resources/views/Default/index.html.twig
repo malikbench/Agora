@@ -208,7 +208,7 @@
                 let printedPlayerBuyedCards = document.getElementById('buyedCard' + content.userId);
                 var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
                 url = url.replace('id', content.oldCard);
-                printedPlayerBuyedCards.innerHTML += "<img class=\"buyedCards\" src=\"" + url + "\" alt=\"NO\">";
+                printedPlayerBuyedCards.innerHTML += "<div><img class=\"buyedCards\" src=\"" + url + "\" alt=\"NO\"><div>";
                 let prestige = document.getElementById('prestige' + content.userId);
                 prestige.innerHTML = "Prestige : " + content.prestige;
                 if (content.newCard == null) {
@@ -224,7 +224,7 @@
                         + "<button class=\"buyButton\" onclick=\"buyCard("+ content.newCard +");\">Buy</button>";
                 }
                 let playerTokens = document.getElementById('tokens' + content.userId);
-                playerTokens.innerHTML = content.tokens.replace(/,/g, "   ");
+                playerTokens.innerHTML = content.tokens.replace(/,/g, "    ");
                 if (content.userId == {{ user.id }}) {
                     canVisitNoble();
                 }

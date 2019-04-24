@@ -54,7 +54,9 @@ body {
     height: 200px;*/
     left: 1045px;
     top: -1830px;
-    padding: 5px;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
     border: solid black 1px;
     border-radius: 10px;
     color: black;
@@ -247,10 +249,14 @@ button:hover {
 
 .divReservedCards div, .divBuyedCards div {
     display: inline-block;
-    /*vertical-align: middle;*/
 }
 
-.divReservedCards, .divBuyedCards {
+.divReservedCards {
+    overflow: auto;
+    height: 70px;
+}
+
+.divBuyedCards {
     overflow: auto;
     height: 68px;
 }
@@ -268,7 +274,7 @@ button:hover {
     height: 150px;
     position: fixed;
     border-radius: 5px;
-    top: 170px;
+    top: 155px;
     z-index: 2;
 }
 
@@ -284,10 +290,3 @@ button:hover {
 #buyPlayer {
     vertical-align: middle;
 }
-
-/*.reservedCards:hover + #buyPlayer {
-    visibility: visible;
-    position: fixed;
-    left: 1060px;
-    top: 280px;
-}*/
