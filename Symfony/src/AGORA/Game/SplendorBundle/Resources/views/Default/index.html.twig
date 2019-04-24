@@ -42,7 +42,7 @@
     cards : Vue component for visible cards
 <cards class="cards"></cards>-->
 <div class="cards">
-    {% for card in game.idCards %}
+    {% for card in game.idCards|reverse %}
     <div id="box{{ card }}"><img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
             <button class="reserveButton" onclick="reserveCard({{ card }});">Reserve</button>
             <button class="buyButton" onclick="buyCard({{ card }});">Buy</button>
