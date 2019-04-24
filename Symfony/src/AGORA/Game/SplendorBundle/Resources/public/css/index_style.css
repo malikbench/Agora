@@ -251,7 +251,7 @@ button:hover {
 }
 
 .divReservedCards, .divBuyedCards {
-    overflow: scroll;
+    overflow: auto;
     height: 68px;
 }
 
