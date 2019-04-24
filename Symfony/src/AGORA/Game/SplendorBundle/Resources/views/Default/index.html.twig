@@ -17,7 +17,7 @@
 
 <div class="nobles">
     {% for noble in game.idNobles %}
-        <div id="box{{ noble }}"><img class="noble" src="{{ asset('bundles/agoragamesplendor/images/' ~ noble ~ '.jpg') }}" alt="NO"></div>
+        <div id="box{{ noble }}"><img class="noble" src="{{ asset('bundles/agoragamesplendor/images/' ~ noble ~ '.png') }}" alt="NO"></div>
     {% endfor %}
 </div>
 
@@ -43,7 +43,7 @@
 <cards class="cards"></cards>-->
 <div class="cards">
     {% for card in game.idCards|reverse %}
-    <div id="box{{ card }}"><img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
+    <div id="box{{ card }}"><img class="card" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.png') }}" alt="NO">
             <button class="reserveButton" onclick="reserveCard({{ card }});">Reserve</button>
             <button class="buyButton" onclick="buyCard({{ card }});">Buy</button>
     </div>
@@ -111,7 +111,7 @@
                 {% for card in player.buyedCards %}
                     {% if card != 0 %}
                         <div>
-                        <img class="buyedCards" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
+                        <img class="buyedCards" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.png') }}" alt="NO">
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -121,7 +121,7 @@
                 {% for card in player.reservedCards %}
                     {% if card != 0 %}
                         <div id="reserv{{ card }}">
-                            <img class="reservedCards" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.jpg') }}" alt="NO">
+                            <img class="reservedCards" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.png') }}" alt="NO">
                             <button id="buyPlayer" class="buyButton" onclick="buyCard({{ card }});">Buy</button>
                         </div>
                     {% endif %}
@@ -181,12 +181,12 @@
             case "reserveCard":
                 let printedPlayerReservedCards = document.getElementById('reservedCard' + content.userId);
                 let printedGameCard = document.getElementById('box' + content.oldCard);
-                var url = '{{ asset("bundles/agoragamesplendor/images/id.jpg") }}';
+                var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
                 url = url.replace('id', content.oldCard);
                 printedPlayerReservedCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\"><img class=\"reservedCards\" src=\"" + url
                     + "\" alt=\"NO\">\n <button class=\"buyButton\" onclick=\"buyCard("+ content.oldCard +");\">Buy</button></div>";
                 printedGameCard.id = 'box' + content.newCard;
-                var url2 = '{{ asset("bundles/agoragamesplendor/images/id.jpg") }}';
+                var url2 = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
                 url2 = url2.replace('id', content.newCard);
                 printedGameCard.innerHTML = "<img class=\"card\" src=\"" + url2 + "\" alt=\"NO\">\n"
                                + "<button class=\"reserveButton\" onclick=\"reserveCard(" + content.newCard + ");\">Reserve</button>\n"
@@ -206,7 +206,7 @@
                 break;
             case "buyCard":
                 let printedPlayerBuyedCards = document.getElementById('buyedCard' + content.userId);
-                var url = '{{ asset("bundles/agoragamesplendor/images/id.jpg") }}';
+                var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
                 url = url.replace('id', content.oldCard);
                 printedPlayerBuyedCards.innerHTML += "<img class=\"buyedCards\" src=\"" + url + "\" alt=\"NO\">";
                 let prestige = document.getElementById('prestige' + content.userId);
@@ -217,7 +217,7 @@
                 } else {
                     let printedGameCard = document.getElementById('box' + content.oldCard);
                     printedGameCard.id = 'box' + content.newCard;
-                    var url2 = '{{ asset("bundles/agoragamesplendor/images/id.jpg") }}';
+                    var url2 = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
                     url2 = url2.replace('id', content.newCard);
                     printedGameCard.innerHTML = "<img class=\"card\" src=\"" + url2 + "\" alt=\"NO\">\n"
                         + "<button class=\"reserveButton\" onclick=\"reserveCard(" + content.newCard + ");\">Reserve</button>\n"
@@ -231,7 +231,7 @@
                 break;
             case "reserveRandomCard":
                 let printedReservedPlayerCards = document.getElementById('reservedCard' + content.userId);
-                var url = '{{ asset("bundles/agoragamesplendor/images/id.jpg") }}';
+                var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
                 url = url.replace('id', content.oldCard);
                 printedReservedPlayerCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\"><img class=\"reservedCards\" src=\"" + url
                     + "\" alt=\"NO\">\n <button id=\"buyPlayer\" class=\"buyButton\" onclick=\"buyCard("+ content.oldCard +");\">Buy</button></div>";
