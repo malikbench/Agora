@@ -120,10 +120,26 @@
             <div id="reservedCard{{ player.idUser.id }}" class="divReservedCards">
                 {% for card in player.reservedCards %}
                     {% if card != 0 %}
+                        {% if not (card in player.hiddenCards) or player.idUser.id == user.id %}
                         <div id="reserv{{ card }}">
                             <img class="reservedCards" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.png') }}" alt="NO">
+                            {% if player.idUser.id == user.id %}
                             <button id="buyPlayer" class="buyButton" onclick="buyCard({{ card }});">Buy</button>
+                            {% endif %}
                         </div>
+                        {% else %}
+                            {% if card <= 40 %}
+                                {% set lvl = 1 %}
+                            {% elseif card <= 70 %}
+                                {% set lvl = 2 %}
+                            {% else %}
+                                {% set lvl = 3 %}
+                            {% endif %}
+                            <div id="reserv{{ card }}">
+                                <img class="reservedCards" src="{{ asset('bundles/agoragamesplendor/images/cardLevel' ~ lvl ~ '.png') }}" alt="NO">
+                            </div>
+
+                        {% endif %}
                     {% endif %}
                 {% endfor %}
             </div>
@@ -181,16 +197,20 @@
             case "reserveCard":
                 let printedPlayerReservedCards = document.getElementById('reservedCard' + content.userId);
                 let printedGameCard = document.getElementById('box' + content.oldCard);
+                let btn = "";
+                if (content.userId == {{ user.id }}) {
+                    btn = "<button class=\"buyButton\" onclick=\"buyCard("+ content.oldCard +");\">Buy</button></div>"
+                }
                 var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
                 url = url.replace('id', content.oldCard);
                 printedPlayerReservedCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\"><img class=\"reservedCards\" src=\"" + url
-                    + "\" alt=\"NO\">\n <button class=\"buyButton\" onclick=\"buyCard("+ content.oldCard +");\">Buy</button></div>";
+                    + "\" alt=\"NO\">\n" + btn;
                 printedGameCard.id = 'box' + content.newCard;
                 var url2 = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
                 url2 = url2.replace('id', content.newCard);
                 printedGameCard.innerHTML = "<img class=\"card\" src=\"" + url2 + "\" alt=\"NO\">\n"
                                + "<button class=\"reserveButton\" onclick=\"reserveCard(" + content.newCard + ");\">Reserve</button>\n"
-                               + "<button id=\"buyPlayer\" class=\"buyButton\" onclick=\"buyCard("+ content.oldCard +");\">Buy</button>";
+                               + "<button id=\"buyPlayer\" class=\"buyButton\" onclick=\"buyCard("+ content.newCard +");\">Buy</button>";
                 if (content.joker == 1) {
                     let printedGold = document.getElementById('gold');
                     let nb = parseInt(printedGold.innerHTML);
@@ -205,6 +225,19 @@
                 }
                 break;
             case "buyCard":
+                let emerald = document.getElementById('emerald');
+                let saphire = document.getElementById('saphire');
+                let ruby = document.getElementById('ruby');
+                let diamond = document.getElementById('diamond');
+                let onyx = document.getElementById('onyx');
+                let gold = document.getElementById('gold');
+                let tabTok = content.gameTokens.split(",");
+                emerald.innerHTML = tabTok[0];
+                saphire.innerHTML = tabTok[1];
+                ruby.innerHTML = tabTok[2];
+                diamond.innerHTML = tabTok[3];
+                onyx.innerHTML = tabTok[4];
+                gold.innerHTML = tabTok[5];
                 let printedPlayerBuyedCards = document.getElementById('buyedCard' + content.userId);
                 var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
                 url = url.replace('id', content.oldCard);
@@ -231,10 +264,23 @@
                 break;
             case "reserveRandomCard":
                 let printedReservedPlayerCards = document.getElementById('reservedCard' + content.userId);
-                var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
-                url = url.replace('id', content.oldCard);
-                printedReservedPlayerCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\"><img class=\"reservedCards\" src=\"" + url
-                    + "\" alt=\"NO\">\n <button id=\"buyPlayer\" class=\"buyButton\" onclick=\"buyCard("+ content.oldCard +");\">Buy</button></div>";
+                if (content.userId == {{ user.id }}) {
+                    var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
+                    url = url.replace('id', content.oldCard);
+                    printedReservedPlayerCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\"><img class=\"reservedCards\" src=\"" + url
+                        + "\" alt=\"NO\">\n <button id=\"buyPlayer\" class=\"buyButton\" onclick=\"buyCard(" + content.oldCard + ");\">Buy</button></div>";
+                } else {
+                    let lvl = 3;
+                    if (content.oldCard <= 40) {
+                        lvl = 1;
+                    } else if (content.oldCard <= 70) {
+                        lvl = 2
+                    }
+                    var url = '{{ asset("bundles/agoragamesplendor/images/cardLevellvl.png") }}';
+                    url = url.replace('lvl', lvl);
+                    printedReservedPlayerCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\"><img class=\"reservedCards\" src=\"" + url
+                        + "\" alt=\"NO\">"
+                }
                 if (content.joker == 1) {
                     let printedGold = document.getElementById('gold');
                     let nb = parseInt(printedGold.innerHTML);
@@ -264,8 +310,7 @@
                     printed.replaceChild(wrap, target);
                     wrap.appendChild(target);
                     //Trouver un moyen de prevenir le joueur + de lui montrer les nobles possibles !!!
-                    // printed.style.borderWidth = "50px";
-                    // printed.style.borderColor = "red";
+                    printed.style.border = "solid 5px red";
                     k++;
                 }
                 break;
@@ -274,6 +319,11 @@
                 noble.parentNode.removeChild(noble);
                 let prest = document.getElementById('prestige' + content.userId);
                 prest.innerHTML = "Prestige : " + content.prestige;
+                let nob = document.getElementsByClassName('nobles')[0].childNodes;
+                for (let n of nob) {
+                    console.log("ici : " + n);
+                    n.style.removeProperty("border");
+                }
                 endTurn();
                 break;
             case "endTurn":

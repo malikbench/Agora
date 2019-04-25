@@ -61,9 +61,16 @@ class SplendorPlayer
     /**
      * @var string
      *
-     * @ORM\Column(name="buyedCards", type="string", length=50)
+     * @ORM\Column(name="buyedCards", type="string", length=500)
      */
     private $buyedCards;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hiddenCards", type="string", length=50)
+     */
+    private $hiddenCards;
 
 
     /**
@@ -227,5 +234,21 @@ class SplendorPlayer
 //            return [];
 //        }
         return array_map('intval', explode(',', $this->buyedCards));
+    }
+
+    /**
+     * @param string $hiddenCards
+     */
+    public function setHiddenCards($hiddenCards)
+    {
+        $this->hiddenCards = $hiddenCards;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHiddenCards()
+    {
+        return array_map('intval', explode(',', $this->hiddenCards));
     }
 }

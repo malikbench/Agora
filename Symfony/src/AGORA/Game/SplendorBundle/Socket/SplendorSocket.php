@@ -90,7 +90,7 @@ class SplendorSocket implements MessageComponentInterface {
                 $tab = $this->service->buyCard(intval($content->gameId), intval($content->userId), intval($content->cardId));
                 if ($tab !== null) {
                     $data = array("type" => $content->type, "userId" => $content->userId, "oldCard" => $content->cardId
-                        ,"newCard" => $tab[0], "tokens" => $tab[1], "prestige" => $tab[2]);
+                        ,"newCard" => $tab[0], "tokens" => $tab[1], "prestige" => $tab[2], 'gameTokens' => $tab[3]);
                     $data = json_encode($data);
                     echo count($this->clients);
                     foreach ($this->clients as $client) {
@@ -100,6 +100,7 @@ class SplendorSocket implements MessageComponentInterface {
                 break;
             case "reserveRandomCard":
                 $card = $this->service->getRandomCard(intval($content->gameId), intval($content->level));
+                $this->service->addHiddenCard(intval($content->gameId), intval($content->userId), intval($card));
                 $tab = $this->service->reserveCard(intval($content->gameId), intval($content->userId), intval($card));
                 if ($tab !== null) {
                     $data = array("type" => $content->type, "userId" => $content->userId, "oldCard" => $card

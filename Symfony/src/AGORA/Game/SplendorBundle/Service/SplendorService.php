@@ -221,6 +221,7 @@ class SplendorService
             $spldrPlayer->setListTokens("0,0,0,0,0,0");
             $spldrPlayer->setBuyedCards("");
             $spldrPlayer->setReservedCards("");
+            $spldrPlayer->setHiddenCards("");
             $this->manager->persist($spldrPlayer);
             $this->manager->flush();
         }
@@ -326,6 +327,7 @@ class SplendorService
         $playerCard = $player->getBuyedCards();
         $cardTable = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorCard')->find($cardId);
         $playerTokens = $player->getListTokens();
+        $gameTokens = $game->getListTokens();
         $jokerNeed = 0;
 
         //On verifie si le joueur a les ressources necessaires
@@ -336,6 +338,8 @@ class SplendorService
             } else {
                 //On en profite pour mettre à jour les ressources du joueur
                 $playerTokens[$k] = $playerTokens[$k] - $tok;
+                //Et pour mettre a jour les ressources du plateau
+                $gameTokens[$k] = $gameTokens[$k] + $tok;
             }
         }
 
@@ -352,8 +356,6 @@ class SplendorService
                 //On met la carte piochée à la place de celle achetée
                 $cardsGame[$i] = $newCard;
                 $game->setIdCards(implode(",", $cardsGame));
-                $this->manager->persist($game);
-                $this->manager->flush();
             } else {
                 //Si la carte est dans les cartes réservées du joueur
                 //On la retire des cartes réservées
@@ -361,11 +363,15 @@ class SplendorService
                 $player->setReservedCards(implode(",", $cardsReserved));
             }
 
+
+
             //On ajoute la carte achetée dans la main du joueur
             array_push($playerCard, $cardId);
             $player->setBuyedCards(implode(",", $playerCard));
             //On retire les ressources joker necessaire pour l'achat
             $playerTokens[5] = $playerTokens[5] - $jokerNeed;
+            //Et on les ajoute au plateau
+            $gameTokens[5] = $gameTokens[5] + $jokerNeed;
             $player->setListTokens(implode(",", $playerTokens));
             //On ajoute le prestige de la carte au joueur
             $prestige = $player->getPrestige() + $cardTable->getPrestige();
@@ -373,7 +379,12 @@ class SplendorService
             $this->manager->persist($player);
             $this->manager->flush();
 
-            return array($newCard, implode(",", $playerTokens), $prestige);
+            //On met la table splendor_game à jour
+            $game->setListTokens(implode(",", $gameTokens));
+            $this->manager->persist($game);
+            $this->manager->flush();
+
+            return array($newCard, implode(",", $playerTokens), $prestige, implode(",", $gameTokens));
         }
 
         return null;
@@ -570,6 +581,15 @@ class SplendorService
         return implode(",", $tokensPlayer);
     }
 
+    public function  addHiddenCard($gameId, $userId, $cardId) {
+        $player = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorPlayer')
+            ->findOneBy(array('gameId' => $gameId, 'idUser' => $userId));
+        $hide = $player->getHiddenCards();
+        array_push($hide, $cardId);
+        $player->setHiddenCards(implode(",", $hide));
+        $this->manager->persist($player);
+        $this->manager->flush();
+    }
 
 
 
