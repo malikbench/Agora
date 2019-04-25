@@ -139,7 +139,6 @@ class AugustusGameModel {
             case "legion":
                 if ($this->allOk($id)) {
                     $this->drawToken($id);
-                    $game->setToken(AugustusToken::JOKER);
                     $steps = $this->aveCesarSteps($id);
                     $states = $steps[0];
                     $affecteds = $steps[1];
