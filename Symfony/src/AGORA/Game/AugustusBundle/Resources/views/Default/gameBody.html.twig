@@ -267,7 +267,9 @@
                                 <br>
                                 <br>
                             </div>
-                            <div>
+                            <div {% if game.state == "moveLegion" %}
+                                style="visibility:hidden;"
+                                    {% endif %}>
                                 <p>Vous pouvez placer une légion sur cette carte :</p>
                                 {% if me.isLock %}
                                     <button disabled>
@@ -351,7 +353,7 @@
     checkValidate = function() {
         if (gottaRemove > 0 || gottaRemoveAllTokenOnCard || gotToCompleteCard
             {% if game.state == "moveLegion" %}
-            || removeAction !== addAction
+            || legionMoving !== 0
             {% else %}
             || removeAction < addAction
             {% endif %}
@@ -895,6 +897,9 @@
                     ee.firstElementChild.innerHTML = "<p>Vous avez déplacé vos légions ce tour, vous ne pouvez plus en retirer d'avantage.</p>";
                 });
             }
+            document.querySelectorAll(".remove").forEach(element => {
+                element.disabled = true;
+            });
         }
     };
 
@@ -1039,8 +1044,7 @@
     {% elseif game.state == "moveLegion" and game.affectedPlayer == me.id and me.legion != me.legionMax %}
 
     {# Cas MOVE LEGION #}
-    addAction = {{ me.legionMax - me.legion }};
-    removeAction = addAction;
+    //legionMoving = 0;
     action = {};
     selectedToken = {};
     selectedCard = {};
@@ -1069,24 +1073,28 @@
                 action.removeToken.card = [];
             }
 
-            if (typeof (removeAction) != 'undefined' && removeAction >= 2) {
+            if (typeof (removeAction) != 'undefined') {
                 action.removeToken.token.push(selectedToken.ind);
                 action.removeToken.card.push(selectedCard.ind);
                 selectedToken.elem.style.visibility = "hidden";
-                selectedToken.elem = null;
-                removeAction -= 1;
+                selectedToken.elem.remove();
+                selectedToken = {};
+                selectedCard = {};
+                legionMoving += 1;
                 checkValidate();
-            } else {
-                action.removeToken.token.push(selectedToken.ind);
-                action.removeToken.card.push(selectedCard.ind);
-                removeAction -= 1;
 
-                checkValidate();
-                document.querySelectorAll(".cardAction").forEach(function (ee) {
-                    ee.firstElementChild.innerHTML = "<p>Vous avez déplacé vos légions ce tour, vous ne pouvez plus en retirer d'avantage.</p>";
+                document.querySelectorAll(".remove").forEach(element => {
+                    element.disabled = true;
                 });
+                document.querySelectorAll(".cardAction").forEach(function (ee) {
+                    ee.lastElementChild.style.visibility = "inherit";
+                });
+                if (document.querySelectorAll(".token").length === 0) {
+                    document.querySelectorAll(".cardAction").forEach(function (ee) {
+                        ee.firstElementChild.innerHTML = "<p>Vous avez récupéré toutes vos légions. Veuillez les replacer puis valider.</p>";
+                    });
+                }
             }
-
         } else {
             alert("Aucun emplacement selectionné");
         }
@@ -1094,7 +1102,7 @@
 
     //MOVE LEGION version
     addBestToken = function (e, listToken, listControlled, indCard) {
-        if (addAction > 0) {
+        if (legionMoving > 0) {
 
             //recherche sur la carte
             let indToken = -1;
@@ -1112,26 +1120,24 @@
                     action.addToken.token = [];
                 }
 
-                if (typeof (addAction) != 'undefined' && addAction >= 2) {
+                if (typeof (addAction) != 'undefined') {
                     action.addToken.card.push(indCard);
                     action.addToken.token.push(indToken);
-                    addAction -= 1;
+                    legionMoving -= 1;
 
                     // on doit changer le tableau des tokens controlés
                     listControlled[indToken] = "1";
                     e.onclick = function () {
                         addBestToken(this, listToken, listControlled, indCard);
                     };
-                    checkValidate();
-                } else {
-                    action.addToken.card.push(indCard);
-                    action.addToken.token.push(indToken);
-                    addAction -= 1;
+
                     checkValidate();
 
-                    document.querySelectorAll(".cardAction").forEach(function (ee) {
-                        ee.lastElementChild.innerHTML = "<p>Vous avez déplacé vos légions ce tour, vous ne pouvez plus en poser d'avantage.</p>";
-                    });
+                    if (legionMoving === 0) {
+                        document.querySelectorAll(".cardAction").forEach(function (ee) {
+                            ee.lastElementChild.style.visibility = "hidden";
+                        });
+                    }
                 }
             } else {
                 alert("On ne peut capturer aucun token de cette carte");
