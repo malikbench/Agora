@@ -1,7 +1,8 @@
 html {
     height: 100%;
     width: 100%;
-    background-image: url('../img/wall.jpg');
+    /*background-image: url('../img/wall.jpg');*/
+    background-color: #ffcc99;
 }
 
 body {
