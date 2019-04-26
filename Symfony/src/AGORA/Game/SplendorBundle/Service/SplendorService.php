@@ -330,16 +330,47 @@ class SplendorService
         $gameTokens = $game->getListTokens();
         $jokerNeed = 0;
 
+        $bonus = [0,0,0,0,0];
+        //On calcul les bonus du joueur
+        foreach ($player->getBuyedCards() as $id) {
+            if ($id != 0) {
+                $buyedCard = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorCard')->find($id);
+                switch ($buyedCard->getBonus()) {
+                    case "Green":
+                        $bonus[0] += 1;
+                        break;
+                    case "Blue":
+                        $bonus[1] += 1;
+                        break;
+                    case "Red":
+                        $bonus[2] += 1;
+                        break;
+                    case "White":
+                        $bonus[3] += 1;
+                        break;
+                    case "Black":
+                        $bonus[4] += 1;
+                        break;
+                }
+            }
+        }
+
         //On verifie si le joueur a les ressources necessaires
         for ($k = 0; $k < 5; $k++) {
             $tok = $cardTable->getTokens($k);
-            if ($tok > $playerTokens[$k]) {
-                $jokerNeed += ($tok - $playerTokens[$k]);
+            if ($tok > $playerTokens[$k] + $bonus[$k]) {
+                $jokerNeed += ($tok - ($playerTokens[$k] + $bonus[$k]));
             } else {
+                $reste1 = $tok + $bonus[$k];
+                $reste2 = $tok - $bonus[$k];
+                if ($bonus[$k] >= $tok) {
+                    $reste1 = 0;
+                    $reste2 = 0;
+                }
                 //On en profite pour mettre à jour les ressources du joueur
-                $playerTokens[$k] = $playerTokens[$k] - $tok;
+                $playerTokens[$k] = $playerTokens[$k] - $reste1;
                 //Et pour mettre a jour les ressources du plateau
-                $gameTokens[$k] = $gameTokens[$k] + $tok;
+                $gameTokens[$k] = $gameTokens[$k] + $reste2;
             }
         }
 
