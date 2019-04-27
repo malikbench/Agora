@@ -108,7 +108,7 @@
             </p>
             Bought Cards: <br/>
             <div id="buyedCard{{ player.idUser.id }}" class="divBuyedCards">
-                {% for card in player.buyedCards %}
+                {% for card in player.buyedCards|sort%}
                     {% if card != 0 %}
                         <div>
                         <img class="buyedCards" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.png') }}" alt="NO">
@@ -241,9 +241,9 @@
                 let printedPlayerBuyedCards = document.getElementById('buyedCard' + content.userId);
                 var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
                 url = url.replace('id', content.oldCard);
-                printedPlayerBuyedCards.innerHTML += "<div><img class=\"buyedCards\" src=\"" + url + "\" alt=\"NO\"><div>";
+                printedPlayerBuyedCards.innerHTML += "<div><div><img class=\"buyedCards\" src=\"" + url + "\" alt=\"NO\"></div></div>";
                 let prestige = document.getElementById('prestige' + content.userId);
-                prestige.innerHTML = "Prestige : " + content.prestige;
+                prestige.innerHTML = "Prestige: " + content.prestige;
                 if (content.newCard == null) {
                     let reservCard = document.getElementById('reserv' + content.oldCard);
                     reservCard.parentNode.removeChild(reservCard);
@@ -257,7 +257,7 @@
                         + "<button class=\"buyButton\" onclick=\"buyCard("+ content.newCard +");\">Buy</button>";
                 }
                 let playerTokens = document.getElementById('tokens' + content.userId);
-                playerTokens.innerHTML = content.tokens.replace(/,/g, "    ");
+                playerTokens.innerHTML = content.tokens.replace(/,/g, "   ");
                 if (content.userId == {{ user.id }}) {
                     canVisitNoble();
                 }
