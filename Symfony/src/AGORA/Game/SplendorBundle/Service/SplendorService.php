@@ -328,7 +328,6 @@ class SplendorService
         $cardTable = $this->manager->getRepository('AGORAGameSplendorBundle:SplendorCard')->find($cardId);
         $playerTokens = $player->getListTokens();
         $gameTokens = $game->getListTokens();
-        $jokerNeed = 0;
 
         $bonus = [0,0,0,0,0];
         //On calcul les bonus du joueur
@@ -355,23 +354,25 @@ class SplendorService
             }
         }
 
-        $jok = 0;
+        $jokerNeed = 0;
         //On verifie si le joueur a les ressources necessaires
         for ($k = 0; $k < 5; $k++) {
+            $jok = 0;
             $tok = $cardTable->getTokens($k);
             if ($tok > $playerTokens[$k] + $bonus[$k]) {
                 $jokerNeed += ($tok - ($playerTokens[$k] + $bonus[$k]));
                 $jok = ($tok - ($playerTokens[$k] + $bonus[$k]));
-            } else {
-                $reste = $tok - $bonus[$k] - $jok;
-                if ($bonus[$k] >= $tok) {
-                    $reste = 0;
-                }
-                //On en profite pour mettre à jour les ressources du joueur
-                $playerTokens[$k] = $playerTokens[$k] - $reste;
-                //Et pour mettre a jour les ressources du plateau
-                $gameTokens[$k] = $gameTokens[$k] + $reste;
             }
+            //else {
+            $reste = $tok - $bonus[$k] - $jok;
+            if ($bonus[$k] >= $tok) {
+                $reste = 0;
+            }
+            //On en profite pour mettre à jour les ressources du joueur
+            $playerTokens[$k] = $playerTokens[$k] - $reste;
+            //Et pour mettre a jour les ressources du plateau
+            $gameTokens[$k] = $gameTokens[$k] + $reste;
+            //}
         }
 
         //Si la carte est sur le plateau ou dans les carte réservé du joueur
