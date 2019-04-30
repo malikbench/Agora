@@ -569,7 +569,8 @@ class SplendorService
 
         if ($player->getPrestige() >= 15) {
             $this->end = true;
-            $this->winner = $userId;
+            $user = $this->manager->getRepository('AGORAUserBundle:User')->find($userId);
+            $this->winner = $user->getUsername();
         }
 
         if ($this->end && ($this->nbTurn % count($players)) == 0) {

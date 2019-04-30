@@ -290,3 +290,9 @@ button:hover {
 #buyPlayer {
     vertical-align: middle;
 }
+
+.toks {
+    display: inline-block;
+    width: 22px;
+    text-align: center;
+}

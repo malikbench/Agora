@@ -103,24 +103,50 @@
 
             <p id="tokens{{ player.idUser.id }}" class="nbTokens">
                 {% for token in player.listTokens %}
-                    {{ token }} &emsp;
+                    <span class="toks">{{ token }}</span>
                 {% endfor %}
             </p>
             Bought Cards: <br/>
             <div id="buyedCard{{ player.idUser.id }}" class="divBuyedCards">
+                {% set nbE, nbS, nbR, nbD, nbO = 0,0,0,0,0 %}
                 {% for card in player.buyedCards %}
                     {% if card != 0 %}
-                        <div>
-                        <img class="buyedCards" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.png') }}" alt="NO">
-                        </div>
+                        {% if (card > 0 and card < 9) or (card > 40 and card < 47) or (card > 71 and card < 75) %}
+                            {% set nbE = nbE + 1 %}
+                        {% endif %}
+                        {% if (card > 8 and card < 17) or (card > 46 and card < 53) or (card > 74 and card < 79) %}
+                            {% set nbS = nbS + 1 %}
+                        {% endif %}
+                        {% if (card > 16 and card < 25) or (card > 52 and card < 59) or (card > 78 and card < 83) %}
+                            {% set nbR = nbR + 1 %}
+                        {% endif %}
+                        {% if (card > 24 and card < 33) or (card > 58 and card < 65) or (card > 82 and card < 87) %}
+                            {% set nbD = nbD + 1 %}
+                        {% endif %}
+                        {% if (card > 32 and card < 41) or (card > 64 and card < 71) or (card > 86 and card < 91) %}
+                            {% set nbO = nbO + 1 %}
+                        {% endif %}
+{#                        <div>#}
+{#                        <img class="buyedCards" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.png') }}" alt="NO">#}
+{#                        </div>#}
                     {% endif %}
                 {% endfor %}
+                <img class="buyedCards" src="{{ asset('bundles/agoragamesplendor/images/emeraude.png') }}" alt="NO">
+                <span id="emeraldBonus{{ player.idUser.id }}">{{ nbE }}</span><br>
+                <img class="buyedCards" src="{{ asset('bundles/agoragamesplendor/images/saphir.png') }}" alt="NO">
+                <span id="saphireBonus{{ player.idUser.id }}">{{ nbS }}</span><br>
+                <img class="buyedCards" src="{{ asset('bundles/agoragamesplendor/images/rubyy.png') }}" alt="NO">
+                <span id="rubyBonus{{ player.idUser.id }}">{{ nbR }}</span><br>
+                <img class="buyedCards" src="{{ asset('bundles/agoragamesplendor/images/diamant.png') }}" alt="NO">
+                <span id="diamondBonus{{ player.idUser.id }}">{{ nbD }}</span><br>
+                <img class="buyedCards" src="{{ asset('bundles/agoragamesplendor/images/onyxx.png') }}" alt="NO">
+                <span id="onyxBonus{{ player.idUser.id }}">{{ nbO }}</span>
             </div>
             <br>Reserved Cards: <br>
             <div id="reservedCard{{ player.idUser.id }}" class="divReservedCards">
                 {% for card in player.reservedCards %}
                     {% if card != 0 %}
-                        {% if not (card in player.hiddenCards) or player.idUser.id == user.id %}
+                        {% if player.idUser.id == user.id %}
                         <div id="reserv{{ card }}">
                             <img class="reservedCards" src="{{ asset('bundles/agoragamesplendor/images/' ~ card ~ '.png') }}" alt="NO">
                             {% if player.idUser.id == user.id %}
@@ -182,7 +208,10 @@
                 let printedDiamond = document.getElementById('diamond');
                 let printedOnyx = document.getElementById('onyx');
                 let str = content.tokensPlayer;
-                printedPlayerTokens.innerHTML = str.replace(/,/g, "   ");
+                let tab = str.split(",");
+                for (let i = 0; i < tab.length; i++) {
+                    printedPlayerTokens.children[i].innerHTML = tab[i];
+                }
                 let tabTokens = content.tokensGame.split(",");
                 printedEmerald.innerHTML = tabTokens[0];
                 printedSaphire.innerHTML = tabTokens[1];
@@ -197,14 +226,31 @@
             case "reserveCard":
                 let printedPlayerReservedCards = document.getElementById('reservedCard' + content.userId);
                 let printedGameCard = document.getElementById('box' + content.oldCard);
-                let btn = "";
+                {#let btn = "";#}
+                {#if (content.userId == {{ user.id }}) {#}
+                {#    btn = "<button class=\"buyButton\" onclick=\"buyCard("+ content.oldCard +");\">Buy</button></div>"#}
+                {#}#}
+                {#var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';#}
+                {#url = url.replace('id', content.oldCard);#}
+                {#printedPlayerReservedCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\"><img class=\"reservedCards\" src=\"" + url#}
+                {#    + "\" alt=\"NO\">\n" + btn;#}
                 if (content.userId == {{ user.id }}) {
-                    btn = "<button class=\"buyButton\" onclick=\"buyCard("+ content.oldCard +");\">Buy</button></div>"
+                    var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
+                    url = url.replace('id', content.oldCard);
+                    printedPlayerReservedCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\"><img class=\"reservedCards\" src=\"" + url
+                        + "\" alt=\"NO\">\n <button id=\"buyPlayer\" class=\"buyButton\" onclick=\"buyCard(" + content.oldCard + ");\">Buy</button></div>";
+                } else {
+                    let lvl = 3;
+                    if (content.oldCard <= 40) {
+                        lvl = 1;
+                    } else if (content.oldCard <= 70) {
+                        lvl = 2
+                    }
+                    var url = '{{ asset("bundles/agoragamesplendor/images/cardLevellvl.png") }}';
+                    url = url.replace('lvl', lvl);
+                    printedPlayerReservedCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\"><img class=\"reservedCards\" src=\"" + url
+                        + "\" alt=\"NO\">"
                 }
-                var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
-                url = url.replace('id', content.oldCard);
-                printedPlayerReservedCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\"><img class=\"reservedCards\" src=\"" + url
-                    + "\" alt=\"NO\">\n" + btn;
                 printedGameCard.id = 'box' + content.newCard;
                 var url2 = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
                 url2 = url2.replace('id', content.newCard);
@@ -216,9 +262,9 @@
                     let nb = parseInt(printedGold.innerHTML);
                     printedGold.innerHTML = (nb - 1);
                     let printedPlayerTokens = document.getElementById('tokens' + content.userId);
-                    let values = printedPlayerTokens.innerText.split("   ");
+                    let values = printedPlayerTokens.innerText.split(" ");
                     values[5] = ""+(parseInt(values[5]) + 1);
-                    printedPlayerTokens.innerHTML = values.join("   ");
+                    printedPlayerTokens.children[5].innerHTML = values[5];
                 }
                 if (content.userId == {{ user.id }}) {
                     canVisitNoble();
@@ -238,10 +284,37 @@
                 diamond.innerHTML = tabTok[3];
                 onyx.innerHTML = tabTok[4];
                 gold.innerHTML = tabTok[5];
-                let printedPlayerBuyedCards = document.getElementById('buyedCard' + content.userId);
-                var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';
-                url = url.replace('id', content.oldCard);
-                printedPlayerBuyedCards.innerHTML += "<div><img class=\"buyedCards\" src=\"" + url + "\" alt=\"NO\"><div>";
+                {#let printedPlayerBuyedCards = document.getElementById('buyedCard' + content.userId);#}
+                {#var url = '{{ asset("bundles/agoragamesplendor/images/id.png") }}';#}
+                {#url = url.replace('id', content.oldCard);#}
+                {#printedPlayerBuyedCards.innerHTML += "<div><img class=\"buyedCards\" src=\"" + url + "\" alt=\"NO\"><div>";#}
+                let card = content.oldCard;
+                if ((card > 0 && card < 9) || (card > 40 && card < 47) || (card > 71 && card < 75)) {
+                    let elmt = document.getElementById('emeraldBonus' + content.userId);
+                    let nb = parseInt(elmt.innerText) + 1;
+                    elmt.innerText = '' + nb;
+                }
+                else if ((card > 8 && card < 17) || (card > 46 && card < 53) || (card > 74 && card < 79)) {
+                    let elmt = document.getElementById('saphireBonus' + content.userId);
+                    let nb = parseInt(elmt.innerText) + 1;
+                    elmt.innerText = '' + nb;
+                }
+                else if ((card > 16 && card < 25) || (card > 52 && card < 59) || (card > 78 && card < 83)) {
+                    let elmt = document.getElementById('rubyBonus' + content.userId);
+                    let nb = parseInt(elmt.innerText) + 1;
+                    elmt.innerText = '' + nb;
+                }
+                else if ((card > 24 && card < 33) || (card > 58 && card < 65) || (card > 82 && card < 87)) {
+                    let elmt = document.getElementById('diamondBonus' + content.userId);
+                    let nb = parseInt(elmt.innerText) + 1;
+                    elmt.innerText = '' + nb;
+                }
+                else if ((card > 32 && card < 41) || (card > 64 && card < 71) || (card > 86 && card < 91)) {
+                    let elmt = document.getElementById('onyxBonus' + content.userId);
+                    let nb = parseInt(elmt.innerText) + 1;
+                    elmt.innerText = '' + nb;
+                }
+
                 let prestige = document.getElementById('prestige' + content.userId);
                 prestige.innerHTML = "Prestige : " + content.prestige;
                 if (content.newCard == null) {
@@ -257,7 +330,11 @@
                         + "<button class=\"buyButton\" onclick=\"buyCard("+ content.newCard +");\">Buy</button>";
                 }
                 let playerTokens = document.getElementById('tokens' + content.userId);
-                playerTokens.innerHTML = content.tokens.replace(/,/g, "    ");
+                let tabb = content.tokens.split(",");
+                for (let i = 0; i < tabb.length; i++) {
+                    playerTokens.children[i].innerHTML = tabb[i];
+                }
+                // playerTokens.innerHTML = content.tokens.replace(/,/g, "    ");
                 if (content.userId == {{ user.id }}) {
                     canVisitNoble();
                 }
@@ -284,11 +361,12 @@
                 if (content.joker == 1) {
                     let printedGold = document.getElementById('gold');
                     let nb = parseInt(printedGold.innerHTML);
-                    printedGold.innerHTML = (nb - 1);
+                    printedGold.innerHTML = parseInt(nb - 1);
                     let printedPlayerTokens = document.getElementById('tokens' + content.userId);
-                    let values = printedPlayerTokens.innerText.split("   ");
+                    let values = printedPlayerTokens.innerText.split(" ");
+                    console.log(values[5]);
                     values[5] = ""+(parseInt(values[5]) + 1);
-                    printedPlayerTokens.innerHTML = values.join("   ");
+                    printedPlayerTokens.children[5].innerHTML = values[5];
                 }
                 if (content.userId == {{ user.id }}) {
                     canVisitNoble();
@@ -310,7 +388,7 @@
                     printed.replaceChild(wrap, target);
                     wrap.appendChild(target);
                     //Trouver un moyen de prevenir le joueur + de lui montrer les nobles possibles !!!
-                    printed.style.border = "solid 5px red";
+                    printed.children[0].children[0].style.border = "solid 3px red";
                     k++;
                 }
                 break;
@@ -321,10 +399,13 @@
                 prest.innerHTML = "Prestige : " + content.prestige;
                 let nob = document.getElementsByClassName('nobles')[0].childNodes;
                 for (let n of nob) {
-                    console.log("ici : " + n);
-                    n.style.removeProperty("border");
+                    if (n != undefined && n.children != undefined && n.children[0] != undefined) {
+                        n.children[0].style.removeProperty("border");
+                    }
                 }
-                endTurn();
+                if (content.userId == {{ user.id }}) {
+                    endTurn();
+                }
                 break;
             case "endTurn":
                 let turn = document.getElementById('turn');
@@ -408,14 +489,19 @@
                 break;
             case "removeTokens":
                 let printedPlayerTok = document.getElementById('tokens' + content.userId);
-                printedPlayerTok.innerHTML = content.tokens.replace(/,/g, "   ");
+                let tabbb = content.tokens.split(",");
+                for (let i = 0; i < tabbb.length; i++) {
+                    printedPlayerTok.children[i].innerHTML = tabbb[i];
+                }
+                // printedPlayerTok.innerHTML = content.tokens.replace(/,/g, "   ");
                 if (content.userId == {{ user.id }}) {
                     endTurn();
                 }
                 break;
             case "gameWin":
                 //PARTIE GAGNEE
-                alert(content.winner + "a gagné la partie !");
+                alert(content.winner + " a gagné la partie !");
+                window.location.href = '{{ app.request.getSchemeAndHttpHost() }}';
                 break;
         }
 
