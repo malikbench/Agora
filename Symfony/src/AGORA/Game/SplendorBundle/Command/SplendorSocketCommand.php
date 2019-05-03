@@ -32,7 +32,7 @@ class SplendorSocketCommand extends Command {
 
         $server = IoServer::factory(
             new HttpServer(new WsServer(new SplendorSocket($service))),
-            8088
+            8089
         );
 
         $server->run();
