@@ -247,26 +247,42 @@ button:hover {
     left: 1000px;
 }
 
-.divReservedCards div, .divBuyedCards div {
-    display: inline-block;
-}
-
 .divReservedCards {
     overflow: auto;
-    height: 70px;
+    height: 68px;
+    vertical-align: middle;
 }
+
+
 
 .divBuyedCards {
-    overflow: auto;
-    height: 68px;
+    height: 75px;
 }
 
-.buyedCards, .reservedCards {
+.reservedCards {
+    /*width: 30%;
+    height: 30%;*/
     width: 30%;
-    height: 30%;
+    height: 100%;
     position: relative;
     vertical-align: middle;
     border-radius: 5px;
+}
+
+.reservedCardss {
+    width: 30%;
+    height: 100%;
+    position: relative;
+    border-radius: 5px;
+    vertical-align: middle;
+}
+
+.buyedCards {
+    width: 25%;
+    height: 20%;
+    position: relative;
+    border-radius: 5px;
+    vertical-align: middle;
 }
 
 .player:hover .reservedCards:hover {
@@ -278,13 +294,9 @@ button:hover {
     z-index: 2;
 }
 
-.player:hover .buyedCards:hover {
-    width: 110px;
-    height: 150px;
-    position: fixed;
-    border-radius: 5px;
-    top: 120px;
-    z-index: 2;
+.imgPlusBtn {
+    display: inline;
+    vertical-align: middle;
 }
 
 #buyPlayer {

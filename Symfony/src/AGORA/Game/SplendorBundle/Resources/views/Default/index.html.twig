@@ -161,8 +161,8 @@
                             {% else %}
                                 {% set lvl = 3 %}
                             {% endif %}
-                            <div id="reserv{{ card }}">
-                                <img class="reservedCards" src="{{ asset('bundles/agoragamesplendor/images/cardLevel' ~ lvl ~ '.png') }}" alt="NO">
+                            <div id="reserv{{ card }}" class="imgPlusBtn">
+                                <img class="reservedCardss" src="{{ asset('bundles/agoragamesplendor/images/cardLevel' ~ lvl ~ '.png') }}" alt="NO">
                             </div>
 
                         {% endif %}
@@ -248,7 +248,7 @@
                     }
                     var url = '{{ asset("bundles/agoragamesplendor/images/cardLevellvl.png") }}';
                     url = url.replace('lvl', lvl);
-                    printedPlayerReservedCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\"><img class=\"reservedCards\" src=\"" + url
+                    printedPlayerReservedCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\" class=\"imgPlusBtn\"><img class=\"reservedCardss\" src=\"" + url
                         + "\" alt=\"NO\">"
                 }
                 printedGameCard.id = 'box' + content.newCard;
@@ -355,7 +355,7 @@
                     }
                     var url = '{{ asset("bundles/agoragamesplendor/images/cardLevellvl.png") }}';
                     url = url.replace('lvl', lvl);
-                    printedReservedPlayerCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\"><img class=\"reservedCards\" src=\"" + url
+                    printedReservedPlayerCards.innerHTML += "<div id=\"reserv" + content.oldCard + "\" class=\"imgPlusBtn\"><img class=\"reservedCardss\" src=\"" + url
                         + "\" alt=\"NO\">"
                 }
                 if (content.joker == 1) {
