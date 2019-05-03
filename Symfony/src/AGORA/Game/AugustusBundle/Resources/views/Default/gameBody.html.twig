@@ -359,7 +359,11 @@
             {% endif %}
                 ) {
             if (gottaRemove <= 0) {
+                {% if game.state == "moveLegion" %}
+                alert("Vous devez replacer " + legionMoving + " légion(s)");
+                {% else %}
                 alert("Il vous reste des choses a faire");
+                {% endif %}
             }
             document.querySelector("#valider").disabled = true;
             return false;
