@@ -142,7 +142,7 @@
                 <img class="buyedCards" src="{{ asset('bundles/agoragamesplendor/images/onyxx.png') }}" alt="NO">
                 <span id="onyxBonus{{ player.idUser.id }}">{{ nbO }}</span>
             </div>
-            <br>Reserved Cards: <br>
+            <br>Reserved Cards: <span id="nbReserv{{ player.idUser.id }}">{{ player.reservedCards|length - 1 }}</span><br>
             <div id="reservedCard{{ player.idUser.id }}" class="divReservedCards">
                 {% for card in player.reservedCards %}
                     {% if card != 0 %}
@@ -269,6 +269,9 @@
                 if (content.userId == {{ user.id }}) {
                     canVisitNoble();
                 }
+                let nbReserv = document.getElementById('nbReserv' + content.userId);
+                nbReserv.innerText = parseInt(nbReserv.innerText) + 1;
+
                 break;
             case "buyCard":
                 let emerald = document.getElementById('emerald');
@@ -371,6 +374,8 @@
                 if (content.userId == {{ user.id }}) {
                     canVisitNoble();
                 }
+                let nbReserve = document.getElementById('nbReserv' + content.userId);
+                nbReserve.innerText = parseInt(nbReserve.innerText) + 1;
                 break;
             case "canVisitNoble":
                 let nobles = content.nobles.split(",");
@@ -545,36 +550,44 @@
     }
 
     function buyCard(id) {
-        var content = {
-            type: "buyCard",
-            gameId: {{ game.id }},
-            userId: {{ user.id }},
-            cardId: id
-        };
-        console.log("splendor send : " + JSON.stringify(content));
-        connection.send(JSON.stringify(content));
+        if (window.confirm("Etes vous sûr de vouloir acheter cette carte ?")) {
+            var content = {
+                type: "buyCard",
+                gameId: {{ game.id }},
+                userId: {{ user.id }},
+                cardId: id
+            };
+            console.log("splendor send : " + JSON.stringify(content));
+            connection.send(JSON.stringify(content));
+        }
     }
 
     function reserveCard(id) {
-        var content = {
-            type: "reserveCard",
-            gameId: {{ game.id }},
-            userId: {{ user.id }},
-            cardId: id
-        };
-        console.log("splendor send : " + JSON.stringify(content));
-        connection.send(JSON.stringify(content));
+        if (window.confirm("Etes vous sûr de vouloir reserver cette carte ?")) {
+
+            var content = {
+                type: "reserveCard",
+                gameId: {{ game.id }},
+                userId: {{ user.id }},
+                cardId: id
+            };
+            console.log("splendor send : " + JSON.stringify(content));
+            connection.send(JSON.stringify(content));
+        }
     }
 
     function reserveRandomCard(level) {
-        var content = {
-            type: "reserveRandomCard",
-            gameId: {{ game.id }},
-            userId: {{ user.id }},
-            level: level
-        };
-        console.log("splendor send : " + JSON.stringify(content));
-        connection.send(JSON.stringify(content));
+        if (window.confirm("Etes vous sûr de vouloir reserver cette carte ?")) {
+
+            var content = {
+                type: "reserveRandomCard",
+                gameId: {{ game.id }},
+                userId: {{ user.id }},
+                level: level
+            };
+            console.log("splendor send : " + JSON.stringify(content));
+            connection.send(JSON.stringify(content));
+        }
     }
 
     function takeTokens() {
