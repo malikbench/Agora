@@ -65,10 +65,10 @@ class DefaultController extends Controller
 
         ///initialise le joueur dans le classement Elo si c'est ça première partie
         $em = $this->getDoctrine()->getManager();
-        if ($em->getRepository('AGORAPlatformBundle:Leaderboard')->findOneBy(array('idPlayer' => $user->getId(), 'idGame' => 3)) == null) {
+        if ($em->getRepository('AGORAPlatformBundle:Leaderboard')->findOneBy(array('idPlayer' => $user->getId(), 'idGame' => 4)) == null) {
             $lb = new Leaderboard;
 
-            $g = $em->getRepository('AGORAPlatformBundle:GameInfo')->find(3); //splendor est le troisieme jeu de gameinfo
+            $g = $em->getRepository('AGORAPlatformBundle:GameInfo')->find(4); //splendor est le quatrieme jeu de gameinfo
             $lb -> setIdGame($g);
 
             $lb -> setIdPlayer($user);
@@ -80,7 +80,7 @@ class DefaultController extends Controller
             $em->flush();
         }
 
-        $nbPlayers = $em->getRepository('AGORAGameGameBundle:Game')->findOneBy(array('gameId' => $gameId, 'gameInfoId' => 3))->getNbPlayers();
+        $nbPlayers = $em->getRepository('AGORAGameGameBundle:Game')->findOneBy(array('gameId' => $gameId, 'gameInfoId' => 4))->getNbPlayers();
         $players = $em->getRepository('AGORAGameSplendorBundle:SplendorPlayer')->findBy(array('gameId' => $gameId));
         $service = $this->container->get('agora_game.splendor');
         $plr = $em->getRepository('AGORAGameSplendorBundle:SplendorPlayer')->findBy(array('gameId' => $gameId, 'idUser' => $user->getId()));
@@ -89,7 +89,7 @@ class DefaultController extends Controller
         if (count($players) < $nbPlayers && $user && $plr == null) {
             $service->createPlayer($gameId, $user);
             if(count($players) + 1 == $nbPlayers) {
-                $game = $em->getRepository('AGORAGameGameBundle:Game')->findOneBy(array('gameId' => $gameId, 'gameInfoId' => 3));
+                $game = $em->getRepository('AGORAGameGameBundle:Game')->findOneBy(array('gameId' => $gameId, 'gameInfoId' => 4));
                 $game->setState("started");
                 $em->persist($game);
                 $em->flush();
@@ -118,7 +118,7 @@ class DefaultController extends Controller
 //            $em->flush($card);
 //        }
 
-        $g = $em->getRepository('AGORAGameGameBundle:Game')->findOneBy(array('gameId' => $gameId, 'gameInfoId' => 3));
+        $g = $em->getRepository('AGORAGameGameBundle:Game')->findOneBy(array('gameId' => $gameId, 'gameInfoId' => 4));
         $em->remove($g);
         $em->flush($g);
 

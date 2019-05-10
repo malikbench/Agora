@@ -585,7 +585,7 @@ class SplendorService
             $this->manager->remove($game);
             $this->manager->flush($game);
             $g = $this->manager->getRepository('AGORAGameGameBundle:Game')
-                ->findOneBy(array('gameId' => $gameId, 'gameInfoId' => 3));
+                ->findOneBy(array('gameId' => $gameId, 'gameInfoId' => 4));
             $this->manager->remove($g);
             $this->manager->flush($g);
 
