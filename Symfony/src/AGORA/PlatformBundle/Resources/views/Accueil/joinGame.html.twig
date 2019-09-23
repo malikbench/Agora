@@ -119,7 +119,7 @@
 	</tr>
 	</thead>
 	{% for game in gamesSQP %}
-            <tr>
+		<tr>
             <td>
                 {{ game.name }}
             </td>
@@ -170,78 +170,7 @@
 		</tr>
 	{% endfor %}
 </table>
-    <h2>Splendor</h2>
-    <table id="joinGameTableSPLDR" class="display">
-        <thead>
-        <tr>
-            <th>Nom du lobby</th>
-            <th>Personnes présentes en jeu</th>
-            <th>Nombre de joueurs requis</th>
-            <th>Date de création</th>
-            <th>Privée</th>
-            <th>Lien</th>
-        </tr>
-        </thead>
-        {% for game in games %}
-            {% if game.gameInfoId.id == 4 %}
-
-            {% if game.state == "waiting" %}
-                <tr>
-                    <td>
-                        {{ game.name }}
-                    </td>
-
-                    <td>{% for gameCode,pls in players %}
-                            {% if gameCode == "spldr" %}
-                                {% for key, pls2 in pls %}
-                                    {% if key == game.id %}
-                                        {% for pl in pls2 %}
-                                            {% if game.idHost == pl.idUser.id %}
-                                                {#{% if pl.lastCardPlayed is null %}
-                                                    [<b><u>{{ pl.userId.username }}</u></b>]
-                                                {% else %}#}
-                                                [<u>{{ pl.idUser.username }}</u>]
-                                                {#{% endif %}#}
-                                            {% else %}{#
-                                            {% if pl.lastCardPlayed is null %}
-                                                [<b>{{ pl.userId.username }}</b>]
-                                            {% else %}#}
-                                                [{{ pl.idUser.username }}]
-                                                {#{% endif %}#}
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {{ game.nbPlayers }}
-                    </td>
-
-                    <td>
-                        {{ game.dateCrea|date('Y-m-d') }}
-                    </td>
-                    <td>
-                        {% if game.private == 0 %}
-                            Non
-                        {% else %}
-                            Oui
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if game.private == 1 %}
-                            <script>var path = "{{ path('agora_game_join_spldr', {'gameId': game.gameId }) }}";</script>
-                            <a onclick="promptMDP(path);">Rejoindre</a>
-                        {% else %}
-                            <a href="{{ path('agora_game_join_spldr', {'gameId': game.gameId }) }}">Rejoindre</a>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endif %}
-        {% endfor %}
-        </table>
-
+   
    <h2>Augustus</h2>
     <table id="joinGameTableAUG" class="display">
         <thead>
@@ -311,7 +240,79 @@
             {% endif %}
         {% endfor %}
     </table>
+  
+       <h2>Splendor</h2>
+    <table id="joinGameTableSPLDR" class="display">
+        <thead>
+        <tr>
+            <th>Nom du lobby</th>
+            <th>Personnes présentes en jeu</th>
+            <th>Nombre de joueurs requis</th>
+            <th>Date de création</th>
+            <th>Privée</th>
+            <th>Lien</th>
+        </tr>
+        </thead>
+        {% for game in games %}
+            {% if game.gameInfoId.id == 4 %}
 
+            {% if game.state == "waiting" %}
+                <tr>
+                    <td>
+                        {{ game.name }}
+                    </td>
+
+                    <td>{% for gameCode,pls in players %}
+                            {% if gameCode == "spldr" %}
+                                {% for key, pls2 in pls %}
+                                    {% if key == game.id %}
+                                        {% for pl in pls2 %}
+                                            {% if game.idHost == pl.idUser.id %}
+                                                {#{% if pl.lastCardPlayed is null %}
+                                                    [<b><u>{{ pl.userId.username }}</u></b>]
+                                                {% else %}#}
+                                                [<u>{{ pl.idUser.username }}</u>]
+                                                {#{% endif %}#}
+                                            {% else %}{#
+                                            {% if pl.lastCardPlayed is null %}
+                                                [<b>{{ pl.userId.username }}</b>]
+                                            {% else %}#}
+                                                [{{ pl.idUser.username }}]
+                                                {#{% endif %}#}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {{ game.nbPlayers }}
+                    </td>
+
+                    <td>
+                        {{ game.dateCrea|date('Y-m-d') }}
+                    </td>
+                    <td>
+                        {% if game.private == 0 %}
+                            Non
+                        {% else %}
+                            Oui
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if game.private == 1 %}
+                            <script>var path = "{{ path('agora_game_join_spldr', {'gameId': game.gameId }) }}";</script>
+                            <a onclick="promptMDP(path);">Rejoindre</a>
+                        {% else %}
+                            <a href="{{ path('agora_game_join_spldr', {'gameId': game.gameId }) }}">Rejoindre</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endif %}
+            {% endif %}
+        {% endfor %}
+        </table>
 	<script>
         $('#joinGameTableSQP').addClass("display");
         $(document).ready( function () {
