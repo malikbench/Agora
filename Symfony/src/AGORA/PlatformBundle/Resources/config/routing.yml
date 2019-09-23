@@ -18,6 +18,11 @@ agora_platform_gamelist:
     path:     /gamelist/{game}
     defaults: { _controller: AGORAPlatformBundle:Default:gameList, game: "*" }
 
+agora_platform_gamelist_create:
+    path:     /gamelistcreate
+    defaults: { _controller: AGORAPlatformBundle:Default:gameListCreate, game: "*" }
+
+
 agora_platform_leaderboard:
     path:     /leaderboard/{game}
     defaults: { _controller: AGORAPlatformBundle:Default:leaderboard, game: "*" }
@@ -25,7 +30,8 @@ agora_platform_leaderboard:
 agora_platform_game_create:
     path: /game/create/{gameId}
     defaults: { _controller: AGORAPlatformBundle:Default:createGame, gameId: "" }
-    
+
+
 agora_platform_joingame:
     path: /joingame
     defaults: { _controller: AGORAPlatformBundle:Default:joinGame, gameId: "" }

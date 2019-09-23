@@ -14,7 +14,48 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('AGORAPlatformBundle:Accueil:accueil.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        $gameInfoRepository = $em->getRepository('AGORAPlatformBundle:GameInfo');
+
+        $allGameInfo = $gameInfoRepository->findAll();
+
+        $playersSQPRepository = $em->getRepository('AGORAGameSQPBundle:SQPPlayer');
+        $gamesSQPRepository = $em->getRepository('AGORAGameSQPBundle:SQPGame');
+        $gamesSQP = $gamesSQPRepository->findAll();
+        $gamesRepository = $em->getRepository('AGORAGameGameBundle:Game');
+        $games = $gamesRepository->findAll();
+        $usersRepository = $em->getRepository('AGORAUserBundle:User');
+        $users = $usersRepository->findAll();
+        $playersSQP = array();
+        foreach ($gamesSQP as $game) {
+            $playersSQP[''.$game->getId()] = $playersSQPRepository->getAllPlayersFromLobby($game->getId());
+        }
+        $players = array();
+        /** @var AveCesarService $service */
+        $service = $this->container->get('agora_game.ave_cesar');
+        $serviceSpldr = $this->container->get('agora_game.splendor');
+
+        foreach ($games as $game) {
+            if ($game->getGameInfoId()->getGameCode() == "avc") {
+                $players['avc'][''.$game->getId()] = $service->getAllPlayers($game->getId());
+            }
+            if ($game->getGameInfoId()->getGameCode() == "spldr") {
+                $players['spldr'][''.$game->getId()] = $serviceSpldr->getAllPlayers($game->getGameId());
+            }
+        }
+
+        $user = $this->getUser();
+        if ($user != null && $user->hasRole('ROLE_ADMIN')) {
+            return $this->render('AGORAPlatformBundle:Accueil:moderation.html.twig', array(
+                "gamesSQP" => $gamesSQP,
+                "users" => $users,
+                "games" => $games,
+                "playersSQP" => $playersSQP,
+                "players" => $players));
+        }
+
+        return $this->render('AGORAPlatformBundle:Accueil:accueil.html.twig', array(
+            "gameList" => $allGameInfo));
     }
 
     public function theProjectAction()
@@ -23,6 +64,9 @@ class DefaultController extends Controller
     }
 
     public function contactAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $gameInfoRepository = $em->getRepository('AGORAPlatformBundle:GameInfo');
+        $allGameInfo = $gameInfoRepository->findAll();
         $Contact = new Contact();
         $form = $this->createForm(ContactType::class, $Contact);
         if ($request->getMethod() == 'POST') {
@@ -38,17 +82,18 @@ class DefaultController extends Controller
                 return $this->redirect($this->generateUrl('agora_platform_contact'));
             }
         }
-        return $this->render('AGORAPlatformBundle:Accueil:contact.html.twig', array(
-            'form' => $form->createView()
-        ));
+        return $this->render('AGORAPlatformBundle:Accueil:contact.html.twig',
+            array('form' => $form->createView(),
+                'gameList' => $allGameInfo)
+        );
     }
 
     public function leaderboardAction($game = null) {
         $em = $this->getDoctrine()->getManager();
         $leaderboardRepository = $em->getRepository('AGORAPlatformBundle:Leaderboard');
         $gameInfoRepository = $em->getRepository('AGORAPlatformBundle:GameInfo');
+        $allGameInfo = $gameInfoRepository->findAll();
         if ($game == "*") {
-            $allGameInfo = $gameInfoRepository->findAll();
             return $this->render('AGORAPlatformBundle:Accueil:listLeaderboard.html.twig',array(
                 "gameList" => $allGameInfo));
         }
@@ -61,7 +106,8 @@ class DefaultController extends Controller
             array(
 				"users" => $users,
                 "gameInfo" => $gameInfo,
-                "leaderboard" => $leaderboard));
+                "leaderboard" => $leaderboard,
+                "gameList" => $allGameInfo));
 
     }
 
@@ -75,6 +121,7 @@ class DefaultController extends Controller
         $em->flush();
 
         return $this->render('AGORAPlatformBundle:Accueil:acceuil.html.twig');
+
     }
     
     public function gameListAction($game = null) {
@@ -94,17 +141,43 @@ class DefaultController extends Controller
             return $this->render('AGORAPlatformBundle:Game:gameList.html.twig',array(
                 "gameList" => $allGameInfo));
         }
-    	
+
 	}
+
+    public function gameListCreateAction($game = null) {
+        $em = $this->getDoctrine()->getManager();
+        $gameInfoRepository = $em->getRepository('AGORAPlatformBundle:GameInfo');
+
+        if (isset($game) && $game != "*") {
+            $gameInfo = $gameInfoRepository->find($game);
+
+            if ($gameInfo == null) {
+                throw $this->createNotFoundException('La page demandée n\'existe pas ! ');
+            }
+            return $this->render('AGORAPlatformBundle:Accueil:gameDetails.html.twig',array(
+                "gameInfo" => $gameInfo));
+        } else {
+            $allGameInfo = $gameInfoRepository->findAll();
+            return $this->render('AGORAPlatformBundle:Game:gameListCreate.html.twig',array(
+                "gameList" => $allGameInfo));
+
+
+        }
+
+    }
 
     public function profileAction() {
         $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $gameInfoRepository = $em->getRepository('AGORAPlatformBundle:GameInfo');
+        $allGameInfo = $gameInfoRepository->findAll();
         if (!is_object($user) || !$user instanceof UserInterface) {
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
         return $this->render('AGORAPlatformBundle:Profile:profile.html.twig', array(
             'user' => $user,
+            'gameList' => $allGameInfo
         ));
 
     }
@@ -126,9 +199,11 @@ class DefaultController extends Controller
         } else {
             throw $this->createNotFoundException('La page demandée n\'existe pas ! ');
         }
+        $allGameInfo = $gameInfoRepository->findAll();
         return $this->render('AGORAPlatformBundle:Accueil:createGame.html.twig', array(
             "gameInfo" => $gameInfo,
-            "user" => $user
+            "user" => $user,
+            "gameList" => $allGameInfo
         ));
     }
     
@@ -139,6 +214,8 @@ class DefaultController extends Controller
         $gamesSQP = $gamesSQPRepository->findAll();
         $gamesRepository = $em->getRepository('AGORAGameGameBundle:Game');
         $games = $gamesRepository->findAll();
+        $gameInfoRepository = $em->getRepository('AGORAPlatformBundle:GameInfo');
+        $allGameInfo = $gameInfoRepository->findAll();
         $usersRepository = $em->getRepository('AGORAUserBundle:User');
         $users = $usersRepository->findAll();
         $playersSQP = array();
@@ -147,10 +224,21 @@ class DefaultController extends Controller
         }
         $players = array();
         /** @var AveCesarService $service */
-        $service = $this->container->get('agora_game.ave_cesar');
+        $serviceSpldr = $this->container->get('agora_game.splendor');
+
+
+
+        $gameServices['avc'] = $this->container->get('agora_game.ave_cesar');
+        $gameServices['aug'] = $this->container->get('agora_game.augustus');
         foreach ($games as $game) {
-            if ($game->getGameInfoId()->getGameCode() == "avc") {
-                $players['avc'][''.$game->getId()] = $service->getAllPlayers($game->getId());
+            foreach ($gameServices as $code => $service) {
+                if ($game->getGameInfoId()->getGameCode() == $code) {
+                    $players[$code][''.$game->getId()] = $service->getPlayers($game->getGameId());
+                    break;
+                }
+            }
+            if ($game->getGameInfoId()->getGameCode() == "spldr") {
+                $players['spldr'][''.$game->getId()] = $serviceSpldr->getAllPlayers($game->getGameId());
             }
         }
 
@@ -160,7 +248,8 @@ class DefaultController extends Controller
 			"users" => $users,
             "games" => $games,
             "playersSQP" => $playersSQP,
-            "players" => $players
+            "players" => $players,
+            "gameList" => $allGameInfo
 		));
 	}
 
@@ -181,10 +270,15 @@ class DefaultController extends Controller
         $players = array();
         /** @var AveCesarService $service */
         $service = $this->container->get('agora_game.ave_cesar');
+        $serviceSpldr = $this->container->get('agora_game.splendor');
         foreach ($games as $game) {
             if ($game->getGameInfoId()->getGameCode() == "avc") {
                 $players['avc'][''.$game->getId()] = $service->getAllPlayers($game->getId());
             }
+            if ($game->getGameInfoId()->getGameCode() == "spldr") {
+                $players['spldr'][''.$game->getId()] = $serviceSpldr->getAllPlayers($game->getGameId());
+            }
+
         }
 
 
@@ -205,6 +299,8 @@ class DefaultController extends Controller
         $gamesSQP = $gamesSQPRepository->findAll();
         $gamesRepository = $em->getRepository('AGORAGameGameBundle:Game');
         $games = $gamesRepository->findAll();
+        $gameInfoRepository = $em->getRepository('AGORAPlatformBundle:GameInfo');
+        $allGameInfo = $gameInfoRepository->findAll();
         $usersRepository = $em->getRepository('AGORAUserBundle:User');
         $users = $usersRepository->findAll();
         $playersSQP = array();
@@ -214,9 +310,14 @@ class DefaultController extends Controller
         $players = array();
         /** @var AveCesarService $service */
         $service = $this->container->get('agora_game.ave_cesar');
+        $serviceSpldr = $this->container->get('agora_game.splendor');
+
         foreach ($games as $game) {
             if ($game->getGameInfoId()->getGameCode() == "avc") {
                 $players['avc'][''.$game->getId()] = $service->getAllPlayers($game->getId());
+            }
+            if ($game->getGameInfoId()->getGameCode() == "spldr") {
+                $players['spldr'][''.$game->getId()] = $serviceSpldr->getAllPlayers($game->getGameId());
             }
         }
 
@@ -226,7 +327,8 @@ class DefaultController extends Controller
             "games" => $games,
             "playersSQP" => $playersSQP,
             "players" => $players,
-            "userId" => $userId
+            "userId" => $userId,
+            "gameList" => $allGameInfo
         ));
     }
 }

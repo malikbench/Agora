@@ -28,7 +28,7 @@
                 <div class="rowFlex actionButtonGame">
                     <button  type="button" onclick="window.location.href='{{ game.reglesURL }}'" class="btn btn-danger btn-lg buttonInfo selfCenter ">Règle</button>
                     <button  type="button" onclick="window.location.href='{{ path('agora_platform_leaderboard', {'game' : game.id}) }}'" class="btn btn-danger btn-lg buttonInfo selfCenter ">Classement</button>
-                    <button  type="button" onclick="window.location.href='{{ path('agora_platform_game_create', {'gameId' : game.id}) }}'" class="btn btn-danger btn-lg buttonInfo selfCenter ">Jouer</button>
+                    {##}<button  type="button" onclick="window.location.href='{{ path('agora_platform_game_create', {'gameId' : game.id}) }}'" class="btn btn-danger btn-lg buttonInfo selfCenter ">Jouer</button>
                 </div>
 
             </div>

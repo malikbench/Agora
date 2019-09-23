@@ -43,6 +43,7 @@ class GestionUserController extends Controller
             $em->remove($user);
             $em->flush();
             return new Response("Succes");
+
         }
         return new Response("Echec");
     }

@@ -136,7 +136,10 @@ class AveCesarService {
                 ->getRepository('AGORAGameAveCesarBundle:AveCesarPlayer')
                 ->findBy(array('game_id' => $gameId));
         return $players;
+    }
 
+    public function getPlayers($gameId) {
+        return $this->getAllPlayers($gameId);
     }
 
     public function playerAlreadyCreated($gameId, $userId) {

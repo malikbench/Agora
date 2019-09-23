@@ -32,7 +32,10 @@ CREATE TABLE `game_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-INSERT INTO `game_info` (`id`, `description`, `imageURL`, `reglesURL`, `nom`, `minJoueurs`, `maxJoueurs`, `gameCode`) VALUES (1,'Ave cesar, un jeu franchement incroyable ! Avec des chars ! Excitant n\'est-ce pas ?','ave-caesar.jpg','http://jeuxstrategie.free.fr/Ave_cesar_complet.php','Ave Cesar',3,6,'avc'),(2,'Le 6 qui prend est un jeu de cartes passionnant qui creuse les méninges !','6QP.png','https://www.gigamic.com/files/catalog/products/rules/rules-6quiprend-05-2012.pdf','6 qui prend',2,4,'sqp');
+INSERT INTO `game_info` (`id`, `description`, `imageURL`, `reglesURL`, `nom`, `minJoueurs`, `maxJoueurs`, `gameCode`) VALUES (1,'Ave cesar, un jeu franchement incroyable ! Avec des chars ! Excitant n\'est-ce pas ?','ave-caesar.jpg','http://jeuxstrategie.free.fr/Ave_cesar_complet.php','Ave Cesar',3,6,'avc'),
+(2,'Le 6 qui prend est un jeu de cartes passionnant qui creuse les méninges !','6QP.png','https://www.gigamic.com/files/catalog/products/rules/rules-6quiprend-05-2012.pdf','6 qui prend',2,4,'sqp'),
+(3, 'Gagnez de l\'influence en plaçant vos légions pour devenir Consul à Rome.'           , 'augustus.jpg'  ,'http://regle.jeuxsoc.fr/augus_rg.pdf'                                            , 'Augustus'   , 2, 6, 'aug'),
+(4, 'Dans Splendor, vous êtes à la tête d une guilde de marchands. Vous avez pour objectif de vous enrichir et de devenir le commerçant le plus prestigieux du royaume.', 'Splendor.jpg', 'https://www.spacecowboys.fr/img/games/splendor/details/rules/Rules_Splendor_FR.pdf', 'Splendor', 2, 4, 'spldr');
 
 
 -- Dump completed on 2018-05-31 13:32:52

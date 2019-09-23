@@ -23,6 +23,8 @@ class AppKernel extends Kernel
             new AGORA\Game\SQPBundle\AGORAGameSQPBundle(),
             new AGORA\Game\AveCesarBundle\AGORAGameAveCesarBundle(),
             new AGORA\Game\GameBundle\AGORAGameGameBundle(),
+            new AGORA\Game\AugustusBundle\AugustusBundle(),
+            new AGORA\Game\SplendorBundle\AGORAGameSplendorBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
