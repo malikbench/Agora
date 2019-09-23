@@ -224,12 +224,18 @@ class DefaultController extends Controller
         }
         $players = array();
         /** @var AveCesarService $service */
-        $service = $this->container->get('agora_game.ave_cesar');
         $serviceSpldr = $this->container->get('agora_game.splendor');
 
+
+
+        $gameServices['avc'] = $this->container->get('agora_game.ave_cesar');
+        $gameServices['aug'] = $this->container->get('agora_game.augustus');
         foreach ($games as $game) {
-            if ($game->getGameInfoId()->getGameCode() == "avc") {
-                $players['avc'][''.$game->getId()] = $service->getAllPlayers($game->getId());
+            foreach ($gameServices as $code => $service) {
+                if ($game->getGameInfoId()->getGameCode() == $code) {
+                    $players[$code][''.$game->getId()] = $service->getPlayers($game->getGameId());
+                    break;
+                }
             }
             if ($game->getGameInfoId()->getGameCode() == "spldr") {
                 $players['spldr'][''.$game->getId()] = $serviceSpldr->getAllPlayers($game->getGameId());

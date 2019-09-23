@@ -8,11 +8,15 @@ agora_game_game:
 
 agora_game_ave_cesar:
     resource: "@AGORAGameAveCesarBundle/Resources/config/routing.yml"
-    prefix:   /game/avecesar/
+    prefix:   /game/avecesar
 
 agora_game_sqp:
     resource: "@AGORAGameSQPBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /game/sqp
+
+augustus:
+    resource: "@AugustusBundle/Resources/config/routing.yml"
+    prefix:   /game/augustus
 
 agora_admin_platform:
     resource: "@AGORAAdminPlatformBundle/Resources/config/routing.yml"
