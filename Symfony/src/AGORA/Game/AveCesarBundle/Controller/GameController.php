@@ -92,23 +92,18 @@ class GameController extends Controller
         }
 
         $service = $this->container->get('agora_game.ave_cesar');
-        $maxPlayer = $service->getMaxPlayer($gameId);
-        $nbPlayer = count($service->getAllPlayers($gameId));
 
         if (!$service->playerAlreadyCreated($gameId, $user->getId())) {
             $result = $service->createPlayer($user, $gameId);
-        } elseif ($nbPlayer != $maxPlayer) {
-            return $this->redirect($this->generateUrl('agora_platform_joingame'));
-        }
-        else {
+        } else {
             return $this->redirect($this->generateUrl('agora_game_ave_cesar_homepage' ,array(
                 "gameId" => $gameId
             )));
         }
 
         // Game Full
-        if ($result == -1 || $maxPlayer != $nbPlayer + 1) {
-            return $this->redirect($this->generateUrl('agora_platform_joingame'));
+        if ($result == -1) {
+            $this->redirect($this->generateUrl('agora_platform_joingame'));
         }
 
         return $this->redirect($this->generateUrl('agora_game_ave_cesar_homepage' ,array(
@@ -148,14 +143,9 @@ class GameController extends Controller
         $players = array();
         /** @var AveCesarService $service */
         $service = $this->container->get('agora_game.ave_cesar');
-        $serviceSpldr = $this->container->get('agora_game.splendor');
-
         foreach ($games as $game) {
             if ($game->getGameInfoId()->getGameCode() == "avc") {
                 $players['avc'][''.$game->getId()] = $service->getAllPlayers($game->getId());
-            }
-            if ($game->getGameInfoId()->getGameCode() == "spldr") {
-                $players['spldr'][''.$game->getId()] = $serviceSpldr->getAllPlayers($game->getGameId());
             }
         }
 
